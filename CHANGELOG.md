@@ -1,5 +1,34 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+
+- Same-session rematches with retained players, API-key cookies, chat, and invite link.
+- Cumulative player wins, draw counts, round numbers, and private archived round history.
+- Optional new-problem loading in the rematch lobby, with readiness reset on changes.
+- Round-aware actions that reject delayed submissions, finalizations, and draft saves
+  from earlier rounds; repeated rematch clicks start only one new round.
+- Screenshot attachments in competition and practice submissions, with file upload,
+  clipboard paste, previews, removal, and image-only solutions.
+- Multimodal grading that evaluates typed text and attached screenshots together.
+- Persistent competition screenshots with authenticated author-only image access.
+- Validation for up to four PNG, JPEG, or WebP screenshots per submission, with
+  per-image limits of 3 MiB and 20 megapixels.
+- Grading lifecycle logs and visible finalization timestamps, with clearer messaging
+  when finalizing without a submission or while grading is pending.
+
+### Changed
+
+- Equal final scores now use the earlier finalization timestamp as the tie-break.
+  Identical finalization timestamps are a draw; automatic finalization uses the deadline.
+- Graceful server shutdown waits for accepted grading jobs to complete.
+
+### Fixed
+
+- Grading retries retain the original solution text and screenshots after invalid
+  model output instead of sending the previous model response as the next submission.
+
 ## [1.0.0] - 2026-10-10
 
 ### Added

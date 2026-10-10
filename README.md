@@ -50,9 +50,27 @@ Click **Finalize** to lock your submissions and start the other player's five-mi
 deadline. They can finalize manually; the server automatically finalizes them at
 the deadline even if neither browser is open. Pending submissions received before
 finalization/deadline still finish grading before the result is announced.
+**Finalize does not submit the editor contents.** Click **Submit solution** first
+to send your work for grading; you can finalize immediately afterward while it runs.
 
 Markdown and LaTeX render live, including `$…$`, `$$…$$`, `\(…\)`, and `\[…\]`.
 Rendering libraries load from jsDelivr, so the browser needs internet access.
+
+### Screenshot solutions
+
+In competitions and practice, click **Add screenshots** or paste an image into
+the solution editor. You can submit screenshots alone or combine them with typed
+Markdown/LaTeX. Preview the attachments, remove unwanted images, and submit normally.
+Each submission accepts up to **4 PNG, JPEG, or WebP images**, each at most **3 MiB**
+and **20 megapixels**. Animated images are not supported.
+
+The grader receives the text and images together, so select an OpenRouter model
+that supports both **image input** and structured JSON output. Submitted competition
+screenshots persist in SQLite and appear in your submission history. They remain
+private to their author, including after the competition finishes. Image data is
+served through authenticated URLs rather than included in every polling response.
+Selected screenshots are held in the current page; only text drafts autosave before
+submission. Practice attachments and history remain in memory until you reload.
 
 The default grading model is **GLM 5.3 Flash** (`z-ai/glm-5.3-flash`) via OpenRouter.
 Grading requests use the HTTP proxy at `http://127.0.0.1:12334`, configured as
@@ -89,10 +107,33 @@ competition finishes. Chat is available in the lobby, during play, and afterward
   prompt rather than silently overwriting another draft. No API key is stored in
   localStorage.
 - Session updates poll every 1.2 seconds; deadlines and eligibility use server time.
-- Run a single server worker (`make run`). On server restart, persisted sessions
-  are restored and expired deadlines are reconciled. Interrupted grading is marked
+- Run a single server worker (`make run`). Graceful shutdown waits for in-flight
+  grading to finish. On server restart, persisted sessions are restored and expired
+  deadlines are reconciled. Grading interrupted by a forced stop or crash is marked
   failed without a penalty because keys are not persisted server-side. While play
   remains open, players can resubmit; finalized players remain locked.
+- Server logs record accepted submissions, grading start/completion/retry/interruption,
+  and finalization timestamps with pending job counts, without logging API keys or solutions.
+
+### Rematches and match score
+
+After a round finishes and all accepted grading completes, either player can click
+**Rematch** in the result panel. Both players return to the lobby in the **same
+session**, with the same invite link, identities, saved API keys, model, and chat.
+Both click **Ready** to begin the next round. The creator can optionally load a new
+problem JSON in the rematch lobby; changing the problem resets readiness.
+
+Each round starts with fresh drafts, attachments, submissions, scores, and deadlines.
+Player cards show **cumulative wins**, and the match summary counts completed rounds
+and draws. A draw gives neither player a win. Wins are counted exactly once when a
+round finishes, including while the result panel is still open before a rematch.
+Existing completed sessions count as round 1 and can be rematched immediately.
+
+**Previous rounds** retains results, grading feedback, reference solutions, and your
+own submitted text/screenshots. Opponent solutions and screenshots stay private.
+Round history and match scores persist in SQLite through reloads and server restarts.
+Round-specific actions carry the round number so delayed requests from an earlier
+round cannot submit, finalize, or overwrite drafts in the new one.
 
 ### Practice mode
 
@@ -138,8 +179,8 @@ The session creator supplies a JSON document with these fields:
 - A player who never submits receives 0 out of 10 points.
 - Scores can be negative, so a player with 0 points can beat a player with a negative score.
 - Submission timestamps record when the solution is submitted, not when grading completes. Deadline eligibility is based on the submission timestamp.
-- Players can finalize while grading is pending. Finalization uses submission timestamps rather than LLM response times; eligible pending submissions are still graded before the result is determined.
-- If final scores are equal, compare each player's last successfully graded submission timestamp. The earlier timestamp wins (see the tie-break decisions below for missing or identical timestamps).
+- Players can finalize while grading is pending. Submission timestamps determine deadline eligibility; eligible pending submissions are still graded before the result is determined.
+- If final scores are equal, compare each player's finalization timestamp. The earlier finalization wins. Identical finalization timestamps are a draw.
 - Grading uses structured output validated with Pydantic, including a verdict constrained to the 0–10 range.
 - Inference errors and invalid grading responses (such as malformed JSON or out-of-range verdicts) receive up to five retries after the initial attempt. If all retries fail, the submission incurs no penalty.
 
@@ -189,11 +230,14 @@ Start with a single-player page for writing and grading solutions. Two-player se
 
 ## Tie-break and reveal decisions
 
-- Failed submissions are excluded from the tie-break as well as the penalty count.
-  Compare the last successfully graded submission timestamps, regardless of which
-  submission earned the best verdict.
-- A player without a successful submission loses a score tie against a player with
-  one. If neither player has one, or both last timestamps are identical, it is a draw.
+- Final scores decide the winner first. Failed submissions do not contribute to
+  scores or penalties.
+- Equal scores are decided by finalization time, even if one or both players have
+  no successfully graded submissions. Submission and grading completion times do
+  not affect this tie-break. Identical finalization timestamps are a draw.
+- Manual finalization records the server timestamp of the first finalize request.
+  Automatic finalization uses the exact deadline, not when a polling request or
+  background tick notices it. Repeated finalization does not change the timestamp.
 - Both grading criteria and the reference solution are revealed when the competition
   ends, after all eligible pending grading has completed.
 

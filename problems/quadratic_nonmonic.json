@@ -1,0 +1,6 @@
+{
+  "title": "A quadratic equation with a leading coefficient",
+  "statement": "Solve the equation $2x^2 + x - 6 = 0$ over the real numbers. Show your work and give all solutions.",
+  "criterions": "Award 10 points for a valid derivation and both roots, x = -2 and x = 3/2. Accept factoring, the quadratic formula, completing the square, or any other correct method. Award 7 points for both correct roots without supporting work. Award up to 5 points for meaningful correct progress, such as the correct factorization (2x - 3)(x + 2) or the correct discriminant 49, when the final roots are missing or incorrect. Award up to 3 points if only one correct root is found. Award 0 points for no relevant correct work. Do not require substitution checks if the derivation is complete.",
+  "reference_solution": "Factor the polynomial:\n\n$$2x^2 + x - 6 = (2x - 3)(x + 2).$$\n\nThus $(2x - 3)(x + 2) = 0$. By the zero-product property, $2x - 3 = 0$ or $x + 2 = 0$, so $x = \\frac{3}{2}$ or $x = -2$. The complete solution set is $\\{-2, \\frac{3}{2}\\}$."
+}

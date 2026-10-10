@@ -6,6 +6,7 @@ import secrets
 import sqlite3
 import time
 from contextlib import contextmanager
+from copy import deepcopy
 from decimal import Decimal
 from pathlib import Path
 from uuid import uuid4
@@ -31,6 +32,17 @@ def score(player: dict) -> dict:
     return {"best": float(best), "counted": len(counted), "penalty": penalty, "score": float(best - penalty)}
 
 
+def match_score(session: dict) -> dict:
+    results = [r["result"] for r in session.get("rounds", [])]
+    if session["phase"] == "finished":
+        results.append(session["result"])
+    return {
+        "wins": {p["id"]: sum(r["winner"] == p["id"] for r in results) for p in session["players"]},
+        "draws": sum(r["winner"] is None for r in results),
+        "completed_rounds": len(results),
+    }
+
+
 def reconcile(session: dict, now: float) -> None:
     if session["phase"] not in ("active", "grading"):
         return
@@ -46,17 +58,14 @@ def reconcile(session: dict, now: float) -> None:
     first, second = session["players"]
     a, b = score(first)["score"], score(second)["score"]
     winner = None
-    reason = "Equal scores and equal last successful submission times: draw."
+    reason = "Equal scores and identical finalization times: draw."
     if a != b:
         winner = first["id"] if a > b else second["id"]
         reason = "Higher final score."
     else:
-        last = [max((s["submitted_at"] for s in p["submissions"] if s["status"] == "graded"), default=None) for p in (first, second)]
-        if last[0] != last[1]:
-            winner = first["id"] if last[1] is None or (last[0] is not None and last[0] < last[1]) else second["id"]
-            reason = "Equal scores; earlier last successful submission wins. A player without one loses this tie-break."
-        elif last[0] is None:
-            reason = "Neither player has a successfully graded submission: draw."
+        if first["finalized_at"] != second["finalized_at"]:
+            winner = first["id"] if first["finalized_at"] < second["finalized_at"] else second["id"]
+            reason = "Equal scores; earlier finalization wins."
     session["phase"] = "finished"
     session["ended_at"] = now
     session["result"] = {"winner": winner, "reason": reason}
@@ -86,6 +95,8 @@ class Store:
             if row is None:
                 raise CompetitionError("Session not found. Check your invite code.", 404)
             session = json.loads(row[0])
+            session.setdefault("round", 1)
+            session.setdefault("rounds", [])
             reconcile(session, time.time() if now is None else now)
             yield session
             session["version"] += 1
@@ -95,6 +106,7 @@ class Store:
         code = secrets.token_hex(5).upper()
         session = {
             "version": 1,
+            "round": 1, "rounds": [],
             "code": code, "model": model, "problem": problem.model_dump(),
             "phase": "lobby", "created_at": time.time(), "started_at": None,
             "ended_at": None, "result": None, "chat": [],
@@ -118,6 +130,11 @@ class Store:
         if found is None:
             raise CompetitionError("Join this session first.", 403)
         return found
+
+    @staticmethod
+    def check_round(session: dict, round: int | None):
+        if round is not None and round != session["round"]:
+            raise CompetitionError("The round changed. Refresh to continue in the current round.")
 
     def join(self, code: str, token: str, name: str) -> dict:
         with self.edit(code) as session:
@@ -146,9 +163,10 @@ class Store:
             if any(p["identity"] == digest for p in s["players"])
         ][:20]
 
-    def ready(self, code: str, token: str, ready: bool) -> dict:
+    def ready(self, code: str, token: str, ready: bool, round: int | None = None) -> dict:
         with self.edit(code) as session:
             player = self.player(session, token)
+            self.check_round(session, round)
             if session["phase"] != "lobby":
                 raise CompetitionError("The competition has already started.")
             player["ready"] = ready
@@ -157,9 +175,10 @@ class Store:
                 session["started_at"] = time.time()
             return session
 
-    def model(self, code: str, token: str, model: str) -> dict:
+    def model(self, code: str, token: str, model: str, round: int | None = None) -> dict:
         with self.edit(code) as session:
             player = self.player(session, token)
+            self.check_round(session, round)
             if player["id"] != session["players"][0]["id"]:
                 raise CompetitionError("Only the creator can change the model.", 403)
             if session["phase"] != "lobby":
@@ -169,9 +188,43 @@ class Store:
                 p["ready"] = False
             return session
 
-    def draft(self, code: str, token: str, text: str, revision: int) -> dict:
+    def problem(self, code: str, token: str, problem: Problem, round: int) -> dict:
         with self.edit(code) as session:
             player = self.player(session, token)
+            self.check_round(session, round)
+            if player["id"] != session["players"][0]["id"]:
+                raise CompetitionError("Only the creator can change the problem.", 403)
+            if session["phase"] != "lobby":
+                raise CompetitionError("The problem is locked once the round starts.")
+            session["problem"] = problem.model_dump()
+            for p in session["players"]:
+                p["ready"] = False
+            return session
+
+    def rematch(self, code: str, token: str, round: int) -> dict:
+        with self.edit(code) as session:
+            self.player(session, token)
+            # Concurrent clicks/retries from the just-finished round reset only once.
+            if round == session["round"] - 1:
+                return session
+            self.check_round(session, round)
+            if session["phase"] != "finished":
+                raise CompetitionError("Wait until the round and all pending grading have finished.")
+            session["rounds"].append(deepcopy({
+                key: session[key] for key in
+                ("round", "model", "problem", "players", "started_at", "ended_at", "result")
+            }))
+            session["round"] += 1
+            session.update(phase="lobby", started_at=None, ended_at=None, result=None)
+            for p in session["players"]:
+                p.update(ready=False, finalized=False, finalized_at=None, deadline=None,
+                         draft="", draft_revision=p["draft_revision"] + 1, submissions=[])
+            return session
+
+    def draft(self, code: str, token: str, text: str, revision: int, round: int | None = None) -> dict:
+        with self.edit(code) as session:
+            player = self.player(session, token)
+            self.check_round(session, round)
             if session["phase"] == "lobby":
                 raise CompetitionError("The problem has not been revealed yet.")
             if revision != player["draft_revision"]:
@@ -180,29 +233,32 @@ class Store:
             player["draft_revision"] += 1
             return session
 
-    def submit(self, code: str, token: str, solution: str, request_id: str, now: float | None = None) -> tuple[dict, dict, bool]:
+    def submit(self, code: str, token: str, solution: str, request_id: str, now: float | None = None, images: list[dict] | None = None, round: int | None = None) -> tuple[dict, dict, bool]:
+        images = images or []
         now = time.time() if now is None else now
         with self.edit(code, now) as session:
             player = self.player(session, token)
+            self.check_round(session, round)
             duplicate = next((s for s in player["submissions"] if s["request_id"] == request_id), None)
             if duplicate:
-                if duplicate["solution"] != solution:
+                if duplicate["solution"] != solution or duplicate.get("images", []) != images:
                     raise CompetitionError("This submission ID was already used for a different solution.")
                 return session, duplicate, False
             if session["phase"] != "active" or player["finalized"]:
                 raise CompetitionError("Your submissions are locked; the deadline may have expired.")
             submission = {
                 "id": str(uuid4()), "request_id": request_id, "submitted_at": now,
-                "solution": solution, "status": "pending", "attempts": 0,
+                "solution": solution, "images": images, "status": "pending", "attempts": 0,
                 "grade": None, "error": None,
             }
             player["submissions"].append(submission)
             return session, submission, True
 
-    def finalize(self, code: str, token: str, now: float | None = None) -> dict:
+    def finalize(self, code: str, token: str, now: float | None = None, round: int | None = None) -> dict:
         now = time.time() if now is None else now
         with self.edit(code, now) as session:
             player = self.player(session, token)
+            self.check_round(session, round)
             if player["finalized"]:
                 return session
             if session["phase"] != "active":
@@ -217,7 +273,8 @@ class Store:
 
     def complete(self, code: str, submission_id: str, result: dict) -> None:
         with self.edit(code) as session:
-            submission = next(s for p in session["players"] for s in p["submissions"] if s["id"] == submission_id)
+            rounds = [session, *session["rounds"]]
+            submission = next(s for r in rounds for p in r["players"] for s in p["submissions"] if s["id"] == submission_id)
             if submission["status"] != "pending":
                 return
             submission.update({key: result.get(key) for key in ("status", "attempts", "grade", "error")})
@@ -247,6 +304,7 @@ class Store:
 def snapshot(session: dict, token: str) -> dict:
     me = Store.player(session, token)
     finished = session["phase"] == "finished"
+    tally = match_score(session)
     players = []
     for player in session["players"]:
         own = player["id"] == me["id"]
@@ -256,11 +314,15 @@ def snapshot(session: dict, token: str) -> dict:
             item["verdict"] = s["grade"]["verdict"] if s["grade"] else None
             if own:
                 item["solution"] = s["solution"]
+                item["images"] = [
+                    {"name": image["name"], "url": f'/api/sessions/{session["code"]}/submissions/{s["id"]}/images/{index}'}
+                    for index, image in enumerate(s.get("images", []))
+                ]
             if finished and s["grade"]:
                 item["grade"] = s["grade"]
             history.append(item)
         public = {k: player[k] for k in ("id", "name", "ready", "finalized", "finalized_at", "deadline")}
-        public.update(score=score(player), submissions=history)
+        public.update(score=score(player), submissions=history, wins=tally["wins"][player["id"]])
         if own:
             public.update(draft=player["draft"], draft_revision=player["draft_revision"])
         players.append(public)
@@ -276,4 +338,10 @@ def snapshot(session: dict, token: str) -> dict:
         "started_at": session["started_at"], "ended_at": session["ended_at"],
         "server_time": time.time(),
         "version": session["version"],
+        "round": session.get("round", 1), "match": tally,
+        "previous_rounds": [
+            {"round": r["round"], "title": r["problem"]["title"], "ended_at": r["ended_at"], "result": r["result"],
+             "scores": {p["id"]: score(p)["score"] for p in r["players"]}}
+            for r in session.get("rounds", [])
+        ],
     }

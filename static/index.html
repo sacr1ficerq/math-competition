@@ -10,6 +10,7 @@
   <script defer src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
   <script defer src="/static/rendering.js"></script>
+  <script defer src="/static/attachments.js"></script>
   <script defer src="/static/app.js"></script>
 </head>
 <body>
@@ -42,6 +43,8 @@
         <div id="preview" class="rendered preview"><p class="muted">Your proof takes shape here.</p></div>
       </div>
     </section>
+
+    <section class="attachments" aria-label="Solution screenshots"><label class="file-button">Add screenshots<input id="solution-images" type="file" accept="image/png,image/jpeg,image/webp" multiple aria-label="Add solution screenshots"></label><small>Or paste a screenshot into the editor. Up to 4 images, 3 MiB and 20 megapixels each. Text is optional with images. Use a model that supports image input.</small><div id="image-attachments"></div></section>
 
     <form id="submit-form" class="submit-bar">
       <div class="key-field">

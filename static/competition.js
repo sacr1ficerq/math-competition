@@ -18,6 +18,8 @@ let historySignature = "";
 let chatSignature = "";
 let problemSignature = "";
 let playerSignature = "";
+let roundHistorySignature = "";
+let solutionImages;
 
 function notice(message, error = false) {
   $("notice").textContent = message;
@@ -44,7 +46,7 @@ const me = () => state?.players.find((p) => p.id === state.me);
 const sessionPath = (suffix = "") => `/api/sessions/${encodeURIComponent(code)}${suffix}`;
 const timeText = (value) => new Date(value * 1000).toLocaleTimeString();
 const now = () => Date.now() / 1000 + clockOffset;
-const draftKey = () => `math-draft:${code}:${state.me}`;
+const draftKey = () => `math-draft:${code}:${state.me}${state.round > 1 ? `:${state.round}` : ""}`;
 
 function backupDraft() {
   try { localStorage.setItem(draftKey(), JSON.stringify({ text: $("solution").value, revision: draftRevision })); } catch { /* Server autosave still works without browser storage. */ }
@@ -59,12 +61,31 @@ function preview() { render($("preview"), $("solution").value || "Your proof tak
 function apply(next) {
   if (state && next.code === state.code && next.version < state.version) return;
   const previousPhase = state?.phase;
+  const roundChanged = state && (next.code !== state.code || next.round !== state.round);
+  if (roundChanged) {
+    clearBackup();
+    clearTimeout(draftTimer);
+    loadedDraft = false;
+    draftDirty = false;
+    draftConflict = false;
+    pendingRequest = null;
+    historySignature = problemSignature = playerSignature = "";
+  }
   state = next;
+  if (roundChanged) {
+    $("solution").value = "";
+    solutionImages.clear();
+    $("next-problem-json").value = "";
+    $("next-problem").open = false;
+    for (const id of ["problem-statement", "criteria", "reference"]) $(id).replaceChildren();
+  }
   clockOffset = next.server_time - Date.now() / 1000;
   $("landing").hidden = true;
   $("session").hidden = false;
   $("connection").textContent = "Connected";
   $("session-code").textContent = state.code;
+  $("round-label").textContent = `Round ${state.round}`;
+  $("match-summary").textContent = `${state.match.completed_rounds} completed round${state.match.completed_rounds === 1 ? "" : "s"} · ${state.match.draws} draw${state.match.draws === 1 ? "" : "s"}`;
   $("phase").textContent = { lobby: "Lobby", active: "In progress", grading: "Waiting for grades", finished: "Finished" }[state.phase];
   document.title = `${state.code} · Math Competition`;
   const player = me();
@@ -96,6 +117,7 @@ function apply(next) {
   $("model-form").hidden = state.phase !== "lobby" || state.me !== state.host;
   if (document.activeElement !== $("lobby-model")) $("lobby-model").value = state.model;
   $("lobby").hidden = state.phase !== "lobby";
+  $("next-problem").hidden = state.phase !== "lobby" || state.round === 1 || state.me !== state.host;
   $("arena").hidden = state.phase === "lobby";
   $("histories").hidden = state.phase === "lobby";
   $("ready").textContent = player.ready ? "Not ready" : "Ready";
@@ -120,14 +142,16 @@ function apply(next) {
     $("result-reason").textContent = state.result.reason;
   }
   renderHistory();
+  renderRounds();
   renderChat();
   controls();
   if (previousPhase === "lobby" && state.phase === "active") notice("Both players are ready. The problem is now revealed.");
   if (previousPhase && previousPhase !== "finished" && state.phase === "finished") notice("Competition complete. Detailed feedback and the reference solution are now available.");
+  if (roundChanged) notice(`Round ${state.round} is ready in the same session. Both players can click Ready when set.`);
 }
 
 function renderPlayers() {
-  const signature = JSON.stringify([state.phase, state.players.map((p) => [p.id, p.name, p.ready, p.finalized, p.score])]);
+  const signature = JSON.stringify([state.phase, state.players.map((p) => [p.id, p.name, p.ready, p.finalized, p.finalized_at, p.score, p.wins])]);
   if (signature === playerSignature) return;
   playerSignature = signature;
   const focused = document.activeElement?.id;
@@ -141,7 +165,8 @@ function renderPlayers() {
     name.textContent = `${p.name}${p.id === state.me ? " (you)" : ""}`;
     const label = document.createElement("span");
     label.className = "player-status";
-    label.textContent = state.phase === "lobby" ? p.ready ? "Ready" : "Not ready" : p.finalized ? "Finalized" : "Writing";
+    label.textContent = state.phase === "lobby" ? p.ready ? "Ready" : "Not ready" : p.finalized ? `Finalized · ${timeText(p.finalized_at)}` : "Writing";
+    if (p.finalized) label.title = new Date(p.finalized_at * 1000).toLocaleString();
     top.append(name, label);
     const score = document.createElement("div");
     score.className = "score-info";
@@ -160,7 +185,10 @@ function renderPlayers() {
     tip.textContent = `Best verdict: ${p.score.best}. Counted: ${p.score.counted}. Penalty: ${p.score.penalty}.`;
     score.setAttribute("aria-describedby", tip.id);
     score.append(number, suffix, tip);
-    card.append(top, score);
+    const wins = document.createElement("div");
+    wins.className = "win-count";
+    wins.textContent = `${p.wins} win${p.wins === 1 ? "" : "s"}`;
+    card.append(top, wins, score);
     cards.append(card);
   }
   if (state.players.length === 1) {
@@ -180,11 +208,20 @@ function controls() {
   const locked = state.phase !== "active" || p.finalized || expired;
   const pending = p.submissions.filter((s) => s.status === "pending").length;
   $("solution").readOnly = locked;
-  $("submit").disabled = locked || actionBusy || draftConflict || !state.has_api_key || !$("solution").value.trim();
-  $("finalize").disabled = locked || actionBusy;
-  $("finalize").textContent = p.finalized ? "Finalized" : "Finalize";
+  $("submit").disabled = locked || actionBusy || draftConflict || solutionImages.busy || !state.has_api_key || (!$("solution").value.trim() && !solutionImages.value.length);
+  solutionImages.setDisabled(locked || actionBusy);
+  $("finalize").disabled = locked || actionBusy || solutionImages.busy;
+  $("finalize").textContent = p.finalized ? "Finalized" : p.submissions.length ? "Finalize" : "Finalize without submission";
   $("ready").disabled = actionBusy || state.players.length < 2;
-  $("submission-hint").textContent = state.phase === "grading" ? "Waiting for eligible pending grades…" : p.finalized ? "Your submissions are locked." : pending ? `${pending} grading in background. You may submit again or finalize.` : !state.has_api_key ? "Save your API key to submit." : "";
+  $("rematch").disabled = actionBusy || state.phase !== "finished";
+  let hint = "";
+  if (state.phase === "grading") hint = "Waiting for eligible pending grades…";
+  else if (p.finalized && pending) hint = `Finalized · ${pending} still grading. Your score is provisional.`;
+  else if (p.finalized) hint = p.submissions.length ? "Your submissions are locked." : "Finalized without a submission. No solution was sent for grading.";
+  else if (pending) hint = `${pending} grading in background. You may submit again or finalize.`;
+  else if (!state.has_api_key) hint = "Save your API key to submit.";
+  else if (!p.submissions.length) hint = "No solution submitted yet. Submit your solution before finalizing to have it graded.";
+  $("submission-hint").textContent = hint;
   $("draft-status").textContent = draftConflict ? "Draft conflict" : savePromise ? "Saving…" : draftDirty ? "Unsaved" : "Saved";
   $("deadline").hidden = p.deadline === null || p.finalized || state.phase === "finished";
   if (!$("deadline").hidden) {
@@ -193,13 +230,15 @@ function controls() {
   }
 }
 
-function renderHistory() {
-  const signature = JSON.stringify(state.players.map((p) => [p.name, p.submissions]));
-  if (signature === historySignature) return;
-  historySignature = signature;
-  const opened = new Set([...$("history").querySelectorAll("details[open]")].map((d) => d.id));
+function renderHistory(players = state.players, target = $("history")) {
+  if (target === $("history")) {
+    const signature = JSON.stringify(players.map((p) => [p.name, p.submissions]));
+    if (signature === historySignature) return;
+    historySignature = signature;
+  }
+  const opened = new Set([...target.querySelectorAll("details[open]")].map((d) => d.id));
   const content = document.createDocumentFragment();
-  for (const p of state.players) {
+  for (const p of players) {
     const heading = document.createElement("h3");
     heading.className = "history-owner";
     heading.textContent = p.name + (p.id === state.me ? " · your submissions" : " · opponent");
@@ -238,13 +277,64 @@ function renderHistory() {
       if (s.grade) { section("Reasoning", s.grade.reasoning); section("Evidence", s.grade.evidence); }
       else if (s.status === "graded") { const text = document.createElement("p"); text.className = "muted"; text.textContent = "Detailed feedback is hidden until the competition ends."; feedback.append(text); }
       if (s.error) { const error = document.createElement("p"); error.className = "error"; error.textContent = s.error; feedback.append(error); }
-      if (s.solution !== undefined) section("Your submitted solution", s.solution);
+      if (s.solution !== undefined) {
+        section("Your submitted solution", s.solution || "Solution provided in screenshots.");
+        window.appendSolutionImages(feedback, s.images || []);
+      }
       else { const privateText = document.createElement("p"); privateText.className = "muted"; privateText.textContent = "Your opponent’s solution is private."; feedback.append(privateText); }
       entry.append(summary, feedback);
       content.append(entry);
     }
   }
-  $("history").replaceChildren(content);
+  target.replaceChildren(content);
+}
+
+function renderRounds() {
+  const rounds = state.previous_rounds;
+  $("round-history").hidden = !rounds.length;
+  const signature = JSON.stringify(rounds);
+  if (signature === roundHistorySignature) return;
+  roundHistorySignature = signature;
+  const list = $("round-history-list");
+  const opened = new Set([...list.querySelectorAll("details[open]")].map((entry) => entry.id));
+  list.replaceChildren();
+  for (const round of [...rounds].reverse()) {
+    const entry = document.createElement("details");
+    entry.id = `round-${round.round}`;
+    entry.className = "submission";
+    const summary = document.createElement("summary");
+    const winner = state.players.find((p) => p.id === round.result.winner);
+    summary.textContent = `Round ${round.round} · ${round.title} · ${winner ? `${winner.name} wins` : "Draw"} · ${state.players.map((p) => round.scores[p.id]).join(" : ")}`;
+    const body = document.createElement("div");
+    body.className = "feedback";
+    let loaded = false;
+    let busy = false;
+    entry.addEventListener("toggle", async () => {
+      if (!entry.open || loaded || busy) return;
+      busy = true;
+      body.textContent = "Loading round…";
+      try {
+        const archived = await api(sessionPath(`/rounds/${round.round}`));
+        body.replaceChildren();
+        for (const [title, text] of [["Problem", archived.problem.statement], ["Criteria", archived.problem.criterions], ["Reference solution", archived.problem.reference_solution]]) {
+          const heading = document.createElement("h3");
+          heading.textContent = title;
+          const content = document.createElement("div");
+          content.className = "rendered";
+          render(content, text);
+          body.append(heading, content);
+        }
+        const history = document.createElement("div");
+        renderHistory(archived.players, history);
+        body.append(history);
+        loaded = true;
+      } catch (error) { body.textContent = error.message; }
+      finally { busy = false; }
+    });
+    entry.append(summary, body);
+    entry.open = opened.has(entry.id);
+    list.append(entry);
+  }
 }
 
 function renderChat() {
@@ -278,16 +368,19 @@ async function saveDraft() {
   clearTimeout(draftTimer);
   if (savePromise) return savePromise;
   if (!draftDirty || draftConflict || !state || state.phase === "lobby") return;
+  const savingRound = state.round;
   savePromise = (async () => {
-    while (draftDirty && !draftConflict && state.phase !== "lobby") {
+    while (draftDirty && !draftConflict && state.phase !== "lobby" && state.round === savingRound) {
       const text = $("solution").value;
       try {
-        const result = await api(sessionPath("/draft"), "PUT", { text, revision: draftRevision });
+        const result = await api(sessionPath("/draft"), "PUT", { text, revision: draftRevision, round: savingRound });
+        if (state.round !== savingRound) return;
         draftRevision = result.players.find((p) => p.id === result.me).draft_revision;
         draftDirty = $("solution").value !== text;
         apply(result);
         if (draftDirty) backupDraft(); else clearBackup();
       } catch (error) {
+        if (state.round !== savingRound) return;
         if (error.status === 409) {
           draftConflict = true;
           $("draft-conflict").hidden = false;
@@ -345,8 +438,11 @@ async function submitSolution() {
   if ($("submit").disabled) return;
   await action(async () => {
     const solution = $("solution").value;
+    const images = solutionImages.value;
     saveDraft();
-    if (!pendingRequest || pendingRequest.solution !== solution) pendingRequest = { solution, request_id: crypto.randomUUID() };
+    if (!pendingRequest || pendingRequest.solution !== solution || pendingRequest.images.length !== images.length || pendingRequest.images.some((image, index) => image !== images[index])) {
+      pendingRequest = { solution, images, request_id: crypto.randomUUID(), round: state.round };
+    }
     const next = await api(sessionPath("/submissions"), "POST", pendingRequest);
     pendingRequest = null;
     apply(next);
@@ -356,6 +452,8 @@ async function submitSolution() {
 
 async function init() {
   if (!render) { notice("Rendering libraries could not load. Check your connection and reload.", true); return; }
+  solutionImages = new window.SolutionImages($("solution-images"), $("image-attachments"), $("solution"), controls, notice);
+  solutionImages.setDisabled(true);
   $("create-form").addEventListener("submit", (event) => {
     event.preventDefault();
     action(async () => {
@@ -407,13 +505,36 @@ async function init() {
   $("model-form").addEventListener("submit", (event) => {
     event.preventDefault();
     action(async () => {
-      apply(await api(sessionPath("/model"), "PUT", { model: $("lobby-model").value }));
+      apply(await api(sessionPath("/model"), "PUT", { model: $("lobby-model").value, round: state.round }));
       notice("Shared model updated. Both players need to click Ready again.");
     });
   });
   $("ready").addEventListener("click", () => action(async () => {
-    apply(await api(sessionPath("/ready"), "PUT", { ready: !me().ready }));
+    apply(await api(sessionPath("/ready"), "PUT", { ready: !me().ready, round: state.round }));
   }));
+  $("rematch").addEventListener("click", () => action(async () => {
+    apply(await api(sessionPath("/rematch"), "POST", { round: state.round }));
+  }));
+  $("next-problem-form").addEventListener("submit", (event) => {
+    event.preventDefault();
+    action(async () => {
+      let problem;
+      try { problem = JSON.parse($("next-problem-json").value); } catch { throw new Error("Problem must be valid JSON."); }
+      apply(await api(sessionPath("/problem"), "PUT", { problem, round: state.round }));
+      notice("Problem updated for this round. Both players need to click Ready again.");
+    });
+  });
+  $("next-problem-file").addEventListener("change", async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+    try {
+      if (file.size > 150000) throw new Error("Problem JSON must be smaller than 150 KB.");
+      const text = await file.text();
+      JSON.parse(text);
+      $("next-problem-json").value = text;
+    } catch (error) { notice(error.message, true); }
+    event.target.value = "";
+  });
   $("solution").addEventListener("input", () => {
     draftDirty = true;
     backupDraft();
@@ -428,8 +549,8 @@ async function init() {
   $("submit").addEventListener("click", submitSolution);
   $("finalize").addEventListener("click", () => action(async () => {
     saveDraft();
-    apply(await api(sessionPath("/finalize"), "POST"));
-    notice("Finalized. Your opponent has up to five minutes; pending submissions still finish grading.");
+    apply(await api(sessionPath("/finalize"), "POST", { round: state.round }));
+    notice(me().submissions.length ? "Finalized. Your opponent has up to five minutes; pending submissions still finish grading." : "Finalized without a submission. Finalize locks submissions; it does not send the editor contents for grading.");
   }));
   $("keep-local").addEventListener("click", () => action(async () => {
     apply(await api(sessionPath()));

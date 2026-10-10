@@ -5,6 +5,7 @@ let config;
 let customProblem = null;
 let pending = false;
 const submissions = [];
+let solutionImages;
 
 const render = window.renderMarkdown;
 
@@ -14,7 +15,8 @@ function status(message, error = false) {
 }
 
 function updateButton() {
-  $("submit").disabled = !config || pending || !$("solution").value.trim() || !$("api-key").value.trim();
+  $("submit").disabled = !config || pending || solutionImages.busy || (!$("solution").value.trim() && !solutionImages.value.length) || !$("api-key").value.trim();
+  solutionImages.setDisabled(pending || !config);
 }
 
 function updateScore() {
@@ -25,7 +27,7 @@ function updateScore() {
   $("score-help").textContent = `Best verdict: ${best}. Counted submissions: ${grades.length}. Penalty: ${penalty}.`;
 }
 
-function addSubmission(result, solution) {
+function addSubmission(result, solution, images) {
   submissions.push(result);
   $("history-empty").hidden = true;
   const entry = document.createElement("details");
@@ -61,7 +63,8 @@ function addSubmission(result, solution) {
     error.textContent = result.error;
     feedback.append(error);
   }
-  section("Submitted solution", solution);
+  section("Submitted solution", solution || "Solution provided in screenshots.");
+  window.appendSolutionImages(feedback, images);
   const meta = document.createElement("p");
   meta.className = "meta";
   meta.textContent = `${result.attempts} grading attempt${result.attempts === 1 ? "" : "s"} · ${result.counted ? "Counts toward score" : "Excluded from submission count"}`;
@@ -75,6 +78,7 @@ async function submit(event) {
   event.preventDefault();
   if ($("submit").disabled) return;
   const solution = $("solution").value;
+  const images = solutionImages.value;
   pending = true;
   updateButton();
   $("submit").textContent = "Grading…";
@@ -84,11 +88,14 @@ async function submit(event) {
     const response = await fetch("/api/grade", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ api_key: $("api-key").value.trim(), solution, problem: customProblem }),
+      body: JSON.stringify({ api_key: $("api-key").value.trim(), solution, images, problem: customProblem }),
     });
-    if (!response.ok) throw new Error(`Request failed (${response.status}). Check the input and try again.`);
     const result = await response.json();
-    addSubmission(result, solution);
+    if (!response.ok) {
+      const detail = typeof result.detail === "string" ? result.detail : result.detail?.map((error) => error.msg).join("; ");
+      throw new Error(detail || `Request failed (${response.status}). Check the input and try again.`);
+    }
+    addSubmission(result, solution, images);
     status(result.counted ? "Grading complete. Your feedback is below." : result.error, !result.counted);
   } catch (error) {
     status(`${error.message} No submission penalty was applied.`, true);
@@ -121,6 +128,7 @@ async function loadProblem(event) {
     $("history").replaceChildren();
     $("history-empty").hidden = false;
     $("solution").value = "";
+    solutionImages.clear();
     render($("preview"), "Your proof takes shape here.");
     updateScore();
     updateButton();
@@ -139,6 +147,8 @@ async function init() {
     status("Rendering libraries could not load. Check your internet connection and reload the page.", true);
     return;
   }
+  solutionImages = new window.SolutionImages($("solution-images"), $("image-attachments"), $("solution"), updateButton, status);
+  solutionImages.setDisabled(true);
   $("solution").addEventListener("input", () => {
     render($("preview"), $("solution").value || "Your proof takes shape here.");
     updateButton();

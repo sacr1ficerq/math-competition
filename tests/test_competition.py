@@ -9,10 +9,11 @@ from unittest.mock import patch
 import httpx
 
 from app.api import lifespan, settings
-from app.competition import CompetitionError, Store, score, snapshot
+from app.competition import CompetitionError, Store, match_score, score, snapshot
 from app.config import Problem
 from app.grading import GradeResponse, Verdict
 from app.main import app
+from test_grading import screenshot
 
 
 PROBLEM = Problem(title="Secret problem", statement="Prove $x=x$.", criterions="Secret criteria", reference_solution="Secret reference")
@@ -140,30 +141,61 @@ class CompetitionTests(unittest.TestCase):
         self.assertEqual(score(session["players"][0])["score"], -1)
         self.assertEqual(session["result"]["winner"], session["players"][1]["id"])
 
-    def test_tie_uses_last_successful_submission_and_excludes_failed(self):
+    def test_tie_uses_finalization_instead_of_submission_times(self):
         self.start()
         self.submit(verdict=5, offset=1)
         self.submit("bob-token", verdict=5, offset=2)
         failed = self.submit(verdict=None, offset=3)
         self.store.complete(self.code, failed["id"], {"status": "failed", "attempts": 6, "error": "Failed"})
+        self.store.finalize(self.code, "bob-token", self.now + 20)
+        session = self.store.finalize(self.code, "alice-token", self.now + 21)
+        self.assertEqual(session["result"]["winner"], session["players"][1]["id"])
+        self.assertEqual(session["result"]["reason"], "Equal scores; earlier finalization wins.")
+
+    def test_no_submissions_tie_is_decided_by_finalization(self):
+        self.start()
         session = self.end()
         self.assertEqual(session["result"]["winner"], session["players"][0]["id"])
 
-    def test_no_submissions_draw(self):
-        self.start()
-        self.assertIsNone(self.end()["result"]["winner"])
-
-    def test_identical_successful_submission_times_draw(self):
+    def test_identical_submission_times_still_use_finalization(self):
         self.start()
         self.submit(verdict=5, offset=1)
         self.submit("bob-token", verdict=5, offset=1)
-        self.assertIsNone(self.end()["result"]["winner"])
-
-    def test_successful_zero_wins_tie_with_no_submission(self):
-        self.start()
-        self.submit(verdict=0)
         session = self.end()
         self.assertEqual(session["result"]["winner"], session["players"][0]["id"])
+
+    def test_identical_finalization_times_draw(self):
+        self.start()
+        self.submit(verdict=5, offset=1)
+        self.submit("bob-token", verdict=5, offset=2)
+        self.store.finalize(self.code, "alice-token", self.now + 20)
+        session = self.store.finalize(self.code, "bob-token", self.now + 20)
+        self.assertIsNone(session["result"]["winner"])
+        self.assertEqual(session["result"]["reason"], "Equal scores and identical finalization times: draw.")
+
+    def test_score_tie_ignores_submission_presence(self):
+        self.start()
+        self.submit(verdict=0)
+        self.store.finalize(self.code, "bob-token", self.now + 20)
+        session = self.store.finalize(self.code, "alice-token", self.now + 21)
+        self.assertEqual(session["result"]["winner"], session["players"][1]["id"])
+
+    def test_tie_uses_deadline_for_automatic_finalization(self):
+        self.start()
+        self.submit(verdict=5, offset=1)
+        self.submit("bob-token", verdict=5, offset=2)
+        session = self.store.finalize(self.code, "alice-token", self.now + 20)
+        deadline = session["players"][1]["deadline"]
+        with patch("app.competition.time.time", return_value=deadline + 50):
+            session = self.store.read(self.code, "alice-token")
+        self.assertEqual(session["players"][1]["finalized_at"], deadline)
+        self.assertEqual(session["result"]["winner"], session["players"][0]["id"])
+
+    def test_repeated_finalize_keeps_original_timestamp(self):
+        self.start()
+        self.store.finalize(self.code, "alice-token", self.now + 20)
+        session = self.store.finalize(self.code, "alice-token", self.now + 21)
+        self.assertEqual(session["players"][0]["finalized_at"], self.now + 20)
 
     def test_duplicate_requests_are_idempotent_even_after_finalization(self):
         self.start()
@@ -188,6 +220,23 @@ class CompetitionTests(unittest.TestCase):
         session = self.store.read(self.code, "alice-token")
         self.assertEqual(session["phase"], "finished")
         self.assertEqual(score(session["players"][0])["score"], 9)
+
+    def test_image_submissions_persist_and_idempotency_checks_images(self):
+        self.start()
+        images = [screenshot()]
+        _, submission, created = self.store.submit(self.code, "alice-token", "", "image-once", images=images)
+        self.assertTrue(created)
+        reopened = Store(self.path)
+        session, duplicate, created = reopened.submit(self.code, "alice-token", "", "image-once", images=images)
+        self.assertFalse(created)
+        self.assertEqual(duplicate["id"], submission["id"])
+        self.assertEqual(session["players"][0]["submissions"][0]["images"], images)
+        with self.assertRaises(CompetitionError):
+            reopened.submit(self.code, "alice-token", "", "image-once", images=[screenshot("JPEG")])
+        own = snapshot(session, "alice-token")["players"][0]["submissions"][0]
+        self.assertEqual(own["images"][0]["name"], images[0]["name"])
+        self.assertNotIn("base64", json.dumps(own))
+        self.assertNotIn("images", snapshot(session, "bob-token")["players"][0]["submissions"][0])
 
     def test_in_flight_draft_save_after_finalization_cannot_unlock_submissions(self):
         self.start()
@@ -229,6 +278,140 @@ class CompetitionTests(unittest.TestCase):
         self.assertEqual(snapshot(session, "bob-token")["chat"][0]["text"], "Hello Bob!")
         with self.assertRaises(CompetitionError):
             self.store.chat(self.code, "outsider", "No")
+
+    def test_rematch_keeps_identity_chat_history_and_resets_round_state(self):
+        self.start()
+        self.store.chat(self.code, "alice-token", "Rematch next?")
+        self.store.draft(self.code, "alice-token", "Private draft", 0)
+        self.submit(verdict=9)
+        self.submit("bob-token", verdict=8)
+        finished = self.end()
+        ids = [p["id"] for p in finished["players"]]
+        session = self.store.rematch(self.code, "bob-token", 1)
+        self.assertEqual(session["code"], self.code)
+        self.assertEqual(session["round"], 2)
+        self.assertEqual(session["phase"], "lobby")
+        self.assertEqual([p["id"] for p in session["players"]], ids)
+        self.assertEqual(session["chat"][0]["text"], "Rematch next?")
+        self.assertEqual(session["rounds"][0]["result"], finished["result"])
+        self.assertEqual(session["rounds"][0]["players"][0]["draft"], "Private draft")
+        for player in session["players"]:
+            self.assertFalse(player["ready"])
+            self.assertFalse(player["finalized"])
+            self.assertIsNone(player["deadline"])
+            self.assertIsNone(player["finalized_at"])
+            self.assertEqual(player["draft"], "")
+            self.assertEqual(player["submissions"], [])
+            self.assertEqual(score(player)["score"], 0)
+        view = snapshot(session, "bob-token")
+        self.assertIsNone(view["problem"])
+        self.assertEqual([p["wins"] for p in view["players"]], [1, 0])
+        self.assertNotIn("Private proof", json.dumps(view))
+        reopened = Store(self.path).read(self.code, "bob-token")
+        self.assertEqual(reopened["rounds"], session["rounds"])
+        self.assertEqual(match_score(reopened)["wins"], {ids[0]: 1, ids[1]: 0})
+
+    def test_rematch_retries_and_both_players_click_reset_only_once(self):
+        self.start()
+        self.end()
+        self.store.rematch(self.code, "alice-token", 1)
+        self.store.ready(self.code, "alice-token", True, round=2)
+        session = self.store.rematch(self.code, "bob-token", 1)
+        self.assertEqual(session["round"], 2)
+        self.assertEqual(len(session["rounds"]), 1)
+        self.assertTrue(session["players"][0]["ready"])
+        self.assertEqual(match_score(session)["completed_rounds"], 1)
+
+    def test_rematch_waits_for_pending_grading_and_requires_membership(self):
+        with self.assertRaises(CompetitionError):
+            self.store.rematch(self.code, "alice-token", 1)
+        self.start()
+        submission = self.submit(verdict=None)
+        self.end()
+        with self.assertRaises(CompetitionError):
+            self.store.rematch(self.code, "alice-token", 1)
+        self.store.complete(self.code, submission["id"], outcome())
+        with self.assertRaises(CompetitionError) as error:
+            self.store.rematch(self.code, "outsider", 1)
+        self.assertEqual(error.exception.status, 403)
+        self.assertEqual(self.store.rematch(self.code, "alice-token", 1)["round"], 2)
+        self.store.complete(self.code, submission["id"], outcome(0))
+        self.assertEqual(match_score(self.store.read(self.code, "alice-token"))["completed_rounds"], 1)
+
+    def test_wins_and_draws_are_counted_once_across_three_rounds(self):
+        self.start()
+        self.submit(verdict=9)
+        self.submit("bob-token", verdict=8)
+        self.end()
+        self.store.rematch(self.code, "alice-token", 1)
+        self.start()
+        self.submit(verdict=7)
+        self.submit("bob-token", verdict=10)
+        self.end()
+        self.store.rematch(self.code, "bob-token", 2)
+        self.start()
+        self.submit(verdict=5)
+        self.submit("bob-token", verdict=5)
+        self.store.finalize(self.code, "alice-token", self.now + 20)
+        self.store.finalize(self.code, "bob-token", self.now + 20)
+        for _ in range(3):
+            session = self.store.read(self.code, "alice-token")
+            tally = match_score(session)
+            self.assertEqual(list(tally["wins"].values()), [1, 1])
+            self.assertEqual(tally["draws"], 1)
+            self.assertEqual(tally["completed_rounds"], 3)
+        session = self.store.rematch(self.code, "alice-token", 3)
+        self.assertEqual(match_score(session), tally)
+        self.assertEqual(session["round"], 4)
+
+    def test_stale_round_actions_and_draft_revisions_cannot_affect_rematch(self):
+        self.start()
+        self.end()
+        self.store.rematch(self.code, "alice-token", 1)
+        for action in [
+            lambda: self.store.ready(self.code, "alice-token", True, round=1),
+            lambda: self.store.model(self.code, "alice-token", "new/model", round=1),
+            lambda: self.store.draft(self.code, "alice-token", "Old draft", 0, round=1),
+            lambda: self.store.submit(self.code, "alice-token", "Old proof", "old", round=1),
+            lambda: self.store.finalize(self.code, "alice-token", round=1),
+        ]:
+            with self.assertRaises(CompetitionError):
+                action()
+        self.start()
+        with self.assertRaises(CompetitionError):
+            self.store.draft(self.code, "alice-token", "Old draft", 0, round=2)
+        session = self.store.read(self.code, "alice-token")
+        self.assertEqual(session["players"][0]["draft"], "")
+        self.assertFalse(session["players"][0]["finalized"])
+
+    def test_new_problem_is_creator_only_lobby_only_and_resets_readiness(self):
+        self.start()
+        self.end()
+        self.store.rematch(self.code, "alice-token", 1)
+        self.store.ready(self.code, "bob-token", True, round=2)
+        problem = PROBLEM.model_copy(update={"title": "Round two", "statement": "NEW_SECRET_STATEMENT"})
+        with self.assertRaises(CompetitionError) as error:
+            self.store.problem(self.code, "bob-token", problem, 2)
+        self.assertEqual(error.exception.status, 403)
+        session = self.store.problem(self.code, "alice-token", problem, 2)
+        self.assertFalse(any(p["ready"] for p in session["players"]))
+        self.assertNotIn("NEW_SECRET_STATEMENT", json.dumps(snapshot(session, "bob-token")))
+        self.start()
+        with self.assertRaises(CompetitionError):
+            self.store.problem(self.code, "alice-token", PROBLEM, 2)
+        self.assertEqual(self.store.read(self.code, "bob-token")["problem"]["title"], "Round two")
+
+    def test_existing_finished_sessions_get_their_first_win_and_can_rematch(self):
+        self.start()
+        finished = self.end()
+        finished.pop("round")
+        finished.pop("rounds")
+        with self.store.connection() as db:
+            db.execute("UPDATE sessions SET state = ? WHERE code = ?", (json.dumps(finished), self.code))
+        session = self.store.read(self.code, "alice-token")
+        self.assertEqual(session["round"], 1)
+        self.assertEqual(list(match_score(session)["wins"].values()), [1, 0])
+        self.assertEqual(self.store.rematch(self.code, "alice-token", 1)["round"], 2)
 
 
 class SessionApiTests(unittest.IsolatedAsyncioTestCase):
@@ -296,8 +479,12 @@ class SessionApiTests(unittest.IsolatedAsyncioTestCase):
             await self.alice.post(self.path + "/submissions", json={"solution": "Private proof", "request_id": "once"})
             self.assertEqual(grader.call_count, 1)
             await self.alice.post(self.path + "/finalize")
+            self.assertFalse(release.is_set())
+            self.assertEqual(len(app.state.grading_tasks), 1)
+            self.assertTrue(all(not task.done() and not task.cancelling() for task in app.state.grading_tasks))
             response = await self.bob.post(self.path + "/finalize")
             self.assertEqual(response.json()["phase"], "grading")
+            self.assertTrue(all(not task.done() and not task.cancelling() for task in app.state.grading_tasks))
             release.set()
             await asyncio.gather(*list(app.state.grading_tasks))
         view = (await self.bob.get(self.path)).json()
@@ -308,6 +495,49 @@ class SessionApiTests(unittest.IsolatedAsyncioTestCase):
         response = await self.alice.post(self.path + "/submissions", json={"solution": "Too late", "request_id": "late"})
         self.assertEqual(response.status_code, 409)
 
+    async def test_graceful_shutdown_waits_for_inflight_grading(self):
+        await self.start()
+        await self.alice.put("/api/key", json={"api_key": "test-secret"})
+        started = asyncio.Event()
+        release = asyncio.Event()
+
+        async def fake_grade(request, problem, config):
+            started.set()
+            await release.wait()
+            return GradeResponse(id="shutdown-grade", submitted_at="2026-10-10T12:00:00Z", status="graded", attempts=1, counted=True, grade=Verdict.model_validate(outcome()["grade"]))
+
+        with patch("app.api.grade_solution", side_effect=fake_grade):
+            response = await self.alice.post(self.path + "/submissions", json={"solution": "Proof", "request_id": "shutdown-once"})
+            self.assertEqual(response.status_code, 202)
+            await asyncio.wait_for(started.wait(), 2)
+            await self.alice.post(self.path + "/finalize")
+            await self.bob.post(self.path + "/finalize")
+            with self.assertLogs("uvicorn.error", level="INFO") as logs:
+                shutdown = asyncio.create_task(self.lifespan.__aexit__(None, None, None))
+                try:
+                    await asyncio.sleep(0.02)
+                    self.assertFalse(shutdown.done())
+                    self.assertTrue(all(not task.cancelling() for task in app.state.grading_tasks))
+                finally:
+                    release.set()
+                    await asyncio.wait_for(shutdown, 2)
+                self.assertTrue(any("waiting for 1 in-flight" in line for line in logs.output))
+        self.lifespan = lifespan(app)
+        await self.lifespan.__aenter__()
+        view = (await self.alice.get(self.path)).json()
+        self.assertEqual(view["phase"], "finished")
+        self.assertEqual(view["players"][0]["submissions"][0]["status"], "graded")
+
+    async def test_finalize_does_not_submit_unsubmitted_draft(self):
+        await self.start()
+        await self.alice.put(self.path + "/draft", json={"text": "Unsubmitted proof", "revision": 0})
+        with patch("app.api.grade_solution") as grader, self.assertLogs("uvicorn.error", level="INFO") as logs:
+            response = await self.alice.post(self.path + "/finalize")
+            self.assertEqual(response.status_code, 200)
+            grader.assert_not_called()
+        self.assertEqual(response.json()["players"][0]["submissions"], [])
+        self.assertTrue(any("submissions=0" in line for line in logs.output))
+
     async def test_submission_requires_key_and_hidden_feedback_on_api(self):
         await self.start()
         response = await self.alice.post(self.path + "/submissions", json={"solution": "Proof", "request_id": "first"})
@@ -315,6 +545,86 @@ class SessionApiTests(unittest.IsolatedAsyncioTestCase):
         response = await self.alice.put("/api/key", json={"api_key": "bad key with spaces"})
         self.assertEqual(response.status_code, 422)
         self.assertNotIn("bad key with spaces", response.text)
+
+    async def test_image_submission_grading_and_private_image_endpoint(self):
+        await self.start()
+        await self.alice.put("/api/key", json={"api_key": "test-secret"})
+        image = screenshot()
+
+        async def fake_grade(request, problem, config):
+            self.assertEqual(request.solution, "")
+            self.assertEqual(request.images[0].model_dump(), image)
+            return GradeResponse(id="image-grade", submitted_at="2026-10-10T12:00:00Z", status="graded", attempts=1, counted=True, grade=Verdict.model_validate(outcome()["grade"]))
+
+        with patch("app.api.grade_solution", side_effect=fake_grade) as grader:
+            response = await self.alice.post(self.path + "/submissions", json={"images": [image], "request_id": "image-once"})
+            self.assertEqual(response.status_code, 202)
+            await asyncio.gather(*list(app.state.grading_tasks))
+            duplicate = await self.alice.post(self.path + "/submissions", json={"images": [image], "request_id": "image-once"})
+            self.assertEqual(duplicate.status_code, 202)
+            self.assertEqual(grader.call_count, 1)
+        url = response.json()["players"][0]["submissions"][0]["images"][0]["url"]
+        fetched = await self.alice.get(url)
+        self.assertEqual(fetched.status_code, 200)
+        self.assertEqual(fetched.headers["content-type"], "image/png")
+        self.assertEqual(fetched.headers["cache-control"], "no-store")
+        self.assertTrue(fetched.content.startswith(b"\x89PNG\r\n\x1a\n"))
+        self.assertEqual((await self.bob.get(url)).status_code, 404)
+        self.assertEqual((await self.alice.get(url.rsplit("/", 1)[0] + "/-1")).status_code, 404)
+        await self.alice.post(self.path + "/finalize")
+        await self.bob.post(self.path + "/finalize")
+        self.assertEqual((await self.bob.get(url)).status_code, 404)
+        self.assertEqual((await self.alice.get(url)).status_code, 200)
+        bob_view = (await self.bob.get(self.path)).json()
+        self.assertNotIn("images", bob_view["players"][0]["submissions"][0])
+
+    async def test_invalid_screenshots_are_rejected_without_creating_submissions(self):
+        await self.start()
+        await self.alice.put("/api/key", json={"api_key": "test-secret"})
+        with patch("app.api.grade_solution") as grader:
+            for images in [[{"data_url": "data:image/png;base64,aW52YWxpZA=="}], [screenshot()] * 5]:
+                response = await self.alice.post(self.path + "/submissions", json={"images": images, "request_id": "invalid"})
+                self.assertEqual(response.status_code, 422)
+            grader.assert_not_called()
+        view = (await self.alice.get(self.path)).json()
+        self.assertEqual(view["players"][0]["submissions"], [])
+
+    async def test_rematch_preserves_cookies_and_private_archived_images(self):
+        await self.start()
+        await self.alice.put("/api/key", json={"api_key": "test-secret"})
+        await self.bob.put("/api/key", json={"api_key": "bob-secret"})
+        token = self.alice.cookies["math_player"]
+        image = screenshot()
+        _, submission, _ = app.state.store.submit(self.code, token, "Private round one proof", "round-one", images=[image])
+        app.state.store.complete(self.code, submission["id"], outcome())
+        await self.alice.post(self.path + "/finalize")
+        finished = (await self.bob.post(self.path + "/finalize")).json()
+        image_url = (await self.alice.get(self.path)).json()["players"][0]["submissions"][0]["images"][0]["url"]
+        response = await self.bob.post(self.path + "/rematch", json={"round": 1})
+        self.assertEqual(response.status_code, 200)
+        view = response.json()
+        self.assertEqual(view["round"], 2)
+        self.assertEqual(view["phase"], "lobby")
+        self.assertEqual([p["id"] for p in view["players"]], [p["id"] for p in finished["players"]])
+        self.assertTrue(view["has_api_key"])
+        self.assertTrue((await self.alice.get(self.path)).json()["has_api_key"])
+        self.assertEqual(self.alice.cookies["math_player"], token)
+        self.assertEqual([p["wins"] for p in view["players"]], [1, 0])
+        own = await self.alice.get(self.path + "/rounds/1")
+        opponent = await self.bob.get(self.path + "/rounds/1")
+        self.assertEqual(own.status_code, 200)
+        self.assertIn("Private round one proof", own.text)
+        self.assertNotIn("Private round one proof", opponent.text)
+        self.assertIn("Hidden reasoning", opponent.text)
+        self.assertEqual((await self.alice.get(image_url)).status_code, 200)
+        self.assertEqual((await self.bob.get(image_url)).status_code, 404)
+        self.assertEqual((await self.alice.get(self.path + "/rounds/99")).status_code, 404)
+        self.assertEqual((await self.alice.post(self.path + "/rematch", json={"round": 1})).json()["round"], 2)
+        self.assertEqual((await self.alice.put(self.path + "/ready", json={"ready": True})).status_code, 409)
+        await self.alice.put(self.path + "/ready", json={"ready": True, "round": 2})
+        active = await self.bob.put(self.path + "/ready", json={"ready": True, "round": 2})
+        self.assertEqual(active.json()["phase"], "active")
+        self.assertEqual((await self.alice.post(self.path + "/finalize", json={"round": 1})).status_code, 409)
 
 
 if __name__ == "__main__":

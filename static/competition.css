@@ -66,3 +66,9 @@ form > .primary { margin-top: 20px; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 @media (max-width: 980px) { .competition-grid { grid-template-columns: minmax(0, 1fr); } .chat-panel { position: static; } #chat-messages { height: 220px; } }
 @media (max-width: 720px) { .landing-grid, .key-settings { grid-template-columns: 1fr; } .player-cards { gap: 10px; } .player-card { padding: 12px; } .player-card .player-top { flex-direction: column; gap: 0; } .session-heading { gap: 10px; } #session-code { display: block; margin: 8px 0 0; } .session-heading button { font-size: 12px; padding: 7px 10px; } .landing-intro h1 { font-size: 28px; } .competition-grid .preview { min-height: 160px; } .competition-grid .workspace textarea { min-height: 260px; } }
+.win-count { color: var(--gold); font-size: 13px; margin: 6px 0; }
+#match-summary { font-size: 13px; margin: 0 0 12px; }
+#next-problem { margin: 16px 0; }
+#next-problem summary { cursor: pointer; color: var(--foam); }
+#next-problem-json { min-height: 160px; border: 1px solid var(--line); border-radius: 8px; margin: 8px 0; }
+#round-history-list summary { overflow-wrap: anywhere; }

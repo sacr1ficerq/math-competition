@@ -11,6 +11,7 @@
   <script defer src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
   <script defer src="/static/rendering.js"></script>
+  <script defer src="/static/attachments.js"></script>
   <script defer src="/static/competition.js"></script>
 </head>
 <body>
@@ -38,7 +39,8 @@
     </div>
 
     <div id="session" hidden>
-      <div class="session-heading"><div><span id="phase" class="badge"></span><span id="session-code"></span></div><button id="copy-invite" type="button">Copy invite link</button></div>
+      <div class="session-heading"><div><span id="round-label" class="badge">Round 1</span><span id="phase" class="badge"></span><span id="session-code"></span></div><button id="copy-invite" type="button">Copy invite link</button></div>
+      <p id="match-summary" class="muted"></p>
       <div id="player-cards" class="player-cards"></div>
       <div class="key-settings">
         <form id="key-form"><label for="session-key">OpenRouter API key</label><div class="key-input"><input id="session-key" type="password" maxlength="512" placeholder="sk-or-…" autocomplete="off"><button id="save-key" type="submit">Save key</button><button id="remove-key" type="button" hidden>Forget</button></div><small id="key-state">Saved in an HttpOnly cookie, never in the session database.</small></form>
@@ -47,18 +49,20 @@
 
       <div class="competition-grid">
         <div>
-          <section id="lobby" class="panel" hidden><h1>Ready when you are.</h1><p class="muted">The problem is revealed only when both players are ready. Make sure you have your API key.</p><button id="ready" class="primary" type="button">Ready</button><p id="lobby-hint" class="muted"></p></section>
+          <section id="lobby" class="panel" hidden><h1>Ready when you are.</h1><p class="muted">The problem is revealed only when both players are ready. Make sure you have your API key.</p><details id="next-problem" hidden><summary>Load a new problem for this rematch</summary><form id="next-problem-form"><div class="field-heading"><label for="next-problem-json">Next problem JSON</label><label class="file-button">Load file<input id="next-problem-file" type="file" accept=".json,application/json"></label></div><textarea id="next-problem-json" required spellcheck="false" placeholder='{"title": "…", "statement": "…", "criterions": "…", "reference_solution": "…"}'></textarea><button type="submit">Update problem</button><small>Keep the existing problem or load a new one. Updating resets both players’ readiness.</small></form></details><button id="ready" class="primary" type="button">Ready</button><p id="lobby-hint" class="muted"></p></section>
           <div id="arena" hidden>
             <section class="problem-card"><h1 id="problem-title"></h1><div id="problem-statement" class="rendered"></div></section>
-            <div id="result" class="panel" hidden><h2 id="result-title"></h2><p id="result-reason"></p></div>
+            <div id="result" class="panel" hidden><h2 id="result-title"></h2><p id="result-reason"></p><button id="rematch" class="primary" type="button">Rematch ↗</button><small>Start the next round here with the same players. Wins and previous rounds are kept.</small></div>
             <div id="deadline" role="timer" class="deadline" hidden></div>
             <section class="workspace" aria-label="Solution editor and preview"><div class="editor-pane"><div class="pane-heading"><label for="solution">Your solution</label><span id="draft-status">Saved</span></div><textarea id="solution" maxlength="50000" spellcheck="false" placeholder="Write your proof with Markdown and $LaTeX$…"></textarea><div class="editor-tip">Ctrl / ⌘ + Enter to submit · Drafts save automatically</div></div><div class="preview-pane"><div class="pane-heading"><span>Preview</span><span>Live</span></div><div id="preview" class="rendered preview"></div></div></section>
             <div id="draft-conflict" class="panel" hidden><p>Your draft changed in another tab. Choose which version to keep.</p><button id="keep-local" type="button">Keep this draft</button> <button id="use-saved" type="button">Use saved draft</button></div>
+            <section class="attachments" aria-label="Solution screenshots"><label class="file-button">Add screenshots<input id="solution-images" type="file" accept="image/png,image/jpeg,image/webp" multiple aria-label="Add solution screenshots"></label><small>Or paste a screenshot into the editor. Up to 4 images, 3 MiB and 20 megapixels each. Text is optional with images. Use a model that supports image input.</small><div id="image-attachments"></div></section>
             <div class="competition-actions"><button id="submit" class="primary" type="button">Submit solution ↗</button><button id="finalize" type="button">Finalize</button><span id="submission-hint" class="muted"></span></div>
-            <small>First submission is free; each additional successfully graded submission costs 1 point. Finalizing locks your submissions and gives your opponent five minutes.</small>
+            <small>First submission is free; each additional successfully graded submission costs 1 point. Submit sends your solution for grading; Finalize locks submissions and gives your opponent five minutes. Pending grading continues. Equal scores are decided by who finalized earlier.</small>
             <details id="revealed" class="submission" hidden><summary>Grading criteria &amp; reference solution</summary><div class="feedback"><h3>Criteria</h3><div id="criteria" class="rendered"></div><h3>Reference solution</h3><div id="reference" class="rendered"></div></div></details>
           </div>
           <section id="histories" class="history-section" hidden><div class="history-heading"><h2>Submissions</h2><span id="feedback-hint" class="muted">Feedback appears after both players finish</span></div><div id="history"></div></section>
+          <section id="round-history" class="history-section" hidden><div class="history-heading"><h2>Previous rounds</h2></div><div id="round-history-list"></div></section>
         </div>
         <aside class="chat-panel panel"><h2>Chat</h2><div id="chat-messages" role="log" aria-label="Shared chat" aria-live="polite"></div><form id="chat-form"><label class="sr-only" for="chat-input">Message</label><textarea id="chat-input" maxlength="2000" rows="2" placeholder="Say something…" required></textarea><button type="submit">Send</button></form></aside>
       </div>
