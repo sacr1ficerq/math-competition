@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Math Competition · Practice</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css">
+  <link rel="stylesheet" href="/static/styles.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/marked@15.0.12/marked.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
+  <script defer src="/static/app.js"></script>
+</head>
+<body>
+  <main>
+    <header>
+      <a class="brand" href="/">Math Competition <span> / practice</span></a>
+      <span class="badge">Single-player PoC</span>
+    </header>
+
+    <section class="problem-card" aria-labelledby="problem-title">
+      <div class="problem-top">
+        <h1 id="problem-title">Loading problem…</h1>
+        <label class="file-button" title="Upload a problem JSON with title, statement, criterions, and reference_solution">
+          Load problem JSON
+          <input id="problem-file" type="file" accept=".json,application/json">
+        </label>
+      </div>
+      <div id="problem-statement" class="rendered"></div>
+      <p id="problem-error" class="error" role="alert" hidden></p>
+    </section>
+
+    <section class="workspace" aria-label="Solution editor and preview">
+      <div class="editor-pane">
+        <div class="pane-heading"><label for="solution">Your solution</label><span>Markdown + LaTeX</span></div>
+        <textarea id="solution" placeholder="Write your proof here…&#10;&#10;Use $a^2$ for inline math and $$…$$ for display math." spellcheck="false" maxlength="50000"></textarea>
+        <div class="editor-tip">Inline math: <code>$…$</code> · Display math: <code>$$…$$</code> · <kbd>Ctrl / ⌘ + Enter</kbd> to submit</div>
+      </div>
+      <div class="preview-pane">
+        <div class="pane-heading"><span>Preview</span><span>Live</span></div>
+        <div id="preview" class="rendered preview"><p class="muted">Your proof takes shape here.</p></div>
+      </div>
+    </section>
+
+    <form id="submit-form" class="submit-bar">
+      <div class="key-field">
+        <label for="api-key">OpenRouter API key</label>
+        <div class="key-input"><input id="api-key" type="password" placeholder="sk-or-…" autocomplete="off" required maxlength="512"><button id="toggle-key" type="button" aria-label="Show API key" aria-pressed="false">Show</button></div>
+        <small>Used only for this request. Never saved in cookies or browser storage.</small>
+      </div>
+      <div class="submit-action"><span id="model" class="muted"></span><button id="submit" type="submit" disabled>Submit solution <span aria-hidden="true">↗</span></button></div>
+    </form>
+    <p id="status" role="status" aria-live="polite"></p>
+
+    <section class="history-section" aria-labelledby="history-title">
+      <div class="history-heading"><h2 id="history-title">Submissions</h2><div id="score" tabindex="0" aria-describedby="score-help">Score <strong>0</strong><span> / 10</span><span id="score-help" class="score-tooltip" role="tooltip">Best verdict: 0. Counted submissions: 0. Penalty: 0.</span></div></div>
+      <p id="history-empty" class="muted">Your first submission is free. Each additional graded submission costs 1 point.</p>
+      <div id="history"></div>
+    </section>
+    <footer>Feedback is shown immediately in practice mode. History and drafts last until you reload this page.</footer>
+  </main>
+</body>
+</html>

@@ -1,0 +1,13 @@
+server:
+  host: 127.0.0.1
+  port: 9000
+grading:
+  model: z-ai/glm-5.3-flash
+  proxy: http://127.0.0.1:12334
+  timeout_seconds: 60
+  retry_delay_seconds: 1
+problem:
+  title: A sum of squares
+  statement: 'Let $a$, $b$, and $c$ be real numbers such that $a+b+c=0$. Prove that $a^4+b^4+c^4=\frac12(a^2+b^2+c^2)^2$.'
+  criterions: 'Award 10 points for a complete, logically valid proof. Give partial credit for correct progress. Check that the constraint is used and the identity is established for all real triples satisfying it.'
+  reference_solution: 'Since a+b+c=0, ab+bc+ca=-(a²+b²+c²)/2. Also (ab+bc+ca)²=a²b²+b²c²+c²a²+2abc(a+b+c)=a²b²+b²c²+c²a². Expanding (a²+b²+c²)² therefore gives a⁴+b⁴+c⁴ plus half of that same square, which establishes the identity.'
