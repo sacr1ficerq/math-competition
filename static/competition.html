@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Math Competition</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css">
+  <link rel="stylesheet" href="/static/styles.css">
+  <link rel="stylesheet" href="/static/competition.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/marked@15.0.12/marked.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
+  <script defer src="/static/rendering.js"></script>
+  <script defer src="/static/competition.js"></script>
+</head>
+<body>
+  <main>
+    <header><a class="brand" href="/">Math Competition</a><nav><a href="/practice">Practice</a><span id="connection" class="badge">Connecting…</span></nav></header>
+    <p id="notice" role="status" aria-live="polite"></p>
+
+    <div id="landing" hidden>
+      <div class="landing-intro"><h1>A problem. Two proofs.</h1><p class="muted">Invite a friend, write your solution, and let the same model grade you both.</p></div>
+      <div class="landing-grid">
+        <form id="create-form" class="panel">
+          <h2>Create a competition</h2>
+          <label for="create-name">Your name</label><input id="create-name" required maxlength="40" autocomplete="nickname">
+          <div class="field-heading"><label for="problem-json">Problem JSON</label><label class="file-button">Load file<input id="create-file" type="file" accept=".json,application/json"></label></div>
+          <textarea id="problem-json" required placeholder='{"title": "…", "statement": "…", "criterions": "…", "reference_solution": "…"}' spellcheck="false"></textarea>
+          <small>Include title, statement, criterions, and reference_solution. The statement stays hidden in the lobby.</small>
+          <label for="create-model">Grading model</label><input id="create-model" required maxlength="200" placeholder="z-ai/glm-5.3-flash">
+          <button class="primary" type="submit">Create session ↗</button>
+        </form>
+        <div>
+          <form id="join-form" class="panel"><h2>Join a competition</h2><label for="join-code">Invite code or link</label><input id="join-code" required autocomplete="off"><label for="join-name">Your name</label><input id="join-name" required maxlength="40" autocomplete="nickname"><button class="primary" type="submit">Join session ↗</button></form>
+          <div id="recent" class="panel" hidden><h2>Your sessions</h2><div id="recent-list"></div><small>Your identity is remembered in this browser. Use another browser or private window for the second player.</small></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="session" hidden>
+      <div class="session-heading"><div><span id="phase" class="badge"></span><span id="session-code"></span></div><button id="copy-invite" type="button">Copy invite link</button></div>
+      <div id="player-cards" class="player-cards"></div>
+      <div class="key-settings">
+        <form id="key-form"><label for="session-key">OpenRouter API key</label><div class="key-input"><input id="session-key" type="password" maxlength="512" placeholder="sk-or-…" autocomplete="off"><button id="save-key" type="submit">Save key</button><button id="remove-key" type="button" hidden>Forget</button></div><small id="key-state">Saved in an HttpOnly cookie, never in the session database.</small></form>
+        <div><span id="shared-model" class="muted"></span><form id="model-form" hidden><label for="lobby-model">Shared grading model</label><div class="key-input"><input id="lobby-model" required maxlength="200"><button type="submit">Update</button></div><small>Changing the model resets both players’ readiness.</small></form></div>
+      </div>
+
+      <div class="competition-grid">
+        <div>
+          <section id="lobby" class="panel" hidden><h1>Ready when you are.</h1><p class="muted">The problem is revealed only when both players are ready. Make sure you have your API key.</p><button id="ready" class="primary" type="button">Ready</button><p id="lobby-hint" class="muted"></p></section>
+          <div id="arena" hidden>
+            <section class="problem-card"><h1 id="problem-title"></h1><div id="problem-statement" class="rendered"></div></section>
+            <div id="result" class="panel" hidden><h2 id="result-title"></h2><p id="result-reason"></p></div>
+            <div id="deadline" role="timer" class="deadline" hidden></div>
+            <section class="workspace" aria-label="Solution editor and preview"><div class="editor-pane"><div class="pane-heading"><label for="solution">Your solution</label><span id="draft-status">Saved</span></div><textarea id="solution" maxlength="50000" spellcheck="false" placeholder="Write your proof with Markdown and $LaTeX$…"></textarea><div class="editor-tip">Ctrl / ⌘ + Enter to submit · Drafts save automatically</div></div><div class="preview-pane"><div class="pane-heading"><span>Preview</span><span>Live</span></div><div id="preview" class="rendered preview"></div></div></section>
+            <div id="draft-conflict" class="panel" hidden><p>Your draft changed in another tab. Choose which version to keep.</p><button id="keep-local" type="button">Keep this draft</button> <button id="use-saved" type="button">Use saved draft</button></div>
+            <div class="competition-actions"><button id="submit" class="primary" type="button">Submit solution ↗</button><button id="finalize" type="button">Finalize</button><span id="submission-hint" class="muted"></span></div>
+            <small>First submission is free; each additional successfully graded submission costs 1 point. Finalizing locks your submissions and gives your opponent five minutes.</small>
+            <details id="revealed" class="submission" hidden><summary>Grading criteria &amp; reference solution</summary><div class="feedback"><h3>Criteria</h3><div id="criteria" class="rendered"></div><h3>Reference solution</h3><div id="reference" class="rendered"></div></div></details>
+          </div>
+          <section id="histories" class="history-section" hidden><div class="history-heading"><h2>Submissions</h2><span id="feedback-hint" class="muted">Feedback appears after both players finish</span></div><div id="history"></div></section>
+        </div>
+        <aside class="chat-panel panel"><h2>Chat</h2><div id="chat-messages" role="log" aria-label="Shared chat" aria-live="polite"></div><form id="chat-form"><label class="sr-only" for="chat-input">Message</label><textarea id="chat-input" maxlength="2000" rows="2" placeholder="Say something…" required></textarea><button type="submit">Send</button></form></aside>
+      </div>
+    </div>
+    <footer>Solutions stay private. Verdicts are shared; detailed feedback is revealed when the competition ends.</footer>
+  </main>
+</body>
+</html>

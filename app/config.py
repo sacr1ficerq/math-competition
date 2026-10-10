@@ -32,6 +32,7 @@ class Settings(BaseModel):
     server: ServerConfig = Field(default_factory=ServerConfig)
     grading: GradingConfig = Field(default_factory=GradingConfig)
     problem: Problem
+    database: str = "competition.sqlite3"
 
 
 def load_settings(path: Path = ROOT / "config.yaml") -> Settings:

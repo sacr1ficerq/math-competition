@@ -1,0 +1,17 @@
+[project]
+name = "math-competition"
+version = "1.0.0"
+description = "Two-player math competitions with Markdown, LaTeX, and LLM grading."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115,<1",
+    "uvicorn[standard]>=0.30,<1",
+    "openai>=1.54,<3",
+    "pydantic>=2.9,<3",
+    "PyYAML>=6.0,<7",
+    "httpx>=0.27,<1",
+]
+
+[tool.uv]
+package = false

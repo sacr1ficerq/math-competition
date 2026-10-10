@@ -1,0 +1,479 @@
+"use strict";
+
+const $ = (id) => document.getElementById(id);
+const render = window.renderMarkdown;
+let state = null;
+let code = location.pathname.match(/^\/s\/([^/]+)\/?$/)?.[1]?.toUpperCase() || null;
+let clockOffset = 0;
+let pollTimer;
+let draftTimer;
+let loadedDraft = false;
+let draftDirty = false;
+let draftConflict = false;
+let draftRevision = 0;
+let savePromise = null;
+let actionBusy = false;
+let pendingRequest = null;
+let historySignature = "";
+let chatSignature = "";
+let problemSignature = "";
+let playerSignature = "";
+
+function notice(message, error = false) {
+  $("notice").textContent = message;
+  $("notice").classList.toggle("error", error);
+}
+
+async function api(path, method = "GET", body) {
+  const response = await fetch(path, {
+    method, credentials: "same-origin", cache: "no-store",
+    headers: body === undefined ? {} : { "Content-Type": "application/json" },
+    body: body === undefined ? undefined : JSON.stringify(body),
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    const message = typeof data.detail === "string" ? data.detail : data.detail?.map((e) => `${e.loc.slice(1).join(".")}: ${e.msg}`).join("; ");
+    const error = new Error(message || `Request failed (${response.status}).`);
+    error.status = response.status;
+    throw error;
+  }
+  return data;
+}
+
+const me = () => state?.players.find((p) => p.id === state.me);
+const sessionPath = (suffix = "") => `/api/sessions/${encodeURIComponent(code)}${suffix}`;
+const timeText = (value) => new Date(value * 1000).toLocaleTimeString();
+const now = () => Date.now() / 1000 + clockOffset;
+const draftKey = () => `math-draft:${code}:${state.me}`;
+
+function backupDraft() {
+  try { localStorage.setItem(draftKey(), JSON.stringify({ text: $("solution").value, revision: draftRevision })); } catch { /* Server autosave still works without browser storage. */ }
+}
+
+function clearBackup() {
+  try { localStorage.removeItem(draftKey()); } catch { /* Storage can be disabled. */ }
+}
+
+function preview() { render($("preview"), $("solution").value || "Your proof takes shape here."); }
+
+function apply(next) {
+  if (state && next.code === state.code && next.version < state.version) return;
+  const previousPhase = state?.phase;
+  state = next;
+  clockOffset = next.server_time - Date.now() / 1000;
+  $("landing").hidden = true;
+  $("session").hidden = false;
+  $("connection").textContent = "Connected";
+  $("session-code").textContent = state.code;
+  $("phase").textContent = { lobby: "Lobby", active: "In progress", grading: "Waiting for grades", finished: "Finished" }[state.phase];
+  document.title = `${state.code} · Math Competition`;
+  const player = me();
+  if (!loadedDraft) {
+    loadedDraft = true;
+    draftRevision = player.draft_revision;
+    $("solution").value = player.draft;
+    try {
+      const backup = JSON.parse(localStorage.getItem(draftKey()) || "null");
+      if (backup && backup.text !== player.draft && state.phase !== "lobby") {
+        $("solution").value = backup.text;
+        draftDirty = true;
+        draftConflict = backup.revision !== player.draft_revision;
+        if (!draftConflict) draftTimer = setTimeout(saveDraft, 200);
+      }
+    } catch { /* Invalid/disabled local storage is ignored. */ }
+    preview();
+  } else if (!draftDirty && !savePromise) {
+    draftRevision = player.draft_revision;
+    if ($("solution").value !== player.draft) {
+      $("solution").value = player.draft;
+      preview();
+    }
+  }
+  $("draft-conflict").hidden = !draftConflict;
+  $("key-state").textContent = state.has_api_key ? "API key saved in an HttpOnly cookie. You can replace or forget it." : "Enter your API key to submit. It is saved in an HttpOnly cookie, never in the session database.";
+  $("remove-key").hidden = !state.has_api_key;
+  $("shared-model").textContent = state.model;
+  $("model-form").hidden = state.phase !== "lobby" || state.me !== state.host;
+  if (document.activeElement !== $("lobby-model")) $("lobby-model").value = state.model;
+  $("lobby").hidden = state.phase !== "lobby";
+  $("arena").hidden = state.phase === "lobby";
+  $("histories").hidden = state.phase === "lobby";
+  $("ready").textContent = player.ready ? "Not ready" : "Ready";
+  $("lobby-hint").textContent = state.players.length < 2 ? "Share the invite link to bring in your opponent." : player.ready ? "Waiting for your opponent to get ready…" : "Both players must be ready to begin.";
+  renderPlayers();
+  const problem = JSON.stringify(state.problem);
+  if (problem !== problemSignature && state.problem) {
+    problemSignature = problem;
+    $("problem-title").textContent = state.problem.title;
+    render($("problem-statement"), state.problem.statement);
+    if (state.phase === "finished") {
+      render($("criteria"), state.problem.criterions);
+      render($("reference"), state.problem.reference_solution);
+    }
+  }
+  $("result").hidden = state.phase !== "finished";
+  $("revealed").hidden = state.phase !== "finished";
+  $("feedback-hint").textContent = state.phase === "finished" ? "Reasoning and evidence are now available" : "Feedback appears after both players finish";
+  if (state.result) {
+    const winner = state.players.find((p) => p.id === state.result.winner);
+    $("result-title").textContent = winner ? `${winner.name} wins${winner.id === state.me ? " — well played!" : "."}` : "A draw.";
+    $("result-reason").textContent = state.result.reason;
+  }
+  renderHistory();
+  renderChat();
+  controls();
+  if (previousPhase === "lobby" && state.phase === "active") notice("Both players are ready. The problem is now revealed.");
+  if (previousPhase && previousPhase !== "finished" && state.phase === "finished") notice("Competition complete. Detailed feedback and the reference solution are now available.");
+}
+
+function renderPlayers() {
+  const signature = JSON.stringify([state.phase, state.players.map((p) => [p.id, p.name, p.ready, p.finalized, p.score])]);
+  if (signature === playerSignature) return;
+  playerSignature = signature;
+  const focused = document.activeElement?.id;
+  const cards = document.createDocumentFragment();
+  for (const p of state.players) {
+    const card = document.createElement("div");
+    card.className = "player-card";
+    const top = document.createElement("div");
+    top.className = "player-top";
+    const name = document.createElement("strong");
+    name.textContent = `${p.name}${p.id === state.me ? " (you)" : ""}`;
+    const label = document.createElement("span");
+    label.className = "player-status";
+    label.textContent = state.phase === "lobby" ? p.ready ? "Ready" : "Not ready" : p.finalized ? "Finalized" : "Writing";
+    top.append(name, label);
+    const score = document.createElement("div");
+    score.className = "score-info";
+    score.id = `card-score-${p.id}`;
+    score.tabIndex = 0;
+    const number = document.createElement("span");
+    number.className = "player-score";
+    number.textContent = String(p.score.score);
+    const suffix = document.createElement("span");
+    suffix.className = "muted";
+    suffix.textContent = " / 10";
+    const tip = document.createElement("span");
+    tip.className = "score-tooltip";
+    tip.role = "tooltip";
+    tip.id = `score-${p.id}`;
+    tip.textContent = `Best verdict: ${p.score.best}. Counted: ${p.score.counted}. Penalty: ${p.score.penalty}.`;
+    score.setAttribute("aria-describedby", tip.id);
+    score.append(number, suffix, tip);
+    card.append(top, score);
+    cards.append(card);
+  }
+  if (state.players.length === 1) {
+    const waiting = document.createElement("div");
+    waiting.className = "player-card muted";
+    waiting.textContent = "Waiting for your opponent…";
+    cards.append(waiting);
+  }
+  $("player-cards").replaceChildren(cards);
+  if (focused?.startsWith("card-score-")) $(focused)?.focus();
+}
+
+function controls() {
+  if (!state) return;
+  const p = me();
+  const expired = p.deadline !== null && now() >= p.deadline;
+  const locked = state.phase !== "active" || p.finalized || expired;
+  const pending = p.submissions.filter((s) => s.status === "pending").length;
+  $("solution").readOnly = locked;
+  $("submit").disabled = locked || actionBusy || draftConflict || !state.has_api_key || !$("solution").value.trim();
+  $("finalize").disabled = locked || actionBusy;
+  $("finalize").textContent = p.finalized ? "Finalized" : "Finalize";
+  $("ready").disabled = actionBusy || state.players.length < 2;
+  $("submission-hint").textContent = state.phase === "grading" ? "Waiting for eligible pending grades…" : p.finalized ? "Your submissions are locked." : pending ? `${pending} grading in background. You may submit again or finalize.` : !state.has_api_key ? "Save your API key to submit." : "";
+  $("draft-status").textContent = draftConflict ? "Draft conflict" : savePromise ? "Saving…" : draftDirty ? "Unsaved" : "Saved";
+  $("deadline").hidden = p.deadline === null || p.finalized || state.phase === "finished";
+  if (!$("deadline").hidden) {
+    const remaining = Math.max(0, Math.ceil(p.deadline - now()));
+    $("deadline").textContent = remaining ? `Your opponent finalized. Time left: ${Math.floor(remaining / 60)}:${String(remaining % 60).padStart(2, "0")}` : "Deadline expired. Finalizing automatically…";
+  }
+}
+
+function renderHistory() {
+  const signature = JSON.stringify(state.players.map((p) => [p.name, p.submissions]));
+  if (signature === historySignature) return;
+  historySignature = signature;
+  const opened = new Set([...$("history").querySelectorAll("details[open]")].map((d) => d.id));
+  const content = document.createDocumentFragment();
+  for (const p of state.players) {
+    const heading = document.createElement("h3");
+    heading.className = "history-owner";
+    heading.textContent = p.name + (p.id === state.me ? " · your submissions" : " · opponent");
+    content.append(heading);
+    if (!p.submissions.length) {
+      const empty = document.createElement("p");
+      empty.className = "empty-history";
+      empty.textContent = "No submissions yet.";
+      content.append(empty);
+    }
+    for (const [index, s] of [...p.submissions.entries()].reverse()) {
+      const entry = document.createElement("details");
+      entry.className = "submission";
+      entry.id = `submission-${s.id}`;
+      entry.open = opened.has(entry.id);
+      const summary = document.createElement("summary");
+      summary.append(document.createTextNode(`Submission ${index + 1}`));
+      const time = document.createElement("time");
+      time.dateTime = new Date(s.submitted_at * 1000).toISOString();
+      time.textContent = timeText(s.submitted_at);
+      time.title = new Date(s.submitted_at * 1000).toLocaleString();
+      const verdict = document.createElement("span");
+      verdict.className = "verdict";
+      verdict.textContent = s.status === "pending" ? "Grading…" : s.status === "failed" ? "Failed · no penalty" : `${s.verdict} / 10`;
+      summary.append(time, verdict);
+      const feedback = document.createElement("div");
+      feedback.className = "feedback";
+      const section = (title, text) => {
+        const h = document.createElement("h3");
+        h.textContent = title;
+        const body = document.createElement("div");
+        body.className = "rendered";
+        render(body, text);
+        feedback.append(h, body);
+      };
+      if (s.grade) { section("Reasoning", s.grade.reasoning); section("Evidence", s.grade.evidence); }
+      else if (s.status === "graded") { const text = document.createElement("p"); text.className = "muted"; text.textContent = "Detailed feedback is hidden until the competition ends."; feedback.append(text); }
+      if (s.error) { const error = document.createElement("p"); error.className = "error"; error.textContent = s.error; feedback.append(error); }
+      if (s.solution !== undefined) section("Your submitted solution", s.solution);
+      else { const privateText = document.createElement("p"); privateText.className = "muted"; privateText.textContent = "Your opponent’s solution is private."; feedback.append(privateText); }
+      entry.append(summary, feedback);
+      content.append(entry);
+    }
+  }
+  $("history").replaceChildren(content);
+}
+
+function renderChat() {
+  const signature = JSON.stringify(state.chat);
+  if (signature === chatSignature) return;
+  chatSignature = signature;
+  const container = $("chat-messages");
+  const atBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 60;
+  const content = document.createDocumentFragment();
+  for (const message of state.chat) {
+    const entry = document.createElement("div");
+    entry.className = "chat-message";
+    const meta = document.createElement("div");
+    meta.className = "chat-meta";
+    const name = document.createElement("strong");
+    name.textContent = state.players.find((p) => p.id === message.player_id)?.name || "Player";
+    const time = document.createElement("time");
+    time.textContent = timeText(message.sent_at);
+    meta.append(name, time);
+    const text = document.createElement("p");
+    text.textContent = message.text;
+    entry.append(meta, text);
+    content.append(entry);
+  }
+  if (!state.chat.length) { const empty = document.createElement("p"); empty.className = "muted"; empty.textContent = "Your shared conversation starts here."; content.append(empty); }
+  container.replaceChildren(content);
+  if (atBottom) container.scrollTop = container.scrollHeight;
+}
+
+async function saveDraft() {
+  clearTimeout(draftTimer);
+  if (savePromise) return savePromise;
+  if (!draftDirty || draftConflict || !state || state.phase === "lobby") return;
+  savePromise = (async () => {
+    while (draftDirty && !draftConflict && state.phase !== "lobby") {
+      const text = $("solution").value;
+      try {
+        const result = await api(sessionPath("/draft"), "PUT", { text, revision: draftRevision });
+        draftRevision = result.players.find((p) => p.id === result.me).draft_revision;
+        draftDirty = $("solution").value !== text;
+        apply(result);
+        if (draftDirty) backupDraft(); else clearBackup();
+      } catch (error) {
+        if (error.status === 409) {
+          draftConflict = true;
+          $("draft-conflict").hidden = false;
+          notice(error.message, true);
+        } else {
+          notice("Draft could not reach the server. Your local copy is kept; reconnecting will retry.", true);
+        }
+        break;
+      }
+    }
+  })();
+  controls();
+  await savePromise;
+  savePromise = null;
+  controls();
+}
+
+async function poll() {
+  clearTimeout(pollTimer);
+  if (!code) return;
+  try {
+    apply(await api(sessionPath()));
+    if (draftDirty && !draftConflict && !savePromise) saveDraft();
+  } catch (error) {
+    $("connection").textContent = "Reconnecting…";
+    if (error.status === 401 || error.status === 403) {
+      $("session").hidden = true;
+      $("landing").hidden = false;
+      $("join-code").value = code;
+      notice("Enter your name to join this competition.");
+      return;
+    }
+    notice(error.message, true);
+    if (error.status === 404) { $("landing").hidden = false; $("join-code").value = code; return; }
+  }
+  pollTimer = setTimeout(poll, 1200);
+}
+
+function enter(next) {
+  code = next.code;
+  history.replaceState(null, "", `/s/${code}`);
+  apply(next);
+  pollTimer = setTimeout(poll, 1200);
+}
+
+async function action(callback) {
+  if (actionBusy) return;
+  actionBusy = true;
+  controls();
+  try { await callback(); } catch (error) { notice(error.message, true); }
+  finally { actionBusy = false; controls(); }
+}
+
+async function submitSolution() {
+  if ($("submit").disabled) return;
+  await action(async () => {
+    const solution = $("solution").value;
+    saveDraft();
+    if (!pendingRequest || pendingRequest.solution !== solution) pendingRequest = { solution, request_id: crypto.randomUUID() };
+    const next = await api(sessionPath("/submissions"), "POST", pendingRequest);
+    pendingRequest = null;
+    apply(next);
+    notice("Submission accepted. Grading runs in the background; you may finalize now.");
+  });
+}
+
+async function init() {
+  if (!render) { notice("Rendering libraries could not load. Check your connection and reload.", true); return; }
+  $("create-form").addEventListener("submit", (event) => {
+    event.preventDefault();
+    action(async () => {
+      let problem;
+      try { problem = JSON.parse($("problem-json").value); } catch { throw new Error("Problem must be valid JSON."); }
+      enter(await api("/api/sessions", "POST", { name: $("create-name").value, problem, model: $("create-model").value }));
+      notice("Session created. Share the invite link with your opponent.");
+    });
+  });
+  $("create-file").addEventListener("change", async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+    try {
+      if (file.size > 150000) throw new Error("Problem JSON must be smaller than 150 KB.");
+      $("problem-json").value = await file.text();
+      JSON.parse($("problem-json").value);
+      notice("Problem JSON loaded.");
+    } catch (error) { notice(error.message, true); }
+    event.target.value = "";
+  });
+  $("join-form").addEventListener("submit", (event) => {
+    event.preventDefault();
+    action(async () => {
+      const raw = $("join-code").value.trim();
+      const inviteCode = (raw.includes("/") ? new URL(raw, location.origin).pathname.split("/").filter(Boolean).pop() : raw).toUpperCase();
+      enter(await api(`/api/sessions/${encodeURIComponent(inviteCode)}/join`, "POST", { name: $("join-name").value }));
+      notice("You joined the competition.");
+    });
+  });
+  $("copy-invite").addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText(`${location.origin}/s/${code}`); notice("Invite link copied."); }
+    catch { notice(`Invite link: ${location.origin}/s/${code}`); }
+  });
+  $("key-form").addEventListener("submit", (event) => {
+    event.preventDefault();
+    action(async () => {
+      if (!$("session-key").value.trim()) throw new Error("Enter an OpenRouter API key.");
+      await api("/api/key", "PUT", { api_key: $("session-key").value });
+      $("session-key").value = "";
+      apply(await api(sessionPath()));
+      notice("API key saved.");
+    });
+  });
+  $("remove-key").addEventListener("click", () => action(async () => {
+    await api("/api/key", "DELETE");
+    apply(await api(sessionPath()));
+    notice("API key forgotten.");
+  }));
+  $("model-form").addEventListener("submit", (event) => {
+    event.preventDefault();
+    action(async () => {
+      apply(await api(sessionPath("/model"), "PUT", { model: $("lobby-model").value }));
+      notice("Shared model updated. Both players need to click Ready again.");
+    });
+  });
+  $("ready").addEventListener("click", () => action(async () => {
+    apply(await api(sessionPath("/ready"), "PUT", { ready: !me().ready }));
+  }));
+  $("solution").addEventListener("input", () => {
+    draftDirty = true;
+    backupDraft();
+    preview();
+    controls();
+    clearTimeout(draftTimer);
+    draftTimer = setTimeout(saveDraft, 500);
+  });
+  $("solution").addEventListener("keydown", (event) => {
+    if ((event.ctrlKey || event.metaKey) && event.key === "Enter") { event.preventDefault(); submitSolution(); }
+  });
+  $("submit").addEventListener("click", submitSolution);
+  $("finalize").addEventListener("click", () => action(async () => {
+    saveDraft();
+    apply(await api(sessionPath("/finalize"), "POST"));
+    notice("Finalized. Your opponent has up to five minutes; pending submissions still finish grading.");
+  }));
+  $("keep-local").addEventListener("click", () => action(async () => {
+    apply(await api(sessionPath()));
+    draftConflict = false;
+    draftRevision = me().draft_revision;
+    $("draft-conflict").hidden = true;
+    backupDraft();
+    await saveDraft();
+  }));
+  $("use-saved").addEventListener("click", () => action(async () => {
+    draftDirty = false;
+    draftConflict = false;
+    clearBackup();
+    apply(await api(sessionPath()));
+    preview();
+  }));
+  $("chat-form").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const text = $("chat-input").value;
+    const button = event.currentTarget.querySelector("button");
+    button.disabled = true;
+    try {
+      apply(await api(sessionPath("/chat"), "POST", { text }));
+      if ($("chat-input").value === text) $("chat-input").value = "";
+    } catch (error) { notice(error.message, true); }
+    finally { button.disabled = false; }
+  });
+  setInterval(controls, 250);
+  window.addEventListener("online", () => { if (code) poll(); });
+  window.addEventListener("pagehide", () => { if (draftDirty && state) backupDraft(); });
+  try {
+    const data = await api("/api/sessions");
+    $("create-model").value = data.model;
+    $("recent").hidden = !data.sessions.length;
+    for (const session of data.sessions) {
+      const link = document.createElement("a");
+      link.className = "recent-link";
+      link.href = `/s/${session.code}`;
+      link.textContent = `${session.code} · ${session.names.join(" vs ")} · ${session.phase}`;
+      $("recent-list").append(link);
+    }
+    $("connection").textContent = "Connected";
+    if (code) await poll(); else $("landing").hidden = false;
+  } catch (error) { $("landing").hidden = false; notice(error.message, true); }
+}
+
+init();

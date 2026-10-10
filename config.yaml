@@ -1,6 +1,7 @@
 server:
   host: 127.0.0.1
   port: 9000
+database: competition.sqlite3
 grading:
   model: z-ai/glm-5.3-flash
   proxy: http://127.0.0.1:12334

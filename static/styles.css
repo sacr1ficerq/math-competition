@@ -41,7 +41,7 @@ kbd { font: inherit; }
 .key-field label { display: block; font-size: 12px; margin-bottom: 6px; }
 .key-input { display: flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
 .key-input input { min-width: 0; width: 100%; background: var(--surface); border: 0; color: var(--text); padding: 10px 12px; font: inherit; font-size: 13px; }
-.key-input button { border: 0; border-radius: 0; }
+.key-input button { border: 0; border-radius: 0; flex-shrink: 0; white-space: nowrap; }
 small { display: block; font-size: 11px; margin-top: 5px; }
 .submit-action { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; font-size: 12px; }
 #submit { background: var(--rose); color: var(--base); font-weight: 650; font-size: 14px; padding: 11px 22px; border-color: var(--rose); }

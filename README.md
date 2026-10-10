@@ -2,9 +2,19 @@
 
 A website where two players compete to solve the same math problem, writing their solutions in Markdown and LaTeX. An LLM grades submitted solutions and returns a verdict.
 
-## Run the proof of concept
+## Run the app
 
 Requires Python 3.11 or newer.
+
+With [uv](https://docs.astral.sh/uv/):
+
+```sh
+uv sync --locked
+uv run run.py
+```
+
+The project version is defined in `pyproject.toml`; release notes are in
+[`CHANGELOG.md`](CHANGELOG.md). Run tests with `uv run python -m unittest discover -s tests -v`.
 
 With Make installed:
 
@@ -23,25 +33,34 @@ pip install -r requirements.txt
 python run.py
 ```
 
-Open **http://127.0.0.1:9000**. Write a solution, enter your OpenRouter API key,
-and click **Submit solution** (or press Ctrl/⌘ + Enter). Markdown and LaTeX render
-live, including `$…$`, `$$…$$`, `\(…\)`, and `\[…\]`. Rendering libraries are
-loaded from jsDelivr, so the browser needs an internet connection.
+Open **http://127.0.0.1:9000**. Create a session with your name and a problem JSON
+document, then share the invite link or code. The other player joins with their name.
+For local testing, use a separate browser profile or private window for the second
+player; tabs in the same profile share an identity.
 
-The single-player implementation includes immediate reasoning, verdict, and evidence,
-submission history, and the scoring formula below. Grading makes at most six attempts
-with SDK retries disabled. Failed grading is excluded from the submission penalty.
-The API key is held only in the current page and the grading request; it is not
-saved in cookies, browser storage, or server files. Drafts and history are also
-in-memory and reset on reload.
+After joining, each player saves an OpenRouter API key. The creator can update the
+shared grading model in the lobby; doing so resets both players' readiness. Once
+both players click **Ready**, the problem appears and the solution editors unlock.
+Submit with the button or Ctrl/⌘ + Enter. Grading runs in the background, and
+multiple submissions can be pending at once. Both players see timestamps and
+verdicts, but only their own submitted solutions. Reasoning and evidence remain
+hidden until the competition ends.
+
+Click **Finalize** to lock your submissions and start the other player's five-minute
+deadline. They can finalize manually; the server automatically finalizes them at
+the deadline even if neither browser is open. Pending submissions received before
+finalization/deadline still finish grading before the result is announced.
+
+Markdown and LaTeX render live, including `$…$`, `$$…$$`, `\(…\)`, and `\[…\]`.
+Rendering libraries load from jsDelivr, so the browser needs internet access.
 
 The default grading model is **GLM 5.3 Flash** (`z-ai/glm-5.3-flash`) via OpenRouter.
 Grading requests use the HTTP proxy at `http://127.0.0.1:12334`, configured as
 `grading.proxy` in `config.yaml`. Set it to `null` to disable the explicit proxy.
 Edit `config.yaml` to set the model, timeout, retry delay, server address, and default
-problem. Restart the server after configuration changes. The model must support
-OpenRouter's `json_schema` structured output. Alternatively, use **Load problem JSON**
-to start a fresh practice run with your own problem:
+problem used on the practice page. Restart the server after configuration changes.
+The model must support OpenRouter's `json_schema` structured output. Create a
+competition by pasting JSON or using **Load file**:
 
 ```json
 {
@@ -52,9 +71,35 @@ to start a fresh practice run with your own problem:
 }
 ```
 
-The default problem's grading criteria and reference solution are kept on the backend.
-An uploaded JSON document is supplied by the player and sent with each grading request.
-Only the title and statement appear in the problem panel.
+The supplied problem is stored on the backend. The statement is withheld in the
+lobby; grading criteria and the reference solution are revealed only after the
+competition finishes. Chat is available in the lobby, during play, and afterward.
+
+### Persistence and reconnection
+
+- Session state, player identities (hashed tokens), drafts, submissions, chat, and
+  results persist in SQLite, at `database` in `config.yaml` (default:
+  `competition.sqlite3`, relative to the project directory).
+- Player identity and API key cookies last 30 days. They use HttpOnly and SameSite
+  Strict, and Secure when served over HTTPS. API keys are never written to SQLite.
+  **Forget** removes the API key cookie. Keep the identity cookie to rejoin as the
+  same player; the home page lists your recent sessions.
+- Drafts autosave to the backend. A browser-local draft backup preserves edits
+  during connection loss. Concurrent edits in multiple tabs produce a conflict
+  prompt rather than silently overwriting another draft. No API key is stored in
+  localStorage.
+- Session updates poll every 1.2 seconds; deadlines and eligibility use server time.
+- Run a single server worker (`make run`). On server restart, persisted sessions
+  are restored and expired deadlines are reconciled. Interrupted grading is marked
+  failed without a penalty because keys are not persisted server-side. While play
+  remains open, players can resubmit; finalized players remain locked.
+
+### Practice mode
+
+The original single-player PoC remains at **http://127.0.0.1:9000/practice**. It
+shows reasoning, verdict, and evidence immediately. The practice page keeps its
+entered API key, draft, and history in memory only, and does not save them in cookies
+or browser storage. It supports the default YAML problem or **Load problem JSON**.
 
 Run the backend tests (mocked OpenRouter calls; no key needed):
 
@@ -62,8 +107,9 @@ Run the backend tests (mocked OpenRouter calls; no key needed):
 python -m unittest discover -s tests -v
 ```
 
-API documentation is available at `/docs`. Two-player sessions, readiness/finalization,
-deadlines, chat, delayed feedback, and reconnection are future work described below.
+API documentation is available at `/docs`. The tests mock OpenRouter and cover
+retry limits, validation, identity/visibility, readiness, persistence, deadlines,
+pending grading, submission penalties, negative scores, and tie-breaks.
 
 ## Competition flow
 
@@ -93,7 +139,7 @@ The session creator supplies a JSON document with these fields:
 - Scores can be negative, so a player with 0 points can beat a player with a negative score.
 - Submission timestamps record when the solution is submitted, not when grading completes. Deadline eligibility is based on the submission timestamp.
 - Players can finalize while grading is pending. Finalization uses submission timestamps rather than LLM response times; eligible pending submissions are still graded before the result is determined.
-- If final scores are equal, compare each player's last submission timestamp. The earlier timestamp wins.
+- If final scores are equal, compare each player's last successfully graded submission timestamp. The earlier timestamp wins (see the tie-break decisions below for missing or identical timestamps).
 - Grading uses structured output validated with Pydantic, including a verdict constrained to the 0–10 range.
 - Inference errors and invalid grading responses (such as malformed JSON or out-of-range verdicts) receive up to five retries after the initial attempt. If all retries fail, the submission incurs no penalty.
 
@@ -141,12 +187,15 @@ Start with a single-player page for writing and grading solutions. Two-player se
 - Allow up to five retries after the initial attempt for inference errors or invalid grading responses. If all retries fail, do not apply a submission penalty.
 - Display all three fields immediately in the proof of concept.
 
-## Unresolved questions
+## Tie-break and reveal decisions
 
-### Competition rules and session setup
-
-- How are ties handled if a player has no submissions or both last-submission timestamps are identical? Do submissions that exhaust all retries count for the tie-break?
-- When is the reference solution revealed to players?
+- Failed submissions are excluded from the tie-break as well as the penalty count.
+  Compare the last successfully graded submission timestamps, regardless of which
+  submission earned the best verdict.
+- A player without a successful submission loses a score tie against a player with
+  one. If neither player has one, or both last timestamps are identical, it is a draw.
+- Both grading criteria and the reference solution are revealed when the competition
+  ends, after all eligible pending grading has completed.
 
 ## Backlog
 
