@@ -132,7 +132,7 @@
 (() => {
   document.addEventListener('keydown',()=>document.documentElement.classList.add('keyboard-input'));
   document.addEventListener('pointerdown',()=>document.documentElement.classList.remove('keyboard-input'));
-  const region=document.getElementById('landing'),art=region?.querySelector('.math-arena');
+  const region=document.getElementById('landing'),art=region?.querySelector('.home-prize img');
   if(!art)return;
   const pointer=matchMedia('(hover: hover) and (pointer: fine)'),motion=matchMedia('(prefers-reduced-motion: reduce)');
   let frame=0,currentX=0,currentY=0,targetX=0,targetY=0;
@@ -147,3 +147,16 @@
   region.addEventListener('pointermove',event=>{if(motion.matches||!pointer.matches||event.pointerType==='touch')return;const box=region.getBoundingClientRect();targetX=Math.max(-8,Math.min(8,(event.clientX-box.left-box.width/2)*.016));targetY=Math.max(-6,Math.min(6,(event.clientY-box.top-box.height/2)*.016));start();});
   region.addEventListener('pointerleave',reset);motion.addEventListener('change',preference);pointer.addEventListener('change',preference);
 })();
+
+/* One authoring form serves practice and the next duel round. */
+window.mathProblemForm=function(host,{prefix,fileId,onChange=()=>{}}){
+  const fields=[['title','Название','Например, корни квадратного уравнения',300],['statement','Условие','Сформулируйте задачу. Формулы: $…$ и $$…$$.',30000],['criterions','Критерии оценки','За что начислять баллы? Опишите требования к решению.',30000],['reference_solution','Полное решение · необязательно','Эталон откроется обоим после завершения раунда.',30000]];
+  const inputs={};
+  for(const [key,title,placeholder,max] of fields){const field=document.createElement('div');field.className='custom-problem-field';const label=document.createElement('label');label.htmlFor=prefix+'-'+key;label.textContent=title;const input=document.createElement(key==='title'?'input':'textarea');input.id=label.htmlFor;input.maxLength=max;input.required=key!=='reference_solution';input.placeholder=placeholder;if(key!=='title')input.rows=key==='statement'?4:3;inputs[key]=input;input.addEventListener('input',onChange);field.append(label,input);host.append(field);}
+  const tools=document.createElement('div');tools.className='custom-import-tools';const label=document.createElement('label');label.className='file-button quiet';label.textContent='Импорт JSON';const file=document.createElement('input');file.type='file';file.id=fileId;file.accept='.json,application/json';label.append(file);const template=document.createElement('button');template.type='button';template.className='quiet';template.textContent='Скачать шаблон';const help=document.createElement('p');help.className='field-help';help.textContent='UTF-8 JSON, до 150 КБ. Импорт заполнит поля — перед применением их можно изменить.';const error=document.createElement('p');error.className='error';error.setAttribute('role','alert');tools.append(label,template);host.append(tools,help,error);
+  function validate(value){if(!value||Array.isArray(value)||typeof value!=='object')throw new Error('В JSON должен быть объект задачи.');const unknown=Object.keys(value).filter(key=>!Object.hasOwn(inputs,key));if(unknown.length)throw new Error('Неизвестные поля JSON: '+unknown.join(', '));for(const [key,title,,max]of fields){if(key==='reference_solution'&&value[key]===undefined)continue;if(typeof value[key]!=='string'||(key!=='reference_solution'&&!value[key].trim())||value[key].length>max)throw new Error(`Проверьте поле «${title}»: до ${max} символов.`);}return Object.fromEntries(fields.map(([key])=>[key,value[key]||'']));}
+  function fill(value){for(const [key,input]of Object.entries(inputs))input.value=value[key]||'';}
+  file.addEventListener('change',async()=>{const selected=file.files[0];if(!selected)return;error.textContent='';try{if(selected.size>150000)throw new Error('Файл задачи должен быть меньше 150 КБ.');let value;try{value=JSON.parse(await selected.text());}catch{throw new Error('Не удалось прочитать JSON. Проверьте формат и кодировку UTF-8.');}fill(validate(value));onChange();}catch(failure){error.textContent=failure.message;}finally{file.value='';}});
+  template.onclick=()=>{const example={title:'Корни квадратного уравнения',statement:'Решите уравнение $x^2-5x+6=0$.',criterions:'Найдены оба корня и обоснована полнота решения.',reference_solution:'$(x-2)(x-3)=0$, поэтому $x=2$ или $x=3$.'};const url=URL.createObjectURL(new Blob([JSON.stringify(example,null,2)],{type:'application/json;charset=utf-8'}));const link=document.createElement('a');link.href=url;link.download='math-problem.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
+  return{get:()=>validate(Object.fromEntries(Object.entries(inputs).map(([key,input])=>[key,input.value.trim()]))),fill,reset:()=>fill({}),inputs};
+};

@@ -35,6 +35,7 @@ let lobbyTopicsSignature = "";
 let inviteFeedbackTimer;
 let lobbyMode = null;
 let customProblemDirty = false;
+let customProblemForm;
 let chatOpen = false;
 let chatSending = false;
 let movingChat = false;
@@ -112,6 +113,7 @@ function apply(next) {
     restoringImages = true;
     solutionImages.clear();
     $("next-problem-json").value = "";
+    customProblemForm?.reset();
     lobbyMode = null;
     customProblemDirty = false;
     for (const id of ["problem-statement", "criteria", "reference"]) $(id).replaceChildren();
@@ -199,7 +201,7 @@ function apply(next) {
     render($("problem-statement"), state.problem.statement);
     if (state.phase === "finished") {
       render($("criteria"), state.problem.criterions);
-      render($("reference"), state.problem.reference_solution);
+      render($("reference"), state.problem.reference_solution || "Автор не добавил полное решение.");
     }
   }
   $("result").hidden = state.phase !== "finished";
@@ -290,7 +292,7 @@ function renderPlayers() {
     sides.forEach((card,index)=>{card.classList.add("match-player");card.querySelector(".player-initials")?.remove();const wins=card.querySelector(".win-count");if(wins){if(state.phase==="finished")wins.textContent=state.players[index].wins;wins.setAttribute("aria-label",`Бутерброды ${state.players[index].name}: ${state.players[index].wins}`);tally.append(wins);}if(!index){const colon=document.createElement("span");colon.className="tally-colon";colon.textContent=":";colon.setAttribute("aria-hidden","true");tally.append(colon);}});
     cards.insertBefore(tally,sides[1]);
   }else{
-    const axis=document.createElement("span");axis.className="duel-axis";axis.setAttribute("aria-hidden","true");axis.textContent="⋈";cards.insertBefore(axis,cards.children[1]);
+    const axis=document.createElement("span");axis.className="duel-axis";axis.setAttribute("aria-hidden","true");axis.textContent="vs";cards.insertBefore(axis,cards.children[1]);
   }
   $("player-cards").replaceChildren(cards);
   if (focused?.startsWith("card-score-")) $(focused)?.focus();
@@ -319,8 +321,9 @@ function controls() {
   if(randomPending)$('lobby-hint').textContent='Не удалось применить выбор. Выберите «Случайная» ещё раз.';
   $("rematch").hidden = !!state.closed_at;
   $("close-room").hidden = !!state.closed_at || state.me !== state.host;
-  $("copy-invite").hidden = !!state.closed_at;
-  $("copy-lobby-invite").hidden = !!state.closed_at;
+  $("copy-invite").hidden = !!state.closed_at || state.players.length>=2;
+  document.querySelector(".lobby-invite").hidden=!!state.closed_at || state.players.length>=2;
+  $("copy-lobby-invite").hidden = !!state.closed_at || state.players.length>=2;
   $("close-room").disabled = actionBusy;
   $("chat-input").disabled = !!state.closed_at;
   $("chat-form").querySelector("button").disabled = !!state.closed_at || chatSending || !$("chat-input").value.trim();
@@ -395,7 +398,7 @@ function renderResultComparison() {
   }
   const trophy=document.createElement('div');trophy.className='match-trophy';
   const prizeWinner=state.players.find(player=>player.id===state.result?.winner);const prizeCaption=prizeWinner?prizeWinner.id===state.me?'Ваш бутерброд':`Получает ${prizeWinner.name}`:'Без награды';trophy.setAttribute('aria-label',state.result?.winner?'Победителю — один бутерброд':'Раунд завершён');
-  trophy.innerHTML=`<svg class="sandwich-trophy" viewBox="0 0 180 150" aria-hidden="true"><defs><linearGradient id="bread-top" x2=".7" y2="1"><stop stop-color="#ffe3ac"/><stop offset="1" stop-color="#d99a53"/></linearGradient><linearGradient id="bread-edge" x2="0" y2="1"><stop stop-color="#c98a46"/><stop offset="1" stop-color="#9b6038"/></linearGradient></defs><ellipse cx="90" cy="128" rx="59" ry="8" fill="currentColor" opacity=".08"/><path d="M29 96 91 64 153 96 93 130Z" fill="url(#bread-edge)"/><path d="m29 88 62-31 62 31v9l-60 32-64-32Z" fill="#efd2a1"/><path d="m27 85 16-10 12 3 15-15 16 4 17-13 20 15 19 1 14 16-64 32Z" fill="#7c9e68"/><path d="m31 77 60-29 59 30-58 32Z" fill="#c8726e"/><path d="m31 71 60-31 61 31-24 18-9-5-26 21Z" fill="#f1c96e"/><path d="M30 60Q23 51 37 44L82 21Q91 16 102 22L147 45Q161 52 151 62L94 93Q90 95 84 92Z" fill="url(#bread-edge)"/><path d="M30 52Q26 45 39 38L82 16Q91 11 103 18L146 39Q157 45 151 52L94 83Q89 85 83 82Z" fill="url(#bread-top)"/><path d="m49 43 38-19q5-3 11 0l35 17" fill="none" stroke="#fff0d0" stroke-width="2" opacity=".65"/><g fill="#fff1d2"><ellipse cx="77" cy="40" rx="3" ry="1.5" transform="rotate(-25 77 40)"/><ellipse cx="102" cy="47" rx="3" ry="1.5" transform="rotate(25 102 47)"/><ellipse cx="84" cy="61" rx="3" ry="1.5" transform="rotate(-25 84 61)"/></g></svg><span class="trophy-caption">${prizeCaption}</span>`;
+  trophy.innerHTML=`<img class="sandwich-trophy" src="/static/sandwich.svg" alt=""><span class="trophy-caption">${prizeCaption}</span>`;
   $('result-comparison').append(trophy);
   const entryKey=`${state.code}:${state.round}`;if($('result-comparison').dataset.entryKey!==entryKey){$('result-comparison').dataset.entryKey=entryKey;if(!matchMedia('(prefers-reduced-motion: reduce)').matches)trophy.animate([{opacity:0,transform:'translateY(-8px) rotate(-5deg)'},{opacity:1,transform:'translateY(0) rotate(0)'}],{duration:520,easing:'cubic-bezier(.23,1,.32,1)'});}
 
@@ -419,8 +422,17 @@ function renderHistory(players = state.players, target = $("history")) {
 }
 
 function renderReviewEntry(submission,content,toolbar,player,currentRound,finished) {
+  const attemptNumber=player.submissions.findIndex(item=>item.id===submission.id)+1;
+  if(finished){
+    const identity=document.createElement('strong');identity.className='selected-work-identity';identity.textContent=`Работа №${attemptNumber}`;toolbar.querySelector('.review-document-stamp').prepend(identity);
+    if(submission.appeal){const appeal=submission.appeal;const chip=document.createElement('span');chip.className='appeal-state-chip';chip.dataset.status=appeal.status==='graded'?(appeal.effective_verdict>appeal.old_verdict?'accepted':'declined'):appeal.status;chip.setAttribute('role','status');chip.textContent=appeal.status==='pending'?'На апелляции':appeal.status==='failed'?'Ошибка апелляции':appeal.effective_verdict>appeal.old_verdict?'Апелляция принята':'Апелляция отклонена';
+      const status=document.createElement('div');status.className='selected-work-status';status.append(chip);
+      if(appeal.status==='graded'){const change=document.createElement('span');change.className='appeal-score-change';change.textContent=`${appeal.old_verdict} → ${appeal.effective_verdict} / 10`;status.append(change);}
+      toolbar.append(status);
+    }
+  }
   const work=document.createElement('section');work.className='review-region review-work';
-  if(finished){const title=document.createElement('h3');title.textContent=player.id===state.me?'Ваша работа':'Работа соперника';work.append(title);}
+  if(finished){const title=document.createElement('h3');title.textContent=player.id===state.me?`Ваша работа №${attemptNumber}`:`Работа соперника №${attemptNumber}`;work.append(title);if(submission.appeal){const note=document.createElement('p');note.className='work-snapshot-note';note.textContent='Исходная отправленная работа. Именно к ней относится апелляция.';work.append(note);}}
   const proof=document.createElement('div');proof.className='rendered submitted-document';
   render(proof,submission.solution||'');window.appendSolutionImages(proof,submission.images||[]);work.append(proof);
   if(!finished){
@@ -465,7 +477,7 @@ function buildAppealRegion(submission,player,currentRound) {
   let draft=appealDrafts.get(key);
   if(!draft){draft={reason:appeal?.reason||'',requestId:null,open:false};appealDrafts.set(key,draft);}
   const region=document.createElement('section');region.className='attempt-appeal-region';region.id=`appeal-region-${submission.id}`;region.hidden=!draft.open;
-  const heading=document.createElement('h3');heading.id=`appeal-heading-${submission.id}`;heading.tabIndex=-1;heading.textContent='Апелляция';region.setAttribute('aria-labelledby',heading.id);region.append(heading);
+  const heading=document.createElement('h3');heading.id=`appeal-heading-${submission.id}`;heading.tabIndex=-1;heading.textContent=`Апелляция к работе №${player.submissions.findIndex(item=>item.id===submission.id)+1}`;region.setAttribute('aria-labelledby',heading.id);region.append(heading);const context=document.createElement('p');context.className='appeal-context';context.textContent=`Работа отправлена ${timeText(submission.submitted_at)}. Исходный текст показан в разделе работы выше.`;region.append(context);
   if(appeal?.reason&&!canSubmit){const argument=document.createElement('section');argument.className='appeal-argument';const label=document.createElement('h4');label.textContent=player.id===state.me?'Ваш аргумент':'Аргумент соперника';const reason=document.createElement('p');reason.textContent=appeal.reason;argument.append(label,reason);region.append(argument);}
   if(appeal){
     const decision=document.createElement('section');decision.className='appeal-decision';
@@ -528,7 +540,7 @@ function renderRounds() {
       const reason=document.createElement('p');reason.className='field-help';const winner=state.players.find(player=>player.id===round.result.winner);reason.textContent=winner?`${winner.name} · +1 🥪`:'Ничья';detail.append(reason);
       const tabs=document.createElement('div');tabs.className='review-tabs';tabs.role='group';tabs.setAttribute('aria-label','Разбор предыдущего раунда');const body=document.createElement('div');
       for(const [key,label] of [['own','Ваше решение'],['opponent','Соперник'],['reference','Эталон']]){
-        const tab=document.createElement('button');tab.type='button';tab.textContent=label;tab.setAttribute('aria-pressed',String(key==='own'));tab.onclick=()=>{tabs.querySelectorAll('button').forEach(item=>item.setAttribute('aria-pressed',String(item===tab)));body.replaceChildren();if(key==='reference'){render(body,archived.problem.reference_solution);body.className='rendered';}else{body.className='';renderHistory(archived.players.filter(player=>key==='own'?player.id===state.me:player.id!==state.me),body);body.querySelector('details')?.setAttribute('open','');}};tabs.append(tab);
+        const tab=document.createElement('button');tab.type='button';tab.textContent=label;tab.setAttribute('aria-pressed',String(key==='own'));tab.onclick=()=>{tabs.querySelectorAll('button').forEach(item=>item.setAttribute('aria-pressed',String(item===tab)));body.replaceChildren();if(key==='reference'){render(body,archived.problem.reference_solution || "Автор не добавил полное решение.");body.className='rendered';}else{body.className='';renderHistory(archived.players.filter(player=>key==='own'?player.id===state.me:player.id!==state.me),body);body.querySelector('details')?.setAttribute('open','');}};tabs.append(tab);
       }
       const statement=document.createElement('details');statement.className='review-problem';const summary=document.createElement('summary');summary.textContent='Условие задачи';const text=document.createElement('div');text.className='rendered';render(text,archived.problem.statement);statement.append(summary,text);detail.append(statement,tabs,body);tabs.querySelector('button').click();
     }catch(error){if(selected===round.round)detail.textContent=error.message;}
@@ -792,31 +804,11 @@ async function init() {
   $("rematch").addEventListener("click", () => action(async () => {
     apply(await api(sessionPath("/rematch"), "POST", { round: state.round }));
   }));
-  $("next-problem-json").addEventListener("input",()=>{const wasDirty=customProblemDirty;customProblemDirty=true;controls();if(!wasDirty)withdrawReadyForSelection();});
-  $("next-problem-form").addEventListener("submit", (event) => {
-    event.preventDefault();
-    action(async () => {
-      let problem;
-      try { problem = JSON.parse($("next-problem-json").value); } catch { throw new Error("Проверьте формат JSON задачи."); }
-      const next=await api(sessionPath("/problem"), "PUT", { problem, round: state.round });
-      customProblemDirty=false;
-      apply(next);
-      notice("Задача обновлена. Подтвердите готовность заново.");
-    });
-  });
-  $("next-problem-file").addEventListener("change", async (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
-    await withdrawReadyForSelection();
-    try {
-      if (file.size > 150000) throw new Error("Файл задачи должен быть меньше 150 КБ.");
-      const text = await file.text();
-      JSON.parse(text);
-      $("next-problem-json").value = text;
-      customProblemDirty=true;controls();
-    } catch (error) { notice(error.message, true); }
-    event.target.value = "";
-  });
+  function customEdited(){const wasDirty=customProblemDirty;customProblemDirty=true;controls();if(!wasDirty)withdrawReadyForSelection();}
+  customProblemForm=window.mathProblemForm($('duel-problem-fields'),{prefix:'duel-custom',fileId:'next-problem-file',onChange:customEdited});
+  // The hidden serialized field is retained for importing older local QA fixtures.
+  $('next-problem-json').addEventListener('input',()=>{try{customProblemForm.fill(JSON.parse($('next-problem-json').value));}catch{}customEdited();});
+  $('next-problem-form').addEventListener('submit',event=>{event.preventDefault();action(async()=>{const problem=customProblemForm.get();const next=await api(sessionPath('/problem'),'PUT',{problem,round:state.round});customProblemDirty=false;apply(next);notice('Задача обновлена. Подтвердите готовность заново.');});});
   $("solution").addEventListener("input", () => {
     draftDirty = true;
     backupDraft();

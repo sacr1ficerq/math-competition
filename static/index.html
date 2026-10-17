@@ -6,7 +6,9 @@
   <title>Тренировка · Дуэли</title>
   <script src="/static/theme.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css">
+  <link rel="stylesheet" href="/static/system.css">
   <link rel="stylesheet" href="/static/styles.css">
+  <link rel="stylesheet" href="/static/library.css">
   <script defer src="https://cdn.jsdelivr.net/npm/marked@15.0.12/marked.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
@@ -20,7 +22,7 @@
 <body>
   <main>
 <header class="app-header"><a class="brand" href="/"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m4 5 7 7-7 7M20 5l-7 7 7 7M4 12h5m6 0h5"/></svg><span>Дуэли</span></a><nav class="primary-nav" aria-label="Разделы"><a href="/">Дуэль</a><a href="/practice" aria-current="page">Тренировка</a></nav><div class="header-actions"><button id="open-appearance" type="button" class="quiet appearance-trigger" aria-label="Оформление"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.4 1.4m11.2 11.2L19 19M5 19l1.4-1.4M17.6 6.4 19 5"/></svg></button><button id="open-settings" type="button" class="quiet account-trigger">Войти</button></div></header><div id="account-shell"></div>
-    <section id="problem-bank"><div class="bank-heading"><div><h1>Банк задач</h1><p class="muted">Выберите тему и задачу. Просмотренные условия учитываются при подборе дуэлей.</p></div><label class="file-button">Своя задача<input id="problem-file-bank" type="file" accept=".json,application/json"></label></div><label class="sr-only" for="bank-topic">Тема</label><select id="bank-topic" data-picker><option value="">Все темы</option></select><div id="bank-list" class="bank-list" aria-live="polite"></div><p id="bank-error" class="error" role="alert"></p></section>
+    <section id="problem-bank"><div class="bank-heading page-heading"><div><h1>Библиотека задач</h1><p class="muted">Выберите, над чем поработать сегодня.</p></div><button id="open-custom-problem" type="button" class="quiet">Своя задача</button></div><div class="library-layout"><nav id="bank-topics" class="library-topics" aria-label="Темы задач"></nav><div class="library-collection"><div class="library-toolbar"><div><h2 id="bank-collection-title">Все задачи</h2><p id="bank-count" class="subtle" role="status"></p></div><div class="library-search"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m15 15 5 5"/></svg><label class="sr-only" for="bank-search">Поиск по названию</label><input id="bank-search" type="search" placeholder="Найти задачу…" autocomplete="off"></div></div><select id="bank-topic" hidden aria-label="Тема"><option value="">Все темы</option></select><div id="bank-list" class="bank-list" aria-live="polite"></div><p id="bank-error" class="error" role="alert"></p><p class="library-note">Открытые условия отмечаются в истории и не попадут вам в новой дуэли.</p></div></div></section>
     <div id="practice-work" hidden><a href="/practice" class="back-link">← Банк задач</a>
     <section class="problem-card" aria-labelledby="problem-title">
       <div class="problem-top">
@@ -45,6 +47,7 @@
       <div id="history"></div>
     </section>
     </div>
+    <dialog id="custom-problem-dialog" aria-labelledby="custom-problem-title"><form id="practice-custom-form"><div class="dialog-heading"><h2 id="custom-problem-title">Своя задача</h2><button id="close-custom-problem" type="button" aria-label="Закрыть свою задачу">×</button></div><div id="practice-problem-fields"></div><p id="practice-custom-error" class="error" role="alert"></p><button type="submit" class="primary">Начать решение</button></form></dialog>
     <footer>В тренировке подробный разбор доступен сразу после проверки.</footer>
   </main>
 </body>
