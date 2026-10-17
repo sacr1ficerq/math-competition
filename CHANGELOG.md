@@ -4,10 +4,19 @@
 
 ### Added
 
+- Persistent accounts with remembered sessions, legacy-session linking, and encrypted
+  OpenRouter keys shared across devices.
+- Topic-based task bank with permanent exposure history; each duel task is unseen
+  by both players, including tasks previously opened in practice.
+- One appeal per original verdict: a higher reviewed score is adopted; otherwise
+  the attempt loses exactly one point. Provider failures leave the score unchanged.
+- Light, dark, and system themes, shared account settings, and recoverable image drafts.
+- Atomic submission with finalization, and bank practice grading using the saved key.
+
 - `/solution` chat command that posts the reference solution once both players have
   finalized, even while grading is pending, with Markdown/LaTeX rendering and a round label.
 - Same-session rematches with retained players, API-key cookies, chat, and invite link.
-- Cumulative player wins, draw counts, round numbers, and private archived round history.
+- Cumulative sandwiches (one per task win), round numbers, and private archived round history.
 - Optional new-problem loading in the rematch lobby, with readiness reset on changes.
 - Round-aware actions that reject delayed submissions, finalizations, and draft saves
   from earlier rounds; repeated rematch clicks start only one new round.
@@ -26,7 +35,12 @@
 - Both players' submitted solutions and screenshots are revealed when a round
   finishes, including in previous-round history. Unsubmitted drafts remain private.
 - Equal final scores now use the earlier finalization timestamp as the tie-break.
-  Identical finalization timestamps are a draw; automatic finalization uses the deadline.
+  Identical timestamps use server acceptance order, so new rounds always have a winner;
+  automatic finalization uses the deadline.
+- Successful appeals recalculate the current round winner and move its sandwich
+  without changing finalization times. Pending appeals block the next round.
+- Bank rematches select a fresh task, with topic and custom-task changes available
+  in the same room before both players confirm readiness.
 - Graceful server shutdown waits for accepted grading jobs to complete.
 
 ### Fixed
