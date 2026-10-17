@@ -21,3 +21,109 @@
   window.mathUI={syncPickers(){pickers.forEach(sync=>sync());}};
   document.querySelectorAll('select[data-picker]').forEach(enhance);
 })();
+
+/* Shared attempt presentation for duel review and practice. */
+(() => {
+  function summary({number, status, verdict, submittedAt, best = false}) {
+    const node = document.createElement('summary');
+    node.className = 'attempt-heading';
+    const identity = document.createElement('div');
+    identity.className = 'attempt-identity';
+    const title = document.createElement('span');
+    title.className = 'attempt-title';
+    title.textContent = `Попытка ${number}`;
+    const bestLabel = document.createElement('span');
+    bestLabel.className = 'attempt-best';
+    bestLabel.textContent = 'Лучшая оценка';
+    bestLabel.hidden = !best;
+    const labelRow = document.createElement('div');
+    labelRow.className = 'attempt-label-row';
+    labelRow.append(title, bestLabel);
+    const meta = document.createElement('div');
+    meta.className = 'attempt-meta';
+    const state = document.createElement('span');
+    state.className = 'attempt-state';
+    state.textContent = status === 'pending' ? 'Проверяется' : status === 'failed' ? 'Ошибка проверки · без штрафа' : 'Проверено';
+    const time = document.createElement('time');
+    time.dateTime = new Date(submittedAt * 1000).toISOString();
+    time.textContent = new Date(submittedAt * 1000).toLocaleTimeString('ru-RU', {hour:'2-digit', minute:'2-digit', hour12:false});
+    time.title = new Date(submittedAt * 1000).toLocaleString('ru-RU');
+    meta.append(state, time);
+    identity.append(labelRow, meta);
+    const score = document.createElement('div');
+    score.className = 'attempt-score';
+    if (status === 'graded' && typeof verdict === 'number') {
+      const value = document.createElement('strong');
+      value.textContent = verdict;
+      const scale = document.createElement('span');
+      scale.textContent = '/ 10';
+      score.append(value, scale);
+      score.setAttribute('aria-label', `Оценка: ${verdict} из 10`);
+    } else {
+      const mark = document.createElement('span');
+      mark.className = 'attempt-score-placeholder';
+      mark.textContent = status === 'pending' ? '…' : '—';
+      mark.setAttribute('aria-label', status === 'pending' ? 'Ожидаем оценку' : 'Оценка не получена');
+      score.append(mark);
+    }
+    const chevron = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    chevron.setAttribute('viewBox', '0 0 20 20');
+    chevron.setAttribute('aria-hidden', 'true');
+    chevron.classList.add('attempt-chevron');
+    chevron.innerHTML = '<path d="m6 8 4 4 4-4"/>';
+    node.append(identity, score, chevron);
+    return node;
+  }
+  function section(target, title, text, render, {folded = false, id = '', open = false} = {}) {
+    const wrapper = document.createElement(folded ? 'details' : 'section');
+    wrapper.className = folded ? 'review-disclosure' : 'review-block';
+    if (id) wrapper.id = id;
+    const heading = document.createElement(folded ? 'summary' : 'h3');
+    heading.textContent = title;
+    if (folded) wrapper.open = open;
+    const body = document.createElement('div');
+    body.className = 'rendered';
+    render(body, text);
+    wrapper.append(heading, body);
+    target.append(wrapper);
+    return body;
+  }
+  window.mathAttempts = {summary, section};
+})();
+
+/* One review document, navigated by a compact attempt timeline. */
+(() => {
+  const views = new Map();
+  window.mathAttempts.render = function(target, entries, {key, finished, build}) {
+    const focusedId=target.contains(document.activeElement)?document.activeElement.id:null;
+    const selection=target.contains(document.activeElement)&&document.activeElement.selectionStart!==undefined?[document.activeElement.selectionStart,document.activeElement.selectionEnd]:null;
+    const best=entries.filter(entry=>entry.status==='graded'&&typeof entry.verdict==='number').reduce((a,b)=>!a||b.verdict>=a.verdict?b:a,null);
+    const latest=entries.at(-1);
+    const view=views.get(key)||{choice:null,latest:null,userChosen:false,finished:false};
+    if(!entries.some(entry=>entry.id===view.choice)||(!view.userChosen&&finished&&!view.finished))view.choice=(finished&&best?best:latest)?.id;
+    else if(!view.userChosen&&latest?.id!==view.latest&&view.choice===view.latest)view.choice=latest?.id;
+    view.latest=latest?.id;view.finished=finished;views.set(key,view);
+    const rail=document.createElement('div');rail.className='attempt-rail';rail.role='tablist';rail.setAttribute('aria-label','Попытки решения');
+    const pane=document.createElement('section');pane.className='review-stage';pane.role='tabpanel';pane.tabIndex=0;
+    const prefix=key.replace(/[^a-zA-Z0-9_-]/g,'-');pane.id=prefix+'-review';
+    function show(entry,manual=false){
+      view.choice=entry.id;if(manual)view.userChosen=true;
+      rail.querySelectorAll('button').forEach(button=>{const selected=button.dataset.id===entry.id;button.setAttribute('aria-selected',String(selected));button.tabIndex=selected?0:-1;});
+      pane.setAttribute('aria-labelledby',prefix+'-'+entry.id);pane.replaceChildren();
+      const heading=document.createElement('div');heading.className='review-document-toolbar';
+      const stamp=document.createElement('div');stamp.className='review-document-stamp';const time=document.createElement('time');time.dateTime=new Date(entry.submittedAt*1000).toISOString();time.title=new Date(entry.submittedAt*1000).toLocaleString('ru-RU');time.textContent='Отправлено '+new Date(entry.submittedAt*1000).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit',hour12:false});stamp.append(time);
+      if(best?.id===entry.id){const label=document.createElement('span');label.className='attempt-best';label.textContent='Лучшая оценка';stamp.append(label);}
+      const verdict=document.createElement('div');verdict.className='review-document-verdict';
+      const number=document.createElement('strong');number.textContent=typeof entry.verdict==='number'?entry.verdict:entry.status==='pending'?'Проверяется':'Ошибка проверки';
+      if(typeof entry.verdict==='number'){const scale=document.createElement('span');scale.textContent='/ 10';verdict.append(number,scale);}else{verdict.classList.add('is-status');verdict.append(number);}
+      heading.append(stamp,verdict);
+      const content=document.createElement('div');content.className='review-document-content';pane.append(heading,content);
+      build(entry,content,heading);
+    }
+    for(const entry of entries){const button=document.createElement('button');button.type='button';button.role='tab';button.id=prefix+'-'+entry.id;button.dataset.id=entry.id;button.setAttribute('aria-controls',pane.id);const number=document.createElement('span');number.className='attempt-rail-number';number.textContent="№ " + entry.number;const verdict=document.createElement('span');verdict.className='attempt-rail-verdict';verdict.textContent=typeof entry.verdict==='number'?`${entry.verdict} / 10`:entry.status==='pending'?'Проверяется':'Ошибка';button.dataset.status=entry.status;button.setAttribute('aria-label',`Попытка ${entry.number}: ${verdict.textContent}${entry.id===best?.id?', лучшая оценка':''}`);button.append(number,verdict);button.onclick=()=>show(entry,true);rail.append(button);}
+    rail.onkeydown=event=>{const buttons=[...rail.children],index=buttons.indexOf(document.activeElement);if(index<0)return;let next;if(event.key==='ArrowRight')next=(index+1)%buttons.length;else if(event.key==='ArrowLeft')next=(index-1+buttons.length)%buttons.length;else if(event.key==='Home')next=0;else if(event.key==='End')next=buttons.length-1;else return;event.preventDefault();buttons[next].click();buttons[next].focus({preventScroll:true});rail.scrollLeft=Math.max(0,buttons[next].offsetLeft-rail.offsetLeft-rail.clientWidth/2+buttons[next].offsetWidth/2);};
+    target.replaceChildren(rail,pane);
+    if(entries.length){show(entries.find(entry=>entry.id===view.choice)||latest);const active=rail.querySelector('[aria-selected=\"true\"]');if(active)rail.scrollLeft=Math.max(0,active.offsetLeft-rail.offsetLeft-rail.clientWidth/2+active.offsetWidth/2);}
+    if(focusedId){const replacement=document.getElementById(focusedId);replacement?.focus({preventScroll:true});if(selection&&replacement?.setSelectionRange)replacement.setSelectionRange(...selection);}
+  };
+})();

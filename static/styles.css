@@ -1107,47 +1107,117 @@ dialog::backdrop {
   font-size: 15px;
 }
 
-.submission {
-  margin-top: 8px;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  background: var(--surface);
-  overflow: hidden;
+/* One document surface; attempt navigation stays a lightweight horizontal timeline. */
+.attempt-rail {
+  display: flex;
+  gap: 4px;
+  width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  padding: 0 0 12px;
+  margin-bottom: 12px;
+  scrollbar-width: thin;
 }
 
-.submission>summary {
-  padding: 14px 16px;
-  font-size: 13px;
+.attempt-rail>button {
+  flex: 0 0 auto;
+  gap: 10px;
+  min-width: 100px;
+  height: 44px;
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--muted);
+  box-shadow: inset 0 -1px 0 var(--line);
+}
+
+.attempt-rail>[aria-selected="true"] {
   color: var(--text);
+  box-shadow: inset 0 -2px 0 var(--foam);
 }
 
-.submission>summary::after {
-  display: inline-block;
-  content: "⌄";
-  float: none;
-  margin: 0 0 0 10px;
+.attempt-rail-number {
+  font-size: 12px;
   color: var(--subtle);
 }
 
-.submission[open]>summary::after {
-  content: "⌃";
+.attempt-rail-verdict {
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
 }
 
-.submission>summary:hover {
-  background: var(--overlay);
+.attempt-rail>[data-status="pending"] .attempt-rail-verdict { color: var(--gold); }
+.attempt-rail>[data-status="failed"] .attempt-rail-verdict { color: var(--love); }
+
+.review-stage {
+  min-width: 0;
+  outline-offset: 4px;
 }
 
-.submission>summary time {
+.review-document-toolbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 16px;
+  min-height: 76px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+  scroll-margin-top: 104px;
+}
+
+.review-document-stamp {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
   font-size: 12px;
   color: var(--muted);
-  margin-left: 12px;
 }
 
-.verdict {
-  float: right;
+.review-document-stamp time { white-space: nowrap; }
+.attempt-best { color: var(--foam); font-size: 12px; }
+
+.review-document-verdict {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
   font-variant-numeric: tabular-nums;
-  color: var(--foam);
+  white-space: nowrap;
 }
+
+.review-document-verdict strong {
+  font-size: 25px;
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -.6px;
+}
+
+.review-document-verdict>span { color: var(--muted); font-size: 12px; }
+.review-document-verdict.is-status strong { font-size: 13px; letter-spacing: 0; font-weight: 500; color: var(--muted); }
+
+.review-appeal-trigger {
+  min-height: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--foam);
+  font-size: 12px;
+}
+
+.review-document-content {
+  padding: 24px 0;
+  max-width: 880px;
+  min-height: 140px;
+}
+
+.review-block { margin-bottom: 24px; }
+.review-block>h3 { color: var(--muted); font-size: 12px; font-weight: 500; margin: 0 0 12px; }
+.review-document-content>h3 { border-top: 1px solid var(--line); padding-top: 24px; margin: 24px 0 16px; color: var(--muted); font-size: 13px; font-weight: 500; }
+.review-disclosure>summary { color: var(--muted); font-size: 13px; }
+.review-disclosure>.rendered { padding: 4px 0 16px; }
+.review-document-content .image-gallery:empty { display: none; }
 
 .feedback {
   border-top: 1px solid var(--line);
@@ -1417,10 +1487,11 @@ dialog::backdrop {
     padding: 20px;
   }
 
-  .submission>summary time {
-    display: none;
-  }
-
+  .attempt-rail>button { min-width: 88px; padding: 8px 12px; }
+  .review-document-toolbar { gap: 12px; padding: 16px 0; min-height: 76px; }
+  .review-document-stamp { flex-direction: column; gap: 4px; font-size: 11px; }
+  .review-document-verdict strong { font-size: 23px; }
+  .review-document-content { padding: 20px 0; }
   .dialog-actions {
     flex-wrap: wrap;
   }

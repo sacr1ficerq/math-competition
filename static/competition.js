@@ -26,6 +26,7 @@ const appealRequests = new Set();
 let imageBackupFailed = false;
 let acceptedPayload = null;
 let keyPrompted = false;
+let keyboardNavigation = false;
 let readinessWithdrawal = null;
 let reviewTab = "own";
 let noticeTimer;
@@ -176,7 +177,7 @@ function apply(next) {
   $("topic-availability").textContent = selectedTopic ? `Новых задач для вас обоих: ${selectedTopic.unseen_count}.` : "Выберите тему перед подтверждением готовности.";
   window.mathUI.syncPickers();
   $("arena").hidden = state.phase === "lobby" || state.phase === "finished";
-  $("histories").hidden = state.phase === "lobby" || (state.phase === "finished" && reviewTab === "reference");
+  $("histories").hidden = state.phase === "lobby" || (state.phase === "finished" && reviewTab === "reference") || (state.phase !== "finished" && !player.submissions.length);
   $("ready").textContent = player.ready ? "Не готов" : "Готов";
   $("lobby-hint").textContent = state.players.length < 2 ? "Отправьте ссылку другу, чтобы начать." : player.ready ? "Ждём готовности соперника…" : "Нажмите «Готов», когда будете готовы начать.";
   renderPlayers();
@@ -194,7 +195,7 @@ function apply(next) {
   }
   $("result").hidden = state.phase !== "finished";
   $("revealed").hidden = state.phase !== "finished" || reviewTab !== "reference";
-  $("feedback-hint").textContent = state.phase === "finished" ? "Решения и подробный разбор доступны" : "Решение соперника откроется после раунда";
+  $("feedback-hint").textContent = "";
   if (state.result) {
     const winner = state.players.find((p) => p.id === state.result.winner);
     $("result-title").textContent = state.appeals_pending ? "Результат уточняется" : winner ? winner.id === state.me ? "Ваша победа" : `${winner.name} побеждает` : "Ничья";
@@ -214,7 +215,7 @@ function apply(next) {
     const target=state.phase === "finished" ? $("result-title") : $("lobby-title");
     const section=state.phase === "finished" ? $("result") : $("lobby");
     const targetRound=state.round;
-    requestAnimationFrame(()=>{if(state.round!==targetRound)return;target.focus({preventScroll:true});section.scrollIntoView({block:"start",behavior:"auto"});});
+    requestAnimationFrame(()=>{if(state.round!==targetRound)return;target.dataset.keyboardFocus=String(keyboardNavigation);target.focus({preventScroll:true});section.scrollIntoView({block:"start",behavior:"auto"});});
   }
 }
 
@@ -330,78 +331,44 @@ function renderResultComparison() {
   if ($('result-comparison').dataset.signature===signature) return;
   $('result-comparison').dataset.signature=signature;
   $('result-comparison').replaceChildren();
-  for(const player of state.players){const item=document.createElement('div');item.className='result-player'+(state.result?.winner===player.id?' is-winner':'');const name=document.createElement('strong');name.textContent=player.id===state.me?'Вы':player.name;const score=document.createElement('div');score.className='result-number';score.textContent=player.score.score;const scale=document.createElement('span');scale.textContent=' / 10';score.append(scale);const detail=document.createElement('p');detail.textContent=`Проверок: ${player.score.counted} · Штраф: ${player.score.penalty}`;const finish=document.createElement("p");finish.textContent=finishLabel(player);item.append(name,score,detail,finish);$('result-comparison').append(item);}
+  for(const player of state.players){const item=document.createElement('div');item.className='result-player'+(state.result?.winner===player.id?' is-winner':'');const name=document.createElement('strong');name.textContent=player.id===state.me?'Вы':player.name;const score=document.createElement('div');score.className='result-number';score.textContent=player.score.score;const scale=document.createElement('span');scale.textContent=' / 10';score.append(scale);const detail=document.createElement('p');detail.textContent=`Оценка ${player.score.best} − штраф ${player.score.penalty} = ${player.score.score}`;const finish=document.createElement("p");finish.textContent=finishLabel(player);item.append(name,score,detail,finish);$('result-comparison').append(item);}
 }
 
 function renderHistory(players = state.players, target = $("history")) {
-  if (target === $("history")) players=players.filter(player=>state.phase === "finished" ? reviewTab === "opponent" ? player.id !== state.me : player.id === state.me : player.id === state.me);
-  if (target === $("history")) {
-    const signature = JSON.stringify(players.map((p) => [p.name, p.submissions]));
-    if (signature === historySignature) return;
-    historySignature = signature;
-  }
-  const focused = target.contains(document.activeElement) ? document.activeElement : null;
-  const focusId = focused?.id;
-  const selection = focused?.selectionStart !== undefined ? [focused.selectionStart, focused.selectionEnd] : null;
-  const opened = new Set([...target.querySelectorAll("details[open]")].map((d) => d.id));
-  const reviewKey = `${state.code}:${state.round}:${reviewTab}`;
-  const firstReview = target === $("history") && state.phase === "finished" && !initializedReviews.has(reviewKey);
-  const content = document.createDocumentFragment();
-  for (const p of players) {
-    const heading = document.createElement("h3");
-    heading.className = "history-owner";
-    heading.textContent = p.name + (p.id === state.me ? " · ваши попытки" : " · соперник");
-    content.append(heading);
-    if (!p.submissions.length) {
-      const empty = document.createElement("p");
-      empty.className = "empty-history";
-      empty.textContent = "Попыток пока нет.";
-      content.append(empty);
-    }
-    for (const [index, s] of [...p.submissions.entries()].reverse()) {
-      const entry = document.createElement("details");
-      entry.className = "submission";
-      entry.id = `submission-${s.id}`;
-      entry.open = opened.has(entry.id) || (firstReview && index === p.submissions.length-1);
-      const summary = document.createElement("summary");
-      summary.append(document.createTextNode(`Попытка ${index + 1}`));
-      const time = document.createElement("time");
-      time.dateTime = new Date(s.submitted_at * 1000).toISOString();
-      time.textContent = timeText(s.submitted_at);
-      time.title = new Date(s.submitted_at * 1000).toLocaleString();
-      const verdict = document.createElement("span");
-      verdict.className = "verdict";
-      verdict.textContent = s.status === "pending" ? "Проверяется…" : s.status === "failed" ? "Ошибка · без штрафа" : `${s.verdict} / 10`;
-      summary.append(time, verdict);
-      const feedback = document.createElement("div");
-      feedback.className = "feedback";
-      const section = (title, text) => {
-        const h = document.createElement("h3");
-        h.textContent = title;
-        const body = document.createElement("div");
-        body.className = "rendered";
-        render(body, text);
-        feedback.append(h, body);
-      };
-      if (s.grade) { section("Разбор", s.grade.reasoning); section("Обоснование", s.grade.evidence); }
-      else if (s.status === "graded") { const text = document.createElement("p"); text.className = "muted"; text.textContent = "Подробный разбор откроется после раунда."; feedback.append(text); }
-      if (s.error) { const error = document.createElement("p"); error.className = "error"; error.textContent = s.error; feedback.append(error); }
-      if (s.solution !== undefined) {
-        section(p.id === state.me ? "Отправленное решение" : `Решение ${p.name}`, s.solution || "Решение на изображениях.");
-        window.appendSolutionImages(feedback, s.images || []);
+  const currentRound=target === $('history');
+  if(currentRound)players=players.filter(player=>state.phase==='finished'&&reviewTab==='opponent'?player.id!==state.me:player.id===state.me);
+  const player=players[0];
+  if(!player)return;
+  if(currentRound){const signature=JSON.stringify([state.phase,player.name,player.submissions]);if(signature===historySignature)return;historySignature=signature;}
+  if(!player.submissions.length){const empty=document.createElement('p');empty.className='muted';empty.textContent='Решение не отправлено.';target.replaceChildren(empty);return;}
+  const entries=player.submissions.map((submission,index)=>({id:submission.id,number:index+1,status:submission.status,verdict:submission.verdict,submittedAt:submission.submitted_at,submission}));
+  window.mathAttempts.render(target,entries,{
+    key:`${state.code}-${currentRound?state.round:entries[0].id}-${player.id}`,
+    finished:!currentRound||state.phase==='finished',
+    build(entry,content,toolbar){
+      const submission=entry.submission;
+      const finished=!currentRound||state.phase==='finished';
+      const section=(title,text)=>window.mathAttempts.section(content,title,text,render,{folded:title==='Разбор апелляции'});
+      appendAppeal(content,submission,player,currentRound,section);
+      const appealForm=content.querySelector('.appeal-form-panel');
+      if(appealForm){
+        const trigger=document.createElement('button');trigger.type='button';trigger.className='review-appeal-trigger';trigger.textContent='Оспорить';
+        appealForm.id=`appeal-panel-${submission.id}`;appealForm.dataset.linked='true';trigger.setAttribute('aria-controls',appealForm.id);trigger.setAttribute('aria-expanded',String(appealForm.open));
+        trigger.onclick=()=>{appealForm.open=!appealForm.open;trigger.setAttribute('aria-expanded',String(appealForm.open));if(appealForm.open){appealForm.querySelector('textarea')?.focus({preventScroll:true});toolbar.scrollIntoView({block:'start',behavior:'auto'});}};toolbar.append(trigger);
       }
-      else { const privateText = document.createElement("p"); privateText.className = "muted"; privateText.textContent = "Решение соперника откроется после раунда."; feedback.append(privateText); }
-      appendAppeal(feedback, s, p, target === $("history"), section);
-      entry.append(summary, feedback);
-      content.append(entry);
+      if(submission.error){const error=document.createElement('p');error.className='error';error.textContent=submission.error;content.append(error);}
+      if(finished&&submission.grade){section('Разбор',submission.grade.reasoning);if(submission.grade.evidence&&submission.grade.evidence!==submission.grade.reasoning)section('Обоснование',submission.grade.evidence);}
+      if(submission.solution!==undefined){
+        const proof=document.createElement('div');proof.className='rendered submitted-document';
+        if(finished&&submission.grade){const title=document.createElement('h3');title.textContent='Отправленное решение';content.append(title);proof.classList.add('after-review');}
+        render(proof,submission.solution||'');window.appendSolutionImages(proof,submission.images||[]);content.append(proof);
+      }
     }
-  }
-  target.replaceChildren(content);
-  if (firstReview) initializedReviews.add(reviewKey);
-  if (focusId) { const replacement = document.getElementById(focusId); replacement?.focus({preventScroll:true}); if (selection && replacement?.setSelectionRange) replacement.setSelectionRange(...selection); }
+  });
 }
 
 function appendAppeal(feedback, submission, player, currentRound, section) {
+  if(currentRound && state.phase !== "finished")return;
   const appeal = submission.appeal;
   if (appeal) {
     const review = document.createElement("div");
@@ -419,9 +386,9 @@ function appendAppeal(feedback, submission, player, currentRound, section) {
     if (appeal.reason) {const reason=document.createElement("p");reason.className="appeal-reason";reason.textContent=`Основание: ${appeal.reason}`;review.append(reason);}
     if (appeal.error) {const error=document.createElement("p");error.className="muted";error.textContent=appeal.error;review.append(error);}
     feedback.append(review);
-    if (appeal.grade) {section("Пересмотр оценки", appeal.grade.reasoning); section("Обоснование пересмотра", appeal.grade.evidence);}
+    if (appeal.grade) section("Разбор апелляции", `${appeal.grade.reasoning}\n\n### Обоснование\n\n${appeal.grade.evidence}`);
   }
-  if (!currentRound || player.id !== state.me || !submission.appeal_eligible) return;
+  if (!currentRound || state.phase !== "finished" || player.id !== state.me || !submission.appeal_eligible) return;
   const key = `${state.code}:${state.round}:${submission.id}`;
   let draft = appealDrafts.get(key);
   if (!draft) {draft={reason:appeal?.reason || "", requestId:null, open:false};appealDrafts.set(key,draft);}
@@ -434,7 +401,7 @@ function appendAppeal(feedback, submission, player, currentRound, section) {
   const form=document.createElement("form");
   const label=document.createElement("label");label.htmlFor=`appeal-reason-${submission.id}`;label.textContent="Почему оценку нужно повысить?";
   const reason=document.createElement("textarea");reason.id=label.htmlFor;reason.rows=3;reason.maxLength=5000;reason.required=true;reason.value=draft.reason;reason.placeholder="Укажите конкретный шаг решения или ошибку в разборе.";
-  const warning=document.createElement("p");warning.className="appeal-warning";warning.id=`appeal-warning-${submission.id}`;warning.textContent="Одна рассмотренная апелляция на исходную оценку. Если оценка не повысится, она снизится на 1 балл, даже ниже нуля. Пересмотр оплачивается вашим ключом OpenRouter.";
+  const warning=document.createElement("p");warning.className="appeal-warning";warning.id=`appeal-warning-${submission.id}`;warning.textContent="Одна апелляция на оценку. Если её не повысят — минус 1 балл, даже ниже нуля. Проверка оплачивается вашим ключом.";
   reason.setAttribute("aria-describedby",warning.id);
   const error=document.createElement("p");error.className="error";error.setAttribute("role","alert");
   const button=document.createElement("button");button.type="submit";button.textContent=appealRequests.has(key) ? "Отправляется…" : "Отправить апелляцию";button.disabled=appealRequests.has(key) || !draft.reason.trim() || !state.has_api_key;
@@ -442,6 +409,7 @@ function appendAppeal(feedback, submission, player, currentRound, section) {
   const round=state.round;
   form.addEventListener("submit",async event=>{
     event.preventDefault();
+    if(state.phase !== "finished" || state.round !== round){error.textContent="Апелляция доступна после завершения раунда и всех проверок.";return;}
     if(appealRequests.has(key) || !reason.value.trim()) return;
     if(!state.has_api_key){error.textContent="Сначала подключите OpenRouter в настройках.";return;}
     if(!draft.requestId || (appeal?.status === "failed" && draft.requestId === appeal.request_id)) draft.requestId=requestId();
@@ -634,6 +602,8 @@ async function withdrawReadyForSelection() {
 }
 
 async function init() {
+  document.addEventListener("keydown",event=>{if(["Tab","Enter"," "].includes(event.key))keyboardNavigation=true;});
+  document.addEventListener("pointerdown",()=>{keyboardNavigation=false;});
   if (!render) { notice("Не удалось загрузить отображение формул. Проверьте соединение и обновите страницу.", true); return; }
   solutionImages = new window.SolutionImages($("solution-images"), $("image-attachments"), $("solution"), () => {
     controls();

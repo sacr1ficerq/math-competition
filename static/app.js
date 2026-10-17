@@ -36,49 +36,17 @@ function updateScore() {
 }
 
 function addSubmission(result, solution, images) {
-  submissions.push(result);
-  $("history-empty").hidden = true;
-  const entry = document.createElement("details");
-  entry.className = "submission";
-  entry.open = true;
-  const summary = document.createElement("summary");
-  const label = document.createElement("span");
-  label.textContent = `Попытка ${submissions.length}`;
-  const time = document.createElement("time");
-  time.dateTime = result.submitted_at;
-  time.textContent = new Date(result.submitted_at).toLocaleTimeString();
-  time.title = new Date(result.submitted_at).toLocaleString();
-  const verdict = document.createElement("span");
-  verdict.className = "verdict";
-  verdict.textContent = result.grade ? `${result.grade.verdict} / 10` : "Ошибка · без штрафа";
-  summary.append(label, time, verdict);
-  const feedback = document.createElement("div");
-  feedback.className = "feedback";
-  const section = (title, text) => {
-    const heading = document.createElement("h3");
-    heading.textContent = title;
-    const body = document.createElement("div");
-    body.className = "rendered";
-    render(body, text);
-    feedback.append(heading, body);
-  };
-  if (result.grade) {
-    section("Разбор", result.grade.reasoning);
-    section("Обоснование", result.grade.evidence);
-  } else {
-    const error = document.createElement("p");
-    error.className = "error";
-    error.textContent = result.error;
-    feedback.append(error);
-  }
-  section("Отправленное решение", solution || "Решение на изображениях.");
-  window.appendSolutionImages(feedback, images);
-  const meta = document.createElement("p");
-  meta.className = "meta";
-  meta.textContent = `Попыток проверки: ${result.attempts} · ${result.counted ? "Учтено в оценке" : "Без штрафа"}`;
-  feedback.append(meta);
-  entry.append(summary, feedback);
-  $("history").prepend(entry);
+  submissions.push({...result,solution,images});
+  $('history-empty').hidden=true;
+  window.mathAttempts.render($('history'),submissions.map((item,index)=>({id:`practice-${index+1}`,number:index+1,status:item.grade?'graded':'failed',verdict:item.grade?.verdict,submittedAt:new Date(item.submitted_at).getTime()/1000,result:item})),{
+    key:`practice-${problemId||'custom'}`,finished:false,
+    build(entry,content){
+      const item=entry.result;
+      if(item.error){const error=document.createElement('p');error.className='error';error.textContent=item.error;content.append(error);}
+      if(item.grade){window.mathAttempts.section(content,'Разбор',item.grade.reasoning,render);if(item.grade.evidence&&item.grade.evidence!==item.grade.reasoning)window.mathAttempts.section(content,'Обоснование',item.grade.evidence,render);const heading=document.createElement('h3');heading.textContent='Отправленное решение';content.append(heading);}
+      const proof=document.createElement('div');proof.className='rendered submitted-document';render(proof,item.solution||'');window.appendSolutionImages(proof,item.images||[]);content.append(proof);
+    }
+  });
   updateScore();
 }
 
