@@ -1,0 +1,645 @@
+{
+  "reviewer": "bank_math_audit",
+  "hash_algorithm": "sha256(statement+criterions+reference_solution UTF-8)",
+  "files": [
+    {
+      "file": "problems/shad-combinatorics-001.json",
+      "status": "verified",
+      "content_hash": "a3994a04ba7d5b77330bd59633ee84016611eb55119c5997d993047a9fe8a118",
+      "proof_checkpoints": [
+        "Знаковая сумма derangements равна det(J-I)",
+        "спектр n-1,-1"
+      ],
+      "edge_cases": [
+        "n=2: единственная транспозиция, разность -1"
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-combinatorics-002.json",
+      "status": "verified",
+      "content_hash": "60dba8e24363702184fd7a441097f7c6e74a59a57731d3b26e389fd8fc61e9d7",
+      "proof_checkpoints": [
+        "Разбиение на k fixed points и (n-k)/2 пар",
+        "EGF exp(x+x²/2)"
+      ],
+      "edge_cases": [
+        "n-k нечётно:0",
+        "пустая инволюция a0=1"
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-combinatorics-003.json",
+      "status": "verified",
+      "content_hash": "17a4fde64b939a0e6c235fdedd1000bd22dc4d95fd75b41f9818b2283a08ad04",
+      "proof_checkpoints": [
+        "Вставка максимума сохраняет k спусков в k+1 местах",
+        "остальные добавляют спуск"
+      ],
+      "edge_cases": [
+        "A(1,0)=1",
+        "k<0 или k>=n:0"
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-combinatorics-004.json",
+      "status": "verified",
+      "content_hash": "16ea677d98ed70c69a511fa5e73377071432b6d68b758feb520178cb898108b4",
+      "proof_checkpoints": [
+        "Первое пересечение y=x+1 отражается в путь к (a+1,b-1)",
+        "операция обратима"
+      ],
+      "edge_cases": [
+        "a=b даёт Catalan",
+        "b=1 допустимо"
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-combinatorics-005.json",
+      "status": "verified",
+      "content_hash": "ac284a3869d32b72f8529ead6c4a843313c07730f90c7742b279eb7e89a38089",
+      "proof_checkpoints": [
+        "Поворот с длиной цикла d фиксирует C(n/d,k/d)",
+        "multiplicity phi(d)"
+      ],
+      "edge_cases": [
+        "k=0,n: единственный класс",
+        "n=1"
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-combinatorics-006.json",
+      "status": "verified",
+      "content_hash": "4e211e132f94bcc3914a5a1f52ad7784eb247cc241b2132922f31851dc92b156",
+      "proof_checkpoints": [
+        "Мультиномиальные размеры нечётных прообразов дают n![x^n]sinh(x)^k"
+      ],
+      "edge_cases": [
+        "n=0:0 отдельно",
+        "n<k или parity mismatch:0"
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-combinatorics-007.json",
+      "status": "verified",
+      "content_hash": "e2c007dacb11f9239e9f393983c3124507493693a0a33116ebaf18bd5a497ba5",
+      "proof_checkpoints": [
+        "IE сдвигает j координат на b+1",
+        "соглашение binomial upper<m-1 даёт0"
+      ],
+      "edge_cases": [
+        "m=1,b=0",
+        "N>mb сумма сокращается в0"
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-combinatorics-008.json",
+      "status": "verified",
+      "content_hash": "c26235966d87b97c3961de7de6e517ffcc68833d278d05cb92737636b1c19c66",
+      "proof_checkpoints": [
+        "Совместимость запрещённых клеток эквивалентна различным строкам и столбцам"
+      ],
+      "edge_cases": [
+        "F пусто: n!",
+        "диагональ даёт derangements"
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-combinatorics-009.json",
+      "status": "verified",
+      "content_hash": "a57bbb605ae79e3e4e5e509ae46c4b5eec3004eb6bb14ec3ce3c23df9eed55a1",
+      "proof_checkpoints": [
+        "IE сюръекций после j=n-i даёт знак (-1)^n",
+        "fibers дают n!S(m,n)"
+      ],
+      "edge_cases": [
+        "m<n:0",
+        "m=n:(-1)^n n!"
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-combinatorics-010.json",
+      "status": "verified",
+      "content_hash": "f4dab55e70cf66a44ab4d6cb28cbb41b545cb45af649fb252e6d75c71e7f802c",
+      "proof_checkpoints": [
+        "Запрещённые циклы пересекаются только несовместимо",
+        "знак (-1)^(a+b)"
+      ],
+      "edge_cases": [
+        "n=1:0",
+        "a+2b=n оставляет n^0=1"
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-combinatorics-011.json",
+      "status": "verified",
+      "content_hash": "2044d9c8bc92d09cbcdbab49be5f8472c483990ea60ca8e79639de24f157b17a",
+      "proof_checkpoints": [
+        "Двойной счёт отмеченного выбранного места и положительных gaps"
+      ],
+      "edge_cases": [
+        "k=0:1",
+        "2k>n:0",
+        "k=n/2:2"
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-combinatorics-012.json",
+      "status": "verified",
+      "content_hash": "e6efe8f55ba3d7bc547256ea2bc861b5f12fde7005c0e05379a93855e840ee87",
+      "proof_checkpoints": [
+        "Нули создают n-k+1 промежутков",
+        "j занятых и k-j удвоенных"
+      ],
+      "edge_cases": [
+        "k=0:единственный j=0",
+        "k>2(n-k+1):0"
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-combinatorics-013.json",
+      "status": "verified",
+      "content_hash": "5968651e5dff45edafa16c1fed47422c32ef1da2b965e313941e065df5d8456d",
+      "proof_checkpoints": [
+        "Знаковая рекурсия dn=dn-1-dn-2",
+        "возврат пары (1,1) через6"
+      ],
+      "edge_cases": [
+        "n=0 пустая tiling имеет положительный знак"
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-combinatorics-014.json",
+      "status": "verified",
+      "content_hash": "6a31ea1a687016044769d6c724e6aad3491434b1004d9610033f5e24496f81a5",
+      "proof_checkpoints": [
+        "Сопряжение диаграммы меняет largest part<=m на number parts<=m"
+      ],
+      "edge_cases": [
+        "N=0:пустое разбиение",
+        "порядок частей не учитывается"
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-combinatorics-015.json",
+      "status": "verified",
+      "content_hash": "c840f5f70338dc41be7fca36bfd1fc94c541b16c67fc8bb1b3cb1386dc8d7d40",
+      "proof_checkpoints": [
+        "Чётные циклы дают exp(sum x^(2j)/(2j))=(1-x²)^(-1/2)"
+      ],
+      "edge_cases": [
+        "n нечётно:0",
+        "n=0:1"
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-combinatorics-016.json",
+      "status": "verified",
+      "content_hash": "9eee152472c1882990bb932b891ddfa79cdeebbf6b5eae90d50541b315d241ef",
+      "proof_checkpoints": [
+        "Prüfer кратности di-1",
+        "декодирование минимального оставшегося leaf"
+      ],
+      "edge_cases": [
+        "n=2:пустой код",
+        "sum di=2n-2 необходимо и достаточно"
+      ],
+      "corrections": [
+        "Декодирование выбирает метку среди ещё не удалённых; добавлен инвариант остаточной степени"
+      ],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-combinatorics-017.json",
+      "status": "verified",
+      "content_hash": "4cc6ec5eb66ae43748dbb241a6e70af95a7fbdcec8c69ac70f8ef86d2e410dba",
+      "proof_checkpoints": [
+        "Переход в heavy component уменьшает её размер",
+        "второй centroid только сосед"
+      ],
+      "edge_cases": [
+        "n=2:два",
+        "две half-компоненты при одном vertex невозможны"
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-combinatorics-018.json",
+      "status": "verified",
+      "content_hash": "609d2beb28b9e068a386029170acf18fa73a50cb82df92fbe2b85742b0c9da72",
+      "proof_checkpoints": [
+        "Разрез каждого off-path edge пересекается минимум дважды",
+        "diameter edges один раз"
+      ],
+      "edge_cases": [
+        "s=t разрешено, но optimum берёт концы диаметра",
+        "n=2:1"
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-combinatorics-019.json",
+      "status": "verified",
+      "content_hash": "ac6eadb0977db96ee4699e589bd6b92f15a7e7c75ee8c9eb61bc7382dab18ba2",
+      "proof_checkpoints": [
+        "Нечётные вершины требуют >=k открытых trails",
+        "добавленные k edges замыкают Euler"
+      ],
+      "edge_cases": [
+        "k=0 требует один непустой Euler trail",
+        "вспомогательные parallel edges допустимы"
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-combinatorics-020.json",
+      "status": "verified",
+      "content_hash": "cb779dfa435f8c847a0a765b79cd5f40b8e7f6be0a5ea01bc69b103e0be464f5",
+      "proof_checkpoints": [
+        "Баланс in=out необходим для чётности",
+        "Euler cycle ориентация по компонентам"
+      ],
+      "edge_cases": [
+        "изолированные vertices имеют обе степени0",
+        "disconnected допустим"
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-combinatorics-021.json",
+      "status": "verified",
+      "content_hash": "5306cb302ba9cfc7e450da8092675ab806c35da520736e73fa3feb7f9b0fa450",
+      "proof_checkpoints": [
+        "Соседи конца longest path лежат на нём",
+        "два одинаковых parity indices дают even cycle"
+      ],
+      "edge_cases": [
+        "непустота обязательна",
+        "minimum degree2 недостаточна:odd cycle"
+      ],
+      "corrections": [
+        "Исключён пустой граф; вопрос о точности степени согласован с критериями"
+      ],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-combinatorics-022.json",
+      "status": "verified",
+      "content_hash": "347475a69dfb88874eef86103c467507cecd3a64ba1923bbe19a2083fe27b8fe",
+      "proof_checkpoints": [
+        "Insertion первой вершины, побеждённой новой, сохраняет Hamilton path"
+      ],
+      "edge_cases": [
+        "transitive tournament не обязан иметь cycle",
+        "n=1:0 queries"
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-combinatorics-023.json",
+      "status": "verified",
+      "content_hash": "4c6bc7a0c3d84c9d5588bf8103ee6bbc47272d96b3c46656574c8d09ff9b1e3e",
+      "proof_checkpoints": [
+        "Max-outdegree v",
+        "недостижимая w побеждала бы S и v"
+      ],
+      "edge_cases": [
+        "пустой tournament исключён",
+        "singleton trivially king"
+      ],
+      "corrections": [
+        "Исключён пустой турнир"
+      ],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-combinatorics-024.json",
+      "status": "verified",
+      "content_hash": "c69c7ed3de8539f682711b0a264852583de8a7bbb02632aa1eaf2a35625b5dbd",
+      "proof_checkpoints": [
+        "Triangle-free edge: du+dv<=n",
+        "sum degrees²<=nm и >=4m²/n"
+      ],
+      "edge_cases": [
+        "n=0 или m=0 отдельны",
+        "balanced complete bipartite attains floor"
+      ],
+      "corrections": [
+        "Отдельно обработан пустой граф до деления на n"
+      ],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-combinatorics-025.json",
+      "status": "verified",
+      "content_hash": "a5aa88540cce2ef3c450d891d8693ae2bdb686402624bad6cd97e8f3b45b8daa",
+      "proof_checkpoints": [
+        "Два общих соседа дают C4",
+        "sum C(dv,2)<=C(n,2), затем quadratic bound"
+      ],
+      "edge_cases": [
+        "треугольники допускаются",
+        "n=2:bound1"
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-combinatorics-026.json",
+      "status": "verified",
+      "content_hash": "edb232832ba8f9ce8c37edf8ed278bfd07a26398672fa50d57ba503b462de807",
+      "proof_checkpoints": [
+        "Выбор nonforest edges свободен",
+        "leaves uniquely determine forest parity correction"
+      ],
+      "edge_cases": [
+        "isolated vertex требует parity0",
+        "каждой компоненте even target sum"
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-combinatorics-027.json",
+      "status": "verified",
+      "content_hash": "2f34d346ce6bd5d4878f635ad91b01577dd0d488de69a9550e9666d478681027",
+      "proof_checkpoints": [
+        "Kirchhoff minor и Schur complement b^a det(aI-aJ/b)"
+      ],
+      "edge_cases": [
+        "b=1:звезда",
+        "a=1 также даёт1"
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-combinatorics-028.json",
+      "status": "verified",
+      "content_hash": "528b6d93c57dcd4351c7f01e00be2626de5fd99f60de9b0f8408af85406444c3",
+      "proof_checkpoints": [
+        "Euler n-m+f=2 и boundary lengths >=3 или >=4",
+        "sum boundary=2m"
+      ],
+      "edge_cases": [
+        "bridges counted twice",
+        "tree n>=3 has boundary>=4"
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-combinatorics-029.json",
+      "status": "verified",
+      "content_hash": "cfe9ffb7d40fc36b9ddfccba9bd6f774780b318c956e8cfacd1dbeb08d7ce126",
+      "proof_checkpoints": [
+        "K3,3 имеет9>2*6-4 edges",
+        "smoothing subdivided paths preserves embedding"
+      ],
+      "edge_cases": [
+        "internal paths disjoint",
+        "extra ambient graph edges удаляются"
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-combinatorics-030.json",
+      "status": "verified",
+      "content_hash": "16317be7308eeb23486d0d4569711bb0b57e01ef1df522688e032bb637089e66",
+      "proof_checkpoints": [
+        "Планарная средняя degree<6 наследуется при удалении",
+        "обратная6-color greedy"
+      ],
+      "edge_cases": [
+        "n=0,1,2 базы",
+        "disconnected соединяется без пересечений"
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-combinatorics-031.json",
+      "status": "verified",
+      "content_hash": "84a053d503ce9c9eb0c82f583bac422f77ed2b1e5fa17798e6b64237451083af",
+      "proof_checkpoints": [
+        "R33≤6 доказано разбором трёх соседей/несоседей",
+        "Triangle-free на9 без independent4 обязан быть3-регулярен, что нарушает handshaking",
+        "C8+диаметры triangle-free; independent4 цикла только parity classes, разрушенные диаметрами"
+      ],
+      "edge_cases": [
+        "Красная degree≤2 оставляет≥6 несоседей",
+        "Нижняя конструкция содержит12 красных рёбер"
+      ],
+      "corrections": [
+        "По поручению root существенно усилена задача и полностью переписан эталон; независимый финальный gate math_analysis_algorithms approved"
+      ],
+      "executed_checks": [
+        {
+          "method": "exhaustively checked C8+diameters triangles and independent4",
+          "triples": 56,
+          "quadruples": 70
+        }
+      ],
+      "independent_gate": "math_analysis_algorithms"
+    },
+    {
+      "file": "problems/shad-combinatorics-032.json",
+      "status": "verified",
+      "content_hash": "7b01a02ab0d35153378eabb7115f305c1d8b68574bb7afb6d4aace1276d6559b",
+      "proof_checkpoints": [
+        "Окружения v: >=A red или >=B blue",
+        "induction plus Pascal"
+      ],
+      "edge_cases": [
+        "s=1 или t=1 boundary1",
+        "recursion доказывает конечность"
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-combinatorics-033.json",
+      "status": "verified",
+      "content_hash": "bfee07940224f0ddf891d4fac1053bcdc01e8bad2b74625d5d9c54a3067c97e5",
+      "proof_checkpoints": [
+        "Перестановочные maximal chains meet antichain <=1",
+        "A contributes |A|!(n-|A|)!"
+      ],
+      "edge_cases": [
+        "n=0:единственная empty subset",
+        "central layer attains"
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-combinatorics-034.json",
+      "status": "verified",
+      "content_hash": "ed8189c635c76a32bac366c251a9a9ba6e55c9f71af056dea42787805a4fddfa",
+      "proof_checkpoints": [
+        "Без общей вершины две incident пары принуждают третью сторону triangle"
+      ],
+      "edge_cases": [
+        "n=4:triangle и star обе maximizers",
+        "n>=5 только full star"
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-combinatorics-035.json",
+      "status": "verified",
+      "content_hash": "6f3dc2497970f519ad73c801e8a59e1bfa177523deaf52bbe165da620c8a02da",
+      "proof_checkpoints": [
+        "Пары LIS/LDS lengths для разных индексов различны",
+        "r decreasing blocks length s"
+      ],
+      "edge_cases": [
+        "r=1 или s=1 конструкция сохраняет точность",
+        "distinct values обязательны"
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-combinatorics-036.json",
+      "status": "verified",
+      "content_hash": "c9102e564c97444fac2549ede80dd50803cdf6fc0170ea6a324b0516fd0adce1",
+      "proof_checkpoints": [
+        "mn+1 paired prefix states попадают в mn классов",
+        "Совпадение обоих остатков даёт одновременно length multiple m и sum multiple n",
+        "Sharp construction каждый length qm block содержит ровно q единиц"
+      ],
+      "edge_cases": [
+        "n=1 нет допустимого непустого length block",
+        "m=1: n−1 единиц; m=n=1: пустая sharp sequence"
+      ],
+      "corrections": [
+        "По поручению root существенно усилена задача и полностью переписан эталон; независимый финальный gate math_analysis_algorithms approved"
+      ],
+      "executed_checks": [
+        {
+          "method": "exhaustively checked all consecutive blocks of sharp sequence",
+          "m_range": [
+            1,
+            8
+          ],
+          "n_range": [
+            1,
+            8
+          ],
+          "parameter_cases": 64
+        }
+      ],
+      "independent_gate": "math_analysis_algorithms"
+    },
+    {
+      "file": "problems/shad-combinatorics-037.json",
+      "status": "verified",
+      "content_hash": "3675d933e02dd7838ba7b4f53180d6eacdb5528dd778f725cdb606040cbbf3b7",
+      "proof_checkpoints": [
+        "Odd-part chains дают максимум n и equality exactly one representative",
+        "Divisibility representatives iff odd-part divisibility and nondecreasing exponent",
+        "Factorization of odd ratio into primes gives sufficiency of prime-ratio constraints"
+      ],
+      "edge_cases": [
+        "n=1 возможны {1} и {2}",
+        "Нечётные части incomparable не требуют exponent constraints"
+      ],
+      "corrections": [
+        "По поручению root существенно усилена задача и полностью переписан эталон; независимый финальный gate math_analysis_algorithms approved"
+      ],
+      "executed_checks": [
+        {
+          "method": "exact exhaustive equality of divisibility antichain and exponent constraints",
+          "n_range": [
+            1,
+            7
+          ],
+          "subsets": 4706
+        }
+      ],
+      "independent_gate": "math_analysis_algorithms"
+    },
+    {
+      "file": "problems/shad-combinatorics-038.json",
+      "status": "verified",
+      "content_hash": "cb0f5d49ed01949c580c827f1b7dd2a0c33a03c6e9a40fec0194f29c0e2c3356",
+      "proof_checkpoints": [
+        "Представление aij=ri+cj mod2 эквивалентно even rectangles",
+        "kernel size2"
+      ],
+      "edge_cases": [
+        "m=1 или n=1:rectangle condition vacuous",
+        "count2^(m+n-1)"
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-combinatorics-039.json",
+      "status": "verified",
+      "content_hash": "7c00e6d8e18cdc96d8c5bbbaa2d512889a9a6b093a6ce16d11093a0eb0839897",
+      "proof_checkpoints": [
+        "Разности di дают ci=di-di+1",
+        "integer d0 требует sum i ci=0 mod n"
+      ],
+      "edge_cases": [
+        "sum ci=0 обеспечивает periodic d",
+        "x0 произвольное целое"
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-combinatorics-040.json",
+      "status": "verified",
+      "content_hash": "d149747fe2c97253e0e220087713407381b9dddc462081c8e696e3d4f18eefed",
+      "proof_checkpoints": [
+        "Regular bipartite degree count gives equal parts and Hall for every subset"
+      ],
+      "edge_cases": [
+        "d=1 база",
+        "disconnected разрешён",
+        "repeated removal ends at0"
+      ],
+      "corrections": [],
+      "executed_checks": []
+    }
+  ]
+}
