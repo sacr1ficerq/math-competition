@@ -122,7 +122,7 @@ button,.file-button {
   line-height: var(--control-line);
   white-space: nowrap;
   cursor: pointer;
-  transition: background 160ms,border-color 160ms,opacity 160ms,transform 160ms;
+  transition: background 160ms,border-color 160ms,opacity 160ms,transform 100ms cubic-bezier(.23,1,.32,1);
 }
 
 button:hover:not(:disabled),.file-button:hover {
@@ -131,7 +131,7 @@ button:hover:not(:disabled),.file-button:hover {
 }
 
 button:active:not(:disabled) {
-  transform: translateY(1px);
+  transform: scale(.97);
 }
 
 button:disabled,.file-button.disabled {
@@ -1634,3 +1634,11 @@ dialog::backdrop {
   }
 
 }
+
+/* Press feedback never moves keyboard or reduced-motion interactions. */
+:root.keyboard-input button:active { transform: none; }
+:root.keyboard-input button { transition-duration: 0s; }
+@media (prefers-reduced-motion: reduce) { button:active:not(:disabled) { transform: none; } }
+.destructive { background: var(--love); color: var(--button-text); }
+.closed-room-state { padding: 24px 0; }
+.closed-room-state>#closed-history-host { margin-top: 32px; }

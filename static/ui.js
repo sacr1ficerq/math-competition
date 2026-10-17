@@ -127,3 +127,23 @@
     if(focusedId){const replacement=document.getElementById(focusedId);replacement?.focus({preventScroll:true});if(selection&&replacement?.setSelectionRange)replacement.setSelectionRange(...selection);}
   };
 })();
+
+/* Only the artwork responds to a fine pointer; controls keep stable hit areas. */
+(() => {
+  document.addEventListener('keydown',()=>document.documentElement.classList.add('keyboard-input'));
+  document.addEventListener('pointerdown',()=>document.documentElement.classList.remove('keyboard-input'));
+  const region=document.getElementById('landing'),art=region?.querySelector('.math-arena');
+  if(!art)return;
+  const pointer=matchMedia('(hover: hover) and (pointer: fine)'),motion=matchMedia('(prefers-reduced-motion: reduce)');
+  let frame=0,currentX=0,currentY=0,targetX=0,targetY=0;
+  function tick(){
+    currentX+=(targetX-currentX)*.16;currentY+=(targetY-currentY)*.16;
+    if(Math.abs(currentX-targetX)<.03&&Math.abs(currentY-targetY)<.03){currentX=targetX;currentY=targetY;frame=0;}else frame=requestAnimationFrame(tick);
+    art.style.transform=currentX||currentY?`perspective(900px) translate3d(${currentX}px,${currentY}px,0) rotateX(${-currentY*.22}deg) rotateY(${currentX*.22}deg)`:'';
+  }
+  function start(){if(!frame)frame=requestAnimationFrame(tick);}
+  function reset(){targetX=targetY=0;start();}
+  function preference(){if(motion.matches||!pointer.matches){cancelAnimationFrame(frame);frame=0;currentX=currentY=targetX=targetY=0;art.style.transform='';}}
+  region.addEventListener('pointermove',event=>{if(motion.matches||!pointer.matches||event.pointerType==='touch')return;const box=region.getBoundingClientRect();targetX=Math.max(-8,Math.min(8,(event.clientX-box.left-box.width/2)*.016));targetY=Math.max(-6,Math.min(6,(event.clientY-box.top-box.height/2)*.016));start();});
+  region.addEventListener('pointerleave',reset);motion.addEventListener('change',preference);pointer.addEventListener('change',preference);
+})();

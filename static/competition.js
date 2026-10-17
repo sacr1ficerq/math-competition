@@ -161,7 +161,7 @@ function apply(next) {
   const topicsSignature=JSON.stringify(state.available_topics || []);
   if(topicsSignature !== lobbyTopicsSignature){lobbyTopicsSignature=topicsSignature;const current=$('lobby-topic').value;$('lobby-topic').replaceChildren(new Option('Выберите тему',''));for(const topic of state.available_topics || [])$('lobby-topic').append(new Option(topic.label,topic.slug));$('lobby-topic').value=current;}
   if(document.activeElement !== $('lobby-topic'))$('lobby-topic').value=state.source === 'bank' ? state.topic || '' : '';
-  $("lobby").hidden = state.phase !== "lobby";
+  $("lobby").hidden = !!state.closed_at || state.phase !== "lobby";
   const waitingForOpponent=state.players.length < 2;
   $('lobby-title').textContent=waitingForOpponent?'Пригласите соперника':state.round===1?'Можно начинать':`Раунд ${state.round}`;
   $('lobby-description').textContent=waitingForOpponent?'Отправьте ссылку другу — он присоединится к этой комнате.':'Условие откроется одновременно, когда вы оба будете готовы.';
@@ -172,13 +172,15 @@ function apply(next) {
   $('lobby').dataset.players=waitingForOpponent?'one':'two';
   $('lobby-readiness').hidden=waitingForOpponent;
   $('lobby-model-state').textContent=`Проверка: ${state.model}`;
-  document.body.dataset.phase=state.phase;
+  document.body.dataset.phase=state.closed_at?"closed":state.phase;
   $("next-problem").hidden = state.phase !== "lobby" || state.me !== state.host || lobbyMode !== "custom";
   $("topic-availability").textContent = selectedTopic ? `Новых задач для вас обоих: ${selectedTopic.unseen_count}.` : "Выберите тему перед подтверждением готовности.";
   window.mathUI.syncPickers();
-  $("arena").hidden = state.phase === "lobby" || state.phase === "finished";
+  $("arena").hidden = !!state.closed_at || state.phase === "lobby" || state.phase === "finished";
+  $("closed-room-state").hidden = !state.closed_at || state.phase === "finished";
   $("histories").hidden = state.phase === "lobby" || (state.phase === "finished" && reviewTab === "reference") || (state.phase !== "finished" && !player.submissions.length);
   $("ready").textContent = player.ready ? "Не готов" : "Готов";
+  if(state.closed_at)$("phase").textContent="Закрыта";
   $("lobby-hint").textContent = state.players.length < 2 ? "Отправьте ссылку другу, чтобы начать." : player.ready ? "Ждём готовности соперника…" : "Нажмите «Готов», когда будете готовы начать.";
   renderPlayers();
   const problem = JSON.stringify(state.problem);
@@ -202,7 +204,7 @@ function apply(next) {
     $("result-reason").textContent = state.appeals_pending ? "Предварительный результат: рассматривается апелляция. Итог и счёт серии могут измениться." : resultReason();
     $("result-reason").hidden = !$("result-reason").textContent;
   }
-  const historyHost = state.phase === "finished" ? $("result-history-host") : $("active-history-host");
+  const historyHost = state.phase === "finished" ? $("result-history-host") : state.closed_at ? $("closed-history-host") : $("active-history-host");
   if ($("histories").parentElement !== historyHost) historyHost.append($("histories"));
   renderResultComparison();
   renderHistory();
@@ -221,7 +223,7 @@ function apply(next) {
 }
 
 function renderPlayers() {
-  const signature = JSON.stringify([state.phase, state.players.map((p) => [p.id, p.name, p.ready, p.finalized, p.finalized_at, p.score, p.wins])]);
+  const signature = JSON.stringify([state.phase, state.closed_at, state.players.map((p) => [p.id, p.name, p.ready, p.finalized, p.finalized_at, p.score, p.wins])]);
   if (signature === playerSignature) return;
   playerSignature = signature;
   const focused = document.activeElement?.id;
@@ -239,7 +241,7 @@ function renderPlayers() {
     name.title=name.textContent;
     const label = document.createElement("span");
     label.className = "player-status";
-    label.textContent = state.phase === "lobby" ? p.ready ? "Готов" : "Не готов" : p.finalized ? state.phase === "finished" ? "Раунд завершён" : `Завершил в ${timeText(p.finalized_at)}` : "Решает";
+    label.textContent = state.closed_at ? "Комната закрыта" : state.phase === "lobby" ? p.ready ? "Готов" : "Не готов" : p.finalized ? state.phase === "finished" ? "Раунд завершён" : `Завершил в ${timeText(p.finalized_at)}` : "Решает";
     if (p.finalized) label.title = new Date(p.finalized_at * 1000).toLocaleString();
     top.append(name, label);
     const score = document.createElement("div");
@@ -273,8 +275,8 @@ function renderPlayers() {
     const seat=document.createElement("span");seat.className="player-initials";seat.textContent="?";seat.setAttribute("aria-hidden","true");const caption=document.createElement("strong");caption.textContent="Ждём соперника";waiting.append(seat,caption);
     cards.append(waiting);
   }
-  $("player-cards").classList.toggle("scoreboard",state.phase!=="lobby");
-  if(state.phase!=="lobby"){
+  $("player-cards").classList.toggle("scoreboard",state.phase!=="lobby"||!!state.closed_at);
+  if(state.phase!=="lobby"||state.closed_at){
     const sides=[...cards.children];
     const tally=document.createElement("div");tally.className="match-tally";
     sides.forEach((card,index)=>{card.classList.add("match-player");card.querySelector(".player-initials")?.remove();const wins=card.querySelector(".win-count");if(wins){wins.setAttribute("aria-label",`Бутерброды ${state.players[index].name}: ${state.players[index].wins}`);tally.append(wins);}if(!index){const colon=document.createElement("span");colon.className="tally-colon";colon.textContent=":";colon.setAttribute("aria-hidden","true");tally.append(colon);}});
@@ -290,7 +292,7 @@ function controls() {
   if (!state) return;
   const p = me();
   const expired = p.deadline !== null && now() >= p.deadline;
-  const locked = state.phase !== "active" || p.finalized || expired;
+  const locked = !!state.closed_at || state.phase !== "active" || p.finalized || expired;
   const pending = p.submissions.filter((s) => s.status === "pending").length;
   $("solution").readOnly = locked;
   $("submit").disabled = locked || actionBusy || draftConflict || (solutionImages.busy || restoringImages) || (!$("solution").value.trim() && !solutionImages.value.length);
@@ -303,11 +305,17 @@ function controls() {
   const customPending=state.phase === 'lobby' && state.me === state.host && lobbyMode === 'custom' && (state.source !== 'custom' || customProblemDirty);
   const topicPending=state.phase === 'lobby' && state.me === state.host && lobbyMode === 'topic' && (state.source !== 'bank' || !state.topic);
   const randomPending=state.phase === 'lobby' && state.me === state.host && lobbyMode === 'random' && (state.source !== 'bank' || !!state.topic);
-  $('ready').disabled=actionBusy || !!readinessWithdrawal || state.players.length < 2 || customPending || topicPending || randomPending;
+  $('ready').disabled=!!state.closed_at || actionBusy || !!readinessWithdrawal || state.players.length < 2 || customPending || topicPending || randomPending;
   if(customPending)$('lobby-hint').textContent='Добавьте и примените свою задачу перед стартом.';
   if(topicPending)$('lobby-hint').textContent='Выберите тему задачи перед стартом.';
   if(randomPending)$('lobby-hint').textContent='Не удалось применить выбор. Выберите «Случайная» ещё раз.';
-  $("rematch").disabled = actionBusy || state.phase !== "finished" || !!state.appeals_pending;
+  $("rematch").hidden = !!state.closed_at;
+  $("close-room").hidden = !!state.closed_at || state.me !== state.host;
+  $("close-room").disabled = actionBusy;
+  $("chat-input").disabled = !!state.closed_at;
+  $("chat-form").querySelector("button").disabled = !!state.closed_at;
+  $("chat-input").placeholder = state.closed_at?"Комната закрыта":"Сообщение сопернику…";
+  $("rematch").disabled = !!state.closed_at || actionBusy || state.phase !== "finished" || !!state.appeals_pending;
   $("rematch").title = state.appeals_pending ? "Дождитесь рассмотрения апелляции" : "";
   let hint = "";
   if (state.phase === "grading") hint = "Ждём окончания проверки…";
@@ -317,9 +325,9 @@ function controls() {
   else if (!state.has_api_key && keyPrompted) hint = "Для проверки нужен ключ OpenRouter. Решение и черновик сохраняются.";
   else if (!p.submissions.length) hint = "Решение ещё не отправлено на проверку.";
   $("submission-hint").textContent = hint;
-  $("connect-key").hidden = !keyPrompted || state.has_api_key || state.phase !== "active" || p.finalized;
+  $("connect-key").hidden = !!state.closed_at || !keyPrompted || state.has_api_key || state.phase !== "active" || p.finalized;
   $("draft-status").textContent = imageBackupFailed ? "Изображения не сохранены локально" : restoringImages ? "Восстановление…" : draftConflict ? "Конфликт черновиков" : savePromise ? "Сохраняется…" : draftDirty ? "Не сохранено" : "Сохранено";
-  $("deadline").hidden = p.deadline === null || p.finalized || state.phase === "finished";
+  $("deadline").hidden = !!state.closed_at || p.deadline === null || p.finalized || state.phase === "finished";
   if (!$("deadline").hidden) {
     const remaining = Math.max(0, Math.ceil(p.deadline - now()));
     $("deadline").textContent = remaining ? `Соперник завершил. Осталось ${Math.floor(remaining / 60)}:${String(remaining % 60).padStart(2, "0")}` : "Время истекло. Завершаем раунд…";
@@ -346,7 +354,7 @@ function renderResultComparison() {
   $('result-comparison').dataset.signature=signature;
   $('result-comparison').replaceChildren();
   for(const player of [...state.players].sort((a,b)=>Number(state.result?.winner===b.id)-Number(state.result?.winner===a.id))){const item=document.createElement('div');item.className='result-player'+(state.result?.winner===player.id?' is-winner':'');const rank=document.createElement('span');rank.className='podium-rank';rank.textContent=state.result?.winner ? state.result.winner===player.id?'1':'2':'=';item.append(rank);const name=document.createElement('strong');name.textContent=player.id===state.me?'Вы':player.name;const score=document.createElement('div');score.className='result-number';score.textContent=player.score.score;const scale=document.createElement('span');scale.textContent=' / 10';score.append(scale);const detail=document.createElement('p');detail.textContent=player.score.penalty?`Оценка ${player.score.best} − штраф ${player.score.penalty} = ${player.score.score}`:"Без штрафа";const finish=document.createElement("p");finish.textContent=finishLabel(player);const reward=document.createElement('span');reward.className='podium-reward';reward.textContent=state.result?.winner===player.id?'+1 🥪':'';item.append(name,score,detail,finish,reward);$('result-comparison').append(item);}
-  const entryKey=`${state.code}:${state.round}`;if($('result-comparison').dataset.entryKey!==entryKey){$('result-comparison').dataset.entryKey=entryKey;if(!matchMedia('(prefers-reduced-motion: reduce)').matches)$('result-comparison').animate([{opacity:0,transform:'translateY(10px)'},{opacity:1,transform:'translateY(0)'}],{duration:260,easing:'cubic-bezier(.23,1,.32,1)'});}
+  const entryKey=`${state.code}:${state.round}`;if($('result-comparison').dataset.entryKey!==entryKey){$('result-comparison').dataset.entryKey=entryKey;if(!matchMedia('(prefers-reduced-motion: reduce)').matches){$('result-comparison').animate([{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'translateY(0)'}],{duration:260,easing:'cubic-bezier(.23,1,.32,1)'});$('result-comparison').querySelectorAll('.result-player').forEach((item,index)=>item.animate([{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'translateY(0)'}],{duration:300,delay:index*45,fill:'backwards',easing:'cubic-bezier(.23,1,.32,1)'}));$('result-comparison').querySelector('.is-winner .podium-rank')?.animate([{opacity:0,transform:'scale(.92)'},{opacity:1,transform:'scale(1)'}],{duration:180,delay:180,fill:'backwards',easing:'cubic-bezier(.23,1,.32,1)'});}}
 }
 
 function renderHistory(players = state.players, target = $("history")) {
@@ -354,7 +362,7 @@ function renderHistory(players = state.players, target = $("history")) {
   if(currentRound)players=players.filter(player=>state.phase==='finished'&&reviewTab==='opponent'?player.id!==state.me:player.id===state.me);
   const player=players[0];
   if(!player)return;
-  if(currentRound){const signature=JSON.stringify([state.phase,player.name,player.submissions]);if(signature===historySignature)return;historySignature=signature;}
+  if(currentRound){const signature=JSON.stringify([state.phase,state.closed_at,player.name,player.submissions]);if(signature===historySignature)return;historySignature=signature;}
   if(!player.submissions.length){const empty=document.createElement('p');empty.className='muted';empty.textContent='Решение не отправлено.';target.replaceChildren(empty);return;}
   const entries=player.submissions.map((submission,index)=>({id:submission.id,number:index+1,status:submission.status,verdict:submission.verdict,submittedAt:submission.submitted_at,submission}));
   window.mathAttempts.render(target,entries,{
@@ -403,7 +411,7 @@ function appendAppeal(feedback, submission, player, currentRound, section) {
     feedback.append(review);
     if (appeal.grade) section("Разбор апелляции", `${appeal.grade.reasoning}\n\n### Обоснование\n\n${appeal.grade.evidence}`);
   }
-  if (!currentRound || state.phase !== "finished" || player.id !== state.me || !submission.appeal_eligible) return;
+  if (!currentRound || state.closed_at || state.phase !== "finished" || player.id !== state.me || !submission.appeal_eligible) return;
   const key = `${state.code}:${state.round}:${submission.id}`;
   let draft = appealDrafts.get(key);
   if (!draft) {draft={reason:appeal?.reason || "", requestId:null, open:false};appealDrafts.set(key,draft);}
@@ -424,7 +432,7 @@ function appendAppeal(feedback, submission, player, currentRound, section) {
   const round=state.round;
   form.addEventListener("submit",async event=>{
     event.preventDefault();
-    if(state.phase !== "finished" || state.round !== round){error.textContent="Апелляция доступна после завершения раунда и всех проверок.";return;}
+    if(state.closed_at || state.phase !== "finished" || state.round !== round){error.textContent="Апелляция доступна после завершения раунда и всех проверок.";return;}
     if(appealRequests.has(key) || !reason.value.trim()) return;
     if(!state.has_api_key){error.textContent="Сначала подключите OpenRouter в настройках.";return;}
     if(!draft.requestId || (appeal?.status === "failed" && draft.requestId === appeal.request_id)) draft.requestId=requestId();
@@ -505,10 +513,10 @@ function renderChat() {
 async function saveDraft() {
   clearTimeout(draftTimer);
   if (savePromise) return savePromise;
-  if (!draftDirty || draftConflict || !state || state.phase === "lobby") return;
+  if (!draftDirty || draftConflict || !state || state.closed_at || state.phase === "lobby") return;
   const savingRound = state.round;
   savePromise = (async () => {
-    while (draftDirty && !draftConflict && state.phase !== "lobby" && state.round === savingRound) {
+    while (draftDirty && !draftConflict && !state.closed_at && state.phase !== "lobby" && state.round === savingRound) {
       const text = $("solution").value;
       try {
         const result = await api(sessionPath("/draft"), "PUT", { text, revision: draftRevision, round: savingRound });
@@ -520,6 +528,8 @@ async function saveDraft() {
       } catch (error) {
         if (state.round !== savingRound) return;
         if (error.status === 409) {
+          try{apply(await api(sessionPath()));}catch{}
+          if(state.closed_at){backupDraft();return;}
           draftConflict = true;
           $("draft-conflict").hidden = false;
           notice(error.message, true);
@@ -541,7 +551,7 @@ async function poll() {
   if (!code) return;
   try {
     apply(await api(sessionPath()));
-    if (draftDirty && !draftConflict && !savePromise) saveDraft();
+    if (draftDirty && !draftConflict && !savePromise && !state.closed_at) saveDraft();
   } catch (error) {
     $("connection").textContent = "Переподключение…";
     if (error.status === 401 || error.status === 403) {
@@ -566,10 +576,10 @@ function enter(next) {
 }
 
 async function action(callback) {
-  if (actionBusy) return;
+  if (actionBusy || state?.closed_at) return;
   actionBusy = true;
   controls();
-  try { await callback(); } catch (error) { notice(error.message, true); }
+  try { await callback(); } catch (error) { notice(error.message, true); if(error.status===409)try{apply(await api(sessionPath()));}catch{} }
   finally { actionBusy = false; controls(); }
 }
 
@@ -661,6 +671,18 @@ async function init() {
     catch{$('invite-url').focus();$('invite-url').select();$('invite-feedback').textContent='Скопируйте выделенную ссылку.';}
     inviteFeedbackTimer=setTimeout(()=>{inviteFeedbackTimer=null;$('copy-lobby-invite').textContent='Скопировать ссылку';if(state)apply(state);},4000);
   }
+  $('close-room').addEventListener('click',()=>{if(state.me!==state.host||state.closed_at)return;$('close-room-error').textContent='';$('close-room-dialog').showModal();$('cancel-close-room').focus();});
+  function cancelRoomClose(){if(actionBusy)return;$('close-room-dialog').close();$('close-room').focus();}
+  $('cancel-close-room').addEventListener('click',cancelRoomClose);
+  $('dismiss-close-room').addEventListener('click',cancelRoomClose);
+  $('close-room-dialog').addEventListener('cancel',event=>{if(actionBusy)event.preventDefault();});
+  $('close-room-form').addEventListener('submit',async event=>{
+    event.preventDefault();if(actionBusy||state.closed_at||state.me!==state.host)return;
+    actionBusy=true;controls();$('confirm-close-room').disabled=true;$('cancel-close-room').disabled=true;$('dismiss-close-room').disabled=true;
+    try{await saveDraft();if(draftDirty)backupDraft();const next=await api(sessionPath('/close'),'POST',{round:state.round});$('close-room-dialog').close();apply(next);notice('Комната закрыта.');}
+    catch(error){$('close-room-error').textContent=error.message;if(error.status===409)try{apply(await api(sessionPath()));}catch{}}
+    finally{actionBusy=false;controls();$('confirm-close-room').disabled=false;$('cancel-close-room').disabled=false;$('dismiss-close-room').disabled=false;}
+  });
   $('copy-invite').addEventListener('click',copyInvitation);
   $('copy-lobby-invite').addEventListener('click',copyInvitation);
   $('invite-url').addEventListener('click',event=>event.target.select());
@@ -736,6 +758,7 @@ async function init() {
   }));
   $("chat-form").addEventListener("submit", async (event) => {
     event.preventDefault();
+    if(state.closed_at)return;
     const text = $("chat-input").value;
     const button = event.currentTarget.querySelector("button");
     button.disabled = true;
@@ -765,7 +788,7 @@ async function init() {
       link.className = "recent-link";
       link.href = `/s/${session.code}`;
       const name=document.createElement('strong');name.textContent=session.names.join(' и ') || 'Ждём соперника';
-      const meta=document.createElement('div');meta.className='recent-meta';const phase=document.createElement('span');phase.textContent={lobby:'Ожидание друга',active:'Идёт раунд',grading:'Проверка решений',finished:'Раунд завершён'}[session.phase] || session.phase;const arrow=document.createElement('span');arrow.textContent='Продолжить →';meta.append(phase,arrow);link.append(name,meta);
+      const meta=document.createElement('div');meta.className='recent-meta';const phase=document.createElement('span');phase.textContent=session.closed_at?'Комната закрыта':{lobby:'Ожидание друга',active:'Идёт раунд',grading:'Проверка решений',finished:'Раунд завершён'}[session.phase] || session.phase;const arrow=document.createElement('span');arrow.textContent=session.closed_at?'Посмотреть':'Продолжить →';meta.append(phase,arrow);link.append(name,meta);
       $("recent-list").append(link);
     }
     $("connection").textContent = "На связи";
