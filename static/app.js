@@ -90,7 +90,7 @@ async function submit(event) {
   pending = true;
   updateButton();
   $("submit").textContent = "Проверяется…";
-  $("problem-file").disabled = true;
+  $("problem-file-bank").disabled = true;
   status("Решение проверяется. Можно продолжать работу — проверка займёт некоторое время.");
   try {
     const response = await fetch("/api/grade", {
@@ -110,7 +110,7 @@ async function submit(event) {
   } finally {
     pending = false;
     $("submit").textContent = "Проверить решение";
-    $("problem-file").disabled = false;
+    $("problem-file-bank").disabled = false;
     updateButton();
   }
 }
@@ -170,7 +170,6 @@ async function init() {
   $("solution").addEventListener("keydown", (event) => {
     if ((event.ctrlKey || event.metaKey) && event.key === "Enter") submit(event);
   });
-  $("problem-file").addEventListener("change", loadProblem);
   await window.mathAccount.ready;
   $("practice-key-settings").hidden=!!window.mathAccount.user?.has_api_key;
   $("practice-key-state").textContent = window.mathAccount.user?.has_api_key ? '' : 'Для проверки решений нужен ключ.';
