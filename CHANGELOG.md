@@ -40,9 +40,12 @@
 - Desktop chat reserves a nonmodal side column; mobile uses a dedicated screen.
   The round deadline has a readable countdown with subdued urgency thresholds.
 
-- Added the first 40 independently reviewed linear-algebra problems with full
-  reference proofs and scoring rubrics. Further authored batches remain retired
-  until mathematical review; a read-only validator checks the release gate.
+- Published 240 independently reviewed SHAD-style problems, 40 per subject, with
+  reference proofs, scoring rubrics, and per-file audit records. A read-only
+  validator checks publication metadata and formatting; preparation sources are
+  recorded separately from authored exercises.
+- Custom problems support direct form input and an optional reference solution;
+  JSON import remains available with a downloadable template.
 
 - Retired the four elementary demonstration problems from new bank selections;
   existing round snapshots and participant exposure records remain intact.

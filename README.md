@@ -83,11 +83,29 @@ When no common unseen tasks remain, choose another topic or add tasks. There is 
 automatic fallback to repeats. The elementary demonstration tasks have been retired; bank content is maintained
 as separately reviewed problem files.
 
+The bank contains 240 original SHAD-style problems, 40 each in linear algebra,
+analysis, probability, combinatorics, algorithms, and data analysis. Every problem
+has a reference proof and grading rubric, with independent review records in
+`problems/reviews/`. These are preparation exercises, not official examination
+questions. Research sources and verification caveats are recorded in
+[`docs/shad-source-catalog.json`](docs/shad-source-catalog.json).
+
+Check the published bank with:
+
+```sh
+uv run python scripts/validate_problem_bank.py --require-reviewed --min-active 240
+```
+
+This checks release metadata and formatting; it does not automatically prove the mathematics.
+
 Practice is at `/practice`. Choose a topic and open a task; this records exposure.
 Practice uses your saved key and default model and shows feedback immediately.
 Drafts, including screenshots, are stored locally for recovery. Practice attempt
 history currently lasts until the page reloads.
 
+Custom problems can be entered directly in the lobby or practice form. JSON import
+is optional (UTF-8, up to 150 KB); the form provides a downloadable template.
+The reference solution is optional for custom problems and required for bank tasks.
 Custom problem JSON contains:
 
 ```json

@@ -1,0 +1,396 @@
+{
+  "checked_at": "2026-10-18",
+  "timezone": "Europe/Moscow",
+  "latest_official_campaign_found": 2026,
+  "rules_for_2027_found": false,
+  "purpose": "Source evidence used to calibrate original preparation tasks. Generated bank tasks are not claimed to be official SHAD exam questions.",
+  "official": {
+    "admissions": {
+      "url": "https://shad.yandex.ru/enroll",
+      "status": "2026 application period closed",
+      "tracks": [
+        "classical",
+        "alternative",
+        "AI in natural-science research"
+      ],
+      "joint_university_programs_are_separate_admissions_track": false,
+      "one_application_one_track": true,
+      "alternative_extra_selection": "work experience and motivation considered; mathematics intensive in August",
+      "preparatory_courses_organized_by_shad": false
+    },
+    "current_client_data": {
+      "url": "https://cms.education.yandex.ru/api/storages/114",
+      "loaded_by": "https://yastatic.net/s3/lpc/custom-js/39051.js",
+      "verification": "Read public JSON fetched by the admissions page. Embedded fallback data in JS includes 2024 and must not be mistaken for current rules. Dates below are tied to the current 2026 page context.",
+      "common_timeline": {
+        "application": "April 2–May 3",
+        "online_test": "April 30–May 4",
+        "test_result": "May 7",
+        "in_person_exam": "May 16–17",
+        "online_exam": "May 18",
+        "preliminary_exam_result": "June 4",
+        "appeal": "June 6",
+        "exam_result": "June 10",
+        "interviews": "June 17–July 18",
+        "final_result": "July 27",
+        "alternative_math_intensive": "August 3–31"
+      },
+      "natural_science_timeline": {
+        "application": "April 2–May 3",
+        "application_result": "May 7",
+        "exam": "May 23",
+        "exam_result": "June 4",
+        "interviews": "June 10–July 8",
+        "final_result": "July 13"
+      }
+    },
+    "format_conflict": {
+      "status": "unresolved inconsistency inside official website",
+      "faq_url": "https://shad.yandex.ru/enroll",
+      "faq_says": "Natural-science research track exam takes place in person in Moscow.",
+      "current_client_data_says": "Study only in person in Moscow; entrance tests can be taken online.",
+      "data_url": "https://cms.education.yandex.ru/api/storages/114",
+      "consequence": "Do not assert a single unqualified natural-science exam format for a future campaign; verify when that campaign opens."
+    },
+    "syllabi": [
+      {
+        "campaign_label": 2026,
+        "tracks": [
+          "classical",
+          "alternative"
+        ],
+        "url": "https://yastatic.net/s3/education-portal/media/Programma_dlya_postupayushhih_v_Shkolu_analiza_dannyh_3_749884e44e.pdf",
+        "pages": 6,
+        "verification": "Downloaded and read with pdftotext from exact URL in official admissions HTML.",
+        "domains": [
+          "algebra",
+          "mathematical analysis",
+          "combinatorics",
+          "probability",
+          "programming, algorithms and data structures",
+          "data analysis"
+        ],
+        "important_scope": [
+          "Jordan form, Hermitian forms, SVD and numerical linear systems",
+          "multivariable differentiation, constrained extrema, parameter integrals, functional analysis, Fourier series/transforms",
+          "graph theory, generating functions and recurrences",
+          "conditional expectation, convergence modes, characteristic functions and limit theorems",
+          "algorithm correctness, complexity, trees, hashing, dynamic programming, graph and string algorithms",
+          "ML task types, missing/categorical data, overfitting, validation, metrics, hyperparameters, linear models, trees and ensembles"
+        ]
+      },
+      {
+        "campaign_label": 2026,
+        "tracks": [
+          "AI in natural-science research"
+        ],
+        "url": "https://yastatic.net/s3/education-portal/media/Programma_po_matematike_dlya_postupayushhih_na_II_trek_e04f443599.pdf",
+        "pages": 2,
+        "verification": "Downloaded and read. This is a mathematics syllabus, not a complete separate programming syllabus.",
+        "scope": [
+          "linear algebra and quadratic forms",
+          "analysis including measure/integration, Fourier and variational concepts",
+          "probability, conditional expectation, limit theorems and introductory statistics"
+        ]
+      }
+    ],
+    "archives": [
+      {
+        "year": 2025,
+        "kind": "olympiad solutions",
+        "url": "https://yastatic.net/s3/education-portal/media/Razbor_olimpiady_2025_fb3da2183e.pdf",
+        "pages": 8,
+        "verification": "Read; eight tasks across integration, graphs, quadratic forms/geometry, expected stopping counts, probability and algorithms. Historical olympiad format is not automatically current 2026 selection."
+      },
+      {
+        "year": 2025,
+        "kind": "natural-science research track exam solutions",
+        "url": "https://yastatic.net/s3/education-portal/media/Razbor_zadach_ekzamena_na_trek_II_v_EI_2025_cde7c25785.pdf",
+        "pages": 3,
+        "verification": "Read, first page rendered and visually inspected.",
+        "themes": [
+          "monotone recursive sequence and Weierstrass theorem",
+          "positive definiteness and simultaneous transformation of two quadratic forms",
+          "geometric probability from a two-stage stick-breaking model"
+        ]
+      },
+      {
+        "year": 2024,
+        "kind": "olympiad solutions",
+        "url": "https://yastatic.net/s3/education-portal/media/Sh_AD_razbor_olimpiady_2024_3d7c3d320c.pdf",
+        "verification": "Downloaded and read; seven PDF pages."
+      },
+      {
+        "year": 2024,
+        "kind": "exam solutions",
+        "url": "https://yastatic.net/s3/education-portal/media/ysda_exam_red_5a9bc5c776.pdf",
+        "verification": "Exact URL extracted from current official catalogue; contents not fully inspected."
+      },
+      {
+        "year": 2023,
+        "kind": "classical exam solutions",
+        "url": "https://yastatic.net/s3/academy/admin/ysda_2023_classic_1_5f0c07384d.pdf",
+        "pages": 6,
+        "verification": "Downloaded and read."
+      },
+      {
+        "year": 2022,
+        "kind": "classical catalogue card",
+        "url": "https://yastatic.net/s3/academy/admin/ysda_2023_classic_1_5f0c07384d.pdf",
+        "warning": "Current official 2022 classical card points to the same PDF as 2023; do not count as a separately verified 2022 paper."
+      },
+      {
+        "year": 2022,
+        "kind": "alternative exam solutions",
+        "url": "https://yastatic.net/s3/academy/shad/enroll/exam_2022_alttrek_wsols.pdf",
+        "pages": 5,
+        "verification": "Downloaded and read. Eight mathematical/algorithmic tasks; historical lower difficulty does not prove a different current alternative exam."
+      },
+      {
+        "year": 2019,
+        "kind": "exam text/solutions",
+        "url": "https://yastatic.net/s3/academy/shad/enroll/shad2019.pdf",
+        "verification": "Linked by current official catalogue; not fully inspected."
+      },
+      {
+        "year": 2019,
+        "kind": "video solutions",
+        "url": "https://www.youtube.com/playlist?list=PLJOzdkh8T5krpZCLpRCCHPM9rDoENiSjA",
+        "verification": "Exact playlist URL extracted from official admissions HTML."
+      },
+      {
+        "year": 2018,
+        "kind": "data-analysis archive",
+        "url": "https://yastatic.net/s3/academy/shad/enroll/shad2018.zip",
+        "verification": "Official catalogue link; archive not unpacked."
+      },
+      {
+        "year": 2018,
+        "kind": "alternative exam",
+        "url": "https://yastatic.net/s3/academy/shad/enroll/shad2018.pdf",
+        "verification": "Exact URL from official catalogue; contents not fully inspected."
+      },
+      {
+        "year": 2018,
+        "kind": "trial contest",
+        "url": "https://contest.yandex.ru/contest/12341/enter",
+        "verification": "Official catalogue link; no registration or private access performed."
+      },
+      {
+        "year": 2017,
+        "kind": "exam archive",
+        "url": "https://yastatic.net/s3/academy/shad/enroll/shad2017.pdf",
+        "verification": "Exact URL extracted from current official catalogue; contents not fully inspected."
+      },
+      {
+        "year": 2016,
+        "kind": "exam archive",
+        "url": "https://yastatic.net/s3/academy/shad/enroll/shad2016.pdf",
+        "verification": "Exact URL extracted from current official catalogue; contents not fully inspected."
+      },
+      {
+        "year": 2014,
+        "kind": "exam archive",
+        "url": "https://yastatic.net/s3/academy/shad/enroll/shad2014.pdf",
+        "verification": "Exact URL extracted from current official catalogue; contents not fully inspected."
+      },
+      {
+        "year": 2013,
+        "kind": "exam archive",
+        "url": "https://yastatic.net/s3/academy/shad/enroll/shad2013.pdf",
+        "verification": "Exact URL extracted from current official catalogue; contents not fully inspected."
+      },
+      {
+        "year": 2015,
+        "kind": "official Yandex explanation with tasks and reasoning",
+        "url": "https://habr.com/ru/companies/yandex/articles/262543/",
+        "published_at": "2015-07-14",
+        "verification": "Opened primary company publication; explains conceptual and proof-focused exam philosophy. Its format details are historical."
+      },
+      {
+        "year": 2015,
+        "kind": "public solution article and graduate recollection",
+        "url": "https://habr.com/ru/articles/327010/",
+        "publication_year": 2017,
+        "verification": "Opened title: article discusses the 2015 exam and 2017 graduate recollections; exam year differs from publication year."
+      }
+    ],
+    "open_day": {
+      "url": "https://shad.yandex.ru/openday/2026/",
+      "admissions_timestamp": "48:17",
+      "directions_timestamp": "17:34",
+      "natural_science_timestamp": "29:22",
+      "joint_programmes_timestamp": "01:01:19"
+    }
+  },
+  "free_materials": [
+    {
+      "url": "https://education.yandex.ru/handbook/algorithms",
+      "type": "official algorithm handbook",
+      "features": "Theory and coding exercises with automatic checking; topical preparation, not a SHAD admission guarantee."
+    },
+    {
+      "url": "https://education.yandex.ru/handbook/ml",
+      "type": "official ML handbook",
+      "features": "Explicitly recommended by general admission syllabus."
+    },
+    {
+      "url": "https://github.com/esokolov/ml-course-hse",
+      "type": "course repository",
+      "features": "Explicitly recommended by official syllabus; broader ML material."
+    },
+    {
+      "url": "https://github.com/girafe-ai/ml-course",
+      "type": "course repository",
+      "features": "Explicitly recommended by official syllabus; broader ML material."
+    },
+    {
+      "url": "https://education.yandex.ru/journal/nichego-nevozmozhnogo",
+      "type": "historical official preparation guide",
+      "publication_year": 2022,
+      "features": "Preparation strategy and algorithm practice; dates/formats must be rechecked."
+    },
+    {
+      "type": "syllabus bibliography",
+      "evidence_url": "https://yastatic.net/s3/education-portal/media/Programma_dlya_postupayushhih_v_Shkolu_analiza_dannyh_3_749884e44e.pdf",
+      "books_by_domain": {
+        "algebra": [
+          "Kostrikin, Introduction to Algebra",
+          "Vinberg, A Course in Algebra",
+          "Kostrikin problem collection",
+          "Prasolov, Problems and Theorems in Linear Algebra",
+          "Gorodentsev, Algebra",
+          "Smirnov/Gaifullin/Penskoy linear algebra and geometry problems"
+        ],
+        "analysis": [
+          "Zorich, Mathematical Analysis",
+          "Demidovich problem collection",
+          "Kaczor and Nowak, Problems in Mathematical Analysis"
+        ],
+        "combinatorics": [
+          "Vilenkin, Combinatorics",
+          "Genkin/Itenberg/Fomin, Leningrad Mathematical Circles",
+          "Omelchenko, Graph Theory",
+          "Graham/Knuth/Patashnik, Concrete Mathematics",
+          "Alon/Spencer, Probabilistic Method"
+        ],
+        "probability": [
+          "Gnedenko, Course in Probability",
+          "Gnedenko/Khinchin, Elementary Introduction",
+          "Shiryaev, Probability",
+          "Sevastyanov/Chistyakov/Zubkov problem collection"
+        ],
+        "algorithms": [
+          "Shen, Programming: Theorems and Problems",
+          "Kleinberg/Tardos, Algorithm Design",
+          "Cormen et al., Introduction to Algorithms"
+        ]
+      },
+      "note": "Bibliography does not imply that arbitrary uploaded book scans are authorized or that every book must be read in full."
+    }
+  ],
+  "community_archives": [
+    {
+      "url": "https://efiminem.github.io/supershad/",
+      "source": "https://github.com/efiminem/supershad",
+      "classification": "public unofficial solutions archive",
+      "verified_coverage": "Moscow 2012–2019, three dated papers per year; Minsk 2014/2015; Novosibirsk 2013; Kharkiv winter school 2014.",
+      "quality": "Source repository and MIT licence; useful readable solutions, not an official current rubric."
+    },
+    {
+      "url": "https://github.com/koddo/shad-prep",
+      "classification": "historical community preparation materials",
+      "features": "Linear algebra/probability/analysis notes, homework and Trushin-related seminar materials; README says materials free, recordings paid.",
+      "warning": "Current cohort and current prices unverified. Historical recommendation to deprioritize analysis is not the official 2026 syllabus."
+    },
+    {
+      "url": "https://github.com/skar404/yandex-data-school",
+      "mirror": "https://gitlab.com/user502/yandex-data-school/",
+      "classification": "applicant collection and mirrors",
+      "claimed_coverage": "2012–2018 written papers/solutions, online-test Python solutions, interview recollections, notes and books.",
+      "warning": "Authenticity of recollected interview tasks and permission for book scans not independently established."
+    },
+    {
+      "url": "https://shadhelper.com/task_books",
+      "classification": "independent school public problem collection",
+      "features": "Links to SHAD historical tasks/solutions and a separate algorithm collection; school expressly disclaims affiliation with Yandex/SHAD."
+    },
+    {
+      "url": "https://t.me/s/flesspro?before=259&q=%23Shad",
+      "classification": "public applicant/graduate recollections",
+      "features": "Rogulenko videos and materials from 2018–2019; useful personal experience, not current regulations."
+    }
+  ],
+  "courses": [
+    {
+      "provider": "Shad Helper",
+      "url": "https://shadhelper.com/course",
+      "affiliation": "Independent; website explicitly says not affiliated with Yandex or SHAD.",
+      "type": "paid",
+      "current_target_campaign": 2027,
+      "duration": "11 months",
+      "features": [
+        "linear algebra 15 weeks",
+        "discrete mathematics 6 weeks",
+        "analysis 18 weeks",
+        "probability 12 weeks",
+        "algorithms 15 weeks",
+        "introductory data analysis 9 weeks",
+        "checked homework",
+        "online lectures/seminars",
+        "mock exams",
+        "oral mathematics practice"
+      ],
+      "price_verified": false,
+      "price_note": "No reliable full-cohort price extracted; do not quote a guessed figure."
+    },
+    {
+      "provider": "Shad Helper Practicum+",
+      "url": "https://shadhelper.com/practicum",
+      "type": "paid",
+      "features": [
+        "self-paced materials",
+        "over 450 tasks and 40 tests claimed on provider website",
+        "feedback on solutions"
+      ],
+      "price_verified": false,
+      "price_note": "Checkout showed 9999 RUB x12 and separate 79990 RUB materials plus40000 RUB checking language; ambiguous options must not be merged into one universal price."
+    },
+    {
+      "provider": "Поступашки",
+      "url": "https://old.postypashki.ru/курсы/анализ-данных/",
+      "type": "paid",
+      "features": [
+        "3-month course",
+        "40+ lecture hours advertised",
+        "12+ seminar hours advertised",
+        "weekly mock papers",
+        "curator and solution checking advertised"
+      ],
+      "displayed_discount_price_per_course_rub": 15950,
+      "displayed_installment_rub": 7725,
+      "displayed_installment_count": 3,
+      "price_note": "Values observed on dynamic discount/package page at check date; package conditions and future prices not established. Provider claims of admission guarantees or success rates not independently verified."
+    }
+  ],
+  "unverified_claims": [
+    {
+      "url": "https://t.me/s/postypashki_old?before=1663",
+      "claim": "Public files labelled materials for interview assessors and recollected 2026 questions.",
+      "authenticity_verified": false,
+      "access": "Public web preview only; no private accounts, payment or contact."
+    },
+    {
+      "claim": "Provider claims that ML will appear in every 2027 selection stage.",
+      "official_confirmation_found": false,
+      "treatment": "Not a 2027 SHAD rule. ML is already explicitly present in the official 2026 preparation syllabus."
+    }
+  ],
+  "limitations": [
+    "No 2027 rules inferred from past campaigns.",
+    "Not all historical PDF contents were inspected; verification status retained per item.",
+    "Precise duration, task count and scoring cutoffs of each 2026 selection stage not fully verified from primary public rules.",
+    "Public interview recollections are not authenticated assessor rubrics.",
+    "Research performed without registrations, purchases, subscriptions or contacting other people."
+  ]
+}
