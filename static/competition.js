@@ -97,7 +97,7 @@ function apply(next) {
   $("connection").textContent = "На связи";
   $("session-code").textContent = state.code;
   $("round-label").textContent = `Раунд ${state.round}`;
-  $("match-summary").textContent = `Завершено раундов: ${state.match.completed_rounds} · Ничьих: ${state.match.draws}`;
+  $("match-summary").textContent = `Завершено раундов: ${state.match.completed_rounds} · Ничьих: ${state.match.draws} · Победа в раунде — один бутерброд 🥪`;
   $("phase").textContent = { lobby: "Ожидание", active: "Идёт раунд", grading: "Проверка решений", finished: "Раунд завершён" }[state.phase];
   document.title = `${state.code} · Math Competition`;
   const player = me();
@@ -159,7 +159,7 @@ function apply(next) {
   $("feedback-hint").textContent = state.phase === "finished" ? "Решения и подробный разбор доступны" : "Решение соперника откроется после раунда";
   if (state.result) {
     const winner = state.players.find((p) => p.id === state.result.winner);
-    $("result-title").textContent = winner ? `${winner.name} wins${winner.id === state.me ? " — well played!" : "."}` : "Ничья";
+    $("result-title").textContent = winner ? `${winner.name} побеждает и получает 🥪` : "Ничья";
     $("result-reason").textContent = state.result.reason;
   }
   renderHistory();
@@ -198,7 +198,7 @@ function renderPlayers() {
     number.textContent = String(p.score.score);
     const suffix = document.createElement("span");
     suffix.className = "muted";
-    suffix.textContent = " / 10";
+    suffix.textContent = " / 10 · оценка решения";
     const tip = document.createElement("span");
     tip.className = "score-tooltip";
     tip.role = "tooltip";
@@ -208,7 +208,9 @@ function renderPlayers() {
     score.append(number, suffix, tip);
     const wins = document.createElement("div");
     wins.className = "win-count";
-    wins.textContent = `Побед: ${p.wins}`;
+    wins.textContent = `${p.wins} 🥪`;
+    wins.setAttribute("aria-label", `Бутерброды: ${p.wins}`);
+    wins.title = "Один бутерброд за победу в раунде";
     card.append(top, wins, score);
     cards.append(card);
   }
