@@ -34,6 +34,10 @@
 
 ### Changed
 
+- Added the first 40 independently reviewed linear-algebra problems with full
+  reference proofs and scoring rubrics. Further authored batches remain retired
+  until mathematical review; a read-only validator checks the release gate.
+
 - Retired the four elementary demonstration problems from new bank selections;
   existing round snapshots and participant exposure records remain intact.
 

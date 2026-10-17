@@ -1,0 +1,289 @@
+{
+  "reviewer": "math_analysis_algorithms",
+  "problems": [
+    {
+      "file": "shad-linear-001.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "Ограничение A на im A даёт s>=2r-n; размеры блоков конструкции суммируются в n.",
+      "fix": null,
+      "checkedexamples": []
+    },
+    {
+      "file": "shad-linear-002.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "E+ и E- образуют прямую сумму; ограничения равны A+I и A-I.",
+      "fix": null,
+      "checkedexamples": []
+    },
+    {
+      "file": "shad-linear-003.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "Пересечение образов уничтожается A+B; равенство ядер следует из размерностей.",
+      "fix": null,
+      "checkedexamples": []
+    },
+    {
+      "file": "shad-linear-004.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "Ранговый нормальный вид работает и для r=0; rank AXA<=rank X.",
+      "fix": null,
+      "checkedexamples": []
+    },
+    {
+      "file": "shad-linear-005.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "Все недиагональные координаты независимы; циклическая перестановка без неподвижных точек обратима.",
+      "fix": null,
+      "checkedexamples": []
+    },
+    {
+      "file": "shad-linear-006.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "Два исключения блоков K не требуют m=n; порядок скалярных перекрёстных множителей проверен.",
+      "fix": null,
+      "checkedexamples": []
+    },
+    {
+      "file": "shad-linear-007.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "Полилинейность зануляет >=2 заменённых столбца; ранги n-1 и n достижимы с ненулевыми u,v.",
+      "fix": "Уточнена рубрика для полного ранга.",
+      "checkedexamples": []
+    },
+    {
+      "file": "shad-linear-008.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "Блочное подобие не требует AB=BA; контрпример даёт 1 против0.",
+      "fix": null,
+      "checkedexamples": []
+    },
+    {
+      "file": "shad-linear-009.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "Рекурсия Dn и граничные нули G0j=G(n+1)j=0; скачок наклона в j равен1.",
+      "fix": null,
+      "checkedexamples": [
+        "Executed exact Fraction TG=I for every entry, n=1,...,8."
+      ]
+    },
+    {
+      "file": "shad-linear-010.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "Комплексное подобие вещественного представления даёт C и conjugate(C); определитель положителен при det C!=0.",
+      "fix": null,
+      "checkedexamples": []
+    },
+    {
+      "file": "shad-linear-011.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "Минимальный многочлен без кратных корней; p,q=(r+-t)/2 целые и неотрицательные.",
+      "fix": null,
+      "checkedexamples": []
+    },
+    {
+      "file": "shad-linear-012.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "Вторые разности рангов считают блоки ровно k; пример состоит из4блоков J3.",
+      "fix": null,
+      "checkedexamples": []
+    },
+    {
+      "file": "shad-linear-013.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "Циклический вектор en определяет коммутант; det p(J)=c0^n.",
+      "fix": null,
+      "checkedexamples": []
+    },
+    {
+      "file": "shad-linear-014.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "Остатки многочлена p по (x-1)^2 и x+1 дают проектор; прямота ядер по Безу.",
+      "fix": null,
+      "checkedexamples": []
+    },
+    {
+      "file": "shad-linear-015.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "N ненулевой и N²=0; отрицательные степени получены через I-N.",
+      "fix": null,
+      "checkedexamples": []
+    },
+    {
+      "file": "shad-linear-016.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "Сопряжённые пары имеют произведение1; нечётное число вещественных корней и чётное число -1.",
+      "fix": null,
+      "checkedexamples": []
+    },
+    {
+      "file": "shad-linear-017.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "Невырожденная кососимметричная плоскость отделяется конгруэнцией; индукция включает нулевую форму.",
+      "fix": null,
+      "checkedexamples": []
+    },
+    {
+      "file": "shad-linear-018.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "Любой SPDкорень сохраняет eigenspaces A и равен sqrt(lambda)I на каждом.",
+      "fix": null,
+      "checkedexamples": []
+    },
+    {
+      "file": "shad-linear-019.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "Коэффициент s2 вычислен через главные2миноры; CayleyHamilton применим к жордановым матрицам.",
+      "fix": null,
+      "checkedexamples": []
+    },
+    {
+      "file": "shad-linear-020.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "Циклический блок даёт1-(-t)^ell; дефект I-P равен числу циклов.",
+      "fix": null,
+      "checkedexamples": []
+    },
+    {
+      "file": "shad-linear-021.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "Замена z=x+A^-1 By конгруэнтна diag(A,S); возможное нулевое eigenspace S не исключено.",
+      "fix": null,
+      "checkedexamples": []
+    },
+    {
+      "file": "shad-linear-022.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "PSDформа ноль эквивалентна вектору в ядре; без PSD противоположные единичные матрицы нарушают формулу.",
+      "fix": null,
+      "checkedexamples": []
+    },
+    {
+      "file": "shad-linear-023.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "Whitening A^-1/2 B A^-1/2 симметричен; определители связаны det A.",
+      "fix": null,
+      "checkedexamples": []
+    },
+    {
+      "file": "shad-linear-024.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "G положительно определена; исключение Шура даёт отношение определителей и критерий нулевого расстояния.",
+      "fix": null,
+      "checkedexamples": []
+    },
+    {
+      "file": "shad-linear-025.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "H=PQP идемпотентна из PQPQ=PQ; квадрат Frobenius нормы QP-PQP равен0.",
+      "fix": null,
+      "checkedexamples": []
+    },
+    {
+      "file": "shad-linear-026.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "Проекция на im B разделяет ошибку ортогонально; trace(PAA^T)<=суммы r старших eigenvalues и SVD достигает границы.",
+      "fix": null,
+      "checkedexamples": []
+    },
+    {
+      "file": "shad-linear-027.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "Коши в метрике A даёт границу; допустимое приращение ортогонально Ax* и доказывает единственность.",
+      "fix": null,
+      "checkedexamples": []
+    },
+    {
+      "file": "shad-linear-028.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "При c!=0 пространство разлагается в Aортогональную прямую и гиперплоскость; нулевой индекс ограничения исключён невырожденностью.",
+      "fix": null,
+      "checkedexamples": []
+    },
+    {
+      "file": "shad-linear-029.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "PSDпредставление Gram; зависимость даёт строгость благодаря di>0, независимость и GramSchmidt дают полную характеристику равенства.",
+      "fix": null,
+      "checkedexamples": []
+    },
+    {
+      "file": "shad-linear-030.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "Выбор независимых столбцов Gram даёт положительный главный минор; indefiniteконтрпример при r=1.",
+      "fix": null,
+      "checkedexamples": []
+    },
+    {
+      "file": "shad-linear-031.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "Полный строчный ранг гарантирует AA^T>0; решения отличаются элементом ker A и Pythagoras даёт единственность.",
+      "fix": null,
+      "checkedexamples": []
+    },
+    {
+      "file": "shad-linear-032.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "Коши в Gметрике даёт G-xxT>0 при hi<1; знак разности beta-i-beta проверен.",
+      "fix": null,
+      "checkedexamples": []
+    },
+    {
+      "file": "shad-linear-033.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "SVDпо положительным числам корректен при rank0; обе нормы имеют суммы с монотонными коэффициентами.",
+      "fix": null,
+      "checkedexamples": []
+    },
+    {
+      "file": "shad-linear-034.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "qInfinity<1 даёт существование через ряд разностей; хвост начинается с q*d(k-1)/(1-q).",
+      "fix": null,
+      "checkedexamples": []
+    },
+    {
+      "file": "shad-linear-035.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "Нулевое уменьшение за проход означает нулевые изменения всех координат; компактность сферы превращает строгость в единый q<1.",
+      "fix": null,
+      "checkedexamples": []
+    },
+    {
+      "file": "shad-linear-036.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "Логпроизводные P при1 дают S1,S2; conjugate(a)=1-a переводит к модулям.",
+      "fix": null,
+      "checkedexamples": [
+        "Executed complex numerical sum for n=2,...,14; absolute error<1e-9."
+      ]
+    },
+    {
+      "file": "shad-linear-037.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "Старший коэффициент Лагранжа для k<n; остаток xn-P имеет коэффициент sum xi.",
+      "fix": null,
+      "checkedexamples": []
+    },
+    {
+      "file": "shad-linear-038.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "L=(UcapW)+(VcapW) содержится в (U+V)capW; delta>=0 вычитается, три прямые дают контрпример.",
+      "fix": null,
+      "checkedexamples": []
+    },
+    {
+      "file": "shad-linear-039.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "Размерности annihilators дают равенство; g(u+v)=f(v) корректна благодаря f|UcapV=0.",
+      "fix": null,
+      "checkedexamples": []
+    },
+    {
+      "file": "shad-linear-040.json",
+      "status": "passed_independent_mathematical_review",
+      "reason": "G=S^-T S^-1 даёт метрику; HAH^-1 симметрична и обеспечивает вещественную диагонализируемость.",
+      "fix": null,
+      "checkedexamples": []
+    }
+  ]
+}
