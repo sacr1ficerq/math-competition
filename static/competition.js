@@ -379,11 +379,11 @@ function finishLabel(player) {
 
 function renderResultComparison() {
   if (state.phase !== "finished") return;
-  const signature=JSON.stringify([state.players.map(player=>[player.id,player.score,player.finalized_at]),state.result]);
+  const signature=JSON.stringify([state.players.map(player=>[player.id,player.score,player.finalized_at,player.submissions.map(submission=>[submission.id,submission.appeal?.status,submission.appeal?.old_verdict,submission.appeal?.effective_verdict])]),state.result,state.appeals_pending]);
   if ($('result-comparison').dataset.signature===signature) return;
   $('result-comparison').dataset.signature=signature;
   $('result-comparison').replaceChildren();
-  for(const player of [...state.players].sort((a,b)=>Number(state.result?.winner===b.id)-Number(state.result?.winner===a.id))){const item=document.createElement('div');item.className='result-player'+(state.result?.winner===player.id?' is-winner':'');const rank=document.createElement('span');rank.className='podium-rank';rank.textContent=state.result?.winner ? state.result.winner===player.id?'1':'2':'=';item.append(rank);const name=document.createElement('strong');name.textContent=player.id===state.me?'Вы':player.name;const score=document.createElement('div');score.className='result-number';score.textContent=player.score.score;const scale=document.createElement('span');scale.textContent=' / 10';score.append(scale);const detail=document.createElement('p');detail.textContent=player.score.penalty?`Оценка ${player.score.best} − штраф ${player.score.penalty} = ${player.score.score}`:"Без штрафа";const finish=document.createElement("p");finish.textContent=finishLabel(player);const reward=document.createElement('span');reward.className='podium-reward';reward.textContent=state.result?.winner===player.id?'+1 🥪':'';item.append(name,score,detail,finish,reward);$('result-comparison').append(item);}
+  for(const player of [...state.players].sort((a,b)=>Number(state.result?.winner===b.id)-Number(state.result?.winner===a.id))){const item=document.createElement('div');item.className='result-player'+(state.result?.winner===player.id?' is-winner':'');const rank=document.createElement('span');rank.className='podium-rank';rank.textContent=state.result?.winner ? state.result.winner===player.id?'1':'2':'=';item.append(rank);const name=document.createElement('strong');name.textContent=player.id===state.me?'Вы':player.name;const score=document.createElement('div');score.className='result-number';score.textContent=player.score.score;const scale=document.createElement('span');scale.textContent=' / 10';score.append(scale);const detail=document.createElement('p');const adjustments=[];const appealDrop=player.submissions.reduce((sum,submission)=>{const appeal=submission.appeal;return sum+(appeal?.status==='graded'&&typeof appeal.old_verdict==='number'&&typeof appeal.effective_verdict==='number'?Math.max(0,appeal.old_verdict-appeal.effective_verdict):0);},0);if(appealDrop)adjustments.push(`Апелляция: −${appealDrop} к оценке работы`);if(player.score.penalty)adjustments.push(`Повторные проверки: −${player.score.penalty}`);detail.textContent=adjustments.join(' · ');detail.hidden=!adjustments.length;const finish=document.createElement("p");finish.textContent=finishLabel(player);const reward=document.createElement('span');reward.className='podium-reward';reward.textContent=state.result?.winner===player.id?'+1 🥪':'';item.append(name,score,detail,finish,reward);$('result-comparison').append(item);}
   const entryKey=`${state.code}:${state.round}`;if($('result-comparison').dataset.entryKey!==entryKey){$('result-comparison').dataset.entryKey=entryKey;if(!matchMedia('(prefers-reduced-motion: reduce)').matches){$('result-comparison').animate([{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'translateY(0)'}],{duration:260,easing:'cubic-bezier(.23,1,.32,1)'});$('result-comparison').querySelectorAll('.result-player').forEach((item,index)=>item.animate([{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'translateY(0)'}],{duration:300,delay:index*45,fill:'backwards',easing:'cubic-bezier(.23,1,.32,1)'}));$('result-comparison').querySelector('.is-winner .podium-rank')?.animate([{opacity:0,transform:'scale(.92)'},{opacity:1,transform:'scale(1)'}],{duration:180,delay:180,fill:'backwards',easing:'cubic-bezier(.23,1,.32,1)'});}}
 }
 
@@ -399,25 +399,42 @@ function renderHistory(players = state.players, target = $("history")) {
     key:`${state.code}-${currentRound?state.round:entries[0].id}-${player.id}`,
     finished:!currentRound||state.phase==='finished',
     build(entry,content,toolbar){
-      const submission=entry.submission;
-      const finished=!currentRound||state.phase==='finished';
-      const section=(title,text)=>window.mathAttempts.section(content,title,text,render,{folded:title==='Разбор апелляции'});
-      appendAppeal(content,submission,player,currentRound,section);
-      const appealForm=content.querySelector('.appeal-form-panel');
-      if(appealForm){
-        const trigger=document.createElement('button');trigger.type='button';trigger.className='review-appeal-trigger';trigger.textContent=submission.appeal?.status==='failed'?'Повторить апелляцию':'Оспорить оценку';
-        appealForm.id=`appeal-panel-${submission.id}`;appealForm.dataset.linked='true';trigger.setAttribute('aria-controls',appealForm.id);trigger.setAttribute('aria-expanded',String(appealForm.open));
-        trigger.onclick=()=>{appealForm.open=!appealForm.open;trigger.setAttribute('aria-expanded',String(appealForm.open));if(appealForm.open){appealForm.querySelector('textarea')?.focus({preventScroll:true});toolbar.scrollIntoView({block:'start',behavior:'auto'});}};toolbar.append(trigger);
-      }
-      if(submission.error){const error=document.createElement('p');error.className='error';error.textContent=submission.error;content.append(error);}
-      if(finished&&submission.grade){section('Разбор',submission.grade.reasoning);if(submission.grade.evidence&&submission.grade.evidence!==submission.grade.reasoning)section('Обоснование',submission.grade.evidence);}
-      if(submission.solution!==undefined){
-        const proof=document.createElement('div');proof.className='rendered submitted-document';
-        if(finished&&submission.grade){const title=document.createElement('h3');title.textContent='Отправленное решение';content.append(title);proof.classList.add('after-review');}
-        render(proof,submission.solution||'');window.appendSolutionImages(proof,submission.images||[]);content.append(proof);
-      }
+      renderReviewEntry(entry.submission,content,toolbar,player,currentRound,!currentRound||state.phase==='finished');
     }
   });
+}
+
+function renderReviewEntry(submission,content,toolbar,player,currentRound,finished) {
+  const work=document.createElement('section');work.className='review-region review-work';
+  if(finished){const title=document.createElement('h3');title.textContent=player.id===state.me?'Ваша работа':'Работа соперника';work.append(title);}
+  const proof=document.createElement('div');proof.className='rendered submitted-document';
+  render(proof,submission.solution||'');window.appendSolutionImages(proof,submission.images||[]);work.append(proof);
+  if(!finished){
+    if(submission.error){const error=document.createElement('p');error.className='error';error.textContent=submission.error;content.append(error);}
+    content.append(work);return;
+  }
+  const layout=document.createElement('div');layout.className='attempt-review-layout';layout.append(work);
+  if(submission.grade||submission.error){
+    const grading=document.createElement('section');grading.className='review-region review-grading';
+    const heading=document.createElement('h3');heading.textContent='Оценка и разбор';grading.append(heading);
+    if(submission.appeal?.status==='graded'&&typeof submission.original_verdict==='number'){
+      const original=document.createElement('p');original.className='grade-original-score';original.textContent=`Исходная оценка: ${submission.original_verdict} из 10`;grading.append(original);
+    }
+    if(submission.error){const error=document.createElement('p');error.className='error';error.textContent=submission.error;grading.append(error);}
+    if(submission.grade){
+      const reasoning=document.createElement('div');reasoning.className='rendered';render(reasoning,submission.grade.reasoning);grading.append(reasoning);
+      if(submission.grade.evidence&&submission.grade.evidence!==submission.grade.reasoning){const evidence=document.createElement('section');evidence.className='grade-evidence';const label=document.createElement('h4');label.textContent='Обоснование оценки';const body=document.createElement('div');body.className='rendered';render(body,submission.grade.evidence);evidence.append(label,body);grading.append(evidence);}
+    }
+    layout.append(grading);
+  }
+  content.append(layout);
+  const appeal=buildAppealRegion(submission,player,currentRound);
+  if(appeal){
+    content.parentElement.append(appeal.region);
+    const trigger=document.createElement('button');trigger.type='button';trigger.className='review-appeal-trigger';trigger.textContent=appeal.label;trigger.setAttribute('aria-controls',appeal.region.id);trigger.setAttribute('aria-expanded',String(!appeal.region.hidden));
+    trigger.onclick=()=>{appeal.draft.open=!appeal.draft.open;appeal.region.hidden=!appeal.draft.open;trigger.setAttribute('aria-expanded',String(appeal.draft.open));if(appeal.draft.open){const target=appeal.region.querySelector('textarea')||appeal.region.querySelector('h3');target.focus({preventScroll:true});appeal.region.scrollIntoView({block:'start',behavior:'auto'});}};
+    toolbar.append(trigger);
+  }
 }
 
 function appealQuotaUsed(player) {
@@ -425,61 +442,55 @@ function appealQuotaUsed(player) {
   return player.submissions.some(submission=>['pending','graded'].includes(submission.appeal?.status)) || [...appealRequests].some(key=>key.startsWith(prefix));
 }
 
-function appendAppeal(feedback, submission, player, currentRound, section) {
-  if(currentRound && state.phase !== "finished")return;
-  const appeal = submission.appeal;
-  if (appeal) {
-    const review = document.createElement("div");
-    review.className = "appeal-review";
-    const label = document.createElement("p");
-    label.className = "appeal-status";
-    label.setAttribute("role", "status");
-    if (appeal.status === "pending") label.textContent = "Апелляция рассматривается… Итог раунда пока предварительный.";
-    else if (appeal.status === "failed") {label.classList.add("error"); label.textContent = "Не удалось рассмотреть апелляцию. Оценка не изменилась, штрафа нет.";}
-    else if (typeof appeal.old_verdict !== "number") label.textContent = "Апелляция рассмотрена. Подробности откроются после раунда.";
-    else label.textContent = appeal.effective_verdict > appeal.old_verdict
-      ? `Апелляция принята: ${appeal.old_verdict} → ${appeal.effective_verdict} / 10.`
-      : `Оценка не повышена: ${appeal.old_verdict} → ${appeal.effective_verdict} / 10. Применено снижение на 1 балл.`;
-    review.append(label);
-    if (appeal.reason) {const reason=document.createElement("p");reason.className="appeal-reason";reason.textContent=`Основание: ${appeal.reason}`;review.append(reason);}
-    if (appeal.error) {const error=document.createElement("p");error.className="muted";error.textContent=appeal.error;review.append(error);}
-    feedback.append(review);
-    if (appeal.grade) section("Разбор апелляции", `${appeal.grade.reasoning}\n\n### Обоснование\n\n${appeal.grade.evidence}`);
+function buildAppealRegion(submission,player,currentRound) {
+  if(currentRound&&state.phase!=='finished')return null;
+  const appeal=submission.appeal;
+  const canSubmit=currentRound&&!state.closed_at&&state.phase==='finished'&&player.id===state.me&&submission.appeal_eligible&&!appealQuotaUsed(player);
+  if(!appeal&&!canSubmit)return null;
+  const key=`${state.code}:${state.round}:${submission.id}`;
+  let draft=appealDrafts.get(key);
+  if(!draft){draft={reason:appeal?.reason||'',requestId:null,open:false};appealDrafts.set(key,draft);}
+  const region=document.createElement('section');region.className='attempt-appeal-region';region.id=`appeal-region-${submission.id}`;region.hidden=!draft.open;
+  const heading=document.createElement('h3');heading.id=`appeal-heading-${submission.id}`;heading.tabIndex=-1;heading.textContent='Апелляция';region.setAttribute('aria-labelledby',heading.id);region.append(heading);
+  if(appeal?.reason&&!canSubmit){const argument=document.createElement('section');argument.className='appeal-argument';const label=document.createElement('h4');label.textContent=player.id===state.me?'Ваш аргумент':'Аргумент соперника';const reason=document.createElement('p');reason.textContent=appeal.reason;argument.append(label,reason);region.append(argument);}
+  if(appeal){
+    const decision=document.createElement('section');decision.className='appeal-decision';
+    if(appeal.status==='graded'){const label=document.createElement('h4');label.textContent='Решение по апелляции';decision.append(label);}
+    const status=document.createElement('p');status.className='appeal-status';status.setAttribute('role','status');
+    if(appeal.status==='pending')status.textContent='Апелляция рассматривается. Итог раунда предварительный.';
+    else if(appeal.status==='failed'){status.classList.add('error');status.textContent='Не удалось рассмотреть апелляцию. Оценка не изменилась, штрафа нет.';}
+    else if(typeof appeal.old_verdict==='number')status.textContent=appeal.effective_verdict>appeal.old_verdict?`Оценка повышена: ${appeal.old_verdict} → ${appeal.effective_verdict} из 10.`:`Оценка не повышена: ${appeal.old_verdict} → ${appeal.effective_verdict} из 10. Снижение на 1 балл.`;
+    else status.textContent='Апелляция рассмотрена.';
+    decision.append(status);
+    if(appeal.error){const error=document.createElement('p');error.className='muted';error.textContent=appeal.error;decision.append(error);}
+    if(appeal.grade){const review=document.createElement('div');review.className='rendered';render(review,appeal.grade.reasoning);decision.append(review);if(appeal.grade.evidence&&appeal.grade.evidence!==appeal.grade.reasoning){const label=document.createElement('h5');label.textContent='Обоснование пересмотра';const evidence=document.createElement('div');evidence.className='rendered';render(evidence,appeal.grade.evidence);decision.append(label,evidence);}}
+    region.append(decision);
   }
-  if (!currentRound || state.closed_at || state.phase !== "finished" || player.id !== state.me || !submission.appeal_eligible || appealQuotaUsed(player)) return;
-  const key = `${state.code}:${state.round}:${submission.id}`;
-  let draft = appealDrafts.get(key);
-  if (!draft) {draft={reason:appeal?.reason || "", requestId:null, open:false};appealDrafts.set(key,draft);}
-  const disclosure = document.createElement("details");
-  disclosure.className="appeal-form-panel";
-  disclosure.open=draft.open;
-  const heading=document.createElement("summary");heading.textContent=appeal?.status === "failed" ? "Повторить апелляцию" : "Оспорить оценку";
-  disclosure.append(heading);
-  disclosure.addEventListener("toggle",()=>{draft.open=disclosure.open;});
-  const form=document.createElement("form");
-  const label=document.createElement("label");label.htmlFor=`appeal-reason-${submission.id}`;label.textContent="Почему оценку нужно повысить?";
-  const reason=document.createElement("textarea");reason.id=label.htmlFor;reason.rows=3;reason.maxLength=5000;reason.required=true;reason.value=draft.reason;reason.placeholder="Укажите конкретный шаг решения или ошибку в разборе.";
-  const warning=document.createElement("p");warning.className="appeal-warning";warning.id=`appeal-warning-${submission.id}`;warning.textContent="Одна апелляция на задачу за раунд. Если оценку не повысят — минус 1 балл, даже ниже нуля. Проверка оплачивается вашим ключом.";
-  reason.setAttribute("aria-describedby",warning.id);
-  const error=document.createElement("p");error.className="error";error.setAttribute("role","alert");
-  const button=document.createElement("button");button.type="submit";button.textContent=appealRequests.has(key) ? "Отправляется…" : "Отправить апелляцию";button.disabled=appealRequests.has(key) || !draft.reason.trim() || !state.has_api_key;
-  reason.addEventListener("input",()=>{if(draft.reason!==reason.value){draft.reason=reason.value;draft.requestId=null;}button.disabled=!reason.value.trim() || appealRequests.has(key) || !state.has_api_key;});
-  const round=state.round;
-  form.addEventListener("submit",async event=>{
-    event.preventDefault();
-    if(state.closed_at || state.phase !== "finished" || state.round !== round){error.textContent="Апелляция доступна после завершения раунда и всех проверок.";return;}
-    if(appealRequests.has(key) || !reason.value.trim()) return;
-    if(appealQuotaUsed(me())){error.textContent="Апелляция на эту задачу уже использована или рассматривается.";return;}
-    if(!state.has_api_key){error.textContent="Добавьте ключ OpenRouter в настройках.";return;}
-    if(!draft.requestId || (appeal?.status === "failed" && draft.requestId === appeal.request_id)) draft.requestId=requestId();
-    appealRequests.add(key);button.disabled=true;button.textContent="Отправляется…";reason.readOnly=true;error.textContent="";
-    try {
-      const next=await api(sessionPath(`/submissions/${encodeURIComponent(submission.id)}/appeal`),"POST",{round,request_id:draft.requestId,reason:reason.value.trim()});
-      if(state.round===round) {apply(next);notice("Апелляция принята. Дождитесь пересмотра оценки.");}
-    } catch(failure) {error.textContent=failure.message;if(failure.status===409)try{apply(await api(sessionPath()));}catch{}}
-    finally {appealRequests.delete(key);button.disabled=!reason.value.trim() || !state.has_api_key;button.textContent="Отправить апелляцию";reason.readOnly=false;}
-  });
-  form.append(label,reason,warning,error,button);disclosure.append(form);feedback.append(disclosure);
+  if(canSubmit){
+    const form=document.createElement('form');form.className='appeal-form';
+    const label=document.createElement('label');label.htmlFor=`appeal-reason-${submission.id}`;label.textContent='Почему оценку нужно повысить?';
+    const reason=document.createElement('textarea');reason.id=label.htmlFor;reason.rows=3;reason.maxLength=5000;reason.required=true;reason.value=draft.reason;reason.placeholder='Укажите конкретный шаг решения или ошибку в разборе.';
+    const warning=document.createElement('p');warning.className='appeal-warning';warning.id=`appeal-warning-${submission.id}`;warning.textContent='Одна апелляция на задачу за раунд. Если оценку не повысят — минус 1 балл, даже ниже нуля. Проверка оплачивается вашим ключом.';reason.setAttribute('aria-describedby',warning.id);
+    const error=document.createElement('p');error.className='error';error.setAttribute('role','alert');
+    const button=document.createElement('button');button.type='submit';button.textContent=appealRequests.has(key)?'Отправляется…':'Отправить апелляцию';button.disabled=appealRequests.has(key)||!draft.reason.trim()||!state.has_api_key;
+    reason.addEventListener('input',()=>{if(draft.reason!==reason.value){draft.reason=reason.value;draft.requestId=null;}button.disabled=!reason.value.trim()||appealRequests.has(key)||!state.has_api_key;});
+    const round=state.round;
+    form.addEventListener('submit',async event=>{
+      event.preventDefault();
+      if(state.closed_at||state.phase!=='finished'||state.round!==round){error.textContent='Апелляция доступна после завершения раунда и всех проверок.';return;}
+      if(appealRequests.has(key)||!reason.value.trim())return;
+      if(appealQuotaUsed(me())){error.textContent='Апелляция на эту задачу уже использована или рассматривается.';return;}
+      if(!state.has_api_key){error.textContent='Добавьте ключ OpenRouter в настройках.';return;}
+      if(!draft.requestId||(appeal?.status==='failed'&&draft.requestId===appeal.request_id))draft.requestId=requestId();
+      appealRequests.add(key);button.disabled=true;button.textContent='Отправляется…';reason.readOnly=true;error.textContent='';
+      try{const next=await api(sessionPath(`/submissions/${encodeURIComponent(submission.id)}/appeal`),'POST',{round,request_id:draft.requestId,reason:reason.value.trim()});if(state.round===round){apply(next);document.getElementById(heading.id)?.focus({preventScroll:true});}}
+      catch(failure){error.textContent=failure.message;if(failure.status===409)try{apply(await api(sessionPath()));}catch{}}
+      finally{appealRequests.delete(key);button.disabled=!reason.value.trim()||!state.has_api_key;button.textContent='Отправить апелляцию';reason.readOnly=false;}
+    });
+    form.append(label,reason,warning,error,button);region.append(form);
+  }
+  const label=appeal?.status==='graded'?'Решение по апелляции':appeal?.status==='pending'?'Апелляция рассматривается':appeal?.status==='failed'&&canSubmit?'Повторить апелляцию':canSubmit?'Оспорить оценку':'Апелляция';
+  return {region,draft,label};
 }
 
 function renderRounds() {

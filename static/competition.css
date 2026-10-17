@@ -462,7 +462,7 @@ body[data-phase="lobby"] .win-count { order: 0; font-size: 16px; }
 }
 
 .solve {
-  max-width: 1320px;
+  max-width: 1600px;
   margin: auto;
 }
 
@@ -579,7 +579,7 @@ body[data-phase="lobby"] .win-count { order: 0; font-size: 16px; }
 
 .results {
   scroll-margin-top: 104px;
-  max-width: 820px;
+  max-width: 1480px;
   padding-top: 0;
 }
 
@@ -731,9 +731,11 @@ body[data-phase="lobby"] .win-count { order: 0; font-size: 16px; }
 }
 
 #revealed h2 {
-  font-size: 16px;
+  font-size: 19px;
   margin-bottom: 20px;
 }
+
+#reference,#criteria { max-width: 80ch; }
 
 .criteria-disclosure {
   margin-top: 24px;
@@ -802,71 +804,8 @@ body[data-chat="docked"] .session-layout { display: grid; grid-template-columns:
   body[data-chat="docked"][data-workspace="preview"] .editor-pane { display: none; }
 }
 
-.appeal-review {
-  margin: 0 0 20px;
-  padding: 0;
-}
-
-.appeal-form-panel[data-linked="true"]>summary { display: none; }
-.appeal-form-panel[data-linked="true"]:not([open]) { display: none; }
-.appeal-form-panel[data-linked="true"][open] {
-  margin: 0 0 24px;
-  padding: 0 0 24px;
-  border-top: 0;
-  border-bottom: 1px solid var(--line);
-}
-
-.appeal-status {
-  font-size: 13px;
-  font-weight: 500;
-  margin: 0;
-}
-
-.appeal-reason {
-  font-size: 12px;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-  margin: 8px 0 0;
-  color: var(--muted);
-}
-
-.appeal-form-panel {
-  border-top: 1px solid var(--line);
-  margin-top: 24px;
-  padding-top: 4px;
-}
-
-.appeal-form-panel>summary {
-  color: var(--foam);
-}
-
-.appeal-form-panel textarea {
-  font-size: 14px;
-}
-
-.appeal-warning {
-  font-size: 12px;
-  line-height: 1.6;
-  color: var(--muted);
-  margin: 12px 0;
-}
-
-.appeal-form-panel .error:empty {
-  display: none;
-}
-
-@keyframes sandwich-in {
-  from {
-    opacity: 0;
-    transform: translateY(5px) scale(.96);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-
-}
+.appeal-status { margin: 0 0 16px; font-size: 15px; font-weight: 500; }
+.appeal-warning { color: var(--muted); font-size: 12px; line-height: 1.6; margin: 12px 0 0; max-width: 75ch; }
 
 @media(max-width:720px) {
   body[data-phase="finished"] .player-status, body[data-phase="closed"] .player-status { display: none; }
