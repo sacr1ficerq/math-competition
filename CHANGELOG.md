@@ -8,7 +8,7 @@
   OpenRouter keys shared across devices.
 - Topic-based task bank with permanent exposure history; each duel task is unseen
   by both players, including tasks previously opened in practice.
-- One appeal per original verdict: a higher reviewed score is adopted; otherwise
+- One appeal per participant and problem round: a higher reviewed score is adopted; otherwise
   the attempt loses exactly one point. Provider failures leave the score unchanged.
 - Light, dark, and system themes, shared account settings, and recoverable image drafts.
 - Saved account model preference with a cached OpenRouter model catalog and manual
@@ -33,6 +33,12 @@
   when finalizing without a submission or while grading is pending.
 
 ### Changed
+
+- Appeal eligibility shares one per-player round budget across every submission;
+  technical failures allow retry. Result labels distinguish appeal reductions
+  from repeat-submission penalties without subtracting either twice.
+- Desktop chat reserves a nonmodal side column; mobile uses a dedicated screen.
+  The round deadline has a readable countdown with subdued urgency thresholds.
 
 - Added the first 40 independently reviewed linear-algebra problems with full
   reference proofs and scoring rubrics. Further authored batches remain retired

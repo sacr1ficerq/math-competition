@@ -135,8 +135,9 @@ Scores may be negative. Failed checks do not incur a submission penalty. During 
 players see verdicts and their own submitted work; opponent solutions and detailed
 feedback remain private until the round finishes. Unsubmitted drafts stay private.
 
-Only after both participants finalize and all original checks finish can each
-original successful verdict in the current round receive **one decided appeal**:
+After both participants finalize and all original checks finish, each participant
+has **one decided appeal per problem in the round**, shared across all their
+submissions. Additional grading attempts do not create additional appeal slots:
 
 - Explain the grading error without editing or extending the submitted proof.
 - The same model reviews the exact original work, verdict, and argument.
