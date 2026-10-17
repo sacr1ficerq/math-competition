@@ -5,16 +5,24 @@ from fastapi.staticfiles import StaticFiles
 from urllib.parse import urlsplit
 
 from app.api import lifespan, router, settings
-from app.competition import CompetitionError
+from app.account_api import router as account_router, resolve_identity
+from app.problem_api import create_problem_router
+from app.problem_bank import ProblemBankError
+from app.competition import CompetitionError, identity
 from app.config import ROOT
 from app.grading import GradeRequest, GradeResponse, grade_solution
 
 
 app = FastAPI(title="Math Competition", version="1.0.0", lifespan=lifespan)
 app.include_router(router)
+app.include_router(account_router)
+app.include_router(create_problem_router(
+    lambda request: identity(value) if (value := resolve_identity(request)) else None
+))
 app.mount("/static", StaticFiles(directory=ROOT / "static"), name="static")
 
 
+@app.exception_handler(ProblemBankError)
 @app.exception_handler(CompetitionError)
 async def competition_error(request, error):
     return JSONResponse(status_code=error.status, content={"detail": error.message})
