@@ -67,6 +67,10 @@ counter. Equal final scores are resolved by earlier **final submission completio
 not by when work was sent for grading. Identical clock readings use server acceptance
 order, so new rounds do not draw. Automatic finalization uses the exact deadline.
 
+The room creator can close a room with confirmation. Closing keeps saved drafts,
+submitted work, chat, and results available for reading, but blocks joining and all
+further play. Already accepted grading jobs can finish without reopening the room.
+
 ## Problems and practice
 
 The task bank is loaded from `problems/*.json`. Each task has a stable identity and

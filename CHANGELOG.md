@@ -34,6 +34,14 @@
 
 ### Changed
 
+- Pointer feedback is limited to the home artwork; button press states and
+  result reveals respect reduced-motion preferences and avoid polling replays.
+
+- Active rounds use one compact shared scoreboard and a rebuilt proof workspace,
+  with proportional text, tonal editor/preview surfaces, and consistent controls.
+- Room creators can close a room with confirmation while preserving read-only
+  history. Accepted checks can finish, but no new actions or rounds can start.
+
 - A local systemd user-service helper keeps the development server independent
   of terminal/tool sessions, with restart-on-failure and journal-based logs.
 
