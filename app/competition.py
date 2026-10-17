@@ -53,6 +53,9 @@ def match_score(session: dict) -> dict:
 
 
 def reconcile(session: dict, now: float, recompute_result: bool = False) -> None:
+    # Closing freezes unfinished players; already accepted grading jobs may settle.
+    if session.get("closed_at") is not None and not all(p["finalized"] for p in session["players"]):
+        return
     if session["phase"] == "finished" and not (recompute_result or session.get("appeal_result_dirty")):
         return
     if session["phase"] not in ("active", "grading", "finished"):
@@ -127,7 +130,7 @@ class Store:
             "code": code, "model": model, "problem": problem.model_dump() if problem else None,
             "source": "custom" if problem else "bank", "topic": None if problem else topic,
             "phase": "lobby", "created_at": time.time(), "started_at": None,
-            "ended_at": None, "result": None, "chat": [],
+            "ended_at": None, "result": None, "chat": [], "closed_at": None,
             "players": [self.new_player(token, name)],
         }
         with self.connection() as db:
@@ -154,8 +157,25 @@ class Store:
         if round is not None and round != session["round"]:
             raise CompetitionError("The round changed. Refresh to continue in the current round.")
 
+    @staticmethod
+    def check_open(session: dict):
+        if session.get("closed_at") is not None:
+            raise CompetitionError("Комната закрыта. История доступна только для чтения.")
+
+    def close(self, code: str, token: str, round: int) -> dict:
+        with self.edit(code) as session:
+            player = self.player(session, token)
+            if player["id"] != session["players"][0]["id"]:
+                raise CompetitionError("Только создатель может закрыть комнату.", 403)
+            if session.get("closed_at") is not None:
+                return session
+            self.check_round(session, round)
+            session["closed_at"] = time.time()
+            return session
+
     def join(self, code: str, token: str, name: str) -> dict:
         with self.edit(code) as session:
+            self.check_open(session)
             if any(p["identity"] == identity(token) for p in session["players"]):
                 return session
             if len(session["players"]) >= 2:
@@ -176,13 +196,14 @@ class Store:
             rows = db.execute("SELECT state FROM sessions").fetchall()
         sessions = [json.loads(row[0]) for row in rows]
         return [
-            {"code": s["code"], "phase": s["phase"], "created_at": s["created_at"], "names": [p["name"] for p in s["players"]]}
+            {"code": s["code"], "phase": s["phase"], "created_at": s["created_at"], "closed_at": s.get("closed_at"), "names": [p["name"] for p in s["players"]]}
             for s in sorted(sessions, key=lambda s: s["created_at"], reverse=True)
             if any(p["identity"] == digest for p in s["players"])
         ][:20]
 
     def ready(self, code: str, token: str, ready: bool, round: int | None = None, bank: ProblemBank | None = None) -> dict:
         with self.edit(code, with_connection=True) as (session, db):
+            self.check_open(session)
             player = self.player(session, token)
             self.check_round(session, round)
             if session["phase"] != "lobby":
@@ -200,6 +221,7 @@ class Store:
 
     def model(self, code: str, token: str, model: str, round: int | None = None) -> dict:
         with self.edit(code) as session:
+            self.check_open(session)
             player = self.player(session, token)
             self.check_round(session, round)
             if player["id"] != session["players"][0]["id"]:
@@ -213,6 +235,7 @@ class Store:
 
     def problem(self, code: str, token: str, problem: Problem, round: int) -> dict:
         with self.edit(code) as session:
+            self.check_open(session)
             player = self.player(session, token)
             self.check_round(session, round)
             if player["id"] != session["players"][0]["id"]:
@@ -227,6 +250,7 @@ class Store:
 
     def topic(self, code: str, token: str, topic: str | None, round: int) -> dict:
         with self.edit(code) as session:
+            self.check_open(session)
             player = self.player(session, token)
             self.check_round(session, round)
             if player["id"] != session["players"][0]["id"]:
@@ -240,6 +264,7 @@ class Store:
 
     def rematch(self, code: str, token: str, round: int) -> dict:
         with self.edit(code) as session:
+            self.check_open(session)
             self.player(session, token)
             # Concurrent clicks/retries from the just-finished round reset only once.
             if round == session["round"] - 1:
@@ -263,6 +288,7 @@ class Store:
 
     def draft(self, code: str, token: str, text: str, revision: int, round: int | None = None) -> dict:
         with self.edit(code) as session:
+            self.check_open(session)
             player = self.player(session, token)
             self.check_round(session, round)
             if session["phase"] == "lobby":
@@ -277,6 +303,7 @@ class Store:
         images = images or []
         now = time.time() if now is None else now
         with self.edit(code, now, with_connection=True) as (session, db):
+            self.check_open(session)
             player = self.player(session, token)
             self.check_round(session, round)
             duplicate = next((s for s in player["submissions"] if s["request_id"] == request_id), None)
@@ -302,6 +329,7 @@ class Store:
     def finalize(self, code: str, token: str, now: float | None = None, round: int | None = None) -> dict:
         now = time.time() if now is None else now
         with self.edit(code, now) as session:
+            self.check_open(session)
             player = self.player(session, token)
             self.check_round(session, round)
             if player["finalized"]:
@@ -334,6 +362,7 @@ class Store:
 
     def appeal(self, code: str, token: str, submission_id: str, reason: str, request_id: str, round: int) -> tuple[dict, dict, dict, bool]:
         with self.edit(code) as session:
+            self.check_open(session)
             player = self.player(session, token)
             self.check_round(session, round)
             submission = next((s for s in player["submissions"] if s["id"] == submission_id), None)
@@ -386,6 +415,7 @@ class Store:
 
     def chat(self, code: str, token: str, text: str) -> dict:
         with self.edit(code) as session:
+            self.check_open(session)
             player = self.player(session, token)
             solution_command = text.strip().lower() == "/solution"
             reference = None
@@ -434,7 +464,7 @@ def snapshot(session: dict, token: str) -> dict:
             item["verdict"] = effective_verdict(s)
             item["original_verdict"] = s["grade"]["verdict"] if s["grade"] else None
             attempts = s.get("appeals", [])
-            item["appeal_eligible"] = bool(own and finished and not session.get("_archived") and s["status"] == "graded" and not any(a["status"] in ("pending", "graded") for a in attempts))
+            item["appeal_eligible"] = bool(own and finished and session.get("closed_at") is None and not session.get("_archived") and s["status"] == "graded" and not any(a["status"] in ("pending", "graded") for a in attempts))
             if own or finished:
                 item["appeal"] = deepcopy(attempts[-1]) if attempts else None
                 if item["appeal"] and not finished:
@@ -463,6 +493,7 @@ def snapshot(session: dict, token: str) -> dict:
     return {
         "code": session["code"], "phase": session["phase"], "model": session["model"],
         "source": session.get("source", "custom"), "topic": session.get("topic"),
+        "closed_at": session.get("closed_at"),
         "me": me["id"], "host": session["players"][0]["id"], "players": players,
         "problem": problem, "chat": session["chat"], "result": session["result"],
         "started_at": session["started_at"], "ended_at": session["ended_at"],

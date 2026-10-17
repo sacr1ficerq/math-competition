@@ -222,6 +222,11 @@ async def get_round(code: str, round_number: int, request: Request):
     return view(request, {**session, **archived, "phase": "finished", "rounds": [], "_archived": True})
 
 
+@router.post("/sessions/{code}/close")
+async def close_session(code: str, body: RoundRequest, request: Request):
+    return view(request, store(request).close(code, token(request), body.round))
+
+
 @router.post("/sessions/{code}/rematch")
 async def rematch(code: str, body: RoundRequest, request: Request):
     session = store(request).rematch(code, token(request), body.round)
