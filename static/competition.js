@@ -35,6 +35,8 @@ let lobbyTopicsSignature = "";
 let inviteFeedbackTimer;
 let lobbyMode = null;
 let customProblemDirty = false;
+const deadlineMotion = matchMedia('(prefers-reduced-motion: reduce)');
+deadlineMotion.addEventListener('change',event=>{if(event.matches)document.getElementById('deadline')?.getAnimations().forEach(animation=>animation.cancel());});
 
 function requestId() {
   if (typeof crypto.randomUUID === "function") return crypto.randomUUID();
@@ -329,10 +331,31 @@ function controls() {
   $("submission-hint").textContent = hint;
   $("connect-key").hidden = !!state.closed_at || !keyPrompted || state.has_api_key || state.phase !== "active" || p.finalized;
   $("draft-status").textContent = imageBackupFailed ? "Изображения не сохранены локально" : restoringImages ? "Восстановление…" : draftConflict ? "Конфликт черновиков" : savePromise ? "Сохраняется…" : draftDirty ? "Не сохранено" : "Сохранено";
-  $("deadline").hidden = !!state.closed_at || p.deadline === null || p.finalized || state.phase === "finished";
-  if (!$("deadline").hidden) {
-    const remaining = Math.max(0, Math.ceil(p.deadline - now()));
-    $("deadline").textContent = remaining ? `Соперник завершил. Осталось ${Math.floor(remaining / 60)}:${String(remaining % 60).padStart(2, "0")}` : "Время истекло. Завершаем раунд…";
+  renderDeadline(p);
+}
+
+function renderDeadline(player) {
+  const timer=$("deadline");
+  timer.hidden=!!state.closed_at || player.deadline === null || player.finalized || state.phase === "finished";
+  if(timer.hidden)return;
+  const seconds=Math.max(0,player.deadline-now());
+  const remaining=Math.ceil(seconds);
+  const urgency=remaining===0?'expired':remaining<=15?'critical':remaining<=60?'urgent':'normal';
+  const key=`${state.code}:${state.round}:${player.deadline}`;
+  const firstEntry=timer.dataset.entryKey!==key;
+  const value=`${Math.floor(remaining/60)}:${String(remaining%60).padStart(2,'0')}`;
+  if($('deadline-value').textContent!==value)$('deadline-value').textContent=value;
+  $('deadline-value').dateTime=`PT${remaining}S`;
+  $('deadline-caption').textContent=remaining?'До завершения':'Завершаем раунд…';
+  $('deadline-progress').style.strokeDashoffset=String(100-Math.min(1,seconds/300)*100);
+  timer.setAttribute('aria-label',remaining?`Соперник сдал работу. До завершения ${value}.`:'Время истекло. Завершаем раунд.');
+  if(firstEntry||timer.dataset.urgency!==urgency){
+    $('deadline-announcement').textContent=urgency==='expired'?'Время истекло. Завершаем раунд.':urgency==='critical'?'До завершения осталось 15 секунд.':urgency==='urgent'?'До завершения осталась минута.':'Соперник сдал работу. У вас осталось до пяти минут.';
+  }
+  timer.dataset.urgency=urgency;
+  if(firstEntry){
+    timer.dataset.entryKey=key;
+    if(!deadlineMotion.matches)timer.animate([{opacity:0,transform:'translateY(4px)'},{opacity:1,transform:'translateY(0)'}],{duration:200,easing:'cubic-bezier(.23,1,.32,1)'});
   }
 }
 
