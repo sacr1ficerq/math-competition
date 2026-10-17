@@ -34,6 +34,10 @@ def pending_appeals(session: dict) -> bool:
     return any(a["status"] == "pending" for p in session["players"] for s in p["submissions"] for a in s.get("appeals", []))
 
 
+def appeal_used(player: dict) -> bool:
+    return any(a["status"] in ("pending", "graded") for s in player["submissions"] for a in s.get("appeals", []))
+
+
 def score(player: dict) -> dict:
     counted = [s for s in player["submissions"] if s["status"] == "graded"]
     best = max((Decimal(str(effective_verdict(s))) for s in counted), default=Decimal(0))
@@ -378,8 +382,8 @@ class Store:
                 return session, submission, duplicate, False
             if submission["status"] != "graded":
                 raise CompetitionError("Wait for a successful verdict before appealing.")
-            if any(a["status"] in ("pending", "graded") for a in attempts):
-                raise CompetitionError("Each submission allows only one decided appeal.")
+            if appeal_used(player):
+                raise CompetitionError("У каждого участника одна апелляция на задачу за раунд.")
             appeal = {
                 "id": str(uuid4()), "request_id": request_id, "reason": reason,
                 "status": "pending", "old_verdict": effective_verdict(submission),
@@ -464,7 +468,7 @@ def snapshot(session: dict, token: str) -> dict:
             item["verdict"] = effective_verdict(s)
             item["original_verdict"] = s["grade"]["verdict"] if s["grade"] else None
             attempts = s.get("appeals", [])
-            item["appeal_eligible"] = bool(own and finished and session.get("closed_at") is None and not session.get("_archived") and s["status"] == "graded" and not any(a["status"] in ("pending", "graded") for a in attempts))
+            item["appeal_eligible"] = bool(own and finished and session.get("closed_at") is None and not session.get("_archived") and s["status"] == "graded" and not appeal_used(player))
             if own or finished:
                 item["appeal"] = deepcopy(attempts[-1]) if attempts else None
                 if item["appeal"] and not finished:

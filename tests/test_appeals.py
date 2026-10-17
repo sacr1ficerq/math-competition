@@ -30,12 +30,15 @@ class AppealTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.store = Store(Path(self.temp.name) / "duels.sqlite3")
+        self.new_duel()
+        self.submission = self.submit("alice", 5)
+        self.other = self.submit("bob", 6)
+
+    def new_duel(self):
         self.code = self.store.create("alice", "Alice", PROBLEM, "openai/test")["code"]
         self.store.join(self.code, "bob", "Bob")
         self.store.ready(self.code, "alice", True)
         self.store.ready(self.code, "bob", True)
-        self.submission = self.submit("alice", 5)
-        self.other = self.submit("bob", 6)
 
     def submit(self, token, verdict):
         _, submission, _ = self.store.submit(self.code, token, "Original proof", str(time.time_ns()))
@@ -66,10 +69,12 @@ class AppealTests(unittest.TestCase):
         self.assertEqual(score(self.store.read(self.code, "alice")["players"][0])["score"], 8)
 
     def test_equal_and_lower_penalize_exactly_one_including_zero(self):
-        cases = [(old, proposed, self.submit("alice", old)) for old, proposed in [(5, 5), (5, 2), (0, 0), (10, 10)]]
-        self.finish()
-        for old, proposed, submission in cases:
+        for old, proposed in [(5, 5), (5, 2), (0, 0), (10, 10)]:
             with self.subTest(old=old, proposed=proposed):
+                self.new_duel()
+                submission = self.submit("alice", old)
+                self.submit("bob", 6)
+                self.finish()
                 _, _, appeal, _ = self.appeal(str(old)+str(proposed), sid=submission["id"])
                 self.store.complete_appeal(self.code, submission["id"], appeal["id"], result(proposed))
                 actual = next(s for s in self.store.read(self.code, "alice")["players"][0]["submissions"] if s["id"] == submission["id"])
@@ -88,6 +93,110 @@ class AppealTests(unittest.TestCase):
             self.appeal("new-pending")
         with self.assertRaises(CompetitionError):
             self.appeal(token="bob")
+
+    def test_declined_appeal_decrement_and_repeat_penalty_count_once(self):
+        self.submit("alice", 2)
+        self.finish()
+        _, _, appeal, _ = self.appeal()
+        self.store.complete_appeal(self.code, self.submission["id"], appeal["id"], result(5))
+        state = self.store.read(self.code, "alice")
+        self.assertEqual(score(state["players"][0]), {"best":4, "counted":2, "penalty":1, "score":3})
+        target = snapshot(state, "alice")["players"][0]["submissions"][0]
+        self.assertEqual((target["original_verdict"], target["verdict"]), (5, 4))
+        self.assertEqual((target["appeal"]["old_verdict"], target["appeal"]["effective_verdict"]), (5, 4))
+        self.assertEqual(target["grade"]["verdict"], 5)
+
+    def test_declined_appeal_keeps_another_better_submission_score(self):
+        self.submit("alice", 8)
+        self.finish()
+        _, _, appeal, _ = self.appeal()
+        self.store.complete_appeal(self.code, self.submission["id"], appeal["id"], result(5))
+        state = self.store.read(self.code, "alice")
+        self.assertEqual(score(state["players"][0]), {"best":8, "counted":2, "penalty":1, "score":7})
+        self.assertEqual(state["players"][0]["submissions"][0]["effective_verdict"], 4)
+
+    def test_one_budget_across_all_submissions_with_independent_opponent_budget(self):
+        second = self.submit("alice", 7)
+        self.finish()
+        initial = self.store.read(self.code, "alice")
+        self.assertTrue(all(s["appeal_eligible"] for s in snapshot(initial, "alice")["players"][0]["submissions"]))
+        state, _, appeal, created = self.appeal(sid=second["id"])
+        self.assertTrue(created)
+        self.assertFalse(any(s["appeal_eligible"] for s in snapshot(state, "alice")["players"][0]["submissions"]))
+        self.assertTrue(snapshot(state, "bob")["players"][1]["submissions"][0]["appeal_eligible"])
+        with self.assertRaises(CompetitionError):
+            self.appeal("another-target", sid=self.submission["id"])
+        duplicate = self.appeal(sid=second["id"])
+        self.assertFalse(duplicate[3])
+        self.assertEqual(duplicate[2]["id"], appeal["id"])
+        self.store.complete_appeal(self.code, second["id"], appeal["id"], result(8))
+        self.assertFalse(self.appeal(sid=second["id"])[3])
+        with self.assertRaises(CompetitionError):
+            self.appeal("after-decision", sid=self.submission["id"])
+        state, _, _, created = self.appeal("bob-independent", token="bob", sid=self.other["id"])
+        self.assertTrue(created)
+        self.assertFalse(any(s["appeal_eligible"] for s in snapshot(state, "alice")["players"][0]["submissions"]))
+
+    def test_concurrent_appeals_on_different_submissions_share_one_budget(self):
+        second = self.submit("alice", 7)
+        self.finish()
+        targets = [self.submission["id"], second["id"]]
+        def submit(index):
+            target, request = targets[index % 2], f"race-{index}"
+            try:
+                accepted = self.appeal(request, sid=target)
+                return target, request, accepted[2]["id"]
+            except CompetitionError as error:
+                self.assertEqual(error.status, 409)
+                return None
+        with ThreadPoolExecutor(max_workers=4) as pool:
+            accepted = [outcome for outcome in pool.map(submit, range(8)) if outcome]
+        self.assertEqual(len(accepted), 1)
+        target, request, appeal_id = accepted[0]
+        duplicate = self.appeal(request, sid=target)
+        self.assertFalse(duplicate[3])
+        self.assertEqual(duplicate[2]["id"], appeal_id)
+        player = self.store.read(self.code, "alice")["players"][0]
+        self.assertEqual(sum(len(s.get("appeals", [])) for s in player["submissions"]), 1)
+
+    def test_technical_failure_releases_budget_for_other_target_and_restart(self):
+        second = self.submit("alice", 7)
+        self.finish()
+        _, _, failed, _ = self.appeal()
+        self.store.complete_appeal(self.code, self.submission["id"], failed["id"], {"status":"failed"})
+        self.assertFalse(self.appeal()[3])
+        state = self.store.read(self.code, "alice")
+        self.assertTrue(all(s["appeal_eligible"] for s in snapshot(state, "alice")["players"][0]["submissions"]))
+        _, _, retry, created = self.appeal("different-target", sid=second["id"])
+        self.assertTrue(created)
+        self.store.tick(recover=True)
+        state = self.store.read(self.code, "alice")
+        self.assertTrue(all(s["appeal_eligible"] for s in snapshot(state, "alice")["players"][0]["submissions"]))
+        # A stale success for a failed job cannot consume or alter the new slot.
+        self.store.complete_appeal(self.code, second["id"], retry["id"], result(9))
+        unchanged = self.store.read(self.code, "alice")
+        self.assertNotIn("effective_verdict", unchanged["players"][0]["submissions"][1])
+        self.assertEqual(score(unchanged["players"][0]), score(state["players"][0]))
+        _, _, final, _ = self.appeal("after-restart")
+        self.store.complete_appeal(self.code, self.submission["id"], final["id"], result(8))
+        with self.assertRaises(CompetitionError):
+            self.appeal("used-budget", sid=second["id"])
+
+    def test_new_round_has_fresh_budget_and_archive_does_not_count(self):
+        self.finish()
+        _, _, appeal, _ = self.appeal()
+        self.store.complete_appeal(self.code, self.submission["id"], appeal["id"], result(8))
+        self.store.rematch(self.code, "alice", 1)
+        self.store.ready(self.code, "alice", True, round=2)
+        self.store.ready(self.code, "bob", True, round=2)
+        current = self.submit("alice", 5)
+        self.submit("bob", 6)
+        state = self.finish()
+        self.assertEqual(state["rounds"][0]["players"][0]["submissions"][0]["appeals"][0]["status"], "graded")
+        self.assertTrue(snapshot(state, "alice")["players"][0]["submissions"][0]["appeal_eligible"])
+        _, _, fresh, created = self.store.appeal(self.code, "alice", current["id"], "Round two", "round-two", 2)
+        self.assertTrue(created)
+        self.assertNotEqual(fresh["id"], appeal["id"])
 
     def test_finished_result_wins_and_times_recomputed_without_double_award(self):
         state = self.finish()
