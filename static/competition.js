@@ -311,6 +311,8 @@ function controls() {
   if(randomPending)$('lobby-hint').textContent='Не удалось применить выбор. Выберите «Случайная» ещё раз.';
   $("rematch").hidden = !!state.closed_at;
   $("close-room").hidden = !!state.closed_at || state.me !== state.host;
+  $("copy-invite").hidden = !!state.closed_at;
+  $("copy-lobby-invite").hidden = !!state.closed_at;
   $("close-room").disabled = actionBusy;
   $("chat-input").disabled = !!state.closed_at;
   $("chat-form").querySelector("button").disabled = !!state.closed_at;
