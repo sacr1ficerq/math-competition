@@ -200,6 +200,7 @@ function apply(next) {
     const winner = state.players.find((p) => p.id === state.result.winner);
     $("result-title").textContent = state.appeals_pending ? "Результат уточняется" : winner ? winner.id === state.me ? "Ваша победа" : `${winner.name} побеждает` : "Ничья";
     $("result-reason").textContent = state.appeals_pending ? "Предварительный результат: рассматривается апелляция. Итог и счёт серии могут измениться." : resultReason();
+    $("result-reason").hidden = !$("result-reason").textContent;
   }
   const historyHost = state.phase === "finished" ? $("result-history-host") : $("active-history-host");
   if ($("histories").parentElement !== historyHost) historyHost.append($("histories"));
@@ -228,6 +229,9 @@ function renderPlayers() {
   for (const p of state.players) {
     const card = document.createElement("div");
     card.className = "player-card";
+    card.dataset.ready=String(p.ready);
+    const avatar=document.createElement("span");avatar.className="player-initials";avatar.setAttribute("aria-hidden","true");avatar.textContent=p.name.trim().split(/\s+/).slice(0,2).map(part=>part[0]).join("").toUpperCase();
+    card.append(avatar);
     const top = document.createElement("div");
     top.className = "player-top";
     const name = document.createElement("strong");
@@ -265,7 +269,7 @@ function renderPlayers() {
   if (state.players.length === 1) {
     const waiting = document.createElement("div");
     waiting.className = "player-card muted";
-    waiting.textContent = "Ждём соперника…";
+    const seat=document.createElement("span");seat.className="player-initials";seat.textContent="?";seat.setAttribute("aria-hidden","true");const caption=document.createElement("strong");caption.textContent="Ждём соперника";waiting.append(seat,caption);
     cards.append(waiting);
   }
   $("player-cards").replaceChildren(cards);
@@ -314,7 +318,7 @@ function controls() {
 
 function resultReason() {
   if(state.result?.reason === "Equal scores; earlier finalization wins.") return "Оценки равны. Побеждает тот, кто завершил решение первым.";
-  if(state.result?.reason === "Higher final score.") return "Побеждает решение с более высокой итоговой оценкой.";
+  if(state.result?.reason === "Higher final score.") return "";
   return state.result?.winner ? "За победу в раунде — один бутерброд." : "Одинаковые результаты. Бутерброды не начисляются.";
 }
 
@@ -331,7 +335,8 @@ function renderResultComparison() {
   if ($('result-comparison').dataset.signature===signature) return;
   $('result-comparison').dataset.signature=signature;
   $('result-comparison').replaceChildren();
-  for(const player of state.players){const item=document.createElement('div');item.className='result-player'+(state.result?.winner===player.id?' is-winner':'');const name=document.createElement('strong');name.textContent=player.id===state.me?'Вы':player.name;const score=document.createElement('div');score.className='result-number';score.textContent=player.score.score;const scale=document.createElement('span');scale.textContent=' / 10';score.append(scale);const detail=document.createElement('p');detail.textContent=`Оценка ${player.score.best} − штраф ${player.score.penalty} = ${player.score.score}`;const finish=document.createElement("p");finish.textContent=finishLabel(player);item.append(name,score,detail,finish);$('result-comparison').append(item);}
+  for(const player of [...state.players].sort((a,b)=>Number(state.result?.winner===b.id)-Number(state.result?.winner===a.id))){const item=document.createElement('div');item.className='result-player'+(state.result?.winner===player.id?' is-winner':'');const rank=document.createElement('span');rank.className='podium-rank';rank.textContent=state.result?.winner ? state.result.winner===player.id?'1':'2':'=';item.append(rank);const name=document.createElement('strong');name.textContent=player.id===state.me?'Вы':player.name;const score=document.createElement('div');score.className='result-number';score.textContent=player.score.score;const scale=document.createElement('span');scale.textContent=' / 10';score.append(scale);const detail=document.createElement('p');detail.textContent=player.score.penalty?`Оценка ${player.score.best} − штраф ${player.score.penalty} = ${player.score.score}`:"Без штрафа";const finish=document.createElement("p");finish.textContent=finishLabel(player);const reward=document.createElement('span');reward.className='podium-reward';reward.textContent=state.result?.winner===player.id?'+1 🥪':'';item.append(name,score,detail,finish,reward);$('result-comparison').append(item);}
+  const entryKey=`${state.code}:${state.round}`;if($('result-comparison').dataset.entryKey!==entryKey){$('result-comparison').dataset.entryKey=entryKey;if(!matchMedia('(prefers-reduced-motion: reduce)').matches)$('result-comparison').animate([{opacity:0,transform:'translateY(10px)'},{opacity:1,transform:'translateY(0)'}],{duration:260,easing:'cubic-bezier(.23,1,.32,1)'});}
 }
 
 function renderHistory(players = state.players, target = $("history")) {

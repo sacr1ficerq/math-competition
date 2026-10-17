@@ -145,11 +145,15 @@ async function init() {
   async function showCatalog() {
     const data = await request('/api/problems' + ($('bank-topic').value ? '?topic='+encodeURIComponent($('bank-topic').value) : ''));
     $('bank-list').replaceChildren();
-    for (const problem of data.problems) {
+    const groups=new Map();
+    for(const problem of data.problems){if(!groups.has(problem.topic))groups.set(problem.topic,[]);groups.get(problem.topic).push(problem);}
+    for(const problems of groups.values()){const heading=document.createElement('h2');heading.className='bank-group-heading';heading.textContent=problems[0].topic_label;$('bank-list').append(heading);
+    for (const problem of problems) {
       const row = document.createElement('button'); row.type='button'; row.className='bank-row';
       const title=document.createElement('strong');title.textContent=problem.title;
-      const meta=document.createElement('span');meta.textContent=problem.topic_label + (problem.seen ? ' · Уже открывали' : ' · Новая');row.append(title,meta);
+      const meta=document.createElement('span');meta.textContent=problem.seen ? 'Открывали' : 'Новая';row.append(title,meta);
       row.onclick=()=>{if (!window.mathAccount.user) {window.mathAccount.onSignedIn=()=>{location.href="/practice?problem="+encodeURIComponent(problem.id);};window.mathAccount.open();return;} location.href='/practice?problem='+encodeURIComponent(problem.id);};$('bank-list').append(row);
+    }
     }
     if (!data.problems.length) $('bank-list').textContent='В этой теме пока нет задач.';
   }

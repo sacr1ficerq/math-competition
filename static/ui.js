@@ -112,7 +112,7 @@
       pane.setAttribute('aria-labelledby',prefix+'-'+entry.id);pane.replaceChildren();
       const heading=document.createElement('div');heading.className='review-document-toolbar';
       const stamp=document.createElement('div');stamp.className='review-document-stamp';const time=document.createElement('time');time.dateTime=new Date(entry.submittedAt*1000).toISOString();time.title=new Date(entry.submittedAt*1000).toLocaleString('ru-RU');time.textContent='Отправлено '+new Date(entry.submittedAt*1000).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit',hour12:false});stamp.append(time);
-      if(best?.id===entry.id){const label=document.createElement('span');label.className='attempt-best';label.textContent='Лучшая оценка';stamp.append(label);}
+      if(entries.length>1&&best?.id===entry.id){const label=document.createElement('span');label.className='attempt-best';label.textContent='Лучшая оценка';stamp.append(label);}
       const verdict=document.createElement('div');verdict.className='review-document-verdict';
       const number=document.createElement('strong');number.textContent=typeof entry.verdict==='number'?entry.verdict:entry.status==='pending'?'Проверяется':'Ошибка проверки';
       if(typeof entry.verdict==='number'){const scale=document.createElement('span');scale.textContent='/ 10';verdict.append(number,scale);}else{verdict.classList.add('is-status');verdict.append(number);}

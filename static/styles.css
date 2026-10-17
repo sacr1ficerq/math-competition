@@ -999,30 +999,41 @@ dialog::backdrop {
 }
 
 .bank-list {
-  display: grid;
-  grid-template-columns: repeat(2,minmax(0,1fr));
-  gap: 12px;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--line);
 }
 
 .bank-row {
-  padding: 20px;
+  padding: 20px 0;
   text-align: left;
   display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  flex-direction: column;
-  min-height: 112px;
-  border-radius: 12px;
-  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 76px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  background: transparent;
+  gap: 24px;
 }
 
+.bank-group-heading { font-size: 16px; font-weight: 600; margin: 28px 0 4px; }
+.bank-group-heading:first-child { margin-top: 20px; }
+.bank-row:hover, .bank-row:focus-visible { background: var(--overlay); }
+
 .bank-row strong {
+  min-width: 0;
+  flex: 1;
+  overflow-wrap: anywhere;
+  white-space: normal;
   font-size: 15px;
   font-weight: 550;
   line-height: 1.5;
 }
 
 .bank-row span {
+  flex-shrink: 0;
   font-size: 12px;
   color: var(--muted);
 }
