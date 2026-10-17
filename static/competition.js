@@ -236,6 +236,7 @@ function renderPlayers() {
     top.className = "player-top";
     const name = document.createElement("strong");
     name.textContent = `${p.name}${p.id === state.me ? " (вы)" : ""}`;
+    name.title=name.textContent;
     const label = document.createElement("span");
     label.className = "player-status";
     label.textContent = state.phase === "lobby" ? p.ready ? "Готов" : "Не готов" : p.finalized ? state.phase === "finished" ? "Раунд завершён" : `Завершил в ${timeText(p.finalized_at)}` : "Решает";
@@ -271,6 +272,15 @@ function renderPlayers() {
     waiting.className = "player-card muted";
     const seat=document.createElement("span");seat.className="player-initials";seat.textContent="?";seat.setAttribute("aria-hidden","true");const caption=document.createElement("strong");caption.textContent="Ждём соперника";waiting.append(seat,caption);
     cards.append(waiting);
+  }
+  $("player-cards").classList.toggle("scoreboard",state.phase!=="lobby");
+  if(state.phase!=="lobby"){
+    const sides=[...cards.children];
+    const tally=document.createElement("div");tally.className="match-tally";
+    sides.forEach((card,index)=>{card.classList.add("match-player");card.querySelector(".player-initials")?.remove();const wins=card.querySelector(".win-count");if(wins){wins.setAttribute("aria-label",`Бутерброды ${state.players[index].name}: ${state.players[index].wins}`);tally.append(wins);}if(!index){const colon=document.createElement("span");colon.className="tally-colon";colon.textContent=":";colon.setAttribute("aria-hidden","true");tally.append(colon);}});
+    cards.insertBefore(tally,sides[1]);
+  }else{
+    const axis=document.createElement("span");axis.className="duel-axis";axis.setAttribute("aria-hidden","true");axis.textContent="⋈";cards.insertBefore(axis,cards.children[1]);
   }
   $("player-cards").replaceChildren(cards);
   if (focused?.startsWith("card-score-")) $(focused)?.focus();

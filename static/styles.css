@@ -177,7 +177,7 @@ button:disabled,.file-button.disabled {
 }
 
 .icon-button {
-  width: 40px;
+  width: var(--control-height);
   padding: 4px;
   font-size: 24px;
   background: transparent;
@@ -667,66 +667,51 @@ footer {
   margin-bottom: 20px;
 }
 
-.proof-surface,.workspace {
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  background: var(--surface);
-  box-shadow: inset 0 1px 0 var(--material-rim);
-  overflow: hidden;
+.proof-surface {
+  padding: 12px;
+  border: 1px solid var(--material-line);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--overlay) 55%, var(--surface));
+  box-shadow: inset 0 1px 0 var(--material-rim), 0 8px 32px #00000006;
 }
 
 .proof-surface .workspace {
   display: grid;
   grid-template-columns: minmax(0,1fr) minmax(0,1fr);
-  border: 0;
-  border-radius: 0;
+  gap: 12px;
 }
 
 .editor-pane,.preview-pane {
   min-width: 0;
+  overflow: hidden;
+  border-radius: 10px;
 }
 
 .editor-pane {
-  border-right: 1px solid var(--line);
+  background: var(--base);
+  transition: box-shadow 160ms;
 }
+
+.editor-pane:focus-within {
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--focus) 42%, transparent);
+}
+
+.preview-pane { background: var(--surface); }
 
 .editor-toolbar {
   display: grid;
   grid-template-columns: minmax(0,1fr) minmax(0,1fr);
   align-items: center;
-  padding: 0;
-  border-bottom: 1px solid var(--line);
-  column-gap: 0;
+  min-height: 40px;
+  margin-bottom: 8px;
+  column-gap: 12px;
 }
 
-.editor-toolbar>.workspace-tabs {
-  display: none;
-}
-
-.wide-editor-title {
-  grid-column: 1;
-  grid-row: 1;
-  padding: 16px 24px;
-  font-size: 13px;
-  font-weight: 500;
-}
-
-.editor-toolbar>.subtle {
-  grid-column: 1;
-  grid-row: 1;
-  justify-self: end;
-  margin-right: 24px;
-  font-size: 11px;
-}
-
-.wide-preview-title {
-  grid-column: 2;
-  grid-row: 1;
-  padding: 16px 24px;
-  border-left: 1px solid var(--line);
-  font-size: 13px;
-  font-weight: 500;
-}
+.editor-toolbar>.workspace-tabs { display: none; }
+.wide-editor-title,.wide-preview-title { grid-row: 1; padding: 4px 24px; font-size: 13px; font-weight: 500; }
+.wide-editor-title { grid-column: 1; }
+.wide-preview-title { grid-column: 2; color: var(--muted); }
+.editor-toolbar>.subtle { grid-column: 1; grid-row: 1; justify-self: end; margin-right: 24px; font-size: 12px; }
 
 .workspace-tabs,.review-tabs {
   display: flex;
@@ -750,25 +735,24 @@ footer {
 
 .editor-pane textarea {
   border: 0;
-  border-radius: 0;
-  min-height: 440px;
+  border-radius: 10px;
+  min-height: 360px;
+  height: 360px;
   padding: 24px;
-  resize: vertical;
-  font: 15px/1.85 ui-monospace,SFMono-Regular,Consolas,monospace;
+  resize: none;
+  background: transparent;
+  font: inherit;
+  font-size: 16px;
+  line-height: 1.8;
+  letter-spacing: normal;
 }
 
-.editor-pane textarea:focus {
-  outline: 0;
-}
-
-.workspace:focus-within {
-  box-shadow: inset 0 0 0 1px var(--line);
-}
+.editor-pane textarea:focus { outline: 0; }
 
 .preview {
   padding: 24px;
-  min-height: 440px;
-  max-height: 760px;
+  min-height: 360px;
+  max-height: 600px;
   overflow: auto;
 }
 
@@ -776,20 +760,15 @@ footer {
   display: flex;
   justify-content: space-between;
   gap: 16px;
-  color: var(--subtle);
-  font-size: 11px;
-  padding: 12px 20px;
-  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 12px;
+  padding: 4px 24px 0;
 }
 
-.attachments {
-  padding: 4px 12px 12px;
-}
-
-.attachments>.subtle {
-  font-size: 11px;
-  margin-left: 8px;
-}
+.attachments { padding: 12px 0 4px; }
+.attachments>.file-button { padding-inline: 24px; }
+.attachment-icon { width: 16px; height: 16px; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.attachments>.subtle { font-size: 12px; margin-left: 8px; }
 
 .image-gallery {
   display: grid;
@@ -877,8 +856,9 @@ dialog::backdrop {
 }
 
 .dialog-heading button {
-  width: 36px;
-  min-height: 36px;
+  width: var(--control-height);
+  height: var(--control-height);
+  min-height: var(--control-height);
   padding: 0;
   border: 0;
   background: transparent;
@@ -1336,7 +1316,7 @@ dialog::backdrop {
   .editor-toolbar {
     display: flex;
     justify-content: space-between;
-    padding: 8px 12px;
+    padding: 8px 0;
     gap: 12px;
   }
 
@@ -1362,7 +1342,8 @@ dialog::backdrop {
   }
 
   .editor-pane textarea,.preview {
-    min-height: 360px;
+    min-height: 320px;
+    height: 320px;
   }
 
 }
@@ -1448,10 +1429,9 @@ dialog::backdrop {
     font-size: 16px;
   }
 
-  .editor-tip {
-    font-size: 10px;
-    padding: 12px 16px;
-  }
+  .editor-tip { font-size: 12px; padding: 4px 20px 0; }
+  .attachments>.file-button { padding-inline: 20px; }
+  .editor-toolbar .workspace-tabs button { padding-inline: 20px; }
 
   .editor-tip>span:last-child {
     display: none;
