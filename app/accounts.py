@@ -50,7 +50,8 @@ class AccountStore:
                 CREATE TABLE IF NOT EXISTS accounts (
                     id TEXT PRIMARY KEY, login TEXT NOT NULL UNIQUE,
                     display_name TEXT NOT NULL, password_hash TEXT NOT NULL,
-                    player_token TEXT NOT NULL UNIQUE, api_key BLOB, created_at REAL NOT NULL
+                    player_token TEXT NOT NULL UNIQUE, api_key BLOB, created_at REAL NOT NULL,
+                    default_model TEXT
                 );
                 CREATE TABLE IF NOT EXISTS account_sessions (
                     token_hash TEXT PRIMARY KEY, account_id TEXT NOT NULL,
@@ -58,6 +59,9 @@ class AccountStore:
                     FOREIGN KEY(account_id) REFERENCES accounts(id) ON DELETE CASCADE
                 );
             """)
+            db.execute("BEGIN IMMEDIATE")
+            if "default_model" not in {row["name"] for row in db.execute("PRAGMA table_info(accounts)")}:
+                db.execute("ALTER TABLE accounts ADD COLUMN default_model TEXT")
         # Equal-cost password verification for unknown logins.
         self.dummy_hash = password_hash(secrets.token_urlsafe(32))
 
@@ -74,7 +78,7 @@ class AccountStore:
 
     @staticmethod
     def public(account) -> dict:
-        return {"id": account["id"], "login": account["login"], "display_name": account["display_name"], "has_api_key": bool(account["api_key"])}
+        return {"id": account["id"], "login": account["login"], "display_name": account["display_name"], "has_api_key": bool(account["api_key"]), "default_model": account["default_model"]}
 
     def register(self, login: str, display_name: str, password: str, legacy: str | None = None):
         account_id = secrets.token_hex(16)
@@ -86,7 +90,7 @@ class AccountStore:
                 # A browser identity previously linked to an account cannot be claimed again.
                 if db.execute("SELECT 1 FROM accounts WHERE player_token=?", (canonical,)).fetchone():
                     canonical = secrets.token_urlsafe(32)
-                db.execute("INSERT INTO accounts VALUES (?, ?, ?, ?, ?, NULL, ?)",
+                db.execute("INSERT INTO accounts (id, login, display_name, password_hash, player_token, api_key, created_at) VALUES (?, ?, ?, ?, ?, NULL, ?)",
                            (account_id, login.casefold(), display_name, hashed, canonical, time.time()))
                 return self._issue_session(db, account_id)
         except sqlite3.IntegrityError:
@@ -163,3 +167,8 @@ class AccountStore:
         with self.connection() as db:
             row = db.execute("SELECT api_key FROM accounts WHERE id=?", (account_id,)).fetchone()
         return self.cipher.decrypt(row[0]).decode() if row and row[0] else None
+
+    def set_default_model(self, account_id: str, model: str):
+        with self.connection() as db:
+            db.execute("UPDATE accounts SET default_model=? WHERE id=?", (model, account_id))
+            return db.execute("SELECT * FROM accounts WHERE id=?", (account_id,)).fetchone()

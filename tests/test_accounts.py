@@ -34,7 +34,7 @@ class AccountsTest(unittest.TestCase):
 
     def test_authentication_cookie_and_isolation(self):
         user = self.register()
-        self.assertEqual(set(user), {"id", "login", "display_name", "has_api_key"})
+        self.assertEqual(set(user), {"id", "login", "display_name", "has_api_key", "default_model"})
         self.assertIn("HttpOnly", self.client.post("/api/auth/login", json={"login": "ALICE", "password": "safe-password"}).headers["set-cookie"])
         other = TestClient(self.app)
         self.assertIsNone(other.get("/api/auth/me").json()["user"])

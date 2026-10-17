@@ -1,8 +1,12 @@
 """Cookie authentication and account helpers shared by API routers."""
+from typing import Annotated
+
 from fastapi import APIRouter, HTTPException, Request, Response
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, StringConstraints
 
 from app.accounts import AccountStore, SESSION_SECONDS
+
+ModelName = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=200, pattern=r"^[\w.:-]+/[\w.:-]+$")]
 
 AUTH_COOKIE = "math_auth"
 router = APIRouter(prefix="/api/auth")
@@ -114,3 +118,14 @@ def delete_key(request: Request, response: Response):
     request.app.state.accounts.set_key(account["id"], None)
     response.delete_cookie("math_openrouter_key")
     return {"has_api_key": False}
+
+
+class PreferencesRequest(BaseModel):
+    default_model: ModelName
+
+
+@router.put("/preferences")
+def preferences(body: PreferencesRequest, request: Request):
+    account = require_account(request)
+    updated = request.app.state.accounts.set_default_model(account["id"], body.default_model)
+    return {"user": AccountStore.public(updated)}

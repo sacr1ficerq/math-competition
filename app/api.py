@@ -2,6 +2,10 @@ import asyncio
 import base64
 import logging
 import secrets
+import re
+import time
+
+import httpx
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 from pathlib import Path
@@ -13,7 +17,7 @@ from pydantic import BaseModel, Field, StringConstraints
 from app.competition import Store, snapshot
 from app.config import ROOT, Problem, load_settings
 from app.grading import AppealGradeRequest, GradeRequest, grade_appeal, grade_solution
-from app.account_api import current_account, has_api_key, init_accounts, resolve_identity, saved_api_key
+from app.account_api import ModelName, current_account, init_accounts, resolve_identity, saved_api_key
 from app.problem_bank import ProblemBank
 from app.solutions import SolutionContent
 
@@ -25,7 +29,6 @@ IDENTITY_COOKIE = "math_player"
 KEY_COOKIE = "math_openrouter_key"
 MONTH = 30 * 24 * 60 * 60
 Name = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=40)]
-ModelName = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=200, pattern=r"^[\w.:-]+/[\w.:-]+$")]
 
 
 def store(request: Request) -> Store:
@@ -47,6 +50,11 @@ def provider_key(request: Request) -> str | None:
     if hasattr(request.app.state, "accounts") and current_account(request):
         return saved_api_key(request)
     return request.cookies.get(KEY_COOKIE)
+
+
+def preferred_model(request: Request) -> str:
+    account = current_account(request) if hasattr(request.app.state, "accounts") else None
+    return (account["default_model"] if account else None) or settings.grading.model
 
 
 def decorate(request: Request, session: dict, value: str) -> dict:
@@ -134,6 +142,48 @@ class KeyRequest(BaseModel):
     api_key: Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=512, pattern=r"^[\x21-\x7e]+$")]
 
 
+@router.get("/models")
+async def models(request: Request):
+    # Public metadata only. Provider keys and the grading proxy are never used here.
+    state = request.app.state
+    if not hasattr(state, "model_catalog"):
+        state.model_catalog = {"models": None, "checked_at": 0, "stale": True}
+        state.model_catalog_lock = asyncio.Lock()
+    async with state.model_catalog_lock:
+        cache = state.model_catalog
+        age = time.monotonic() - cache["checked_at"]
+        if cache["checked_at"] == 0 or age >= (60 if cache["stale"] else 600):
+            try:
+                async with httpx.AsyncClient(timeout=5.0) as client:
+                    response = await client.get("https://openrouter.ai/api/v1/models")
+                    response.raise_for_status()
+                    payload = response.json()
+                if not isinstance(payload, dict) or not isinstance(payload.get("data"), list):
+                    raise ValueError("Invalid model catalog")
+                entries = {}
+                for entry in payload["data"]:
+                    if not isinstance(entry, dict):
+                        continue
+                    model_id = entry.get("id")
+                    parameters = entry.get("supported_parameters")
+                    if not isinstance(model_id, str) or len(model_id) > 200 or not re.fullmatch(r"[\w.:-]+/[\w.:-]+", model_id):
+                        continue
+                    if not isinstance(parameters, list) or not any(p in parameters for p in ("response_format", "structured_outputs")):
+                        continue
+                    architecture = entry.get("architecture")
+                    modalities = architecture.get("input_modalities") if isinstance(architecture, dict) else None
+                    entries[model_id] = {"id": model_id, "name": entry["name"] if isinstance(entry.get("name"), str) and entry["name"] else model_id,
+                                         "supports_images": "image" in modalities if isinstance(modalities, list) else None}
+                cache.update(models=sorted(entries.values(), key=lambda m: str(m["name"]).casefold()), stale=False)
+            except (httpx.HTTPError, ValueError, TypeError):
+                cache["stale"] = True
+            cache["checked_at"] = time.monotonic()
+        available = cache["models"]
+        if available is None:
+            available = [{"id": settings.grading.model, "name": settings.grading.model, "supports_images": None}]
+        return {"models": available, "default_model": settings.grading.model, "stale": cache["stale"]}
+
+
 @router.get("/sessions")
 async def sessions(request: Request):
     value = resolve_identity(request) if hasattr(request.app.state, "accounts") else request.cookies.get(IDENTITY_COOKIE)
@@ -145,7 +195,7 @@ async def create(body: CreateSession, request: Request, response: Response):
     value = (resolve_identity(request) if hasattr(request.app.state, "accounts") else request.cookies.get(IDENTITY_COOKIE)) or secrets.token_urlsafe(32)
     if body.problem is None:
         validate_topic(request, body.topic)
-    session = store(request).create(value, participant_name(request, body.name), body.problem, body.model or settings.grading.model, body.topic)
+    session = store(request).create(value, participant_name(request, body.name), body.problem, body.model or preferred_model(request), body.topic)
     set_cookie(response, request, IDENTITY_COOKIE, value)
     return decorate(request, session, value)
 

@@ -8,7 +8,7 @@ from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from urllib.parse import urlsplit
 
-from app.api import lifespan, provider_key, router, settings
+from app.api import lifespan, preferred_model, provider_key, router, settings
 from app.account_api import router as account_router, resolve_identity
 from app.problem_api import create_problem_router
 from app.problem_bank import ProblemBank, ProblemBankError
@@ -121,7 +121,7 @@ async def grade(body: PracticeRequest, request: Request):
             problem = Problem.model_validate(json.loads(row[0]))
             ProblemBank.record_status(db, participant, body.problem_id, "attempted")
     downstream = GradeRequest(api_key=api_key, solution=body.solution, images=body.images, problem=body.problem)
-    result = await grade_solution(downstream, problem, settings.grading)
+    result = await grade_solution(downstream, problem, settings.grading.model_copy(update={"model": preferred_model(request)}))
     if participant and result.status == "graded" and result.grade and result.grade.verdict == 10:
         with request.app.state.problem_bank.connection() as db:
             ProblemBank.record_status(db, participant, body.problem_id, "solved")
