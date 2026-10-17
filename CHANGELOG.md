@@ -34,6 +34,9 @@
 
 ### Changed
 
+- Retired the four elementary demonstration problems from new bank selections;
+  existing round snapshots and participant exposure records remain intact.
+
 - Pointer feedback is limited to the home artwork; button press states and
   result reveals respect reduced-motion preferences and avoid polling replays.
 

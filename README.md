@@ -80,7 +80,8 @@ successful solution. Selection, both exposure records, and round start share one
 SQLite transaction; retries cannot reveal a second task for the same round.
 
 When no common unseen tasks remain, choose another topic or add tasks. There is no
-automatic fallback to repeats. The repository currently includes four seed tasks.
+automatic fallback to repeats. The elementary demonstration tasks have been retired; bank content is maintained
+as separately reviewed problem files.
 
 Practice is at `/practice`. Choose a topic and open a task; this records exposure.
 Practice uses your saved key and default model and shows feedback immediately.
