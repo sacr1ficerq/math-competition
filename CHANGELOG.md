@@ -34,6 +34,9 @@
 
 ### Changed
 
+- A local systemd user-service helper keeps the development server independent
+  of terminal/tool sessions, with restart-on-failure and journal-based logs.
+
 - The home screen introduces a native vector mathematical arena with paired
   foam/iris materials, a glass action panel, and a finite entrance animation.
   The lobby and winner podium share its spatial surfaces; reduced-motion and

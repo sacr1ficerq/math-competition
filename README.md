@@ -19,6 +19,21 @@ Edit `config.yaml` for the address, SQLite database, grading model, timeout, and
 The supplied configuration uses `http://127.0.0.1:12334` as its grading proxy; set
 `grading.proxy` to `null` if no explicit proxy is needed.
 
+On Linux with a user systemd session, keep the server running independently of
+your terminal (with automatic restart on failure):
+
+```sh
+sh scripts/local-server.sh start
+sh scripts/local-server.sh status
+sh scripts/local-server.sh logs
+# After changing Python code or config:
+sh scripts/local-server.sh restart
+# Stop explicitly:
+sh scripts/local-server.sh stop
+```
+
+This is a local user service, not a deployment or a boot-time startup service.
+
 ## Play a duel
 
 1. Register or sign in. Your identity and problem history follow your account across
