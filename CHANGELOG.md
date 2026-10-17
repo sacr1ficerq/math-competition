@@ -34,6 +34,11 @@
 
 ### Changed
 
+- The home screen introduces a native vector mathematical arena with paired
+  foam/iris materials, a glass action panel, and a finite entrance animation.
+  The lobby and winner podium share its spatial surfaces; reduced-motion and
+  reduced-transparency preferences preserve a stable, readable interface.
+
 - Shared visual direction across the home, lobby, editor, task catalog, and
   account sheets: open layouts, paired participant identities, grouped tasks,
   and a two-place winner podium with a once-per-round motion reveal.
