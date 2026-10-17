@@ -21,6 +21,8 @@ let playerSignature = "";
 let roundHistorySignature = "";
 let solutionImages;
 let restoringImages = false;
+const appealDrafts = new Map();
+const appealRequests = new Set();
 let imageBackupFailed = false;
 
 function requestId() {
@@ -160,7 +162,7 @@ function apply(next) {
   if (state.result) {
     const winner = state.players.find((p) => p.id === state.result.winner);
     $("result-title").textContent = winner ? `${winner.name} побеждает и получает 🥪` : "Ничья";
-    $("result-reason").textContent = state.result.reason;
+    $("result-reason").textContent = state.appeals_pending ? "Предварительный результат: рассматривается апелляция. Итог и счёт серии могут измениться." : state.result.reason;
   }
   renderHistory();
   renderRounds();
@@ -240,7 +242,8 @@ function controls() {
   $("finalize").disabled = locked || actionBusy || solutionImages.busy || draftConflict || (changed && !state.has_api_key);
   $("surrender").disabled = locked || actionBusy;
   $("ready").disabled = actionBusy || state.players.length < 2 || !state.has_api_key;
-  $("rematch").disabled = actionBusy || state.phase !== "finished";
+  $("rematch").disabled = actionBusy || state.phase !== "finished" || !!state.appeals_pending;
+  $("rematch").title = state.appeals_pending ? "Дождитесь рассмотрения апелляции" : "";
   let hint = "";
   if (state.phase === "grading") hint = "Ждём окончания проверки…";
   else if (p.finalized && pending) hint = `Finalized · ${pending} still grading. Your score is provisional.`;
@@ -263,6 +266,9 @@ function renderHistory(players = state.players, target = $("history")) {
     if (signature === historySignature) return;
     historySignature = signature;
   }
+  const focused = target.contains(document.activeElement) ? document.activeElement : null;
+  const focusId = focused?.id;
+  const selection = focused?.selectionStart !== undefined ? [focused.selectionStart, focused.selectionEnd] : null;
   const opened = new Set([...target.querySelectorAll("details[open]")].map((d) => d.id));
   const content = document.createDocumentFragment();
   for (const p of players) {
@@ -309,11 +315,66 @@ function renderHistory(players = state.players, target = $("history")) {
         window.appendSolutionImages(feedback, s.images || []);
       }
       else { const privateText = document.createElement("p"); privateText.className = "muted"; privateText.textContent = "Решение соперника откроется после раунда."; feedback.append(privateText); }
+      appendAppeal(feedback, s, p, target === $("history"), section);
       entry.append(summary, feedback);
       content.append(entry);
     }
   }
   target.replaceChildren(content);
+  if (focusId) { const replacement = document.getElementById(focusId); replacement?.focus({preventScroll:true}); if (selection && replacement?.setSelectionRange) replacement.setSelectionRange(...selection); }
+}
+
+function appendAppeal(feedback, submission, player, currentRound, section) {
+  const appeal = submission.appeal;
+  if (appeal) {
+    const review = document.createElement("div");
+    review.className = "appeal-review";
+    const label = document.createElement("p");
+    label.className = "appeal-status";
+    label.setAttribute("role", "status");
+    if (appeal.status === "pending") label.textContent = "Апелляция рассматривается… Итог раунда пока предварительный.";
+    else if (appeal.status === "failed") {label.classList.add("error"); label.textContent = "Не удалось рассмотреть апелляцию. Оценка не изменилась, штрафа нет. Можно повторить.";}
+    else label.textContent = appeal.effective_verdict > appeal.old_verdict
+      ? `Апелляция принята: ${appeal.old_verdict} → ${appeal.effective_verdict} / 10.`
+      : `Оценка не повышена: ${appeal.old_verdict} → ${appeal.effective_verdict} / 10. Применено снижение на 1 балл.`;
+    review.append(label);
+    if (appeal.reason) {const reason=document.createElement("p");reason.className="appeal-reason";reason.textContent=`Основание: ${appeal.reason}`;review.append(reason);}
+    if (appeal.error) {const error=document.createElement("p");error.className="muted";error.textContent=appeal.error;review.append(error);}
+    feedback.append(review);
+    if (appeal.grade) {section("Пересмотр оценки", appeal.grade.reasoning); section("Обоснование пересмотра", appeal.grade.evidence);}
+  }
+  if (!currentRound || player.id !== state.me || !submission.appeal_eligible) return;
+  const key = `${state.code}:${state.round}:${submission.id}`;
+  let draft = appealDrafts.get(key);
+  if (!draft) {draft={reason:appeal?.reason || "", requestId:null, open:false};appealDrafts.set(key,draft);}
+  const disclosure = document.createElement("details");
+  disclosure.className="appeal-form-panel";
+  disclosure.open=draft.open;
+  const heading=document.createElement("summary");heading.textContent=appeal?.status === "failed" ? "Повторить апелляцию" : "Оспорить оценку";
+  disclosure.append(heading);
+  disclosure.addEventListener("toggle",()=>{draft.open=disclosure.open;});
+  const form=document.createElement("form");
+  const label=document.createElement("label");label.htmlFor=`appeal-reason-${submission.id}`;label.textContent="Почему оценку нужно повысить?";
+  const reason=document.createElement("textarea");reason.id=label.htmlFor;reason.rows=3;reason.maxLength=5000;reason.required=true;reason.value=draft.reason;reason.placeholder="Укажите конкретный шаг решения или ошибку в разборе.";
+  const warning=document.createElement("p");warning.className="appeal-warning";warning.id=`appeal-warning-${submission.id}`;warning.textContent="Одна рассмотренная апелляция на исходную оценку. Если оценка не повысится, она снизится на 1 балл, даже ниже нуля. Пересмотр оплачивается вашим ключом OpenRouter.";
+  reason.setAttribute("aria-describedby",warning.id);
+  const error=document.createElement("p");error.className="error";error.setAttribute("role","alert");
+  const button=document.createElement("button");button.type="submit";button.textContent=appealRequests.has(key) ? "Отправляется…" : "Отправить апелляцию";button.disabled=appealRequests.has(key) || !draft.reason.trim() || !state.has_api_key;
+  reason.addEventListener("input",()=>{if(draft.reason!==reason.value){draft.reason=reason.value;draft.requestId=null;}button.disabled=!reason.value.trim() || appealRequests.has(key) || !state.has_api_key;});
+  const round=state.round;
+  form.addEventListener("submit",async event=>{
+    event.preventDefault();
+    if(appealRequests.has(key) || !reason.value.trim()) return;
+    if(!state.has_api_key){error.textContent="Сначала подключите OpenRouter в настройках.";return;}
+    if(!draft.requestId || (appeal?.status === "failed" && draft.requestId === appeal.request_id)) draft.requestId=requestId();
+    appealRequests.add(key);button.disabled=true;button.textContent="Отправляется…";reason.readOnly=true;error.textContent="";
+    try {
+      const next=await api(sessionPath(`/submissions/${encodeURIComponent(submission.id)}/appeal`),"POST",{round,request_id:draft.requestId,reason:reason.value.trim()});
+      if(state.round===round) {apply(next);notice("Апелляция принята. Дождитесь пересмотра оценки.");}
+    } catch(failure) {error.textContent=failure.message;}
+    finally {appealRequests.delete(key);button.disabled=!reason.value.trim() || !state.has_api_key;button.textContent="Отправить апелляцию";reason.readOnly=false;}
+  });
+  form.append(label,reason,warning,error,button);disclosure.append(form);feedback.append(disclosure);
 }
 
 function renderRounds() {
