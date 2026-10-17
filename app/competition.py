@@ -12,6 +12,7 @@ from pathlib import Path
 from uuid import uuid4
 
 from app.config import Problem
+from app.problem_bank import ProblemBank
 
 
 class CompetitionError(Exception):
@@ -104,7 +105,7 @@ class Store:
             db.close()
 
     @contextmanager
-    def edit(self, code: str, now: float | None = None):
+    def edit(self, code: str, now: float | None = None, with_connection: bool = False):
         with self.connection() as db:
             db.execute("BEGIN IMMEDIATE")
             row = db.execute("SELECT state FROM sessions WHERE code = ?", (code.upper(),)).fetchone()
@@ -114,16 +115,17 @@ class Store:
             session.setdefault("round", 1)
             session.setdefault("rounds", [])
             reconcile(session, time.time() if now is None else now)
-            yield session
+            yield (session, db) if with_connection else session
             session["version"] += 1
             db.execute("UPDATE sessions SET state = ? WHERE code = ?", (json.dumps(session), session["code"]))
 
-    def create(self, token: str, name: str, problem: Problem, model: str) -> dict:
+    def create(self, token: str, name: str, problem: Problem | None, model: str, topic: str | None = None) -> dict:
         code = secrets.token_hex(5).upper()
         session = {
             "version": 1,
             "round": 1, "rounds": [],
-            "code": code, "model": model, "problem": problem.model_dump(),
+            "code": code, "model": model, "problem": problem.model_dump() if problem else None,
+            "source": "custom" if problem else "bank", "topic": None if problem else topic,
             "phase": "lobby", "created_at": time.time(), "started_at": None,
             "ended_at": None, "result": None, "chat": [],
             "players": [self.new_player(token, name)],
@@ -179,14 +181,19 @@ class Store:
             if any(p["identity"] == digest for p in s["players"])
         ][:20]
 
-    def ready(self, code: str, token: str, ready: bool, round: int | None = None) -> dict:
-        with self.edit(code) as session:
+    def ready(self, code: str, token: str, ready: bool, round: int | None = None, bank: ProblemBank | None = None) -> dict:
+        with self.edit(code, with_connection=True) as (session, db):
             player = self.player(session, token)
             self.check_round(session, round)
             if session["phase"] != "lobby":
                 raise CompetitionError("The competition has already started.")
             player["ready"] = ready
             if len(session["players"]) == 2 and all(p["ready"] for p in session["players"]):
+                if session.get("source", "custom") == "bank":
+                    if bank is None:
+                        raise CompetitionError("The problem bank is unavailable.", 503)
+                    session["problem"] = bank.select_for_round(db, session["code"], session["round"],
+                        [p["identity"] for p in session["players"]], session.get("topic"))
                 session["phase"] = "active"
                 session["started_at"] = time.time()
             return session
@@ -213,6 +220,20 @@ class Store:
             if session["phase"] != "lobby":
                 raise CompetitionError("The problem is locked once the round starts.")
             session["problem"] = problem.model_dump()
+            session.update(source="custom", topic=None)
+            for p in session["players"]:
+                p["ready"] = False
+            return session
+
+    def topic(self, code: str, token: str, topic: str | None, round: int) -> dict:
+        with self.edit(code) as session:
+            player = self.player(session, token)
+            self.check_round(session, round)
+            if player["id"] != session["players"][0]["id"]:
+                raise CompetitionError("Only the creator can change the topic.", 403)
+            if session["phase"] != "lobby":
+                raise CompetitionError("The topic is locked once the competition starts.")
+            session.update(source="bank", topic=topic, problem=None)
             for p in session["players"]:
                 p["ready"] = False
             return session
@@ -230,8 +251,11 @@ class Store:
                 key: session[key] for key in
                 ("round", "model", "problem", "players", "started_at", "ended_at", "result")
             }))
+            session["rounds"][-1].update(source=session.get("source", "custom"), topic=session.get("topic"))
             session["round"] += 1
             session.update(phase="lobby", started_at=None, ended_at=None, result=None)
+            if session.get("source") == "bank":
+                session["problem"] = None
             for p in session["players"]:
                 p.update(ready=False, finalized=False, finalized_at=None, finalized_order=None, deadline=None,
                          draft="", draft_revision=p["draft_revision"] + 1, submissions=[])
@@ -249,15 +273,15 @@ class Store:
             player["draft_revision"] += 1
             return session
 
-    def submit(self, code: str, token: str, solution: str, request_id: str, now: float | None = None, images: list[dict] | None = None, round: int | None = None) -> tuple[dict, dict, bool]:
+    def submit(self, code: str, token: str, solution: str, request_id: str, now: float | None = None, images: list[dict] | None = None, round: int | None = None, finalize: bool = False) -> tuple[dict, dict, bool]:
         images = images or []
         now = time.time() if now is None else now
-        with self.edit(code, now) as session:
+        with self.edit(code, now, with_connection=True) as (session, db):
             player = self.player(session, token)
             self.check_round(session, round)
             duplicate = next((s for s in player["submissions"] if s["request_id"] == request_id), None)
             if duplicate:
-                if duplicate["solution"] != solution or duplicate.get("images", []) != images:
+                if duplicate["solution"] != solution or duplicate.get("images", []) != images or duplicate.get("finalize", False) != finalize:
                     raise CompetitionError("This submission ID was already used for a different solution.")
                 return session, duplicate, False
             if session["phase"] != "active" or player["finalized"]:
@@ -265,9 +289,14 @@ class Store:
             submission = {
                 "id": str(uuid4()), "request_id": request_id, "submitted_at": now,
                 "solution": solution, "images": images, "status": "pending", "attempts": 0,
-                "grade": None, "error": None,
+                "grade": None, "error": None, "finalize": finalize,
             }
             player["submissions"].append(submission)
+            if session.get("source") == "bank":
+                ProblemBank.record_status(db, player["identity"], session["problem"]["id"], "attempted")
+            if finalize:
+                self._finalize_player(session, player, now)
+                reconcile(session, now)
             return session, submission, True
 
     def finalize(self, code: str, token: str, now: float | None = None, round: int | None = None) -> dict:
@@ -279,22 +308,28 @@ class Store:
                 return session
             if session["phase"] != "active":
                 raise CompetitionError("The competition is not accepting finalization.")
-            player["finalized_order"] = 1 + sum(p["finalized"] for p in session["players"])
-            player["finalized"] = True
-            player["finalized_at"] = now
-            other = next(p for p in session["players"] if p["id"] != player["id"])
-            if not other["finalized"] and other["deadline"] is None:
-                other["deadline"] = now + 300
+            self._finalize_player(session, player, now)
             reconcile(session, now)
             return session
 
+    @staticmethod
+    def _finalize_player(session: dict, player: dict, now: float):
+        player["finalized_order"] = 1 + sum(p["finalized"] for p in session["players"])
+        player["finalized"] = True
+        player["finalized_at"] = now
+        other = next(p for p in session["players"] if p["id"] != player["id"])
+        if not other["finalized"] and other["deadline"] is None:
+            other["deadline"] = now + 300
+
     def complete(self, code: str, submission_id: str, result: dict) -> None:
-        with self.edit(code) as session:
+        with self.edit(code, with_connection=True) as (session, db):
             rounds = [session, *session["rounds"]]
-            submission = next(s for r in rounds for p in r["players"] for s in p["submissions"] if s["id"] == submission_id)
+            part, player, submission = next((r, p, s) for r in rounds for p in r["players"] for s in p["submissions"] if s["id"] == submission_id)
             if submission["status"] != "pending":
                 return
             submission.update({key: result.get(key) for key in ("status", "attempts", "grade", "error")})
+            if part.get("source") == "bank" and submission["status"] == "graded" and effective_verdict(submission) == 10:
+                ProblemBank.record_status(db, player["identity"], part["problem"]["id"], "solved")
             reconcile(session, time.time())
 
     def appeal(self, code: str, token: str, submission_id: str, reason: str, request_id: str, round: int) -> tuple[dict, dict, dict, bool]:
@@ -324,10 +359,11 @@ class Store:
             return session, submission, appeal, True
 
     def complete_appeal(self, code: str, submission_id: str, appeal_id: str, result: dict) -> None:
-        with self.edit(code) as session:
-            submission = next((s for p in session["players"] for s in p["submissions"] if s["id"] == submission_id), None)
-            if submission is None:
+        with self.edit(code, with_connection=True) as (session, db):
+            found = next(((p, s) for p in session["players"] for s in p["submissions"] if s["id"] == submission_id), None)
+            if found is None:
                 return
+            player, submission = found
             appeal = next((a for a in submission.get("appeals", []) if a["id"] == appeal_id), None)
             if appeal is None or appeal["status"] != "pending":
                 return
@@ -339,6 +375,8 @@ class Store:
                 appeal.update(proposed_verdict=proposed, effective_verdict=effective)
                 submission["effective_verdict"] = effective
                 session["appeal_result_dirty"] = True
+                if session.get("source") == "bank" and effective == 10:
+                    ProblemBank.record_status(db, player["identity"], session["problem"]["id"], "solved")
             else:
                 appeal["status"] = "failed"
                 appeal["error"] = "Appeal review failed. Your grade is unchanged; you can retry."
@@ -417,11 +455,12 @@ def snapshot(session: dict, token: str) -> dict:
         players.append(public)
     problem = None
     if session["phase"] != "lobby":
-        problem = {k: session["problem"][k] for k in ("title", "statement")}
+        problem = {k: session["problem"][k] for k in ("title", "statement", "id", "topic", "topic_label", "version") if k in session["problem"]}
         if finished:
             problem = session["problem"]
     return {
         "code": session["code"], "phase": session["phase"], "model": session["model"],
+        "source": session.get("source", "custom"), "topic": session.get("topic"),
         "me": me["id"], "host": session["players"][0]["id"], "players": players,
         "problem": problem, "chat": session["chat"], "result": session["result"],
         "started_at": session["started_at"], "ended_at": session["ended_at"],

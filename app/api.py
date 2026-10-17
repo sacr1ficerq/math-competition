@@ -49,20 +49,45 @@ def provider_key(request: Request) -> str | None:
     return request.cookies.get(KEY_COOKIE)
 
 
-def view(request: Request, session: dict) -> dict:
-    result = snapshot(session, token(request))
+def decorate(request: Request, session: dict, value: str) -> dict:
+    result = snapshot(session, value)
     result["has_api_key"] = bool(provider_key(request))
+    if session["phase"] == "lobby" and hasattr(request.app.state, "problem_bank"):
+        result["available_topics"] = request.app.state.problem_bank.topics([p["identity"] for p in session["players"]])
     return result
 
 
+def view(request: Request, session: dict) -> dict:
+    return decorate(request, session, token(request))
+
+
+def participant_name(request: Request, supplied: str | None) -> str:
+    account = current_account(request) if hasattr(request.app.state, "accounts") else None
+    if account:
+        return account["display_name"]
+    if not supplied:
+        raise HTTPException(422, "Enter a display name or sign in first.")
+    return supplied
+
+
+def validate_topic(request: Request, topic: str | None):
+    if topic is not None and topic not in {t["slug"] for t in request.app.state.problem_bank.topics()}:
+        raise HTTPException(422, "Choose an available topic.")
+
+
+def grading_problem(session: dict) -> Problem:
+    return Problem.model_validate({k: session["problem"][k] for k in Problem.model_fields})
+
+
 class CreateSession(BaseModel):
-    name: Name
-    problem: Problem
+    name: Name | None = None
+    problem: Problem | None = None
+    topic: str | None = Field(default=None, min_length=1, max_length=100)
     model: ModelName | None = None
 
 
 class JoinSession(BaseModel):
-    name: Name
+    name: Name | None = None
 
 
 class RoundRequest(BaseModel):
@@ -81,12 +106,17 @@ class ProblemRequest(RoundRequest):
     problem: Problem
 
 
+class TopicRequest(RoundRequest):
+    topic: str | None = Field(default=None, min_length=1, max_length=100)
+
+
 class DraftRequest(RoundRequest):
     text: str = Field(max_length=50_000)
     revision: int = Field(ge=0)
 
 
 class SubmitRequest(SolutionContent):
+    finalize: bool = False
     round: int = Field(default=1, ge=1)
     request_id: str = Field(min_length=1, max_length=100)
 
@@ -113,21 +143,19 @@ async def sessions(request: Request):
 @router.post("/sessions", status_code=201)
 async def create(body: CreateSession, request: Request, response: Response):
     value = (resolve_identity(request) if hasattr(request.app.state, "accounts") else request.cookies.get(IDENTITY_COOKIE)) or secrets.token_urlsafe(32)
-    session = store(request).create(value, body.name, body.problem, body.model or settings.grading.model)
+    if body.problem is None:
+        validate_topic(request, body.topic)
+    session = store(request).create(value, participant_name(request, body.name), body.problem, body.model or settings.grading.model, body.topic)
     set_cookie(response, request, IDENTITY_COOKIE, value)
-    result = snapshot(session, value)
-    result["has_api_key"] = bool(provider_key(request))
-    return result
+    return decorate(request, session, value)
 
 
 @router.post("/sessions/{code}/join")
 async def join(code: str, body: JoinSession, request: Request, response: Response):
     value = (resolve_identity(request) if hasattr(request.app.state, "accounts") else request.cookies.get(IDENTITY_COOKIE)) or secrets.token_urlsafe(32)
-    session = store(request).join(code, value, body.name)
+    session = store(request).join(code, value, participant_name(request, body.name))
     set_cookie(response, request, IDENTITY_COOKIE, value)
-    result = snapshot(session, value)
-    result["has_api_key"] = bool(provider_key(request))
-    return result
+    return decorate(request, session, value)
 
 
 @router.get("/sessions/{code}")
@@ -154,6 +182,12 @@ async def rematch(code: str, body: RoundRequest, request: Request):
 @router.put("/sessions/{code}/problem")
 async def set_problem(code: str, body: ProblemRequest, request: Request):
     return view(request, store(request).problem(code, token(request), body.problem, body.round))
+
+
+@router.put("/sessions/{code}/topic")
+async def set_topic(code: str, body: TopicRequest, request: Request):
+    validate_topic(request, body.topic)
+    return view(request, store(request).topic(code, token(request), body.topic, body.round))
 
 
 @router.put("/key")
@@ -184,7 +218,7 @@ async def set_model(code: str, body: ModelRequest, request: Request):
 
 @router.put("/sessions/{code}/ready")
 async def ready(code: str, body: ReadyRequest, request: Request):
-    return view(request, store(request).ready(code, token(request), body.ready, round=body.round))
+    return view(request, store(request).ready(code, token(request), body.ready, round=body.round, bank=getattr(request.app.state, "problem_bank", None)))
 
 
 @router.put("/sessions/{code}/draft")
@@ -197,7 +231,7 @@ async def run_grade(app, code: str, submission: dict, session: dict, api_key: st
     try:
         result = await grade_solution(
             GradeRequest(api_key=api_key, solution=submission["solution"], images=submission.get("images", [])),
-            Problem.model_validate(session["problem"]),
+            grading_problem(session),
             settings.grading.model_copy(update={"model": session["model"]}),
         )
         output = result.model_dump(mode="json")
@@ -223,7 +257,7 @@ async def submit(code: str, body: SubmitRequest, request: Request):
     session, submission, created = store(request).submit(
         code, value, body.solution, body.request_id,
         images=[image.model_dump() for image in body.images],
-        round=body.round,
+        round=body.round, finalize=body.finalize,
     )
     if created:
         logger.info("Submission accepted: session=%s submission=%s submitted_at=%s", code, submission["id"], datetime.fromtimestamp(submission["submitted_at"], timezone.utc).isoformat())
@@ -238,7 +272,7 @@ async def run_appeal(app, code: str, submission: dict, appeal: dict, session: di
         result = await grade_appeal(
             AppealGradeRequest(api_key=api_key, solution=submission["solution"], images=submission.get("images", []),
                                previous_verdict=submission["grade"], appeal_reason=appeal["reason"]),
-            Problem.model_validate(session["problem"]),
+            grading_problem(session),
             settings.grading.model_copy(update={"model": session["model"]}),
         )
         output = result.model_dump(mode="json")
