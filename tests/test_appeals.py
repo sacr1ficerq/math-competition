@@ -50,6 +50,7 @@ class AppealTests(unittest.TestCase):
         return self.store.finalize(self.code, "bob", now=101)
 
     def test_higher_verdict_adopted_original_unchanged_one_slot(self):
+        self.finish()
         original = deepcopy(self.store.read(self.code, "alice")["players"][0]["submissions"][0])
         _, _, appeal, _ = self.appeal()
         self.store.complete_appeal(self.code, original["id"], appeal["id"], result(8))
@@ -65,9 +66,10 @@ class AppealTests(unittest.TestCase):
         self.assertEqual(score(self.store.read(self.code, "alice")["players"][0])["score"], 8)
 
     def test_equal_and_lower_penalize_exactly_one_including_zero(self):
-        for old, proposed in [(5, 5), (5, 2), (0, 0), (10, 10)]:
+        cases = [(old, proposed, self.submit("alice", old)) for old, proposed in [(5, 5), (5, 2), (0, 0), (10, 10)]]
+        self.finish()
+        for old, proposed, submission in cases:
             with self.subTest(old=old, proposed=proposed):
-                submission = self.submit("alice", old)
                 _, _, appeal, _ = self.appeal(str(old)+str(proposed), sid=submission["id"])
                 self.store.complete_appeal(self.code, submission["id"], appeal["id"], result(proposed))
                 actual = next(s for s in self.store.read(self.code, "alice")["players"][0]["submissions"] if s["id"] == submission["id"])
@@ -75,6 +77,7 @@ class AppealTests(unittest.TestCase):
         self.assertEqual(score({"submissions": [{"status": "graded", "grade": {"verdict": 0}, "effective_verdict": -1}]} )["score"], -1)
 
     def test_duplicate_and_concurrent_requests_do_not_create_extra_jobs(self):
+        self.finish()
         def submit(_):
             return self.appeal()[3]
         with ThreadPoolExecutor(max_workers=4) as pool:
@@ -108,10 +111,10 @@ class AppealTests(unittest.TestCase):
         with self.assertRaises(CompetitionError):
             self.appeal("archive")
 
-    def test_pending_prevents_finalization_and_failed_retry_restart(self):
-        _, _, appeal, _ = self.appeal()
-        state = self.finish()
-        self.assertEqual(state["phase"], "grading")
+    def test_finished_pending_appeal_failed_retry_and_restart(self):
+        self.finish()
+        state, _, appeal, _ = self.appeal()
+        self.assertEqual(state["phase"], "finished")
         self.store.complete_appeal(self.code, self.submission["id"], appeal["id"], {"status": "failed", "error": "Secret provider input"})
         state = self.store.read(self.code, "alice")
         self.assertEqual(state["phase"], "finished")
@@ -130,17 +133,40 @@ class AppealTests(unittest.TestCase):
         self.assertEqual(score(self.store.read(self.code, "alice")["players"][0])["score"], 7)
 
     def test_privacy_and_archived_eligibility(self):
+        active = self.store.read(self.code, "alice")
+        self.assertFalse(snapshot(active, "alice")["players"][0]["submissions"][0]["appeal_eligible"])
+        self.finish()
         state, _, appeal, _ = self.appeal(reason="Private argument")
-        self.assertTrue(snapshot(state, "alice")["players"][0]["submissions"][0]["appeal"]["reason"])
-        self.assertEqual(snapshot(state, "bob")["players"][0]["submissions"][0]["appeal"], {"status": "pending"})
+        self.assertEqual(snapshot(state, "bob")["players"][0]["submissions"][0]["appeal"]["reason"], "Private argument")
         self.store.complete_appeal(self.code, self.submission["id"], appeal["id"], result(8))
         state = self.store.read(self.code, "alice")
-        self.assertIsNone(snapshot(state, "alice")["players"][0]["submissions"][0]["appeal"]["grade"])
-        self.assertNotIn("Private argument", json.dumps(snapshot(state, "bob")))
-        state = self.finish()
         self.assertEqual(snapshot(state, "bob")["players"][0]["submissions"][0]["appeal"]["grade"]["reasoning"], "Private review")
+        # Redact legacy early-review data when displaying a round still in play.
+        legacy = {**state, "phase":"active"}
+        self.assertIsNone(snapshot(legacy, "alice")["players"][0]["submissions"][0]["appeal"]["grade"])
+        self.assertNotIn("Private argument", json.dumps(snapshot(legacy, "bob")))
         self.assertTrue(snapshot(state, "bob")["players"][1]["submissions"][0]["appeal_eligible"])
         self.assertFalse(snapshot({**state, "_archived": True}, "bob")["players"][1]["submissions"][0]["appeal_eligible"])
+
+    def test_appeal_requires_finished_round_after_all_original_grades(self):
+        state = self.store.read(self.code, "alice")
+        self.assertEqual(state["phase"], "active")
+        with self.assertRaises(CompetitionError) as solving:
+            self.appeal()
+        self.assertEqual(solving.exception.status, 409)
+        _, pending, _ = self.store.submit(self.code, "bob", "Pending original proof", "pending")
+        state = self.finish()
+        self.assertEqual(state["phase"], "grading")
+        self.assertTrue(all(p["finalized"] for p in state["players"]))
+        self.assertFalse(snapshot(state, "alice")["players"][0]["submissions"][0]["appeal_eligible"])
+        with self.assertRaises(CompetitionError) as grading:
+            self.appeal()
+        self.assertEqual(grading.exception.status, 409)
+        self.store.complete(self.code, pending["id"], result(7))
+        state = self.store.read(self.code, "alice")
+        self.assertEqual(state["phase"], "finished")
+        self.assertTrue(snapshot(state, "alice")["players"][0]["submissions"][0]["appeal_eligible"])
+        self.assertTrue(self.appeal()[3])
 
     def test_finished_parallel_appeals_recompute_after_final_failure_or_restart(self):
         self.finish()
@@ -193,6 +219,19 @@ class AppealApiTests(unittest.IsolatedAsyncioTestCase):
             async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://test", cookies={"math_player":"alice", "math_openrouter_key":"secret"}) as client:
                 with patch("app.api.grade_appeal", mock):
                     body = {"round":1,"request_id":"appeal","reason":"Look at line two"}
+                    url = f"/api/sessions/{code}/submissions/{sub['id']}/appeal"
+                    early = await client.post(url, json=body)
+                    self.assertEqual(early.status_code, 409)
+                    mock.assert_not_awaited()
+                    _, pending, _ = store.submit(code, "bob", "Pending original", "bob-original")
+                    store.finalize(code, "alice")
+                    waiting = store.finalize(code, "bob")
+                    self.assertEqual(waiting["phase"], "grading")
+                    during_grading = await client.post(url, json=body)
+                    self.assertEqual(during_grading.status_code, 409)
+                    mock.assert_not_awaited()
+                    store.complete(code, pending["id"], result(6))
+                    self.assertEqual(store.read(code, "alice")["phase"], "finished")
                     responses = await asyncio.gather(*[client.post(f"/api/sessions/{code}/submissions/{sub['id']}/appeal", json=body) for _ in range(3)])
                     self.assertEqual([r.status_code for r in responses], [202]*3)
                     self.assertNotIn("secret", json.dumps([r.json() for r in responses]))
@@ -211,6 +250,8 @@ class AppealApiTests(unittest.IsolatedAsyncioTestCase):
             store.ready(code, "bob", True)
             _, submission, _ = store.submit(code, "alice", "Original", "request")
             store.complete(code, submission["id"], result(5))
+            store.finalize(code, "alice")
+            store.finalize(code, "bob")
             state, submission, appeal, _ = store.appeal(code, "alice", submission["id"], "Argument", "appeal", 1)
             target = type("Target", (), {"state": type("State", (), {"store":store})()})()
             with patch("app.api.grade_appeal", AsyncMock(side_effect=asyncio.CancelledError)):

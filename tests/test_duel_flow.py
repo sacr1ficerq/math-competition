@@ -234,6 +234,8 @@ class DuelFlowTests(unittest.IsolatedAsyncioTestCase):
         token=self.raw_token(self.alice)
         _,submission,_=self.store.submit(code,token,"Proof","initial",round=1)
         self.store.complete(code,submission["id"],grade(8).model_dump(mode="json"))
+        self.store.finalize(code,token)
+        self.store.finalize(code,self.raw_token(self.bob))
         _,_,appeal,_=self.store.appeal(code,token,submission["id"],"Review this","appeal",1)
         self.store.complete_appeal(code,submission["id"],appeal["id"],grade(10).model_dump(mode="json"))
         with self.bank.connection() as db:
