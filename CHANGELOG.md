@@ -11,6 +11,8 @@
 - One appeal per original verdict: a higher reviewed score is adopted; otherwise
   the attempt loses exactly one point. Provider failures leave the score unchanged.
 - Light, dark, and system themes, shared account settings, and recoverable image drafts.
+- Saved account model preference with a cached OpenRouter model catalog and manual
+  provider/model fallback when the catalog is unavailable.
 - Atomic submission with finalization, and bank practice grading using the saved key.
 
 - `/solution` chat command that posts the reference solution once both players have
@@ -32,6 +34,11 @@
 
 ### Changed
 
+- State-specific home, lobby, editor, and results screens with equal Create/Join
+  actions, consistent controls, separate authentication/preferences/appearance,
+  accessible topic selection, and reduced-motion-aware transitions.
+- Wide proof workspaces show the editor and live preview together; small screens
+  retain view switching. Task upload is confined to task selection.
 - Both players' submitted solutions and screenshots are revealed when a round
   finishes, including in previous-round history. Unsubmitted drafts remain private.
 - Equal final scores now use the earlier finalization timestamp as the tie-break.
