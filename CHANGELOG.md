@@ -34,6 +34,17 @@
 
 ### Changed
 
+- Appeals become available only after both players finalize and all original
+  checks finish; the server rejects attempts to appeal during solving or grading.
+
+- Room creation is now one action with no task or model questions. A permanent
+  invitation URL and copy action lead the one-player lobby; task selection exists
+  only in the room, and readiness becomes the primary action after joining.
+- The configured default model appears independently of the model catalog.
+  Missing provider keys no longer block invitations, readiness, or proof editing;
+  key setup is requested in the context of checking a solution.
+- Dark appearance uses Rosé Pine with translucent navigation/floating materials,
+  opaque proof surfaces, and reduced-transparency fallbacks.
 - State-specific home, lobby, editor, and results screens with equal Create/Join
   actions, consistent controls, separate authentication/preferences/appearance,
   accessible topic selection, and reduced-motion-aware transitions.

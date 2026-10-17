@@ -339,6 +339,8 @@ class Store:
             submission = next((s for s in player["submissions"] if s["id"] == submission_id), None)
             if submission is None:
                 raise CompetitionError("Your submission was not found in this round.", 404)
+            if session["phase"] != "finished":
+                raise CompetitionError("Апелляция доступна после сдачи работ обоими участниками и завершения всех проверок.")
             attempts = submission.setdefault("appeals", [])
             duplicate = next((a for a in attempts if a["request_id"] == request_id), None)
             if duplicate:
@@ -432,7 +434,7 @@ def snapshot(session: dict, token: str) -> dict:
             item["verdict"] = effective_verdict(s)
             item["original_verdict"] = s["grade"]["verdict"] if s["grade"] else None
             attempts = s.get("appeals", [])
-            item["appeal_eligible"] = bool(own and not session.get("_archived") and s["status"] == "graded" and not any(a["status"] in ("pending", "graded") for a in attempts))
+            item["appeal_eligible"] = bool(own and finished and not session.get("_archived") and s["status"] == "graded" and not any(a["status"] in ("pending", "graded") for a in attempts))
             if own or finished:
                 item["appeal"] = deepcopy(attempts[-1]) if attempts else None
                 if item["appeal"] and not finished:

@@ -24,13 +24,16 @@ The supplied configuration uses `http://127.0.0.1:12334` as its grading proxy; s
 1. Register or sign in. Your identity and problem history follow your account across
    browsers and devices. Existing anonymous rooms in the current browser are linked
    when you register or sign in, unless that would merge the room's two opponents.
-2. Connect your OpenRouter key in account settings. Select a default grading model
-   there for new duels and practice. Changing this preference does not alter a room
-   that already exists; both opponents always use the room's shared model.
-3. Choose **Create duel** or **Join** on the home page. Creation accepts a bank topic,
-   any topic, or a custom problem. Joining accepts an invitation code or room link.
-4. Share the room invitation. Both players confirm readiness before the condition
-   is revealed. A bank problem is selected only at this point and is new to both.
+2. A grading model is already selected by default. You can replace the default in
+   account settings for new rooms and practice; existing rooms retain their shared
+   model. Your OpenRouter key is needed only when sending work for checking, not
+   when creating, inviting, confirming readiness, or writing a proof.
+3. Choose **Create duel** or **Join**. Creation immediately opens a room without
+   asking for a topic, problem, or model. Joining accepts a code or room link.
+4. Copy the visible invitation URL in the room and send it to your opponent. Task
+   selection is always visible here before the first and every next round:
+   **Random**, **By topic**, or **Custom task**. Both confirm readiness before the condition is revealed. A bank problem is
+   selected at this point and is new to both.
 5. Write a proof or attach screenshots, then submit for background grading. You can
    continue writing and submit a revised solution while checking is in progress.
 6. Finish your work explicitly. If the editor contains a new version, **Submit and
@@ -38,7 +41,8 @@ The supplied configuration uses `http://127.0.0.1:12334` as its grading proxy; s
    already-submitted version does not create another attempt. Surrendering sends no
    editor content; previously submitted work still counts.
 7. The first finalization gives the opponent five minutes. Once both have finalized
-   and eligible checks/appeals finish, the result reveals the solutions and feedback.
+   and all checks finish, the result reveals solutions and feedback. Appeals become
+   available only at this point.
 8. **Next problem** keeps the room, players, invitation, chat, and cumulative score.
    In the lobby the creator can keep or change the topic, select any topic, or upload
    a custom problem. Both players confirm readiness again.
@@ -111,7 +115,8 @@ Scores may be negative. Failed checks do not incur a submission penalty. During 
 players see verdicts and their own submitted work; opponent solutions and detailed
 feedback remain private until the round finishes. Unsubmitted drafts stay private.
 
-Each original successful verdict in the current round allows **one decided appeal**:
+Only after both participants finalize and all original checks finish can each
+original successful verdict in the current round receive **one decided appeal**:
 
 - Explain the grading error without editing or extending the submitted proof.
 - The same model reviews the exact original work, verdict, and argument.
@@ -136,8 +141,10 @@ and block the next round. Archived rounds cannot be appealed.
 - Text drafts autosave to SQLite, with browser-local backups and explicit conflict
   handling between tabs. Screenshot drafts and accepted-payload metadata persist
   locally in IndexedDB so reloading does not cause duplicate submissions.
-- Light, dark, and system appearance, remembered locally. Reduced-motion preference
-  disables interface animations. Chat and archived rounds are secondary views.
+- Light, dark, and system appearance, remembered locally. The dark theme uses
+  Rosé Pine colors; glass navigation, menus, and dialogs are separate from opaque
+  proof surfaces. Reduced-transparency preference restores solid materials, and
+  reduced-motion preference disables animations. Chat and archives are secondary views.
 - `/solution` in chat reveals the reference after both players finalize, even while
   checks are still pending.
 
