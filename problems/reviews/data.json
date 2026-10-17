@@ -1,0 +1,388 @@
+[
+  {
+    "file": "shad-data-001.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "Условное среднее ортогонально остаткам; towerproperty даёт точный выигрыш E(m2-m1)².",
+    "edge_cases": "Нулевые вероятности X, признак Z без нового условного среднего, L2интегрируемость.",
+    "corrections": [],
+    "content_hash": "df7231b0a919caf86210b82e48cae3be705befb1f43a666ac1ef7cbda2e973f6",
+    "executed_checks": []
+  },
+  {
+    "file": "shad-data-002.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "Левый/правый наклон F(a-)-tau и F(a)-tau; ноль в субдифференциале эквивалентен полному множеству квантилей.",
+    "edge_cases": "Атом, плато CDF, tau строго между0и1, интегрируемость.",
+    "corrections": [],
+    "content_hash": "bf93c9ab76110d2cf0fe9e85df3c2a21af335570fdaf0c8a75042410c128397e",
+    "executed_checks": [
+      "Executed 21 exact Fraction atom/gap quantile candidate checks; passed."
+    ]
+  },
+  {
+    "file": "shad-data-003.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "Алгебра энтропия+binaryKL; производная (q-eta)/(q(1-q)) задаёт единственный условный минимум.",
+    "edge_cases": "Eta/q в открытом интервале; оптимальность лишь на положительном support.",
+    "corrections": [],
+    "content_hash": "4a7ef273c9963d7fda3fd0aaf2b4f4b0395f79ff6010f34e95a9471cf0e106ab",
+    "executed_checks": []
+  },
+  {
+    "file": "shad-data-004.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "Стоимость решения1=c01(1-eta), решения0=c10 eta; разность модулей даёт точный regret.",
+    "edge_cases": "Равенство на пороге имеет нулевой зазор, любой выбор gstar.",
+    "corrections": [],
+    "content_hash": "2b2e07ab60fdac84017414b03a33e5ad088841b5739322bf6d5efa7a89a56d2f",
+    "executed_checks": [
+      "Executed exact weighted-cost regret identity on 500 seeded rational populations; passed."
+    ]
+  },
+  {
+    "file": "shad-data-005.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "Squareexcess=E(f-m)²; при ошибке знака |m|<=|f-m|; Коши завершает границу.",
+    "edge_cases": "f=0 при отрицательном m и m=0; конечность рисков.",
+    "corrections": [],
+    "content_hash": "8ab0ae4d7c6ca34b2a467b7cf5f38d6e8e9679c8dab6d913f80a71ec39d6f611",
+    "executed_checks": []
+  },
+  {
+    "file": "shad-data-006.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "Полный строчный ранг даёт интерполятор X^T(XX^T)^-1 y; постоянство прогноза эквивалентно z perpendicular kerX.",
+    "edge_cases": "Ненулевой kernelprojection h0 даёт zTh0=norm(h0)², все realпрогнозы.",
+    "corrections": [],
+    "content_hash": "d0c75b18578589f7126ea15c2edf0e3c5c3bc1b2e6d844bc992c43ec94de3456",
+    "executed_checks": []
+  },
+  {
+    "file": "shad-data-007.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "Оптимизация a даёт центрирование; нормальные уравнения и kernelхарактеризуют все beta.",
+    "edge_cases": "Rankdeficient Xc, константные признаки, проекция обеспечивает существование и unique fittedvector.",
+    "corrections": [],
+    "content_hash": "098ca1d7f3f07e045cb011ed5c5209e9ffe2b196ff8dd2ac87c59ff6493779ff",
+    "executed_checks": []
+  },
+  {
+    "file": "shad-data-008.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "Фиксированная сумма коэффициентов c минимизирует штраф при bj=c/k; lambda эффективно делится на k.",
+    "edge_cases": "x=0 либо xTy=0 прогнозы не меняются; численный пример x=y=1 проверен.",
+    "corrections": [],
+    "content_hash": "36904c49e92e3186a5736e87175301b0b2ec5f31fe7b51b927f2e3878ab53f9b",
+    "executed_checks": []
+  },
+  {
+    "file": "shad-data-009.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "Популяционная производная даёт CovXY/VarX; модель даёт omittedterm gammaCovXZ/VarX.",
+    "edge_cases": "Wнезависимая с positivevariance устраняет коллинеарность; beta=gamma=1 даёт -1.",
+    "corrections": [],
+    "content_hash": "072ee11f98431d24a9e8c6ee3151ac3f28ae36709cc9d5a364899c2b45bc2069",
+    "executed_checks": []
+  },
+  {
+    "file": "shad-data-010.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "Noisyeta=a+(1-a-b)eta; совпадение всех порогов требует a=b при positive slope.",
+    "edge_cases": "Порог вне[0,1], tieпри1/2, контрпример eta=.4,a=.3,b=.1 даёт .54.",
+    "corrections": [],
+    "content_hash": "afb51ba932bc87d6a5a621d101eb3750cb5c7cfd4056e0d9b9aec42faee6f268",
+    "executed_checks": []
+  },
+  {
+    "file": "shad-data-011.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "XTX=I разделяет координаты; subgradient[-z-lambda,-z+lambda] даёт softthreshold.",
+    "edge_cases": "z=+-lambda имеет uniquezero; ridge нормировка(1+lambda) проверена.",
+    "corrections": [],
+    "content_hash": "fc4a3592a5bb2b2077bd12d6fdb3abd0aaccf7add9495f64afa1b82ce233d162",
+    "executed_checks": []
+  },
+  {
+    "file": "shad-data-012.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "Beta=Sgamma превращает штраф в betaT S^-T S^-1 beta; поляризация даёт ортогональность.",
+    "edge_cases": "Отрицательное диагональное масштабирование учитывается квадратом sj²; Sобратима.",
+    "corrections": [],
+    "content_hash": "e044ad331ea4fc577c6fd2d1ba0a2eb8369ee9e4459103dbbbf08f4c048e311e",
+    "executed_checks": []
+  },
+  {
+    "file": "shad-data-013.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "Дополнение квадрата posterior имеет precision XTX/sigma²+I/tau²; MAP=mean.",
+    "edge_cases": "RankdeficientX не мешает SPD; ridgeparameter sigma²/tau² точно согласован с нормировкой.",
+    "corrections": [],
+    "content_hash": "9c505b4a12fbeab38b093d552654cc7202bfa18ab09d4285410d74d9c8145646",
+    "executed_checks": []
+  },
+  {
+    "file": "shad-data-014.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "Разложение w по rowspace+kernel делает orthogonalpart излишним; dualformula решает нормальные уравнения.",
+    "edge_cases": "Phiпроизвольногоранга, lambda>0 обеспечивает обе обратимости и unique minimizer.",
+    "corrections": [],
+    "content_hash": "51fa29a0e4b720294c67df95d8db31063b536459420b8ade57eb1cfc7bd98f46",
+    "executed_checks": []
+  },
+  {
+    "file": "shad-data-015.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "ODEпоeigenspace даёт (1-exp(-ht))/h; alpha(h)=h/(exp(ht)-1) strictlydecreasing.",
+    "edge_cases": "t>0,h>0; XTsurjective позволяет активировать каждое направление, речь об операторах всехy.",
+    "corrections": [],
+    "content_hash": "664de53e04530116984cdd99153373a0482993a1a282d7f04d7933191046300e",
+    "executed_checks": []
+  },
+  {
+    "file": "shad-data-016.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "Gradient и Hessian проверены дифференцированием; positiveweights дают convexity; separatingray даётinf0.",
+    "edge_cases": "n>=1 нужен для strictpositive finiteL; разделимостьстрогая, отсутствиедостижениянаконечномbeta.",
+    "corrections": [
+      "Уточнено n>=1, исключён пустой набор с вакуумной разделимостью."
+    ],
+    "content_hash": "b47d0acf7620af4280bd82def28847d6708a87db5fa0cb35f7b9e37579c8ba63",
+    "executed_checks": []
+  },
+  {
+    "file": "shad-data-017.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "L2penalty делает losscoercive и Hessian>=lambdaI; значениевнуле ограничиваетnorm.",
+    "edge_cases": "Все координаты штрафуются; разделимость/rankdeficiency не влияют; n=0 также даёт beta0.",
+    "corrections": [],
+    "content_hash": "3ecc553be22df3c7a22416befc23990d87538c014f005af21a367bfabf7a30ad",
+    "executed_checks": []
+  },
+  {
+    "file": "shad-data-018.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "Байесовские odds делятся при неизменных classconditionals; prioroddsratio даёт logitshift.",
+    "edge_cases": "Вероятности priors и qs в(0,1); утверждения a.s. на общем support.",
+    "corrections": [
+      "X уточнён как конечный, вывод применяется на положительном support."
+    ],
+    "content_hash": "60fcb5f24e7acc4ab55d72433153457a1529e42edf0d35dc90c56759ca580e21",
+    "executed_checks": []
+  },
+  {
+    "file": "shad-data-019.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "Bernoulliусловный squareloss и logloss минимальны при etaS; tower E(Y|Q)=Q.",
+    "edge_cases": "Eta0/1 и предельные logсоглашения; неинъективное преобразование S→Q.",
+    "corrections": [
+      "Явно выписаны оба минимальных риска."
+    ],
+    "content_hash": "97476ff9d5b47f47d9d682d19124baaf406494b164b6f6edf93be714ff3b46a2",
+    "executed_checks": [
+      "Executed exact recalibration tower identity on 500 seeded rational populations, including merged score groups; passed."
+    ]
+  },
+  {
+    "file": "shad-data-020.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "Ортогональное разложение Brier плюс полная дисперсия даёт calibration-resolution+uncertainty.",
+    "edge_cases": "Pi0/1 допустимы; строгий критерий лучше константы resolution>calibrationerror.",
+    "corrections": [],
+    "content_hash": "a96d2fe5b3bd02119b6a29d3cda261779e77153df0661bae1f463923ef00ba8d",
+    "executed_checks": [
+      "Executed exact Brier decomposition on 500 seeded rational populations; passed."
+    ]
+  },
+  {
+    "file": "shad-data-021.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "q0=1-eps<q1=1-eps/2 даёт AUC1; logloss содержит -logeps/2→infinity.",
+    "edge_cases": "Strictmonotone scoretransform сохраняет ties и пары; transformedscore не обязан быть вероятностью.",
+    "corrections": [],
+    "content_hash": "e1a169408c11ce4abbbe8ec039f5e6898296af3ec7f091f9b36073a36efe96c0",
+    "executed_checks": []
+  },
+  {
+    "file": "shad-data-022.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "Precision=pi*t/(pi*t+(1-pi)*f); derivative=tf/den²>0.",
+    "edge_cases": "t,f в(0,1), positive denominator; pi=.01 даёт8/107, pi=.5 даёт8/9.",
+    "corrections": [],
+    "content_hash": "76d4ff8f739c26c0eadc5662490d0ea5a70da5d3921850c5738ef184ba1c76fa",
+    "executed_checks": []
+  },
+  {
+    "file": "shad-data-023.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "Fractionalobjective переводится в linear E[(eta-c)1D]<=cpi при c=Fstar/2; maximizationpointwise даётthreshold.",
+    "edge_cases": "Nullsupport исключается изнеобходимогоправила; eta=c менятьможнобезэффекта; pi>0.",
+    "corrections": [
+      "Пороговое обязательное включение/исключение ограничено положительным support."
+    ],
+    "content_hash": "935d583dd9408f46aa63bc99a236175a8a99a8f3b7f17ae48841d6861f255efd",
+    "executed_checks": [
+      "Enumerated all16 decision regions on each of500 seeded rational populations and checked every optimal threshold support; passed."
+    ]
+  },
+  {
+    "file": "shad-data-024.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "ТочныйOLSсintercept допускает среднююконстанту, поэтому SSE<=TSS; upperboundотSSE>=0.",
+    "edge_cases": "Непостоянныеy обеспечиваютTSS>0; тестпример(-1,1),(M,-M) даёт1-(M+1)².",
+    "corrections": [],
+    "content_hash": "0284acd209d73a2f748df47aa139493cfdbdadb03f3e758694db7be9ec6a19b9",
+    "executed_checks": []
+  },
+  {
+    "file": "shad-data-025.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "Параметрf=FP даётвсематрицы; производнаяF1=2eps/den²>0, границыпри0,eps.",
+    "edge_cases": "Eps<min(pi,1-pi) делаетвесьотрезокдопустимым и знаменателиположительными.",
+    "corrections": [],
+    "content_hash": "427883142d6cab1998c9a4ddc84e9fcfd1e9fdbdc0121725d5c9c300c72af0b1",
+    "executed_checks": []
+  },
+  {
+    "file": "shad-data-026.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "Singletoncategorytargetencoding=ownlabel; LOOcodingотдругихметокнезависим отYi.",
+    "edge_cases": "Резервнаякодировканезависима от собственнойметки; новаячестнаяметкаошибка1/2.",
+    "corrections": [],
+    "content_hash": "5da33031b3369a907fc5367c0c95c8d2f6652862e365f28fa2400e0d6b6736d6",
+    "executed_checks": []
+  },
+  {
+    "file": "shad-data-027.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "Duplicateingroupid запоминаетсясошибкой0; newgroup label independent fairbit даёт1/2.",
+    "edge_cases": "Групповойsplitнезависимотметок; двекопииvalidationне даютдвухнезависимыхметок.",
+    "corrections": [
+      "Групповой split независим от меток, validation непуст."
+    ],
+    "content_hash": "826d921461a6a904d3ac4a869068336b7c49f16e05ff2f358bfaa92ef174ac14",
+    "executed_checks": []
+  },
+  {
+    "file": "shad-data-028.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "Безmask заполненныйпризнакконстанта; Bayesriskwithmaskсуммирует minсовместныхмассвдвухгруппах.",
+    "edge_cases": "Пустыегруппыобработаныбезусловныхделений; pi=.5,a1,b0 даётrisk0.",
+    "corrections": [],
+    "content_hash": "d6a71480988fa35fd6ae3e160e7615261333ea54416ed7338e13c8e9477e013f",
+    "executed_checks": []
+  },
+  {
+    "file": "shad-data-029.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "Normal equations дают bg=ng/(ng+lambda)(mug-a); aweightedmean и sum bg=0.",
+    "edge_cases": "k>=1,ng>0; quadraticincrements строгоpositive несмотряна unpenalizedintercept.",
+    "corrections": [],
+    "content_hash": "5a437f8e0f91087107396397fba084a5289ca4ceeb1e8df51b1f9887e89ce1a6",
+    "executed_checks": []
+  },
+  {
+    "file": "shad-data-030.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "Independentmasks: covariancepqCov и variancespVar,qVar; commonmask: allmomentsfactorp.",
+    "edge_cases": "p,q>0 и positivevariances нужныдляcorrelation; p=q1 сохраняетrho.",
+    "corrections": [],
+    "content_hash": "b8ffb23ef9bcbc95e514fa16c299044ebd240ac276cadb01ce52768ec3639e62",
+    "executed_checks": []
+  },
+  {
+    "file": "shad-data-031.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "Оптимальная константа — среднее; ANOVAразложение даёт nLnR/(nL+nR)*(muL-muR)².",
+    "edge_cases": "Непустые дети; XORчетырёхравновесныхточек даётобаfirstgains0 и depth2error0.",
+    "corrections": [],
+    "content_hash": "44e5cfa623b3c8cd5551ed674f3599ec72b624b9ae900fb62f6b1f7f5d999123",
+    "executed_checks": []
+  },
+  {
+    "file": "shad-data-032.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "Giniразность сводится к2w(1-w)(pL-pR)²; Hsecond=-1/(p(1-p)) даёт strictconcavity.",
+    "edge_cases": "pL/pR=0или1 обрабатываютсянепрерывностью; positiveweights исключаютлишниеравенства.",
+    "corrections": [],
+    "content_hash": "9f5c905d09d0d61b51f04b054ce0789fdaf741f9c2288ee7d29296d2c01b1e6e",
+    "executed_checks": []
+  },
+  {
+    "file": "shad-data-033.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "Equicorrelationeigenvalues1+(M-1)rho и1-rho даютточныйPSDinterval; spectralroot реализуетего.",
+    "edge_cases": "Граничныеsingularcovariances допустимы; fixednegative rhoневозможенприM→infinity.",
+    "corrections": [],
+    "content_hash": "cb37288bbbb6123ea5b672ea25174c62e2515956dd7d94e52030ad1d4846fe14",
+    "executed_checks": []
+  },
+  {
+    "file": "shad-data-034.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "Exactline search eta=rTh/normh² даёт decrease(rTh)²/normh²; maxABS normalizeddotнаsphere имеетminc>0.",
+    "edge_cases": "SignedmaxбезABSневерен; correctedstatement; c1 даётone-stepzero; r0не требуетнормировки.",
+    "corrections": [
+      "В выборе направления явно добавлен модуль; без него найден контрпример h=e1,e2,r=(-1,0)."
+    ],
+    "content_hash": "8e6d103b2863e2bf7f84e00830ffb1122861ef4205050e41036a9cb467007294",
+    "executed_checks": []
+  },
+  {
+    "file": "shad-data-035.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "Weightederrors группируютZ=(1-eps)e^-alpha+eps e^alpha; derivativeдаётalpha иZmin2sqrt(eps(1-eps))<1.",
+    "edge_cases": "Связьсcurrentexponentialloss требуетwi proportionalexp(-yiFi); добавленовусловие; epsв(0,.5).",
+    "corrections": [
+      "Добавлено необходимое wi proportional exp(-yiFi) для связи Z с исходной потерей."
+    ],
+    "content_hash": "cddc2246abd91e55f5f6d4fdf543f90549f3cd321e36ae705bf73d46288b359c",
+    "executed_checks": []
+  },
+  {
+    "file": "shad-data-036.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "Centroididentity crosssum0 даётuniqueaverage; mergeincreaseab/(a+b)*norm(muA-muB)².",
+    "edge_cases": "Группынепересекающихсяиндексированныхнаблюдений,duplicatesallowed; равенствоiffmeanssame.",
+    "corrections": [
+      "Объединение понимается для непересекающихся индексированных групп, допускающих совпадение векторов."
+    ],
+    "content_hash": "0bd80a82f52a2d6ef091ba1e9e2e308f02a443bdd7750129b684753d5a2aa52d",
+    "executed_checks": []
+  },
+  {
+    "file": "shad-data-037.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "Lloydcenters0,25/3 имеютboundary25/6<5,assignedgroupsнеизменныстрого.",
+    "edge_cases": "Стоимость50/3 против25/2; duplicate10 считаютсядвумянаблюдениями; лучшийкандидатнеобязанглобальный.",
+    "corrections": [],
+    "content_hash": "13bf5de24a2952fbd94dd1dd30752894bf298ea1747911f790913467ce079e7b",
+    "executed_checks": []
+  },
+  {
+    "file": "shad-data-038.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "PCAerror=traceSigma-tracePSigma; diagonalprojectorweights0..1sumr даютtailboundиattainment.",
+    "edge_cases": "Strictgapзаставляетdiagonalweights1/0, затемPej=ej/0; rankdeficientSigma включена.",
+    "corrections": [],
+    "content_hash": "82ffd0e456471cbaef6fdd5cbdf36445a077ffde366d6afc855d686d1374925f",
+    "executed_checks": []
+  },
+  {
+    "file": "shad-data-039.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "IndependentfairU,V даютcovdiag(M,1), leadingaxisuniqueM>1; signalV независимотfirstPC.",
+    "edge_cases": "VarY1, fullXpredictorsecondcoordinateerror0, BayesfirstPCrisk1; PCsignневажен.",
+    "corrections": [],
+    "content_hash": "160d0a35a737f5e7579336287ab3c5bff4a77f7f681458a0664e7ea2201c777a",
+    "executed_checks": []
+  },
+  {
+    "file": "shad-data-040.json",
+    "status": "passed_independent_mathematical_review",
+    "specific_proof_checkpoints": "Все2clusterpartitionsчетырёхточек имеют2+2 или1+3; pairedcosthalf-distance²,triplecostone-thirdpairdistances.",
+    "edge_cases": "1+3cost8/3(a²+b²)>4min(a²,b²); a!=buniqueorientation; scale0<c<b/a flips.",
+    "corrections": [],
+    "content_hash": "6e917161b30ccfb9209f02073a33c9543c22205dd3f7724e208e8a7b0edcbcf2",
+    "executed_checks": []
+  }
+]
