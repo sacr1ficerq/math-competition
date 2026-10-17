@@ -66,7 +66,8 @@
     finally { button.disabled = false; }
   }
   $('open-settings').onclick = openAccount;
-  $('close-account').onclick = () => $('account-dialog').close();
+  $('close-account').onclick = () => {window.mathAccount.onSignedIn=null;$('account-dialog').close();};
+  $('account-dialog').addEventListener('cancel', () => {window.mathAccount.onSignedIn=null;});
   $('close-settings').onclick = () => $('settings-dialog').close();
   $('open-appearance').onclick = () => $('appearance-dialog').showModal();
   $('close-appearance').onclick = () => $('appearance-dialog').close();

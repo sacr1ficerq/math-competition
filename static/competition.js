@@ -615,7 +615,7 @@ async function init() {
     event.preventDefault();
     action(async () => {
       let problem;
-      if (!window.mathAccount.user) { window.mathAccount.open(); return; }
+      if (!window.mathAccount.user) { window.mathAccount.onSignedIn = () => $("create-form").requestSubmit(); window.mathAccount.open(); return; }
       try { problem = createSource === "custom" ? JSON.parse($("problem-json").value) : undefined; } catch { throw new Error("Проверьте формат JSON задачи."); }
       enter(await api("/api/sessions", "POST", { name: window.mathAccount.user.display_name, topic: $("create-topic").value || null, ...(problem ? {problem} : {}) }));
       notice("Дуэль создана. Отправьте приглашение другу.");
@@ -636,7 +636,7 @@ async function init() {
   $("join-form").addEventListener("submit", (event) => {
     event.preventDefault();
     action(async () => {
-      if (!window.mathAccount.user) {window.mathAccount.open(); return;}
+      if (!window.mathAccount.user) {window.mathAccount.onSignedIn = () => $("join-form").requestSubmit(); window.mathAccount.open(); return;}
       const raw = $("join-code").value.trim();
       const inviteCode = (raw.includes("/") ? new URL(raw, location.origin).pathname.split("/").filter(Boolean).pop() : raw).toUpperCase();
       enter(await api(`/api/sessions/${encodeURIComponent(inviteCode)}/join`, "POST", { name: window.mathAccount.user.display_name }));
