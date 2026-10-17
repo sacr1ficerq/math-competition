@@ -23,7 +23,30 @@
 <header class="app-header"><a class="brand" href="/" aria-label="Дуэли — на главную"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m4 5 7 7-7 7M20 5l-7 7 7 7M4 12h5m6 0h5"/></svg><span>Дуэли</span></a><nav class="primary-nav" aria-label="Разделы"><a href="/" aria-current="page">Дуэль</a><a href="/practice">Тренировка</a></nav><div class="header-actions"><span id="connection" class="connection" aria-live="polite"></span><button id="open-appearance" type="button" class="quiet appearance-trigger" aria-label="Оформление"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.4 1.4m11.2 11.2L19 19M5 19l1.4-1.4M17.6 6.4 19 5"/></svg></button><button id="open-settings" type="button" class="quiet account-trigger">Войти</button></div></header>
 <div id="account-shell"></div><p id="notice" class="notice" role="status" aria-live="polite"></p>
 <section id="landing" class="narrow page-enter" hidden>
-  <div class="page-heading home-heading"><svg class="duel-emblem" viewBox="0 0 96 48" fill="none" aria-hidden="true"><path d="M16 8 40 24 16 40M80 8 56 24 80 40M40 24h16"/></svg><h1>Математическая дуэль</h1></div>
+  <div class="page-heading home-heading"><h1>Математическая<br>дуэль</h1></div>
+  <figure class="math-arena" aria-hidden="true"><svg viewBox="0 0 680 560" fill="none">
+    <defs>
+      <linearGradient id="arena-floor" x1="150" y1="180" x2="500" y2="480" gradientUnits="userSpaceOnUse"><stop stop-color="var(--arena-foam)" stop-opacity=".24"/><stop offset="1" stop-color="var(--arena-iris)" stop-opacity=".06"/></linearGradient>
+      <linearGradient id="arena-orbit" x1="100" y1="100" x2="560" y2="420" gradientUnits="userSpaceOnUse"><stop stop-color="var(--arena-foam)"/><stop offset=".5" stop-color="var(--text)"/><stop offset="1" stop-color="var(--arena-iris)"/></linearGradient>
+      <radialGradient id="arena-core"><stop stop-color="#fff"/><stop offset=".3" stop-color="var(--arena-foam)"/><stop offset="1" stop-color="var(--arena-foam)" stop-opacity="0"/></radialGradient>
+      <linearGradient id="arena-stone-iris" x1="0" y1="0" x2="0" y2="1"><stop stop-color="var(--arena-iris)" stop-opacity=".45"/><stop offset="1" stop-color="var(--surface)"/></linearGradient>
+      <linearGradient id="arena-stone" x1="0" y1="0" x2="0" y2="1"><stop stop-color="var(--arena-foam)" stop-opacity=".45"/><stop offset="1" stop-color="var(--surface)"/></linearGradient>
+    </defs>
+    <path d="m92 346 248-144 248 144v28L340 518 92 374Z" fill="var(--surface)" stroke="var(--line)"/>
+    <path d="m92 346 248-144 248 144L340 490Z" fill="url(#arena-floor)" stroke="var(--arena-foam)" stroke-opacity=".25"/>
+    <g stroke="var(--arena-foam)" stroke-opacity=".12"><path d="m154 310 248 144m-186-180 248 144m-186-180 248 144m-124-144L154 382m310-108L216 418m310-108L278 454"/></g>
+    <ellipse cx="340" cy="286" rx="254" ry="102" stroke="url(#arena-orbit)" stroke-opacity=".18"/>
+    <ellipse cx="340" cy="270" rx="228" ry="92" transform="rotate(-38 340 270)" stroke="var(--arena-foam)" stroke-width="1.5"/>
+    <ellipse cx="340" cy="270" rx="228" ry="92" transform="rotate(38 340 270)" stroke="var(--arena-iris)" stroke-width="1.5"/>
+    <path d="M116 270h448M340 78v390" stroke="var(--text)" stroke-opacity=".13" stroke-dasharray="3 8"/>
+    <path d="m186 330 36-21 36 21v43l-36 21-36-21Z" fill="url(#arena-stone)" stroke="var(--arena-foam)" stroke-opacity=".5"/>
+    <path d="m422 330 36-21 36 21v43l-36 21-36-21Z" fill="url(#arena-stone-iris)" stroke="var(--arena-iris)" stroke-opacity=".5"/>
+    <path d="M222 330V214m236 116V214" stroke="url(#arena-orbit)" stroke-opacity=".6"/>
+    <circle cx="222" cy="210" r="28" fill="var(--base)" stroke="var(--arena-foam)"/><path d="m214 200 12 10-12 10" stroke="var(--arena-foam)" stroke-width="2"/>
+    <circle cx="458" cy="210" r="28" fill="var(--base)" stroke="var(--arena-iris)"/><path d="m466 200-12 10 12 10" stroke="var(--arena-iris)" stroke-width="2"/>
+    <circle cx="340" cy="270" r="22" fill="url(#arena-core)" opacity=".65"/><circle cx="340" cy="270" r="4" fill="#fff" stroke="var(--arena-foam)"/>
+    <g fill="var(--muted)" font-family="Georgia,serif" font-size="22" font-style="italic"><text x="112" y="175">x</text><text x="548" y="175">y</text></g>
+  </svg></figure>
   <div class="surface home-panel"><div class="home-mode-tabs" role="group" aria-label="Начать дуэль"><button type="button" data-home-mode="create" aria-pressed="true">Создать дуэль</button><button type="button" data-home-mode="join" aria-pressed="false">Присоединиться</button></div><form id="create-form" class="create-panel"><p class="create-explanation">Создайте комнату и отправьте ссылку другу.<br>Задачу выберете вместе перед стартом.</p><div class="create-footer"><span aria-hidden="true"></span><button class="primary" type="submit">Создать комнату <span aria-hidden="true">→</span></button></div></form>
   <div id="join-disclosure" hidden><form id="join-form" class="join-panel"><label for="join-code">Код или ссылка приглашения</label><input id="join-code" required autocomplete="off" placeholder="Код или ссылка на комнату"><input id="join-name" type="hidden"><div class="create-footer"><span class="muted">Приглашение из комнаты друга</span><button class="primary" type="submit">Присоединиться <span aria-hidden="true">→</span></button></div></form></div></div>
   <section id="recent" class="recent-section" hidden><div class="section-heading"><h2>Продолжить игру</h2><span class="subtle">Ваши комнаты</span></div><div id="recent-list" class="recent-grid"></div></section>
