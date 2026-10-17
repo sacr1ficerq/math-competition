@@ -135,7 +135,7 @@ problem JSON in the rematch lobby; changing the problem resets readiness.
 
 Each round starts with fresh drafts, attachments, submissions, scores, and deadlines.
 Player cards show **cumulative wins**, and the match summary counts completed rounds
-and draws. A draw gives neither player a win. Wins are counted exactly once when a
+and sandwiches (one per round win). Wins are counted exactly once when a
 round finishes, including while the result panel is still open before a rematch.
 Existing completed sessions count as round 1 and can be rematched immediately.
 
@@ -191,7 +191,7 @@ The session creator supplies a JSON document with these fields:
 - Scores can be negative, so a player with 0 points can beat a player with a negative score.
 - Submission timestamps record when the solution is submitted, not when grading completes. Deadline eligibility is based on the submission timestamp.
 - Players can finalize while grading is pending. Submission timestamps determine deadline eligibility; eligible pending submissions are still graded before the result is determined.
-- If final scores are equal, compare each player's finalization timestamp. The earlier finalization wins. Identical finalization timestamps are a draw.
+- If final scores are equal, compare each player's finalization timestamp. The earlier finalization wins. Identical finalization timestamps are resolved by server acceptance order; new rounds always have a winner.
 - Grading uses structured output validated with Pydantic, including a verdict constrained to the 0–10 range.
 - Inference errors and invalid grading responses (such as malformed JSON or out-of-range verdicts) receive up to five retries after the initial attempt. If all retries fail, the submission incurs no penalty.
 
@@ -245,7 +245,7 @@ Start with a single-player page for writing and grading solutions. Two-player se
   scores or penalties.
 - Equal scores are decided by finalization time, even if one or both players have
   no successfully graded submissions. Submission and grading completion times do
-  not affect this tie-break. Identical finalization timestamps are a draw.
+  not affect this tie-break. Identical finalization timestamps are resolved by server acceptance order; new rounds always have a winner.
 - Manual finalization records the server timestamp of the first finalize request.
   Automatic finalization uses the exact deadline, not when a polling request or
   background tick notices it. Repeated finalization does not change the timestamp.

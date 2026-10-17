@@ -164,14 +164,20 @@ class CompetitionTests(unittest.TestCase):
         session = self.end()
         self.assertEqual(session["result"]["winner"], session["players"][0]["id"])
 
-    def test_identical_finalization_times_draw(self):
+    def test_identical_finalization_times_use_acceptance_order(self):
         self.start()
         self.submit(verdict=5, offset=1)
         self.submit("bob-token", verdict=5, offset=2)
         self.store.finalize(self.code, "alice-token", self.now + 20)
         session = self.store.finalize(self.code, "bob-token", self.now + 20)
-        self.assertIsNone(session["result"]["winner"])
-        self.assertEqual(session["result"]["reason"], "Equal scores and identical finalization times: draw.")
+        self.assertEqual(session["result"]["winner"], session["players"][0]["id"])
+        self.assertEqual(session["result"]["reason"], "Equal scores; earlier finalization wins.")
+
+    def test_same_clock_second_player_can_finalize_first(self):
+        self.start()
+        self.store.finalize(self.code, "bob-token", self.now + 20)
+        session = self.store.finalize(self.code, "alice-token", self.now + 20)
+        self.assertEqual(session["result"]["winner"], session["players"][1]["id"])
 
     def test_score_tie_ignores_submission_presence(self):
         self.start()
@@ -394,7 +400,7 @@ class CompetitionTests(unittest.TestCase):
         self.store.complete(self.code, submission["id"], outcome(0))
         self.assertEqual(match_score(self.store.read(self.code, "alice-token"))["completed_rounds"], 1)
 
-    def test_wins_and_draws_are_counted_once_across_three_rounds(self):
+    def test_wins_are_counted_once_across_three_rounds(self):
         self.start()
         self.submit(verdict=9)
         self.submit("bob-token", verdict=8)
@@ -413,8 +419,8 @@ class CompetitionTests(unittest.TestCase):
         for _ in range(3):
             session = self.store.read(self.code, "alice-token")
             tally = match_score(session)
-            self.assertEqual(list(tally["wins"].values()), [1, 1])
-            self.assertEqual(tally["draws"], 1)
+            self.assertEqual(list(tally["wins"].values()), [2, 1])
+            self.assertEqual(tally["draws"], 0)
             self.assertEqual(tally["completed_rounds"], 3)
         session = self.store.rematch(self.code, "alice-token", 3)
         self.assertEqual(match_score(session), tally)

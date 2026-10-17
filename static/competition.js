@@ -97,7 +97,7 @@ function apply(next) {
   $("connection").textContent = "На связи";
   $("session-code").textContent = state.code;
   $("round-label").textContent = `Раунд ${state.round}`;
-  $("match-summary").textContent = `Завершено раундов: ${state.match.completed_rounds} · Ничьих: ${state.match.draws} · Победа в раунде — один бутерброд 🥪`;
+  $("match-summary").textContent = `Завершено раундов: ${state.match.completed_rounds} · Победа в раунде — один бутерброд 🥪`;
   $("phase").textContent = { lobby: "Ожидание", active: "Идёт раунд", grading: "Проверка решений", finished: "Раунд завершён" }[state.phase];
   document.title = `${state.code} · Math Competition`;
   const player = me();

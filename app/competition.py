@@ -48,6 +48,7 @@ def reconcile(session: dict, now: float) -> None:
         return
     for player in session["players"]:
         if not player["finalized"] and player["deadline"] is not None and now >= player["deadline"]:
+            player["finalized_order"] = 1 + sum(p["finalized"] for p in session["players"])
             player["finalized"] = True
             player["finalized_at"] = player["deadline"]
     if not all(p["finalized"] for p in session["players"]):
@@ -57,15 +58,16 @@ def reconcile(session: dict, now: float) -> None:
         return
     first, second = session["players"]
     a, b = score(first)["score"], score(second)["score"]
-    winner = None
-    reason = "Equal scores and identical finalization times: draw."
     if a != b:
         winner = first["id"] if a > b else second["id"]
         reason = "Higher final score."
     else:
-        if first["finalized_at"] != second["finalized_at"]:
-            winner = first["id"] if first["finalized_at"] < second["finalized_at"] else second["id"]
-            reason = "Equal scores; earlier finalization wins."
+        # SQLite serializes finalization; order resolves identical clock readings.
+        # Older states without order use stable player order as a fallback.
+        winner = min(enumerate(session["players"]), key=lambda pair: (
+            pair[1]["finalized_at"], pair[1].get("finalized_order", pair[0] + 1),
+        ))[1]["id"]
+        reason = "Equal scores; earlier finalization wins."
     session["phase"] = "finished"
     session["ended_at"] = now
     session["result"] = {"winner": winner, "reason": reason}
@@ -217,7 +219,7 @@ class Store:
             session["round"] += 1
             session.update(phase="lobby", started_at=None, ended_at=None, result=None)
             for p in session["players"]:
-                p.update(ready=False, finalized=False, finalized_at=None, deadline=None,
+                p.update(ready=False, finalized=False, finalized_at=None, finalized_order=None, deadline=None,
                          draft="", draft_revision=p["draft_revision"] + 1, submissions=[])
             return session
 
@@ -263,6 +265,7 @@ class Store:
                 return session
             if session["phase"] != "active":
                 raise CompetitionError("The competition is not accepting finalization.")
+            player["finalized_order"] = 1 + sum(p["finalized"] for p in session["players"])
             player["finalized"] = True
             player["finalized_at"] = now
             other = next(p for p in session["players"] if p["id"] != player["id"])
