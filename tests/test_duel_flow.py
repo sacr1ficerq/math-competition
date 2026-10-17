@@ -86,6 +86,18 @@ class DuelFlowTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(response.status_code, 200, response.text)
         return response.json()
 
+    async def test_custom_problem_without_reference_starts_and_preserves_criteria_privacy(self):
+        await self.lobby()
+        problem = {"title": "Ручной ввод", "statement": "Докажите равенство.", "criterions": "Обоснуйте каждый переход."}
+        response = await self.alice.put(self.path + "/problem", json={"problem": problem, "round": 1})
+        self.assertEqual(response.status_code, 200, response.text)
+        await self.alice.put(self.path + "/ready", json={"ready": True})
+        response = await self.bob.put(self.path + "/ready", json={"ready": True})
+        self.assertEqual(response.status_code, 200, response.text)
+        self.assertEqual(response.json()["problem"]["statement"], problem["statement"])
+        self.assertNotIn("reference_solution", response.json()["problem"])
+        self.assertNotIn("criterions", response.json()["problem"])
+
     async def test_cross_device_name_saved_key_bank_union_and_no_early_reveal(self):
         await self.alice.post("/api/problems/algebra-0/practice")
         await self.bob.post("/api/problems/algebra-1/practice")

@@ -13,7 +13,7 @@ class Problem(BaseModel):
     title: str = Field(min_length=1, max_length=300)
     statement: str = Field(min_length=1, max_length=30_000)
     criterions: str = Field(min_length=1, max_length=30_000)
-    reference_solution: str = Field(min_length=1, max_length=30_000)
+    reference_solution: str = Field(default="", max_length=30_000)
 
 
 class ServerConfig(BaseModel):

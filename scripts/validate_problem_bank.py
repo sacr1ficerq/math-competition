@@ -25,6 +25,8 @@ def main():
         try:
             raw = json.loads(path.read_text(encoding='utf-8'))
             content = Problem.model_validate({key: raw[key] for key in Problem.model_fields})
+            if not content.reference_solution.strip():
+                raise ValueError('bank problem requires a reference solution')
             identifier = raw.get('id', path.stem)
             if not isinstance(identifier, str) or not identifier:
                 raise ValueError('missing stable id')
