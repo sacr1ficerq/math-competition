@@ -25,9 +25,17 @@ def identity(token: str) -> str:
     return hashlib.sha256(token.encode()).hexdigest()
 
 
+def effective_verdict(submission: dict):
+    return submission.get("effective_verdict", submission["grade"]["verdict"] if submission.get("grade") else None)
+
+
+def pending_appeals(session: dict) -> bool:
+    return any(a["status"] == "pending" for p in session["players"] for s in p["submissions"] for a in s.get("appeals", []))
+
+
 def score(player: dict) -> dict:
     counted = [s for s in player["submissions"] if s["status"] == "graded"]
-    best = max((Decimal(str(s["grade"]["verdict"])) for s in counted), default=Decimal(0))
+    best = max((Decimal(str(effective_verdict(s))) for s in counted), default=Decimal(0))
     penalty = max(0, len(counted) - 1)
     return {"best": float(best), "counted": len(counted), "penalty": penalty, "score": float(best - penalty)}
 
@@ -43,8 +51,10 @@ def match_score(session: dict) -> dict:
     }
 
 
-def reconcile(session: dict, now: float) -> None:
-    if session["phase"] not in ("active", "grading"):
+def reconcile(session: dict, now: float, recompute_result: bool = False) -> None:
+    if session["phase"] == "finished" and not (recompute_result or session.get("appeal_result_dirty")):
+        return
+    if session["phase"] not in ("active", "grading", "finished"):
         return
     for player in session["players"]:
         if not player["finalized"] and player["deadline"] is not None and now >= player["deadline"]:
@@ -53,7 +63,10 @@ def reconcile(session: dict, now: float) -> None:
             player["finalized_at"] = player["deadline"]
     if not all(p["finalized"] for p in session["players"]):
         return
-    session["phase"] = "grading"
+    if session["phase"] != "finished":
+        session["phase"] = "grading"
+    if pending_appeals(session):
+        return
     if any(s["status"] == "pending" for p in session["players"] for s in p["submissions"]):
         return
     first, second = session["players"]
@@ -69,8 +82,9 @@ def reconcile(session: dict, now: float) -> None:
         ))[1]["id"]
         reason = "Equal scores; earlier finalization wins."
     session["phase"] = "finished"
-    session["ended_at"] = now
+    session["ended_at"] = session.get("ended_at") or now
     session["result"] = {"winner": winner, "reason": reason}
+    session.pop("appeal_result_dirty", None)
 
 
 class Store:
@@ -210,8 +224,8 @@ class Store:
             if round == session["round"] - 1:
                 return session
             self.check_round(session, round)
-            if session["phase"] != "finished":
-                raise CompetitionError("Wait until the round and all pending grading have finished.")
+            if session["phase"] != "finished" or pending_appeals(session):
+                raise CompetitionError("Wait until the round and all pending grading and appeals have finished.")
             session["rounds"].append(deepcopy({
                 key: session[key] for key in
                 ("round", "model", "problem", "players", "started_at", "ended_at", "result")
@@ -283,6 +297,53 @@ class Store:
             submission.update({key: result.get(key) for key in ("status", "attempts", "grade", "error")})
             reconcile(session, time.time())
 
+    def appeal(self, code: str, token: str, submission_id: str, reason: str, request_id: str, round: int) -> tuple[dict, dict, dict, bool]:
+        with self.edit(code) as session:
+            player = self.player(session, token)
+            self.check_round(session, round)
+            submission = next((s for s in player["submissions"] if s["id"] == submission_id), None)
+            if submission is None:
+                raise CompetitionError("Your submission was not found in this round.", 404)
+            attempts = submission.setdefault("appeals", [])
+            duplicate = next((a for a in attempts if a["request_id"] == request_id), None)
+            if duplicate:
+                if duplicate["reason"] != reason:
+                    raise CompetitionError("This appeal request ID was already used for another argument.")
+                return session, submission, duplicate, False
+            if submission["status"] != "graded":
+                raise CompetitionError("Wait for a successful verdict before appealing.")
+            if any(a["status"] in ("pending", "graded") for a in attempts):
+                raise CompetitionError("Each submission allows only one decided appeal.")
+            appeal = {
+                "id": str(uuid4()), "request_id": request_id, "reason": reason,
+                "status": "pending", "old_verdict": effective_verdict(submission),
+                "proposed_verdict": None, "effective_verdict": None,
+                "grade": None, "error": None, "attempts": 0,
+            }
+            attempts.append(appeal)
+            return session, submission, appeal, True
+
+    def complete_appeal(self, code: str, submission_id: str, appeal_id: str, result: dict) -> None:
+        with self.edit(code) as session:
+            submission = next((s for p in session["players"] for s in p["submissions"] if s["id"] == submission_id), None)
+            if submission is None:
+                return
+            appeal = next((a for a in submission.get("appeals", []) if a["id"] == appeal_id), None)
+            if appeal is None or appeal["status"] != "pending":
+                return
+            appeal.update(status=result["status"], attempts=result.get("attempts", 0), error=result.get("error"))
+            if result["status"] == "graded" and result.get("grade"):
+                appeal["grade"] = result["grade"]
+                proposed, old = result["grade"]["verdict"], appeal["old_verdict"]
+                effective = proposed if proposed > old else float(Decimal(str(old)) - 1)
+                appeal.update(proposed_verdict=proposed, effective_verdict=effective)
+                submission["effective_verdict"] = effective
+                session["appeal_result_dirty"] = True
+            else:
+                appeal["status"] = "failed"
+                appeal["error"] = "Appeal review failed. Your grade is unchanged; you can retry."
+            reconcile(session, time.time(), recompute_result=appeal["status"] == "graded")
+
     def chat(self, code: str, token: str, text: str) -> dict:
         with self.edit(code) as session:
             player = self.player(session, token)
@@ -306,7 +367,7 @@ class Store:
 
     def tick(self, recover: bool = False) -> None:
         with self.connection() as db:
-            codes = [row[0] for row in db.execute("SELECT code FROM sessions WHERE json_extract(state, '$.phase') IN ('active', 'grading')")]
+            codes = [row[0] for row in db.execute("SELECT code FROM sessions" if recover else "SELECT code FROM sessions WHERE json_extract(state, '$.phase') IN ('active', 'grading')")]
         for code in codes:
             with self.edit(code) as session:
                 if recover:
@@ -314,6 +375,9 @@ class Store:
                         for s in p["submissions"]:
                             if s["status"] == "pending":
                                 s.update(status="failed", error="Grading was interrupted by a server restart. No submission penalty was applied.")
+                            for appeal in s.get("appeals", []):
+                                if appeal["status"] == "pending":
+                                    appeal.update(status="failed", error="Appeal review was interrupted. Your grade is unchanged; you can retry.")
                 reconcile(session, time.time())
 
 
@@ -327,7 +391,16 @@ def snapshot(session: dict, token: str) -> dict:
         history = []
         for s in player["submissions"]:
             item = {k: s[k] for k in ("id", "submitted_at", "status", "attempts", "error")}
-            item["verdict"] = s["grade"]["verdict"] if s["grade"] else None
+            item["verdict"] = effective_verdict(s)
+            item["original_verdict"] = s["grade"]["verdict"] if s["grade"] else None
+            attempts = s.get("appeals", [])
+            item["appeal_eligible"] = bool(own and not session.get("_archived") and s["status"] == "graded" and not any(a["status"] in ("pending", "graded") for a in attempts))
+            if own or finished:
+                item["appeal"] = deepcopy(attempts[-1]) if attempts else None
+                if item["appeal"] and not finished:
+                    item["appeal"]["grade"] = None
+            else:
+                item["appeal"] = {"status": attempts[-1]["status"]} if attempts else None
             if own or finished:
                 item["solution"] = s["solution"]
                 item["images"] = [
@@ -353,6 +426,7 @@ def snapshot(session: dict, token: str) -> dict:
         "problem": problem, "chat": session["chat"], "result": session["result"],
         "started_at": session["started_at"], "ended_at": session["ended_at"],
         "server_time": time.time(),
+        "appeals_pending": pending_appeals(session),
         "version": session["version"],
         "round": session.get("round", 1), "match": tally,
         "previous_rounds": [

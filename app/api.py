@@ -12,7 +12,9 @@ from pydantic import BaseModel, Field, StringConstraints
 
 from app.competition import Store, snapshot
 from app.config import ROOT, Problem, load_settings
-from app.grading import GradeRequest, grade_solution
+from app.grading import AppealGradeRequest, GradeRequest, grade_appeal, grade_solution
+from app.account_api import current_account, has_api_key, init_accounts, resolve_identity, saved_api_key
+from app.problem_bank import ProblemBank
 from app.solutions import SolutionContent
 
 
@@ -31,7 +33,7 @@ def store(request: Request) -> Store:
 
 
 def token(request: Request) -> str:
-    value = request.cookies.get(IDENTITY_COOKIE)
+    value = resolve_identity(request) if hasattr(request.app.state, "accounts") else request.cookies.get(IDENTITY_COOKIE)
     if not value:
         raise HTTPException(401, "Join or create a session first.")
     return value
@@ -41,9 +43,15 @@ def set_cookie(response: Response, request: Request, name: str, value: str):
     response.set_cookie(name, value, max_age=MONTH, httponly=True, samesite="strict", secure=request.url.scheme == "https")
 
 
+def provider_key(request: Request) -> str | None:
+    if hasattr(request.app.state, "accounts") and current_account(request):
+        return saved_api_key(request)
+    return request.cookies.get(KEY_COOKIE)
+
+
 def view(request: Request, session: dict) -> dict:
     result = snapshot(session, token(request))
-    result["has_api_key"] = bool(request.cookies.get(KEY_COOKIE))
+    result["has_api_key"] = bool(provider_key(request))
     return result
 
 
@@ -83,6 +91,11 @@ class SubmitRequest(SolutionContent):
     request_id: str = Field(min_length=1, max_length=100)
 
 
+class AppealRequest(RoundRequest):
+    request_id: str = Field(min_length=1, max_length=100)
+    reason: Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=10_000)]
+
+
 class ChatRequest(BaseModel):
     text: Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=2000)]
 
@@ -93,27 +106,27 @@ class KeyRequest(BaseModel):
 
 @router.get("/sessions")
 async def sessions(request: Request):
-    value = request.cookies.get(IDENTITY_COOKIE)
+    value = resolve_identity(request) if hasattr(request.app.state, "accounts") else request.cookies.get(IDENTITY_COOKIE)
     return {"sessions": store(request).recent(value) if value else [], "model": settings.grading.model}
 
 
 @router.post("/sessions", status_code=201)
 async def create(body: CreateSession, request: Request, response: Response):
-    value = request.cookies.get(IDENTITY_COOKIE) or secrets.token_urlsafe(32)
+    value = (resolve_identity(request) if hasattr(request.app.state, "accounts") else request.cookies.get(IDENTITY_COOKIE)) or secrets.token_urlsafe(32)
     session = store(request).create(value, body.name, body.problem, body.model or settings.grading.model)
     set_cookie(response, request, IDENTITY_COOKIE, value)
     result = snapshot(session, value)
-    result["has_api_key"] = bool(request.cookies.get(KEY_COOKIE))
+    result["has_api_key"] = bool(provider_key(request))
     return result
 
 
 @router.post("/sessions/{code}/join")
 async def join(code: str, body: JoinSession, request: Request, response: Response):
-    value = request.cookies.get(IDENTITY_COOKIE) or secrets.token_urlsafe(32)
+    value = (resolve_identity(request) if hasattr(request.app.state, "accounts") else request.cookies.get(IDENTITY_COOKIE)) or secrets.token_urlsafe(32)
     session = store(request).join(code, value, body.name)
     set_cookie(response, request, IDENTITY_COOKIE, value)
     result = snapshot(session, value)
-    result["has_api_key"] = bool(request.cookies.get(KEY_COOKIE))
+    result["has_api_key"] = bool(provider_key(request))
     return result
 
 
@@ -128,7 +141,7 @@ async def get_round(code: str, round_number: int, request: Request):
     archived = next((r for r in session["rounds"] if r["round"] == round_number), None)
     if archived is None:
         raise HTTPException(404, "Completed round not found.")
-    return view(request, {**session, **archived, "phase": "finished", "rounds": []})
+    return view(request, {**session, **archived, "phase": "finished", "rounds": [], "_archived": True})
 
 
 @router.post("/sessions/{code}/rematch")
@@ -146,12 +159,20 @@ async def set_problem(code: str, body: ProblemRequest, request: Request):
 @router.put("/key")
 async def save_key(body: KeyRequest, request: Request, response: Response):
     token(request)
-    set_cookie(response, request, KEY_COOKIE, body.api_key)
+    account = current_account(request) if hasattr(request.app.state, "accounts") else None
+    if account:
+        request.app.state.accounts.set_key(account["id"], body.api_key)
+        response.delete_cookie(KEY_COOKIE)
+    else:
+        set_cookie(response, request, KEY_COOKIE, body.api_key)
     return {"has_api_key": True}
 
 
 @router.delete("/key")
-async def delete_key(response: Response):
+async def delete_key(request: Request, response: Response):
+    account = current_account(request) if hasattr(request.app.state, "accounts") else None
+    if account:
+        request.app.state.accounts.set_key(account["id"], None)
     response.delete_cookie(KEY_COOKIE)
     return {"has_api_key": False}
 
@@ -196,7 +217,7 @@ async def run_grade(app, code: str, submission: dict, session: dict, api_key: st
 @router.post("/sessions/{code}/submissions", status_code=202)
 async def submit(code: str, body: SubmitRequest, request: Request):
     value = token(request)
-    api_key = request.cookies.get(KEY_COOKIE)
+    api_key = provider_key(request)
     if not api_key:
         raise HTTPException(400, "Save your OpenRouter API key before submitting.")
     session, submission, created = store(request).submit(
@@ -207,6 +228,38 @@ async def submit(code: str, body: SubmitRequest, request: Request):
     if created:
         logger.info("Submission accepted: session=%s submission=%s submitted_at=%s", code, submission["id"], datetime.fromtimestamp(submission["submitted_at"], timezone.utc).isoformat())
         task = asyncio.create_task(run_grade(request.app, code, submission, session, api_key))
+        request.app.state.grading_tasks.add(task)
+        task.add_done_callback(request.app.state.grading_tasks.discard)
+    return view(request, session)
+
+
+async def run_appeal(app, code: str, submission: dict, appeal: dict, session: dict, api_key: str):
+    try:
+        result = await grade_appeal(
+            AppealGradeRequest(api_key=api_key, solution=submission["solution"], images=submission.get("images", []),
+                               previous_verdict=submission["grade"], appeal_reason=appeal["reason"]),
+            Problem.model_validate(session["problem"]),
+            settings.grading.model_copy(update={"model": session["model"]}),
+        )
+        output = result.model_dump(mode="json")
+    except asyncio.CancelledError:
+        app.state.store.complete_appeal(code, submission["id"], appeal["id"], {"status": "failed"})
+        raise
+    except Exception as error:
+        logger.error("Appeal review failed: session=%s submission=%s error_type=%s", code, submission["id"], type(error).__name__)
+        output = {"status": "failed"}
+    app.state.store.complete_appeal(code, submission["id"], appeal["id"], output)
+
+
+@router.post("/sessions/{code}/submissions/{submission_id}/appeal", status_code=202)
+async def appeal_submission(code: str, submission_id: str, body: AppealRequest, request: Request):
+    value = token(request)
+    api_key = provider_key(request)
+    if not api_key:
+        raise HTTPException(400, "Save your OpenRouter API key before appealing.")
+    session, submission, appeal, created = store(request).appeal(code, value, submission_id, body.reason, body.request_id, body.round)
+    if created:
+        task = asyncio.create_task(run_appeal(request.app, code, submission, appeal, session, api_key))
         request.app.state.grading_tasks.add(task)
         task.add_done_callback(request.app.state.grading_tasks.discard)
     return view(request, session)
@@ -251,6 +304,8 @@ async def deadline_loop(app):
 async def lifespan(app):
     path = Path(settings.database)
     app.state.store = Store(path if path.is_absolute() else ROOT / path)
+    init_accounts(app)
+    app.state.problem_bank = ProblemBank(app.state.store.path)
     app.state.store.tick(recover=True)
     app.state.grading_tasks = set()
     ticker = asyncio.create_task(deadline_loop(app))
