@@ -1,9 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Math Competition</title>
+  <title>Математические дуэли</title>
+  <script src="/static/theme.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css">
   <link rel="stylesheet" href="/static/styles.css">
   <link rel="stylesheet" href="/static/competition.css">
@@ -12,62 +13,64 @@
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
   <script defer src="/static/rendering.js"></script>
   <script defer src="/static/attachments.js"></script>
+  <script defer src="/static/draft-storage.js"></script>
+  <script defer src="/static/account.js"></script>
   <script defer src="/static/competition.js"></script>
 </head>
 <body>
   <main>
-    <header><a class="brand" href="/">Math Competition</a><nav><a href="/practice">Practice</a><span id="connection" class="badge">Connecting…</span></nav></header>
+    <header><a class="brand" href="/" aria-label="На главную"><span class="brand-mark">∑</span> Дуэли</a><nav><a href="/practice">Тренировка</a><button type="button" id="open-settings" class="quiet">Настройки</button><span id="connection" class="connection">Подключение…</span></nav></header>
+    <div id="account-shell"></div>
     <p id="notice" role="status" aria-live="polite"></p>
 
     <div id="landing" hidden>
-      <div class="landing-intro"><h1>A problem. Two proofs.</h1><p class="muted">Invite a friend, write your solution, and let the same model grade you both.</p></div>
+      <div class="landing-intro"><p class="eyebrow">Математика вдвоём</p><h1>Новая задача.<br>Два решения.</h1><p class="muted">Выберите тему, пригласите друга и сравните ваши доказательства.</p></div>
       <div class="landing-grid">
-        <form id="create-form" class="panel">
-          <h2>Create a competition</h2>
-          <label for="create-name">Your name</label><input id="create-name" required maxlength="40" autocomplete="nickname">
-          <div class="field-heading"><label for="problem-json">Problem JSON</label><label class="file-button">Load file<input id="create-file" type="file" accept=".json,application/json"></label></div>
-          <textarea id="problem-json" required placeholder='{"title": "…", "statement": "…", "criterions": "…", "reference_solution": "…"}' spellcheck="false"></textarea>
-          <small>Include title, statement, criterions, and reference_solution. The statement stays hidden in the lobby.</small>
-          <label for="create-model">Grading model</label><input id="create-model" required maxlength="200" placeholder="z-ai/glm-5.3-flash">
-          <button class="primary" type="submit">Create session ↗</button>
+        <form id="create-form" class="panel create-panel">
+          <h2>Создать дуэль</h2><p class="muted">Задача будет новой для вас обоих.</p>
+          <label for="create-topic">Тема</label><select id="create-topic"><option value="">Любая тема</option></select>
+          <input id="create-name" type="hidden">
+          <details class="advanced"><summary>Дополнительно</summary><label for="create-model">Модель проверки</label><input id="create-model" maxlength="200"><label for="problem-json">Своя задача · JSON</label><textarea id="problem-json" placeholder='{"title":"…","statement":"…","criterions":"…","reference_solution":"…"}'></textarea><label class="file-button">Загрузить JSON<input id="create-file" type="file" accept=".json,application/json"></label><small>Автор знает эталон. Для обычной дуэли оставьте это поле пустым.</small></details>
+          <button class="primary" type="submit">Создать дуэль <span aria-hidden="true">→</span></button>
         </form>
         <div>
-          <form id="join-form" class="panel"><h2>Join a competition</h2><label for="join-code">Invite code or link</label><input id="join-code" required autocomplete="off"><label for="join-name">Your name</label><input id="join-name" required maxlength="40" autocomplete="nickname"><button class="primary" type="submit">Join session ↗</button></form>
-          <div id="recent" class="panel" hidden><h2>Your sessions</h2><div id="recent-list"></div><small>Your identity is remembered in this browser. Use another browser or private window for the second player.</small></div>
+          <form id="join-form" class="panel"><h2>Есть приглашение?</h2><label for="join-code">Код или ссылка</label><input id="join-code" required autocomplete="off" placeholder="Вставьте приглашение"><input id="join-name" type="hidden"><button type="submit">Присоединиться →</button></form>
+          <div id="recent" class="panel" hidden><h2>Ваши дуэли</h2><div id="recent-list"></div></div>
+          <a class="practice-link" href="/practice">Решать самостоятельно <span>Банк задач и проверка решений →</span></a>
         </div>
       </div>
     </div>
 
     <div id="session" hidden>
-      <div class="session-heading"><div><span id="round-label" class="badge">Round 1</span><span id="phase" class="badge"></span><span id="session-code"></span></div><button id="copy-invite" type="button">Copy invite link</button></div>
+      <div class="session-heading"><div><span id="round-label" class="badge">Round 1</span><span id="phase" class="badge"></span><span id="session-code"></span></div><button id="copy-invite" type="button">Скопировать приглашение</button></div>
       <p id="match-summary" class="muted"></p>
       <div id="player-cards" class="player-cards"></div>
-      <div class="key-settings">
-        <form id="key-form"><label for="session-key">OpenRouter API key</label><div class="key-input"><input id="session-key" type="password" maxlength="512" placeholder="sk-or-…" autocomplete="off"><button id="save-key" type="submit">Save key</button><button id="remove-key" type="button" hidden>Forget</button></div><small id="key-state">Saved in an HttpOnly cookie, never in the session database.</small></form>
-        <div><span id="shared-model" class="muted"></span><form id="model-form" hidden><label for="lobby-model">Shared grading model</label><div class="key-input"><input id="lobby-model" required maxlength="200"><button type="submit">Update</button></div><small>Changing the model resets both players’ readiness.</small></form></div>
-      </div>
+      <details class="key-settings"><summary>Настройки проверки</summary><div class="key-settings-inner">
+        <form id="key-form"><label for="session-key">Ключ OpenRouter</label><div class="key-input"><input id="session-key" type="password" maxlength="512" placeholder="sk-or-…" autocomplete="off"><button id="save-key" type="submit">Сохранить</button><button id="remove-key" type="button" hidden>Удалить</button></div><small id="key-state">Ключ хранится зашифрованным в аккаунте.</small></form>
+        <div><form id="topic-form" hidden><label for="lobby-topic">Тема следующей задачи</label><div class="key-input"><select id="lobby-topic"><option value="">Любая тема</option></select><button type="submit">Выбрать</button></div></form><span id="shared-model" class="muted"></span><form id="model-form" hidden><label for="lobby-model">Общая модель проверки</label><div class="key-input"><input id="lobby-model" required maxlength="200"><button type="submit">Обновить</button></div><small>После смены модели оба подтверждают готовность заново.</small></form></div>
+      </div></details>
 
       <div class="competition-grid">
         <div>
-          <section id="lobby" class="panel" hidden><h1>Ready when you are.</h1><p class="muted">The problem is revealed only when both players are ready. Make sure you have your API key.</p><details id="next-problem" hidden><summary>Load a new problem for this rematch</summary><form id="next-problem-form"><div class="field-heading"><label for="next-problem-json">Next problem JSON</label><label class="file-button">Load file<input id="next-problem-file" type="file" accept=".json,application/json"></label></div><textarea id="next-problem-json" required spellcheck="false" placeholder='{"title": "…", "statement": "…", "criterions": "…", "reference_solution": "…"}'></textarea><button type="submit">Update problem</button><small>Keep the existing problem or load a new one. Updating resets both players’ readiness.</small></form></details><button id="ready" class="primary" type="button">Ready</button><p id="lobby-hint" class="muted"></p></section>
+          <section id="lobby" class="panel" hidden><h1>Все готовы?</h1><p class="muted">Условие откроется одновременно, когда вы оба будете готовы.</p><details id="next-problem" hidden><summary>Своя задача для следующего раунда</summary><form id="next-problem-form"><div class="field-heading"><label for="next-problem-json">Задача · JSON</label><label class="file-button">Загрузить файл<input id="next-problem-file" type="file" accept=".json,application/json"></label></div><textarea id="next-problem-json" required spellcheck="false" placeholder='{"title": "…", "statement": "…", "criterions": "…", "reference_solution": "…"}'></textarea><button type="submit">Обновить задачу</button><small>Загрузка своей задачи сбросит готовность игроков.</small></form></details><button id="ready" class="primary" type="button">Готов</button><p id="lobby-hint" class="muted"></p></section>
           <div id="arena" hidden>
             <section class="problem-card"><h1 id="problem-title"></h1><div id="problem-statement" class="rendered"></div></section>
-            <div id="result" class="panel" hidden><h2 id="result-title"></h2><p id="result-reason"></p><button id="rematch" class="primary" type="button">Rematch ↗</button><small>Start the next round here with the same players. Wins and previous rounds are kept.</small></div>
+            <div id="result" class="panel" hidden><h2 id="result-title"></h2><p id="result-reason"></p><button id="rematch" class="primary" type="button">Следующая задача →</button><small>Та же комната, соперник и счёт серии. Новая задача для обоих.</small></div>
             <div id="deadline" role="timer" class="deadline" hidden></div>
-            <section class="workspace" aria-label="Solution editor and preview"><div class="editor-pane"><div class="pane-heading"><label for="solution">Your solution</label><span id="draft-status">Saved</span></div><textarea id="solution" maxlength="50000" spellcheck="false" placeholder="Write your proof with Markdown and $LaTeX$…"></textarea><div class="editor-tip">Ctrl / ⌘ + Enter to submit · Drafts save automatically</div></div><div class="preview-pane"><div class="pane-heading"><span>Preview</span><span>Live</span></div><div id="preview" class="rendered preview"></div></div></section>
-            <div id="draft-conflict" class="panel" hidden><p>Your draft changed in another tab. Choose which version to keep.</p><button id="keep-local" type="button">Keep this draft</button> <button id="use-saved" type="button">Use saved draft</button></div>
-            <section class="attachments" aria-label="Solution screenshots"><label class="file-button">Add screenshots<input id="solution-images" type="file" accept="image/png,image/jpeg,image/webp" multiple aria-label="Add solution screenshots"></label><small>Or paste a screenshot into the editor. Up to 4 images, 3 MiB and 20 megapixels each. Text is optional with images. Use a model that supports image input.</small><div id="image-attachments"></div></section>
-            <div class="competition-actions"><button id="submit" class="primary" type="button">Submit solution ↗</button><button id="finalize" type="button">Finalize</button><span id="submission-hint" class="muted"></span></div>
-            <small>First submission is free; each additional successfully graded submission costs 1 point. Submit sends your solution for grading; Finalize locks submissions and gives your opponent five minutes. Pending grading continues. Equal scores are decided by who finalized earlier.</small>
-            <details id="revealed" class="submission" hidden><summary>Grading criteria &amp; reference solution</summary><div class="feedback"><h3>Criteria</h3><div id="criteria" class="rendered"></div><h3>Reference solution</h3><div id="reference" class="rendered"></div></div></details>
+            <div class="workspace-tabs" role="group" aria-label="Режим редактора"><button type="button" data-workspace="editor" aria-pressed="true">Решение</button><button type="button" data-workspace="preview" aria-pressed="false">Предпросмотр</button></div><section class="workspace" aria-label="Solution editor and preview"><div class="editor-pane"><div class="pane-heading"><label for="solution">Ваше решение</label><span id="draft-status">Saved</span></div><textarea id="solution" maxlength="50000" spellcheck="false" placeholder="Запишите доказательство. Формулы: $a^2$ или $$…$$"></textarea><div class="editor-tip">Ctrl / ⌘ + Enter — проверить · Черновик сохраняется</div></div><div class="preview-pane"><div class="pane-heading"><span>Предпросмотр</span><span>В реальном времени</span></div><div id="preview" class="rendered preview"></div></div></section>
+            <div id="draft-conflict" class="panel" hidden><p>Черновик изменён в другой вкладке. Какую версию оставить?</p><button id="keep-local" type="button">Оставить этот</button> <button id="use-saved" type="button">Взять сохранённый</button></div>
+            <section class="attachments" aria-label="Solution screenshots"><label class="file-button">Добавить изображения<input id="solution-images" type="file" accept="image/png,image/jpeg,image/webp" multiple aria-label="Add solution screenshots"></label><small>Можно вставить скриншот из буфера. До 4 изображений, каждое до 3 МиБ. Модель должна поддерживать изображения.</small><div id="image-attachments"></div></section>
+            <div class="competition-actions"><button id="submit" class="primary" type="button">Отправить на проверку</button><button id="finalize" type="button">Завершить</button><button id="surrender" class="quiet" type="button">Сдаться</button><span id="submission-hint" class="muted"></span></div>
+            <small>Первая проверка без штрафа, каждая следующая успешная — минус 1 балл. После завершения у соперника остаётся пять минут. При равных баллах побеждает завершивший раньше.</small>
+            <details id="revealed" class="submission" hidden><summary>Критерии и эталонное решение</summary><div class="feedback"><h3>Критерии</h3><div id="criteria" class="rendered"></div><h3>Эталонное решение</h3><div id="reference" class="rendered"></div></div></details>
           </div>
-          <section id="histories" class="history-section" hidden><div class="history-heading"><h2>Submissions</h2><span id="feedback-hint" class="muted">Feedback appears after both players finish</span></div><div id="history"></div></section>
-          <section id="round-history" class="history-section" hidden><div class="history-heading"><h2>Previous rounds</h2></div><div id="round-history-list"></div></section>
+          <section id="histories" class="history-section" hidden><div class="history-heading"><h2>Попытки</h2><span id="feedback-hint" class="muted">Feedback appears after both players finish</span></div><div id="history"></div></section>
+          <section id="round-history" class="history-section" hidden><div class="history-heading"><h2>Предыдущие раунды</h2></div><div id="round-history-list"></div></section>
         </div>
-        <aside class="chat-panel panel"><h2>Chat</h2><div id="chat-messages" role="log" aria-label="Shared chat" aria-live="polite"></div><form id="chat-form"><label class="sr-only" for="chat-input">Message</label><textarea id="chat-input" maxlength="2000" rows="2" placeholder="Say something…" required></textarea><button type="submit">Send</button><small>Send /solution after both players finalize to show the reference solution, even while grading runs.</small></form></aside>
+        <aside class="chat-panel panel"><h2>Чат</h2><div id="chat-messages" role="log" aria-label="Shared chat" aria-live="polite"></div><form id="chat-form"><label class="sr-only" for="chat-input">Message</label><textarea id="chat-input" maxlength="2000" rows="2" placeholder="Сообщение сопернику…" required></textarea><button type="submit">Отправить</button><small>Команда /solution откроет эталон, когда оба завершат решение.</small></form></aside>
       </div>
     </div>
-    <footer>Verdicts are shared during play. Opponent solutions, screenshots, and detailed feedback are revealed when the round ends.</footer>
+    <footer>Оценки видны во время игры. Решения соперника и подробный разбор — после раунда.</footer>
   </main>
 </body>
 </html>

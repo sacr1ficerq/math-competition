@@ -1,9 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Math Competition · Practice</title>
+  <title>Тренировка · Дуэли</title>
+  <script src="/static/theme.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css">
   <link rel="stylesheet" href="/static/styles.css">
   <script defer src="https://cdn.jsdelivr.net/npm/marked@15.0.12/marked.min.js"></script>
@@ -11,20 +12,20 @@
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
   <script defer src="/static/rendering.js"></script>
   <script defer src="/static/attachments.js"></script>
+  <script defer src="/static/draft-storage.js"></script>
+  <script defer src="/static/account.js"></script>
   <script defer src="/static/app.js"></script>
 </head>
 <body>
   <main>
-    <header>
-      <a class="brand" href="/">Math Competition <span> / practice</span></a>
-      <span class="badge">Single-player PoC</span>
-    </header>
-
+    <header><a class="brand" href="/"><span class="brand-mark">∑</span> Дуэли</a><nav><a href="/">Дуэль</a><button id="open-settings" type="button" class="quiet">Настройки</button></nav></header><div id="account-shell"></div>
+    <section id="problem-bank"><div class="bank-heading"><div><p class="eyebrow">Решайте в своём темпе</p><h1>Банк задач</h1><p class="muted">Выберите тему и задачу. Просмотренные условия учитываются при подборе дуэлей.</p></div><label class="file-button">Своя задача<input id="problem-file-bank" type="file" accept=".json,application/json"></label></div><label class="sr-only" for="bank-topic">Тема</label><select id="bank-topic"><option value="">Все темы</option></select><div id="bank-list" class="bank-list" aria-live="polite"></div><p id="bank-error" class="error" role="alert"></p></section>
+    <div id="practice-work" hidden><a href="/practice" class="back-link">← Банк задач</a>
     <section class="problem-card" aria-labelledby="problem-title">
       <div class="problem-top">
-        <h1 id="problem-title">Loading problem…</h1>
+        <h1 id="problem-title">Загрузка задачи…</h1>
         <label class="file-button" title="Upload a problem JSON with title, statement, criterions, and reference_solution">
-          Load problem JSON
+          Своя задача · JSON
           <input id="problem-file" type="file" accept=".json,application/json">
         </label>
       </div>
@@ -32,36 +33,33 @@
       <p id="problem-error" class="error" role="alert" hidden></p>
     </section>
 
-    <section class="workspace" aria-label="Solution editor and preview">
+    <div class="workspace-tabs" role="group" aria-label="Режим редактора"><button type="button" data-workspace="editor" aria-pressed="true">Решение</button><button type="button" data-workspace="preview" aria-pressed="false">Предпросмотр</button></div><section class="workspace" aria-label="Solution editor and preview">
       <div class="editor-pane">
-        <div class="pane-heading"><label for="solution">Your solution</label><span>Markdown + LaTeX</span></div>
-        <textarea id="solution" placeholder="Write your proof here…&#10;&#10;Use $a^2$ for inline math and $$…$$ for display math." spellcheck="false" maxlength="50000"></textarea>
+        <div class="pane-heading"><label for="solution">Ваше решение</label><span>Markdown + LaTeX</span></div>
+        <textarea id="solution" placeholder="Запишите доказательство…&#10;&#10;Формулы: $a^2$ в строке и $$…$$ отдельным блоком." spellcheck="false" maxlength="50000"></textarea>
         <div class="editor-tip">Inline math: <code>$…$</code> · Display math: <code>$$…$$</code> · <kbd>Ctrl / ⌘ + Enter</kbd> to submit</div>
       </div>
       <div class="preview-pane">
-        <div class="pane-heading"><span>Preview</span><span>Live</span></div>
-        <div id="preview" class="rendered preview"><p class="muted">Your proof takes shape here.</p></div>
+        <div class="pane-heading"><span>Предпросмотр</span><span>Live</span></div>
+        <div id="preview" class="rendered preview"><p class="muted">Здесь появится ваше решение.</p></div>
       </div>
     </section>
 
-    <section class="attachments" aria-label="Solution screenshots"><label class="file-button">Add screenshots<input id="solution-images" type="file" accept="image/png,image/jpeg,image/webp" multiple aria-label="Add solution screenshots"></label><small>Or paste a screenshot into the editor. Up to 4 images, 3 MiB and 20 megapixels each. Text is optional with images. Use a model that supports image input.</small><div id="image-attachments"></div></section>
+    <section class="attachments" aria-label="Solution screenshots"><label class="file-button">Добавить изображения<input id="solution-images" type="file" accept="image/png,image/jpeg,image/webp" multiple aria-label="Add solution screenshots"></label><small>Можно вставить изображение из буфера. До 4 изображений, каждое до 3 МиБ.</small><div id="image-attachments"></div></section>
 
     <form id="submit-form" class="submit-bar">
-      <div class="key-field">
-        <label for="api-key">OpenRouter API key</label>
-        <div class="key-input"><input id="api-key" type="password" placeholder="sk-or-…" autocomplete="off" required maxlength="512"><button id="toggle-key" type="button" aria-label="Show API key" aria-pressed="false">Show</button></div>
-        <small>Used only for this request. Never saved in cookies or browser storage.</small>
-      </div>
-      <div class="submit-action"><span id="model" class="muted"></span><button id="submit" type="submit" disabled>Submit solution <span aria-hidden="true">↗</span></button></div>
+      <div class="key-field"><button id="practice-key-settings" type="button" class="quiet">Настроить OpenRouter</button><small id="practice-key-state"></small></div>
+      <div class="submit-action"><span id="model" class="muted"></span><button id="submit" type="submit" disabled>Проверить решение <span aria-hidden="true">↗</span></button></div>
     </form>
     <p id="status" role="status" aria-live="polite"></p>
 
     <section class="history-section" aria-labelledby="history-title">
-      <div class="history-heading"><h2 id="history-title">Submissions</h2><div id="score" tabindex="0" aria-describedby="score-help">Score <strong>0</strong><span> / 10</span><span id="score-help" class="score-tooltip" role="tooltip">Best verdict: 0. Counted submissions: 0. Penalty: 0.</span></div></div>
-      <p id="history-empty" class="muted">Your first submission is free. Each additional graded submission costs 1 point.</p>
+      <div class="history-heading"><h2 id="history-title">Попытки</h2><div id="score" tabindex="0" aria-describedby="score-help">Score <strong>0</strong><span> / 10</span><span id="score-help" class="score-tooltip" role="tooltip">Best verdict: 0. Counted submissions: 0. Penalty: 0.</span></div></div>
+      <p id="history-empty" class="muted">Первая проверка без штрафа. Каждая следующая успешная проверка — минус 1 балл.</p>
       <div id="history"></div>
     </section>
-    <footer>Feedback is shown immediately in practice mode. History and drafts last until you reload this page.</footer>
+    </div>
+    <footer>В тренировке подробный разбор доступен сразу после проверки.</footer>
   </main>
 </body>
 </html>
