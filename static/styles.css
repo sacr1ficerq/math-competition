@@ -1187,15 +1187,7 @@ dialog::backdrop {
 .review-document-verdict>span { color: var(--muted); font-size: 12px; }
 .review-document-verdict.is-status strong { font-size: 13px; letter-spacing: 0; font-weight: 500; color: var(--muted); }
 
-.review-appeal-trigger {
-  min-height: 32px;
-  height: 32px;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: var(--foam);
-  font-size: 12px;
-}
+.review-appeal-trigger { flex-shrink: 0; }
 
 .review-document-content {
   padding: 24px 0;
@@ -1480,6 +1472,7 @@ dialog::backdrop {
 
   .attempt-rail>button { min-width: 88px; padding: 8px 12px; }
   .review-document-toolbar { gap: 12px; padding: 16px 0; min-height: 76px; }
+  .review-appeal-trigger { grid-column: 1 / -1; justify-self: end; }
   .review-document-stamp { flex-direction: column; gap: 4px; font-size: 11px; }
   .review-document-verdict strong { font-size: 23px; }
   .review-document-content { padding: 20px 0; }

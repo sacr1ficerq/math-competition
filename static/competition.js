@@ -35,6 +35,11 @@ let lobbyTopicsSignature = "";
 let inviteFeedbackTimer;
 let lobbyMode = null;
 let customProblemDirty = false;
+let chatOpen = false;
+let chatSending = false;
+let movingChat = false;
+let chatOpenedBefore = false;
+const mobileChat = matchMedia('(max-width: 1000px)');
 const deadlineMotion = matchMedia('(prefers-reduced-motion: reduce)');
 deadlineMotion.addEventListener('change',event=>{if(event.matches)document.getElementById('deadline')?.getAnimations().forEach(animation=>animation.cancel());});
 
@@ -317,7 +322,7 @@ function controls() {
   $("copy-lobby-invite").hidden = !!state.closed_at;
   $("close-room").disabled = actionBusy;
   $("chat-input").disabled = !!state.closed_at;
-  $("chat-form").querySelector("button").disabled = !!state.closed_at;
+  $("chat-form").querySelector("button").disabled = !!state.closed_at || chatSending || !$("chat-input").value.trim();
   $("chat-input").placeholder = state.closed_at?"Комната закрыта":"Сообщение сопернику…";
   $("rematch").disabled = !!state.closed_at || actionBusy || state.phase !== "finished" || !!state.appeals_pending;
   $("rematch").title = state.appeals_pending ? "Дождитесь рассмотрения апелляции" : "";
@@ -400,7 +405,7 @@ function renderHistory(players = state.players, target = $("history")) {
       appendAppeal(content,submission,player,currentRound,section);
       const appealForm=content.querySelector('.appeal-form-panel');
       if(appealForm){
-        const trigger=document.createElement('button');trigger.type='button';trigger.className='review-appeal-trigger';trigger.textContent='Оспорить';
+        const trigger=document.createElement('button');trigger.type='button';trigger.className='review-appeal-trigger';trigger.textContent=submission.appeal?.status==='failed'?'Повторить апелляцию':'Оспорить оценку';
         appealForm.id=`appeal-panel-${submission.id}`;appealForm.dataset.linked='true';trigger.setAttribute('aria-controls',appealForm.id);trigger.setAttribute('aria-expanded',String(appealForm.open));
         trigger.onclick=()=>{appealForm.open=!appealForm.open;trigger.setAttribute('aria-expanded',String(appealForm.open));if(appealForm.open){appealForm.querySelector('textarea')?.focus({preventScroll:true});toolbar.scrollIntoView({block:'start',behavior:'auto'});}};toolbar.append(trigger);
       }
@@ -505,34 +510,65 @@ function renderRounds() {
 }
 
 function renderChat() {
-  const signature = JSON.stringify(state.chat);
-  if (signature === chatSignature) return;
-  chatSignature = signature;
-  const container = $("chat-messages");
-  const atBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 60;
-  const content = document.createDocumentFragment();
-  for (const message of state.chat) {
-    const entry = document.createElement("div");
-    entry.className = "chat-message";
-    const meta = document.createElement("div");
-    meta.className = "chat-meta";
-    const name = document.createElement("strong");
-    name.textContent = message.kind === "solution" ? `Эталон · раунд ${message.round}` : state.players.find((p) => p.id === message.player_id)?.name || "Игрок";
-    const time = document.createElement("time");
-    time.textContent = timeText(message.sent_at);
-    meta.append(name, time);
-    const text = document.createElement(message.kind === "solution" ? "div" : "p");
-    if (message.kind === "solution") {
-      entry.classList.add("chat-solution");
-      text.className = "rendered";
-      render(text, message.text);
-    } else text.textContent = message.text;
-    entry.append(meta, text);
-    content.append(entry);
+  const opponent=state.players.find(player=>player.id!==state.me);
+  $('chat-title').textContent=opponent?.name || 'Чат дуэли';
+  $('chat-room-status').textContent=state.closed_at?'Комната закрыта · история':`Раунд ${state.round}`;
+  const signature=JSON.stringify(state.chat);
+  if(signature===chatSignature)return;
+  const previous=chatSignature?JSON.parse(chatSignature):[];
+  chatSignature=signature;
+  const container=$('chat-messages');
+  const atBottom=container.scrollHeight-container.scrollTop-container.clientHeight<60;
+  const scroll=container.scrollTop;
+  const content=document.createDocumentFragment();
+  let group=null,lastAuthor=null,lastRound=null;
+  for(const message of state.chat){
+    if(message.kind==='solution'){
+      const event=document.createElement('details');event.className='chat-event';
+      const label=document.createElement('summary');label.textContent=`Эталонное решение · раунд ${message.round}`;
+      const body=document.createElement('div');body.className='rendered';render(body,message.text);event.append(label,body);content.append(event);group=null;lastAuthor=null;continue;
+    }
+    if(!group||lastAuthor!==message.player_id||lastRound!==message.round){
+      group=document.createElement('section');group.className='chat-group'+(message.player_id===state.me?' is-own':' is-other');
+      if(message.player_id!==state.me){const sender=document.createElement('span');sender.className='chat-sender';sender.textContent=state.players.find(player=>player.id===message.player_id)?.name||'Соперник';group.append(sender);}
+      content.append(group);lastAuthor=message.player_id;lastRound=message.round;
+    }
+    group.querySelector('time')?.remove();
+    const bubble=document.createElement('p');bubble.className='chat-bubble';bubble.textContent=message.text;
+    const time=document.createElement('time');time.dateTime=new Date(message.sent_at*1000).toISOString();time.textContent=new Date(message.sent_at*1000).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit',hour12:false});time.title=new Date(message.sent_at*1000).toLocaleString('ru-RU');group.append(bubble,time);
   }
-  if (!state.chat.length) { const empty = document.createElement("p"); empty.className = "muted"; empty.textContent = "Здесь можно обсудить игру."; content.append(empty); }
+  if(!state.chat.length){const empty=document.createElement('p');empty.className='chat-empty';empty.textContent=state.closed_at?'Сообщений пока нет.':opponent?`Напишите ${opponent.name}`:'Чат появится здесь, когда присоединится соперник.';content.append(empty);}
   container.replaceChildren(content);
-  if (atBottom) container.scrollTop = container.scrollHeight;
+  container.scrollTop=atBottom?container.scrollHeight:scroll;
+  if(previous.length&&state.chat.length>previous.length&&state.chat.at(-1).player_id!==state.me)$('chat-announcement').textContent='Новое сообщение от соперника.';
+}
+
+function layoutChat(focusComposer=false) {
+  const panel=$('chat-panel'),dialog=$('chat-dialog'),dock=$('chat-dock');
+  const focused=panel.contains(document.activeElement)?document.activeElement:null;
+  const selection=focused=== $('chat-input')?[focused.selectionStart,focused.selectionEnd]:null;
+  const scroll=$('chat-messages').scrollTop;
+  movingChat=true;
+  if(chatOpen&&mobileChat.matches){
+    dock.hidden=true;dialog.append(panel);document.body.dataset.chat='mobile';
+    if(!dialog.open)dialog.showModal();
+  }else{
+    if(dialog.open)dialog.close();
+    dock.append(panel);dock.hidden=!chatOpen;
+    if(chatOpen){document.body.dataset.chat='docked';dock.style.setProperty('--chat-top',`${Math.max(96,dock.getBoundingClientRect().top)+16}px`);}else delete document.body.dataset.chat;
+  }
+  movingChat=false;
+  $('open-chat').setAttribute('aria-expanded',String(chatOpen));
+  $('chat-messages').scrollTop=scroll;
+  if(chatOpen&&(focused||focusComposer)){const target=focused||$('chat-input');if(!target.disabled){target.focus({preventScroll:true});if(selection)target.setSelectionRange(...selection);}}
+}
+
+function openChat() {
+  chatOpen=true;layoutChat(true);
+  if(!chatOpenedBefore){$('chat-messages').scrollTop=$('chat-messages').scrollHeight;chatOpenedBefore=true;}
+}
+function closeChat() {
+  chatOpen=false;layoutChat();$('open-chat').focus({preventScroll:true});
 }
 
 async function saveDraft() {
@@ -661,8 +697,15 @@ async function init() {
   }, notice);
   solutionImages.setDisabled(true);
   $("connect-key").onclick = () => window.mathAccount.open({section:"key",reason:"Добавьте ключ OpenRouter для проверки решения."});
-  $("open-chat").onclick = () => $("chat-dialog").showModal();
-  $("close-chat").onclick = () => $("chat-dialog").close();
+  $('open-chat').setAttribute('aria-controls','chat-panel');
+  $('open-chat').setAttribute('aria-expanded','false');
+  $('open-chat').onclick=()=>chatOpen?closeChat():openChat();
+  $('close-chat').onclick=closeChat;
+  $('chat-dialog').addEventListener('cancel',event=>{event.preventDefault();closeChat();});
+  mobileChat.addEventListener('change',()=>layoutChat());
+  document.addEventListener('keydown',event=>{if(event.key==='Escape'&&chatOpen&&!mobileChat.matches&&!event.defaultPrevented&&!document.querySelector('dialog[open]')){event.preventDefault();closeChat();}});
+  $('chat-input').addEventListener('input',controls);
+  $('chat-input').addEventListener('keydown',event=>{if(event.key==='Enter'&&(event.ctrlKey||event.metaKey)){event.preventDefault();$('chat-form').requestSubmit();}});
   document.querySelectorAll('[data-review]').forEach(button=>button.addEventListener('click',()=>{reviewTab=button.dataset.review;document.querySelectorAll('[data-review]').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));historySignature="";if(state)apply(state);}));
   document.querySelectorAll('[data-home-mode]').forEach(button=>button.onclick=()=>{$('create-form').hidden=button.dataset.homeMode!=='create';$('join-disclosure').hidden=button.dataset.homeMode!=='join';document.querySelectorAll('[data-home-mode]').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));});
   document.querySelectorAll('[data-lobby-mode]').forEach(button=>button.onclick=()=>{
@@ -783,15 +826,18 @@ async function init() {
   }));
   $("chat-form").addEventListener("submit", async (event) => {
     event.preventDefault();
-    if(state.closed_at)return;
-    const text = $("chat-input").value;
+    if(state.closed_at||chatSending)return;
+    const sourceValue=$("chat-input").value;
+    const text = sourceValue.trim();
+    if(!text)return;
+    $("chat-error").textContent="";
     const button = event.currentTarget.querySelector("button");
-    button.disabled = true;
+    chatSending=true;button.disabled = true;button.setAttribute("aria-busy","true");
     try {
       apply(await api(sessionPath("/chat"), "POST", { text }));
-      if ($("chat-input").value === text) $("chat-input").value = "";
-    } catch (error) { notice(error.message, true); }
-    finally { button.disabled = false; }
+      if ($("chat-input").value === sourceValue) $("chat-input").value = "";
+    } catch (error) { $("chat-error").textContent=error.message;if(error.status===409)try{apply(await api(sessionPath()));}catch{} }
+    finally { chatSending=false;button.removeAttribute("aria-busy");controls(); }
   });
   setInterval(controls, 250);
   window.addEventListener("online", () => { if (code) poll(); });
