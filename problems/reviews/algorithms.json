@@ -1,0 +1,342 @@
+{
+  "reviewed_at": "2026-10-18",
+  "independent_of_author": true,
+  "publication_changed": false,
+  "count": 40,
+  "records": [
+    {
+      "id": "shad-algorithms-001",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Два указателя считают суммы с повторами; исправлена сложность для W=1.",
+      "content_sha256": "88032157bdd4ea10b4fa00da94d2baa9ac7c754c16be0bdd64bc1cbb934747ef"
+    },
+    {
+      "id": "shad-algorithms-002",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Жадное минимальное число блоков и монотонный поиск; нули обработаны.",
+      "content_sha256": "75c2b562d0c4afbe30cf50aeec1acb82ee657584d5c23947f2bdf515925c026a"
+    },
+    {
+      "id": "shad-algorithms-003",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Разрез двух массивов и направления binary-search верны; добавлен диапазон k.",
+      "content_sha256": "5aa59e44bd64f321d43618567f0de066c69f8edff26046cac860e590833bbc31"
+    },
+    {
+      "id": "shad-algorithms-004",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Два ступенчатых прохода ≤T и <T корректно считают равенства без целочисленности.",
+      "content_sha256": "716afcf9401646c52d7501ac8b524f6be227b20696ad174bfc9984a18be0e9c6"
+    },
+    {
+      "id": "shad-algorithms-005",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Самый левый жадный выбор доминирует все допустимые; поиск максимального расстояния корректен.",
+      "content_sha256": "d1f4d8b877d9fd2b343aab8fed031e9f36bb45ce1120f0a80e020137c90338f1"
+    },
+    {
+      "id": "shad-algorithms-006",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Сумма весов оставшейся левой половины корректно считает инверсии; равные идут слева.",
+      "content_sha256": "116e1797e883f9699887b684ed9cdbe5e7bb243c5bf3d391e2a7917309f0fe23"
+    },
+    {
+      "id": "shad-algorithms-007",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Группировка равных событий исключает зависимость длины от порядка событий.",
+      "content_sha256": "cddbd556e4abe6a3ee2455d0e917448aa41cfddb6807c7d71fe9c37a9c50144b"
+    },
+    {
+      "id": "shad-algorithms-008",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Куча концов и момент создания комнаты дают совпадающую нижнюю границу; добавлены строгие интервалы.",
+      "content_sha256": "35bdcd4403d77febddc164fd6b02bde72620d55d628126917a5bbb211102ae78"
+    },
+    {
+      "id": "shad-algorithms-009",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "C(R)-C(L-1) верно для целых границ; условие уточнено.",
+      "content_sha256": "22fc5607e0857f727562bf8a00418bb8603038fc14f07a79310075aab6cb593e"
+    },
+    {
+      "id": "shad-algorithms-010",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Тернарное дерево даёт log3 M; при разных ключах равенство исключено и дерево бинарно.",
+      "content_sha256": "bc36b66047099e4cfd98152b2df79584a3ac5859d59621209ce3e5bd0e6e8da6"
+    },
+    {
+      "id": "shad-algorithms-011",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Слияние разноцветных расстояний до обновления ветви и LCA-доказательство верны для нулевых весов.",
+      "content_sha256": "0c3d1bab68786f4278f6db1d0cafb5da9196b9c65e5fcbb0ecee4387dd83277b"
+    },
+    {
+      "id": "shad-algorithms-012",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Двухслойная редукция и Дейкстра верны; уточнена индексированная куча decrease-key.",
+      "content_sha256": "82a72555fd05d092c44d5378221a2424bf8ebaa7b0b5302df47435005b5c6ba6"
+    },
+    {
+      "id": "shad-algorithms-013",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Кратчайшие дуги образуют послойный DAG; P[u]Q[v]=P[t] точен для конкретной дуги.",
+      "content_sha256": "8550e19c2dc58783cd478767acefd789176abc89a81779725e473621cfb91152"
+    },
+    {
+      "id": "shad-algorithms-014",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "low/tin с id родительского ребра корректны для параллельных рёбер.",
+      "content_sha256": "8d30b58d8614883fd6d8d8034b070483358d282423a5e920e74f742de920015b"
+    },
+    {
+      "id": "shad-algorithms-015",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Источники конденсации дают необходимое и достаточное число стартов.",
+      "content_sha256": "ce263ec0078005bb161e2e28162c0ce1872961233352e5228ad91d5d1973ffb4"
+    },
+    {
+      "id": "shad-algorithms-016",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "LIS lower_bound и предки устанавливаются до замены tails, строгий рост и восстановление верны.",
+      "content_sha256": "5229e56507c1882cb8c3b161dcfc5cddff1ddafac5ad332c9b1559e4d1343076"
+    },
+    {
+      "id": "shad-algorithms-017",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Двоичные пакеты покрывают все количества0..ci, обратный DP не переиспользует пакет.",
+      "content_sha256": "b2bbcb72666b5464ccb9a9327d0946038e2a6d3c1e16ab468147f6f1d9120d0d"
+    },
+    {
+      "id": "shad-algorithms-018",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Три перехода edit-distance и две строки памяти корректны для пустых строк.",
+      "content_sha256": "5bbb83c82bcf9cb2633811cc47ec61955814595f225998364fac545b98d497fa"
+    },
+    {
+      "id": "shad-algorithms-019",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Два tree-DP состояния и восстановление допускают отрицательные веса и пустой ответ.",
+      "content_sha256": "8904518d10c93b088b626394c878f41a84991514bcab65a39c3cdb57c061f2ab"
+    },
+    {
+      "id": "shad-algorithms-020",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Радиус2 на цикле: три первых состояния и три замыкающих запрета полны; 600 exhaustive cases PASS.",
+      "content_sha256": "6898804952a8730d0593c1e6cadffcced1d0db5e90e53fdb2787f72b7190c8f7"
+    },
+    {
+      "id": "shad-algorithms-021",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Slack-сегдерево и полный обменный аргумент взвешенного matroid-greedy;320 exhaustive instances PASS.",
+      "content_sha256": "d8c8fd085b697dc36462c37c7497305a40486d4943e4c1573e4ec8859367c7da"
+    },
+    {
+      "id": "shad-algorithms-022",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Дерево соединений и обмен двух минимумов в самых глубоких соседних листьях корректны.",
+      "content_sha256": "b7b9728fa1f4e7e8b84daf2971890ab1b55ffa8604344e520f28bdc75ef10943"
+    },
+    {
+      "id": "shad-algorithms-023",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Жадный максимальный правый конец, забывание просмотренных и обмен верны для замкнутого покрытия.",
+      "content_sha256": "4511edc85f3e991a9007657d22eea2bb934e42004e3ae8e66ce39a3b4e46b175"
+    },
+    {
+      "id": "shad-algorithms-024",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Ретроспективная maxheap-заправка реализуема без ограничения бака; добавлен P≥0.",
+      "content_sha256": "24f4a707d79e11cf0ae4890861da2dfcaa938fbfb7f9d6d34c211fec4accdbdc"
+    },
+    {
+      "id": "shad-algorithms-025",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Соседний обмен даёт Smith ratio t/w; положительные веса и длительности позволяют cross-product.",
+      "content_sha256": "c8833eb7625301f69a6e69c8802bea254497f4436d7bd5c33b1f4c164f3830ed"
+    },
+    {
+      "id": "shad-algorithms-026",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Дека удаляет доминируемых позднейшим кандидатом, амортизация линейна.",
+      "content_sha256": "a3562551dbc8e7302ceb51dbe1be6558ffa2870288478de565135d152c8e8f84"
+    },
+    {
+      "id": "shad-algorithms-027",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Ранги по суммам левого поддерева учитывают повторы и U=1.",
+      "content_sha256": "637052e0a6d02b7ba6faf71cb3ed25284d8570642b38d1c4b39f8af4e748fe62"
+    },
+    {
+      "id": "shad-algorithms-028",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Неизменяемые узлы создают персистентный стек с O(1) на операцию.",
+      "content_sha256": "e9247e95136c2c65f690f0b73f6c1addfe0ee3eebfa136bb5d7c61b12304917b"
+    },
+    {
+      "id": "shad-algorithms-029",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Обратные удаления и DSU по размеру дают нужный граф перед записью каждого ответа.",
+      "content_sha256": "648ca7ee11ac9dac0504c7a9398e2aaf11589c3d66c6ea685d35ceff7fb1e7ed"
+    },
+    {
+      "id": "shad-algorithms-030",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Lazy-метка включена в сумму родителя; push сохраняет значения и O(log n) число раскрываемых узлов.",
+      "content_sha256": "a04f6a63002961fd87cdbb1b22e8bb198cc4a8789c3326e90f07080a1ffe0970"
+    },
+    {
+      "id": "shad-algorithms-031",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Цепь всех границ и делимость перечисляют ровно блоковые периоды;2046 binary words PASS.",
+      "content_sha256": "1dc1137ec0feaf9a5434bbbaf1568d29dc67a2ddcbe0ee0347f974cc4f9fe0c5"
+    },
+    {
+      "id": "shad-algorithms-032",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "КМП обрабатывает перекрытия; уточнён proper-prefix инвариант после выдачи полного совпадения.",
+      "content_sha256": "307cf4c54d37d454ebf97e5a40b18780bca2f3b37775bf50a24ff3c4566eba4e"
+    },
+    {
+      "id": "shad-algorithms-033",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Оба радиуса Манакера и зеркальные индексы верны; явно добавлена начальная пустая граница.",
+      "content_sha256": "2c1a9cf278798fce0eb4917cd9f82dc7035e71fbf826d676b1b408420cdc8ebc"
+    },
+    {
+      "id": "shad-algorithms-034",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Соседний LCP максимален среди предыдущих благодаря лексикографическому интервалу префиксов.",
+      "content_sha256": "29085a46101eebaea6e230c9cd99b50db586c5b741e52db6b99bd30c222a91f3"
+    },
+    {
+      "id": "shad-algorithms-035",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "КМП по первым2n-1 символам a+a перечисляет все сдвиги, n=0 оговорён.",
+      "content_sha256": "fe839ad3c5043015dba33a255a5eb6c65bdc897eb5771adbf686a4a81b5b4319"
+    },
+    {
+      "id": "shad-algorithms-036",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Геометрическая сумма и потенциал2size-capacity+1 дают амортизацию3.",
+      "content_sha256": "efc159a289761bf286b87848f00c2f673d3e9c80c407299f864514708d699f47"
+    },
+    {
+      "id": "shad-algorithms-037",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Два стека сохраняют FIFO и потенциал2|in| оплачивает все переносы.",
+      "content_sha256": "dea06100a0ace37096ff675528144572dc1f82aaab100bc7337dd3af0e456c61"
+    },
+    {
+      "id": "shad-algorithms-038",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Сбалансированный турнир даёт верхнюю границу; противник с весами и первые/вторые поражения дают нижнюю.",
+      "content_sha256": "5b869098da4d9ce00f10e96c7603b091259d68d64a3dc1c995caf55de7f02de1"
+    },
+    {
+      "id": "shad-algorithms-039",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Медиана медиан даёт размеры n/5 и≤0.7n+C; запас0.1n закрывает линейную индукцию.",
+      "content_sha256": "d4c45cbebfe5d8c248ec736868c32889ace012cddc586d80493b62168927d35a"
+    },
+    {
+      "id": "shad-algorithms-040",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Обратимость по gcd и бинарный инвариант учитывают отрицательные степени и e=0.",
+      "content_sha256": "c06b9a60f65ca520f8ba68d7b7b26198c6ed8a58ad1f727566188a843e6ab7f5"
+    }
+  ],
+  "hash_algorithm": {
+    "name": "sha256",
+    "scope": [
+      "title",
+      "statement",
+      "criterions",
+      "reference_solution"
+    ],
+    "serialization": "json.dumps(content, ensure_ascii=False, sort_keys=True).encode(\"utf-8\")",
+    "json_separators": "Python default separators: comma followed by space, colon followed by space",
+    "unicode_normalization": "none",
+    "trailing_newline": false,
+    "definition": "content = {k: problem[k] for k in [\"title\", \"statement\", \"criterions\", \"reference_solution\"]}; digest = hashlib.sha256(json.dumps(content, ensure_ascii=False, sort_keys=True).encode(\"utf-8\")).hexdigest()"
+  }
+}
