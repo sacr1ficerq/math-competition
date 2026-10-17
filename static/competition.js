@@ -185,7 +185,7 @@ function apply(next) {
   window.mathUI.syncPickers();
   $("arena").hidden = !!state.closed_at || state.phase === "lobby" || state.phase === "finished";
   $("closed-room-state").hidden = !state.closed_at || state.phase === "finished";
-  $("histories").hidden = state.phase === "lobby" || (state.phase === "finished" && reviewTab === "reference") || (state.phase !== "finished" && !player.submissions.length);
+  $("histories").hidden = state.phase === "lobby" || (state.phase !== "finished" && !player.submissions.length);
   $("ready").textContent = player.ready ? "Не готов" : "Готов";
   if(state.closed_at)$("phase").textContent="Закрыта";
   $("lobby-hint").textContent = state.players.length < 2 ? "Отправьте ссылку другу, чтобы начать." : player.ready ? "Ждём готовности соперника…" : "Нажмите «Готов», когда будете готовы начать.";
@@ -203,7 +203,7 @@ function apply(next) {
     }
   }
   $("result").hidden = state.phase !== "finished";
-  $("revealed").hidden = state.phase !== "finished" || reviewTab !== "reference";
+  $("revealed").hidden = state.phase !== "finished";
   $("feedback-hint").textContent = "";
   if (state.result) {
     const winner = state.players.find((p) => p.id === state.result.winner);
