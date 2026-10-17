@@ -334,6 +334,7 @@ function appendAppeal(feedback, submission, player, currentRound, section) {
     label.setAttribute("role", "status");
     if (appeal.status === "pending") label.textContent = "Апелляция рассматривается… Итог раунда пока предварительный.";
     else if (appeal.status === "failed") {label.classList.add("error"); label.textContent = "Не удалось рассмотреть апелляцию. Оценка не изменилась, штрафа нет. Можно повторить.";}
+    else if (typeof appeal.old_verdict !== "number") label.textContent = "Апелляция рассмотрена. Подробности откроются после раунда.";
     else label.textContent = appeal.effective_verdict > appeal.old_verdict
       ? `Апелляция принята: ${appeal.old_verdict} → ${appeal.effective_verdict} / 10.`
       : `Оценка не повышена: ${appeal.old_verdict} → ${appeal.effective_verdict} / 10. Применено снижение на 1 балл.`;
