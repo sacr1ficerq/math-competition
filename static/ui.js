@@ -103,13 +103,13 @@
     if(!entries.some(entry=>entry.id===view.choice)||(!view.userChosen&&finished&&!view.finished))view.choice=(finished&&best?best:latest)?.id;
     else if(!view.userChosen&&latest?.id!==view.latest&&view.choice===view.latest)view.choice=latest?.id;
     view.latest=latest?.id;view.finished=finished;views.set(key,view);
-    const rail=document.createElement('div');rail.className='attempt-rail';rail.role='tablist';rail.setAttribute('aria-label','Попытки решения');
+    const rail=document.createElement('div');rail.className='attempt-rail';rail.role='tablist';rail.setAttribute('aria-label','Попытки решения');if(finished&&entries.length===1)rail.hidden=true;
     const pane=document.createElement('section');pane.className='review-stage';pane.role='tabpanel';pane.tabIndex=0;
     const prefix=key.replace(/[^a-zA-Z0-9_-]/g,'-');pane.id=prefix+'-review';
     function show(entry,manual=false){
       view.choice=entry.id;if(manual)view.userChosen=true;
       rail.querySelectorAll('button').forEach(button=>{const selected=button.dataset.id===entry.id;button.setAttribute('aria-selected',String(selected));button.tabIndex=selected?0:-1;});
-      pane.setAttribute('aria-labelledby',prefix+'-'+entry.id);pane.replaceChildren();
+      if(entries.length===1){pane.removeAttribute('aria-labelledby');pane.setAttribute('aria-label',`Попытка ${entry.number}`);}else pane.setAttribute('aria-labelledby',prefix+'-'+entry.id);pane.replaceChildren();
       const heading=document.createElement('div');heading.className='review-document-toolbar';
       const stamp=document.createElement('div');stamp.className='review-document-stamp';const time=document.createElement('time');time.dateTime=new Date(entry.submittedAt*1000).toISOString();time.title=new Date(entry.submittedAt*1000).toLocaleString('ru-RU');time.textContent='Отправлено '+new Date(entry.submittedAt*1000).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit',hour12:false});stamp.append(time);
       if(entries.length>1&&best?.id===entry.id){const label=document.createElement('span');label.className='attempt-best';label.textContent='Лучшая оценка';stamp.append(label);}

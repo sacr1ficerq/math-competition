@@ -1637,15 +1637,18 @@ dialog::backdrop {
 .closed-room-state>#closed-history-host { margin-top: 32px; }
 
 /* A finished attempt has a work document and a grader review, never one prose pile. */
-.results .review-document-content { max-width: none; padding: 28px 0; container-type: inline-size; }
-.attempt-review-layout { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 48px; align-items: start; }
+.results .review-document-content { max-width: none; padding: 0; container-type: inline-size; }
+.attempt-review-layout { display: grid; grid-template-columns: minmax(0,1.15fr) minmax(0,1fr); gap: 0; align-items: stretch; }
 .review-region { min-width: 0; }
-.review-region>h3 { margin: 0 0 20px; color: var(--text); font-size: 19px; font-weight: 600; letter-spacing: -.4px; }
+.results .review-region { padding: 28px 32px 32px; }
+.results .review-work { background: var(--surface); border-radius: 0 0 0 18px; }
+.results .review-grading { background: color-mix(in srgb,var(--foam) 4%,var(--base)); border-left: 1px solid var(--line); border-radius: 0 0 18px 0; }
+.review-region>h3 { margin: 0 0 20px; color: var(--text); font-size: 17px; font-weight: 600; letter-spacing: -.4px; }
 .review-region .rendered { max-width: 75ch; }
 .grade-evidence { margin-top: 24px; }
 .grade-evidence>h4 { font-size: 13px; font-weight: 600; color: var(--muted); margin: 0 0 10px; }
 .grade-original-score { margin: -8px 0 20px; color: var(--muted); font-size: 13px; }
-.attempt-appeal-region { padding: 24px 28px; margin: 8px 0 36px; border-left: 3px solid var(--foam); background: var(--accent-soft); border-radius: 0 12px 12px 0; scroll-margin-top: 104px; }
+.attempt-appeal-region { padding: 28px 32px; margin: 20px 0 0; border: 1px solid var(--line); background: var(--surface); border-radius: 16px; scroll-margin-top: 104px; }
 .attempt-appeal-region>h3 { font-size: 20px; margin: 0 0 24px; color: var(--text); }
 .appeal-argument { margin-bottom: 24px; }
 .appeal-argument>h4,.appeal-decision>h4 { font-size: 14px; margin: 0 0 12px; font-weight: 600; }
@@ -1659,14 +1662,20 @@ dialog::backdrop {
 .appeal-form>button { margin-top: 16px; }
 @media (max-width: 1699px) and (min-width: 1001px) { main { padding-inline: 40px; } }
 @media (max-width: 900px) {
-  .attempt-review-layout { display: flex; flex-direction: column; gap: 32px; }
+  .attempt-review-layout { display: flex; flex-direction: column; gap: 0; }
   .attempt-review-layout>.review-grading { order: -1; }
   .review-region { width: 100%; }
+  .results .review-region { padding: 24px; }
+  .results .review-grading { border-left: 0; border-bottom: 1px solid var(--line); border-radius: 0; }
+  .results .review-work { border-radius: 0 0 16px 16px; }
   .attempt-appeal-region { padding: 20px; margin-bottom: 28px; }
 }
 
 @container (max-width: 760px) {
-  .attempt-review-layout { display: flex; flex-direction: column; gap: 32px; }
+  .attempt-review-layout { display: flex; flex-direction: column; gap: 0; }
   .attempt-review-layout>.review-grading { order: -1; }
   .review-region { width: 100%; }
+  .results .review-region { padding: 24px; }
+  .results .review-grading { border-left: 0; border-bottom: 1px solid var(--line); border-radius: 0; }
+  .results .review-work { border-radius: 0 0 16px 16px; }
 }
