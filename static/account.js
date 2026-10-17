@@ -56,8 +56,16 @@
     if (document.activeElement !== modelInput) modelInput.value = user.default_model || savedDefault || '';
     window.dispatchEvent(new CustomEvent('accountchange', {detail:user}));
   }
-  function openAccount() {
-    if (user) { $('settings-dialog').showModal(); loadModels(); }
+  function openAccount(options = {}) {
+    if (user) {
+      $('settings-dialog').showModal(); loadModels();
+      if(options.section === 'key'){
+        $('account-key-form').hidden=false;
+        $('key-save-status').classList.remove('error');
+        $('key-save-status').textContent=options.reason || 'Добавьте ключ OpenRouter для проверки решения.';
+        $('account-key').focus();
+      }
+    }
     else $('account-dialog').showModal();
   }
   async function run(button, callback, errorTarget = $('settings-error')) {
@@ -154,5 +162,9 @@
     }, $('model-save-status'));
   };
   window.mathAccount = {get user() {return user;},open:openAccount,request};
-  window.mathAccount.ready=request('/api/auth/me').then(result=>{update(result.user);return user;}).catch(error=>{$('account-error').textContent=error.message;return null;});
+  window.mathAccount.ready=Promise.allSettled([request('/api/auth/me'),request('/api/config')]).then(([account,config])=>{
+    if(config.status==='fulfilled')savedDefault=config.value.model;
+    if(account.status==='rejected'){$('account-error').textContent=account.reason.message;return null;}
+    update(account.value.user);return user;
+  });
 })();

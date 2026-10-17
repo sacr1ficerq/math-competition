@@ -25,11 +25,14 @@ const appealDrafts = new Map();
 const appealRequests = new Set();
 let imageBackupFailed = false;
 let acceptedPayload = null;
+let keyPrompted = false;
+let readinessWithdrawal = null;
 let reviewTab = "own";
 let noticeTimer;
 const initializedReviews = new Set();
-let createSource = "bank";
-let lobbySource = null;
+let lobbyTopicsSignature = "";
+let inviteFeedbackTimer;
+let lobbyMode = null;
 let customProblemDirty = false;
 
 function requestId() {
@@ -92,6 +95,7 @@ function apply(next) {
     draftConflict = false;
     pendingRequest = null;
     acceptedPayload = null;
+    keyPrompted = false;
     historySignature = problemSignature = playerSignature = "";
   }
   state = next;
@@ -100,7 +104,7 @@ function apply(next) {
     restoringImages = true;
     solutionImages.clear();
     $("next-problem-json").value = "";
-    lobbySource = null;
+    lobbyMode = null;
     customProblemDirty = false;
     for (const id of ["problem-statement", "criteria", "reference"]) $(id).replaceChildren();
   }
@@ -144,24 +148,37 @@ function apply(next) {
     }
   }
   $("draft-conflict").hidden = !draftConflict;
-  if (!lobbySource || state.phase !== "lobby") lobbySource=state.source;
-  $("topic-form").hidden = state.phase !== "lobby" || state.me !== state.host || lobbySource !== "bank";
-  $("lobby-source-tabs").hidden = state.me !== state.host;
+  const savedTaskMode=state.source === 'custom' ? 'custom' : state.topic ? 'topic' : 'random';
+  if(!lobbyMode || state.phase !== 'lobby')lobbyMode=savedTaskMode;
+  $('topic-form').hidden=state.phase !== 'lobby' || state.me !== state.host || lobbyMode !== 'topic';
+  $('lobby-task-controls').hidden=state.me !== state.host;
+  $('lobby-task-summary').hidden=state.me === state.host;
+  $('task-selection-title').textContent=state.round === 1 ? 'Задача дуэли' : 'Следующая задача';
   const selectedTopic=state.available_topics?.find(topic=>topic.slug===state.topic);
-  $("lobby-task-summary").textContent = state.source === "custom" ? "Своя задача загружена" : `Из банка · ${selectedTopic?.label || (state.topic || "Любая тема")}`;
-  document.querySelectorAll("[data-lobby-source]").forEach(button=>button.setAttribute("aria-pressed",String(button.dataset.lobbySource===lobbySource)));
-  if (document.activeElement !== $("lobby-topic")) $("lobby-topic").value=state.topic || "";
+  $('lobby-task-summary').textContent=savedTaskMode === 'custom' ? 'Своя задача' : savedTaskMode === 'topic' ? `Тема: ${selectedTopic?.label || state.topic}` : 'Случайная новая задача из банка';
+  document.querySelectorAll('[data-lobby-mode]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.lobbyMode===lobbyMode)));
+  const topicsSignature=JSON.stringify(state.available_topics || []);
+  if(topicsSignature !== lobbyTopicsSignature){lobbyTopicsSignature=topicsSignature;const current=$('lobby-topic').value;$('lobby-topic').replaceChildren(new Option('Выберите тему',''));for(const topic of state.available_topics || [])$('lobby-topic').append(new Option(topic.label,topic.slug));$('lobby-topic').value=current;}
+  if(document.activeElement !== $('lobby-topic'))$('lobby-topic').value=state.source === 'bank' ? state.topic || '' : '';
   $("lobby").hidden = state.phase !== "lobby";
-  $("lobby-title").textContent=state.round === 1 ? "Начнём дуэль?" : "Следующая задача?";
+  const waitingForOpponent=state.players.length < 2;
+  $('lobby-title').textContent=waitingForOpponent?'Пригласите соперника':state.round===1?'Можно начинать':`Раунд ${state.round}`;
+  $('lobby-description').textContent=waitingForOpponent?'Отправьте ссылку другу — он присоединится к этой комнате.':'Условие откроется одновременно, когда вы оба будете готовы.';
+  $('invite-url').value=`${location.origin}/s/${state.code}`;
+  $('copy-lobby-invite').classList.toggle('primary',waitingForOpponent);
+  $('copy-lobby-invite').classList.toggle('invite-copy-secondary',!waitingForOpponent);
+  if(!inviteFeedbackTimer || !waitingForOpponent)$('invite-feedback').textContent=waitingForOpponent?'Ждём второго игрока.':'Вы оба в комнате. Подтвердите готовность.';
+  $('lobby').dataset.players=waitingForOpponent?'one':'two';
+  $('lobby-readiness').hidden=waitingForOpponent;
+  $('lobby-model-state').textContent=`Проверка: ${state.model}`;
   document.body.dataset.phase=state.phase;
-  $("next-problem").hidden = state.phase !== "lobby" || state.me !== state.host || lobbySource !== "custom";
-  $("connect-key").hidden = state.has_api_key;
-  $("topic-availability").textContent = state.source === "custom" ? "Сейчас выбрана своя задача. Выбор темы вернёт задачи из банка." : "Подбираем задачу, которую ещё не открывал ни один из вас.";
+  $("next-problem").hidden = state.phase !== "lobby" || state.me !== state.host || lobbyMode !== "custom";
+  $("topic-availability").textContent = selectedTopic ? `Новых задач для вас обоих: ${selectedTopic.unseen_count}.` : "Выберите тему перед подтверждением готовности.";
   window.mathUI.syncPickers();
   $("arena").hidden = state.phase === "lobby" || state.phase === "finished";
   $("histories").hidden = state.phase === "lobby" || (state.phase === "finished" && reviewTab === "reference");
   $("ready").textContent = player.ready ? "Не готов" : "Готов";
-  $("lobby-hint").textContent = !state.has_api_key ? "Сначала подключите OpenRouter в настройках. Ключ сохранится для следующих игр." : state.players.length < 2 ? "Отправьте ссылку другу, чтобы начать." : player.ready ? "Ждём готовности соперника…" : "Нажмите «Готов», когда будете готовы начать.";
+  $("lobby-hint").textContent = state.players.length < 2 ? "Отправьте ссылку другу, чтобы начать." : player.ready ? "Ждём готовности соперника…" : "Нажмите «Готов», когда будете готовы начать.";
   renderPlayers();
   const problem = JSON.stringify(state.problem);
   if (problem !== problemSignature && state.problem) {
@@ -193,6 +210,12 @@ function apply(next) {
   if (previousPhase === "lobby" && state.phase === "active") notice("Оба готовы. Условие открыто — можно решать.");
   if (previousPhase && previousPhase !== "finished" && state.phase === "finished") notice("");
   if (roundChanged) notice(`Раунд ${state.round}. Подтвердите готовность к новой задаче.`);
+  if ((previousPhase && previousPhase !== "finished" && state.phase === "finished") || roundChanged) {
+    const target=state.phase === "finished" ? $("result-title") : $("lobby-title");
+    const section=state.phase === "finished" ? $("result") : $("lobby");
+    const targetRound=state.round;
+    requestAnimationFrame(()=>{if(state.round!==targetRound)return;target.focus({preventScroll:true});section.scrollIntoView({block:"start",behavior:"auto"});});
+  }
 }
 
 function renderPlayers() {
@@ -255,16 +278,20 @@ function controls() {
   const locked = state.phase !== "active" || p.finalized || expired;
   const pending = p.submissions.filter((s) => s.status === "pending").length;
   $("solution").readOnly = locked;
-  $("submit").disabled = locked || actionBusy || draftConflict || (solutionImages.busy || restoringImages) || !state.has_api_key || (!$("solution").value.trim() && !solutionImages.value.length);
+  $("submit").disabled = locked || actionBusy || draftConflict || (solutionImages.busy || restoringImages) || (!$("solution").value.trim() && !solutionImages.value.length);
   solutionImages.setDisabled(locked || actionBusy || restoringImages);
   $("finalize").disabled = locked || actionBusy || solutionImages.busy;
   const changed = hasUnsubmittedChanges();
   $("finalize").textContent = p.finalized ? "Сдано" : changed ? "Отправить и сдать" : "Сдать";
-  $("finalize").disabled = locked || actionBusy || solutionImages.busy || restoringImages || draftConflict || (changed && !state.has_api_key);
+  $("finalize").disabled = locked || actionBusy || solutionImages.busy || restoringImages || draftConflict;
   $("surrender").disabled = locked || actionBusy;
-  const customPending = state.phase === "lobby" && state.me === state.host && lobbySource === "custom" && (state.source !== "custom" || customProblemDirty);
-  $("ready").disabled = actionBusy || state.players.length < 2 || !state.has_api_key || customPending;
-  if (customPending) $("lobby-hint").textContent = "Добавьте и примените свою задачу перед стартом.";
+  const customPending=state.phase === 'lobby' && state.me === state.host && lobbyMode === 'custom' && (state.source !== 'custom' || customProblemDirty);
+  const topicPending=state.phase === 'lobby' && state.me === state.host && lobbyMode === 'topic' && (state.source !== 'bank' || !state.topic);
+  const randomPending=state.phase === 'lobby' && state.me === state.host && lobbyMode === 'random' && (state.source !== 'bank' || !!state.topic);
+  $('ready').disabled=actionBusy || !!readinessWithdrawal || state.players.length < 2 || customPending || topicPending || randomPending;
+  if(customPending)$('lobby-hint').textContent='Добавьте и примените свою задачу перед стартом.';
+  if(topicPending)$('lobby-hint').textContent='Выберите тему задачи перед стартом.';
+  if(randomPending)$('lobby-hint').textContent='Не удалось применить выбор. Выберите «Случайная» ещё раз.';
   $("rematch").disabled = actionBusy || state.phase !== "finished" || !!state.appeals_pending;
   $("rematch").title = state.appeals_pending ? "Дождитесь рассмотрения апелляции" : "";
   let hint = "";
@@ -272,9 +299,10 @@ function controls() {
   else if (p.finalized && pending) hint = `Завершено · проверяется попыток: ${pending}. Оценка предварительная.`;
   else if (p.finalized) hint = p.submissions.length ? "Вы завершили решение." : "Вы завершили раунд без отправленного решения.";
   else if (pending) hint = `Проверяется попыток: ${pending}. Можно продолжать решать.`;
-  else if (!state.has_api_key) hint = "Подключите OpenRouter в настройках.";
+  else if (!state.has_api_key && keyPrompted) hint = "Для проверки нужен ключ OpenRouter. Решение и черновик сохраняются.";
   else if (!p.submissions.length) hint = "Решение ещё не отправлено на проверку.";
   $("submission-hint").textContent = hint;
+  $("connect-key").hidden = !keyPrompted || state.has_api_key || state.phase !== "active" || p.finalized;
   $("draft-status").textContent = imageBackupFailed ? "Изображения не сохранены локально" : restoringImages ? "Восстановление…" : draftConflict ? "Конфликт черновиков" : savePromise ? "Сохраняется…" : draftDirty ? "Не сохранено" : "Сохранено";
   $("deadline").hidden = p.deadline === null || p.finalized || state.phase === "finished";
   if (!$("deadline").hidden) {
@@ -579,6 +607,7 @@ function persistImageDraft() {
 
 async function submitSolution(finalize = false) {
   if ($("submit").disabled) return;
+  if(!state.has_api_key){keyPrompted=true;controls();$('submission-hint').textContent='Для проверки нужен ключ OpenRouter. Добавьте его в настройках аккаунта.';window.mathAccount.open({section:'key',reason:'Добавьте ключ OpenRouter для проверки решения.'});return;}
   await action(async () => {
     const solution = $("solution").value;
     const images = solutionImages.value;
@@ -596,6 +625,14 @@ async function submitSolution(finalize = false) {
   });
 }
 
+async function withdrawReadyForSelection() {
+  if(!state || state.phase !== 'lobby' || !me().ready || readinessWithdrawal)return readinessWithdrawal;
+  const round=state.round;
+  readinessWithdrawal=api(sessionPath('/ready'),'PUT',{ready:false,round}).then(next=>{if(state.round===round)apply(next);}).catch(error=>{notice(error.message,true);}).finally(()=>{readinessWithdrawal=null;controls();});
+  controls();
+  return readinessWithdrawal;
+}
+
 async function init() {
   if (!render) { notice("Не удалось загрузить отображение формул. Проверьте соединение и обновите страницу.", true); return; }
   solutionImages = new window.SolutionImages($("solution-images"), $("image-attachments"), $("solution"), () => {
@@ -603,35 +640,25 @@ async function init() {
     if (state && !restoringImages) persistImageDraft().then(() => {imageBackupFailed=false; controls();}).catch(() => {imageBackupFailed=true; controls();});
   }, notice);
   solutionImages.setDisabled(true);
-  $("connect-key").onclick = () => window.mathAccount.open();
+  $("connect-key").onclick = () => window.mathAccount.open({section:"key",reason:"Добавьте ключ OpenRouter для проверки решения."});
   $("open-chat").onclick = () => $("chat-dialog").showModal();
   $("close-chat").onclick = () => $("chat-dialog").close();
   document.querySelectorAll('[data-review]').forEach(button=>button.addEventListener('click',()=>{reviewTab=button.dataset.review;document.querySelectorAll('[data-review]').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));historySignature="";if(state)apply(state);}));
   document.querySelectorAll('[data-home-mode]').forEach(button=>button.onclick=()=>{$('create-form').hidden=button.dataset.homeMode!=='create';$('join-disclosure').hidden=button.dataset.homeMode!=='join';document.querySelectorAll('[data-home-mode]').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));});
-  document.querySelectorAll('[data-create-source]').forEach(button=>button.onclick=()=>{createSource=button.dataset.createSource;$('create-bank-fields').hidden=createSource!=='bank';$('create-custom-fields').hidden=createSource!=='custom';document.querySelector('.create-footer>.muted').textContent=createSource==='bank'?'Новая задача для обоих':'Эталон известен автору';document.querySelectorAll('[data-create-source]').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));});
-  document.querySelectorAll('[data-lobby-source]').forEach(button=>button.onclick=()=>{lobbySource=button.dataset.lobbySource;apply(state);if(lobbySource==='bank' && state.source==='custom')$('topic-form').requestSubmit();});
-  $('lobby-topic').addEventListener('change',()=>{$('topic-form').requestSubmit();});
+  document.querySelectorAll('[data-lobby-mode]').forEach(button=>button.onclick=()=>{
+    lobbyMode=button.dataset.lobbyMode;
+    apply(state);
+    if(lobbyMode==='random' && (state.source!=='bank' || state.topic))action(async()=>{apply(await api(sessionPath('/topic'),'PUT',{topic:null,round:state.round}));});
+    else withdrawReadyForSelection();
+  });
+  $('lobby-topic').addEventListener('change',()=>{if($('lobby-topic').value)$('topic-form').requestSubmit();});
   $("create-form").addEventListener("submit", (event) => {
     event.preventDefault();
     action(async () => {
-      let problem;
       if (!window.mathAccount.user) { window.mathAccount.onSignedIn = () => $("create-form").requestSubmit(); window.mathAccount.open(); return; }
-      try { problem = createSource === "custom" ? JSON.parse($("problem-json").value) : undefined; } catch { throw new Error("Проверьте формат JSON задачи."); }
-      enter(await api("/api/sessions", "POST", { name: window.mathAccount.user.display_name, topic: $("create-topic").value || null, ...(problem ? {problem} : {}) }));
+      enter(await api("/api/sessions", "POST", {}));
       notice("Дуэль создана. Отправьте приглашение другу.");
     });
-  });
-  $("create-file").addEventListener("change", async (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
-    try {
-      if (file.size > 150000) throw new Error("Файл задачи должен быть меньше 150 КБ.");
-      $("problem-json").value = await file.text();
-      JSON.parse($("problem-json").value);
-      createSource="custom";document.querySelector('[data-create-source="custom"]').click();
-      notice("Задача загружена.");
-    } catch (error) { notice(error.message, true); }
-    event.target.value = "";
   });
   $("join-form").addEventListener("submit", (event) => {
     event.preventDefault();
@@ -643,18 +670,23 @@ async function init() {
       notice("Вы присоединились к дуэли.");
     });
   });
-  $("copy-invite").addEventListener("click", async () => {
-    try { await navigator.clipboard.writeText(`${location.origin}/s/${code}`); notice("Приглашение скопировано."); }
-    catch { notice(`Приглашение: ${location.origin}/s/${code}`); }
-  });
-  $("topic-form").addEventListener("submit", event => {event.preventDefault(); action(async () => {apply(await api(sessionPath('/topic'),'PUT',{topic:$('lobby-topic').value || null,round:state.round}));notice('Тема обновлена. Подтвердите готовность заново.');});});
+  async function copyInvitation(){
+    clearTimeout(inviteFeedbackTimer);
+    try{await navigator.clipboard.writeText(`${location.origin}/s/${code}`);$('invite-feedback').textContent='Ссылка скопирована. Отправьте её другу.';$('copy-lobby-invite').textContent='Скопировано';if(state.phase!=='lobby')notice('Приглашение скопировано.');}
+    catch{$('invite-url').focus();$('invite-url').select();$('invite-feedback').textContent='Скопируйте выделенную ссылку.';}
+    inviteFeedbackTimer=setTimeout(()=>{inviteFeedbackTimer=null;$('copy-lobby-invite').textContent='Скопировать ссылку';if(state)apply(state);},4000);
+  }
+  $('copy-invite').addEventListener('click',copyInvitation);
+  $('copy-lobby-invite').addEventListener('click',copyInvitation);
+  $('invite-url').addEventListener('click',event=>event.target.select());
+  $("topic-form").addEventListener("submit", event => {event.preventDefault(); action(async () => {apply(await api(sessionPath('/topic'),'PUT',{topic:$('lobby-topic').value,round:state.round}));notice('Тема обновлена. Подтвердите готовность заново.');});});
   $("ready").addEventListener("click", () => action(async () => {
     apply(await api(sessionPath("/ready"), "PUT", { ready: !me().ready, round: state.round }));
   }));
   $("rematch").addEventListener("click", () => action(async () => {
     apply(await api(sessionPath("/rematch"), "POST", { round: state.round }));
   }));
-  $("next-problem-json").addEventListener("input",()=>{customProblemDirty=true;controls();});
+  $("next-problem-json").addEventListener("input",()=>{const wasDirty=customProblemDirty;customProblemDirty=true;controls();if(!wasDirty)withdrawReadyForSelection();});
   $("next-problem-form").addEventListener("submit", (event) => {
     event.preventDefault();
     action(async () => {
@@ -669,6 +701,7 @@ async function init() {
   $("next-problem-file").addEventListener("change", async (event) => {
     const file = event.target.files[0];
     if (!file) return;
+    await withdrawReadyForSelection();
     try {
       if (file.size > 150000) throw new Error("Файл задачи должен быть меньше 150 КБ.");
       const text = await file.text();
@@ -739,8 +772,6 @@ async function init() {
   window.addEventListener('accountauthenticated', async () => {if (code) await poll(); notice('Вы вошли. Можно продолжить.');});
   await window.mathAccount.ready;
   try {
-    const topics = await api('/api/problems/topics');
-    for (const topic of topics.topics) {const option = document.createElement('option'); option.value=topic.slug; option.textContent=`${topic.label} · ${topic.unseen_count ?? topic.count}`; $('create-topic').append(option); $('lobby-topic').append(option.cloneNode(true));}
     const data = await api("/api/sessions");
 
     $("recent").hidden = !data.sessions.length;
