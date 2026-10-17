@@ -14,7 +14,7 @@
       link.href = image.url || image.data_url;
       link.target = "_blank";
       link.rel = "noopener noreferrer";
-      link.title = "Open full-size screenshot";
+      link.title = "Открыть изображение целиком";
       if (image.data_url) {
         // Browsers block top-level data: navigation; use a short-lived blob URL.
         link.addEventListener("click", (event) => {
@@ -38,8 +38,8 @@
       if (remove) {
         const button = document.createElement("button");
         button.type = "button";
-        button.textContent = "Remove";
-        button.setAttribute("aria-label", `Remove ${image.name}`);
+        button.textContent = "Удалить";
+        button.setAttribute("aria-label", `Удалить ${image.name}`);
         button.addEventListener("click", () => remove(index));
         caption.append(button);
       }
@@ -107,22 +107,22 @@
       this.setDisabled(this.disabled);
       this.onChange();
       try {
-        if (this.images.length + files.length > 4) throw new Error("Attach at most four screenshots per submission.");
+        if (this.images.length + files.length > 4) throw new Error("Можно прикрепить не более четырёх изображений.");
         const added = [];
         for (const file of files) {
-          if (!types.has(file.type)) throw new Error("Screenshots must be PNG, JPEG, or WebP images.");
-          if (!file.size || file.size > maxBytes) throw new Error("Each screenshot must be at most 3 MiB.");
+          if (!types.has(file.type)) throw new Error("Используйте изображения PNG, JPEG или WebP.");
+          if (!file.size || file.size > maxBytes) throw new Error("Размер изображения — до 3 МиБ.");
           const data_url = await new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.onload = () => resolve(reader.result);
-            reader.onerror = () => reject(new Error("Unable to read the screenshot. Try selecting it again."));
+            reader.onerror = () => reject(new Error("Не удалось прочитать изображение. Выберите его ещё раз."));
             reader.readAsDataURL(file);
           });
           const image = new Image();
           image.src = data_url;
-          try { await image.decode(); } catch { throw new Error("The screenshot is not a readable image."); }
-          if (image.naturalWidth * image.naturalHeight > 20000000) throw new Error("Each screenshot must be at most 20 megapixels.");
-          added.push({ name: (file.name || "Screenshot").slice(0, 200), data_url });
+          try { await image.decode(); } catch { throw new Error("Не удалось открыть изображение."); }
+          if (image.naturalWidth * image.naturalHeight > 20000000) throw new Error("Разрешение изображения — до 20 мегапикселей.");
+          added.push({ name: (file.name || "Изображение").slice(0, 200), data_url });
         }
         if (this.generation !== generation) return;
         this.images.push(...added);

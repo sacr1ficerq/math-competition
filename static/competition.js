@@ -24,6 +24,13 @@ let restoringImages = false;
 const appealDrafts = new Map();
 const appealRequests = new Set();
 let imageBackupFailed = false;
+let acceptedPayload = null;
+let reviewTab = "own";
+let noticeTimer;
+const initializedReviews = new Set();
+let createSource = "bank";
+let lobbySource = null;
+let customProblemDirty = false;
 
 function requestId() {
   if (typeof crypto.randomUUID === "function") return crypto.randomUUID();
@@ -37,6 +44,8 @@ function requestId() {
 function notice(message, error = false) {
   $("notice").textContent = message;
   $("notice").classList.toggle("error", error);
+  clearTimeout(noticeTimer);
+  if (!error && message) noticeTimer=setTimeout(()=>{$("notice").textContent="";},4000);
 }
 
 async function api(path, method = "GET", body) {
@@ -48,7 +57,7 @@ async function api(path, method = "GET", body) {
   const data = await response.json();
   if (!response.ok) {
     const message = typeof data.detail === "string" ? data.detail : data.detail?.map((e) => `${e.loc.slice(1).join(".")}: ${e.msg}`).join("; ");
-    const error = new Error(message || `Request failed (${response.status}).`);
+    const error = new Error(message || `Не удалось выполнить запрос (${response.status}).`);
     error.status = response.status;
     throw error;
   }
@@ -57,7 +66,7 @@ async function api(path, method = "GET", body) {
 
 const me = () => state?.players.find((p) => p.id === state.me);
 const sessionPath = (suffix = "") => `/api/sessions/${encodeURIComponent(code)}${suffix}`;
-const timeText = (value) => new Date(value * 1000).toLocaleTimeString();
+const timeText = (value) => new Date(value * 1000).toLocaleTimeString("ru-RU", {hour12:false});
 const now = () => Date.now() / 1000 + clockOffset;
 const draftKey = () => `math-draft:${code}:${state.me}${state.round > 1 ? `:${state.round}` : ""}`;
 
@@ -82,6 +91,7 @@ function apply(next) {
     draftDirty = false;
     draftConflict = false;
     pendingRequest = null;
+    acceptedPayload = null;
     historySignature = problemSignature = playerSignature = "";
   }
   state = next;
@@ -90,7 +100,8 @@ function apply(next) {
     restoringImages = true;
     solutionImages.clear();
     $("next-problem-json").value = "";
-    $("next-problem").open = false;
+    lobbySource = null;
+    customProblemDirty = false;
     for (const id of ["problem-statement", "criteria", "reference"]) $(id).replaceChildren();
   }
   clockOffset = next.server_time - Date.now() / 1000;
@@ -120,7 +131,8 @@ function apply(next) {
     restoringImages = true;
     window.mathDrafts.get(draftKey()).then(images => {
       if (state.round !== restoringRound || !images) return;
-      solutionImages.images = images;
+      solutionImages.images = Array.isArray(images) ? images : images.images || [];
+      acceptedPayload = Array.isArray(images) ? null : images.accepted || null;
       solutionImages.render();
     }).catch(() => {imageBackupFailed = true;}).finally(() => {restoringImages = false; controls();});
     preview();
@@ -132,17 +144,22 @@ function apply(next) {
     }
   }
   $("draft-conflict").hidden = !draftConflict;
-  $("key-state").textContent = state.has_api_key ? "OpenRouter подключён. Ключ сохранён в аккаунте." : "Добавьте ключ OpenRouter в настройках перед началом.";
-  $("remove-key").hidden = !state.has_api_key;
-  $("shared-model").textContent = state.model;
-  $("model-form").hidden = state.phase !== "lobby" || state.me !== state.host;
-  $("topic-form").hidden = state.phase !== "lobby" || state.me !== state.host || state.source !== "bank";
+  if (!lobbySource || state.phase !== "lobby") lobbySource=state.source;
+  $("topic-form").hidden = state.phase !== "lobby" || state.me !== state.host || lobbySource !== "bank";
+  $("lobby-source-tabs").hidden = state.me !== state.host;
+  const selectedTopic=state.available_topics?.find(topic=>topic.slug===state.topic);
+  $("lobby-task-summary").textContent = state.source === "custom" ? "Своя задача загружена" : `Из банка · ${selectedTopic?.label || (state.topic || "Любая тема")}`;
+  document.querySelectorAll("[data-lobby-source]").forEach(button=>button.setAttribute("aria-pressed",String(button.dataset.lobbySource===lobbySource)));
   if (document.activeElement !== $("lobby-topic")) $("lobby-topic").value=state.topic || "";
-  if (document.activeElement !== $("lobby-model")) $("lobby-model").value = state.model;
   $("lobby").hidden = state.phase !== "lobby";
-  $("next-problem").hidden = state.phase !== "lobby" || state.round === 1 || state.me !== state.host || state.source === "bank";
-  $("arena").hidden = state.phase === "lobby";
-  $("histories").hidden = state.phase === "lobby";
+  $("lobby-title").textContent=state.round === 1 ? "Начнём дуэль?" : "Следующая задача?";
+  document.body.dataset.phase=state.phase;
+  $("next-problem").hidden = state.phase !== "lobby" || state.me !== state.host || lobbySource !== "custom";
+  $("connect-key").hidden = state.has_api_key;
+  $("topic-availability").textContent = state.source === "custom" ? "Сейчас выбрана своя задача. Выбор темы вернёт задачи из банка." : "Подбираем задачу, которую ещё не открывал ни один из вас.";
+  window.mathUI.syncPickers();
+  $("arena").hidden = state.phase === "lobby" || state.phase === "finished";
+  $("histories").hidden = state.phase === "lobby" || (state.phase === "finished" && reviewTab === "reference");
   $("ready").textContent = player.ready ? "Не готов" : "Готов";
   $("lobby-hint").textContent = !state.has_api_key ? "Сначала подключите OpenRouter в настройках. Ключ сохранится для следующих игр." : state.players.length < 2 ? "Отправьте ссылку другу, чтобы начать." : player.ready ? "Ждём готовности соперника…" : "Нажмите «Готов», когда будете готовы начать.";
   renderPlayers();
@@ -150,6 +167,8 @@ function apply(next) {
   if (problem !== problemSignature && state.problem) {
     problemSignature = problem;
     $("problem-title").textContent = state.problem.title;
+    $("review-problem-title").textContent = state.problem.title;
+    render($("review-problem-statement"), state.problem.statement);
     render($("problem-statement"), state.problem.statement);
     if (state.phase === "finished") {
       render($("criteria"), state.problem.criterions);
@@ -157,20 +176,23 @@ function apply(next) {
     }
   }
   $("result").hidden = state.phase !== "finished";
-  $("revealed").hidden = state.phase !== "finished";
+  $("revealed").hidden = state.phase !== "finished" || reviewTab !== "reference";
   $("feedback-hint").textContent = state.phase === "finished" ? "Решения и подробный разбор доступны" : "Решение соперника откроется после раунда";
   if (state.result) {
     const winner = state.players.find((p) => p.id === state.result.winner);
-    $("result-title").textContent = winner ? `${winner.name} побеждает и получает 🥪` : "Ничья";
-    $("result-reason").textContent = state.appeals_pending ? "Предварительный результат: рассматривается апелляция. Итог и счёт серии могут измениться." : state.result.reason;
+    $("result-title").textContent = state.appeals_pending ? "Результат уточняется" : winner ? winner.id === state.me ? "Ваша победа" : `${winner.name} побеждает` : "Ничья";
+    $("result-reason").textContent = state.appeals_pending ? "Предварительный результат: рассматривается апелляция. Итог и счёт серии могут измениться." : resultReason();
   }
+  const historyHost = state.phase === "finished" ? $("result-history-host") : $("active-history-host");
+  if ($("histories").parentElement !== historyHost) historyHost.append($("histories"));
+  renderResultComparison();
   renderHistory();
   renderRounds();
   renderChat();
   controls();
   if (previousPhase === "lobby" && state.phase === "active") notice("Оба готовы. Условие открыто — можно решать.");
-  if (previousPhase && previousPhase !== "finished" && state.phase === "finished") notice("Раунд завершён. Доступны решения обоих игроков и разбор.");
-  if (roundChanged) notice(`Round ${state.round} is ready in the same session. Both players can click Ready when set.`);
+  if (previousPhase && previousPhase !== "finished" && state.phase === "finished") notice("");
+  if (roundChanged) notice(`Раунд ${state.round}. Подтвердите готовность к новой задаче.`);
 }
 
 function renderPlayers() {
@@ -188,7 +210,7 @@ function renderPlayers() {
     name.textContent = `${p.name}${p.id === state.me ? " (вы)" : ""}`;
     const label = document.createElement("span");
     label.className = "player-status";
-    label.textContent = state.phase === "lobby" ? p.ready ? "Готов" : "Не готов" : p.finalized ? `Finalized · ${timeText(p.finalized_at)}` : "Решает";
+    label.textContent = state.phase === "lobby" ? p.ready ? "Готов" : "Не готов" : p.finalized ? state.phase === "finished" ? "Раунд завершён" : `Завершил в ${timeText(p.finalized_at)}` : "Решает";
     if (p.finalized) label.title = new Date(p.finalized_at * 1000).toLocaleString();
     top.append(name, label);
     const score = document.createElement("div");
@@ -205,7 +227,7 @@ function renderPlayers() {
     tip.className = "score-tooltip";
     tip.role = "tooltip";
     tip.id = `score-${p.id}`;
-    tip.textContent = `Best verdict: ${p.score.best}. Counted: ${p.score.counted}. Penalty: ${p.score.penalty}.`;
+    tip.textContent = `Лучшая оценка: ${p.score.best}. Проверок: ${p.score.counted}. Штраф: ${p.score.penalty}.`;
     score.setAttribute("aria-describedby", tip.id);
     score.append(number, suffix, tip);
     const wins = document.createElement("div");
@@ -236,19 +258,20 @@ function controls() {
   $("submit").disabled = locked || actionBusy || draftConflict || (solutionImages.busy || restoringImages) || !state.has_api_key || (!$("solution").value.trim() && !solutionImages.value.length);
   solutionImages.setDisabled(locked || actionBusy || restoringImages);
   $("finalize").disabled = locked || actionBusy || solutionImages.busy;
-  const latest = p.submissions[p.submissions.length - 1];
-  const changed = !!($("solution").value.trim() || solutionImages.value.length) && (!latest || latest.solution !== $("solution").value || JSON.stringify(latest.images || []) !== JSON.stringify(solutionImages.value));
-  $("finalize").textContent = p.finalized ? "Завершено" : changed ? "Отправить и завершить" : "Завершить";
-  $("finalize").disabled = locked || actionBusy || solutionImages.busy || draftConflict || (changed && !state.has_api_key);
+  const changed = hasUnsubmittedChanges();
+  $("finalize").textContent = p.finalized ? "Сдано" : changed ? "Отправить и сдать" : "Сдать";
+  $("finalize").disabled = locked || actionBusy || solutionImages.busy || restoringImages || draftConflict || (changed && !state.has_api_key);
   $("surrender").disabled = locked || actionBusy;
-  $("ready").disabled = actionBusy || state.players.length < 2 || !state.has_api_key;
+  const customPending = state.phase === "lobby" && state.me === state.host && lobbySource === "custom" && (state.source !== "custom" || customProblemDirty);
+  $("ready").disabled = actionBusy || state.players.length < 2 || !state.has_api_key || customPending;
+  if (customPending) $("lobby-hint").textContent = "Добавьте и примените свою задачу перед стартом.";
   $("rematch").disabled = actionBusy || state.phase !== "finished" || !!state.appeals_pending;
   $("rematch").title = state.appeals_pending ? "Дождитесь рассмотрения апелляции" : "";
   let hint = "";
   if (state.phase === "grading") hint = "Ждём окончания проверки…";
-  else if (p.finalized && pending) hint = `Finalized · ${pending} still grading. Your score is provisional.`;
-  else if (p.finalized) hint = p.submissions.length ? "Вы завершили решение." : "Finalized without a submission. No solution was sent for grading.";
-  else if (pending) hint = `${pending} grading in background. You may submit again or finalize.`;
+  else if (p.finalized && pending) hint = `Завершено · проверяется попыток: ${pending}. Оценка предварительная.`;
+  else if (p.finalized) hint = p.submissions.length ? "Вы завершили решение." : "Вы завершили раунд без отправленного решения.";
+  else if (pending) hint = `Проверяется попыток: ${pending}. Можно продолжать решать.`;
   else if (!state.has_api_key) hint = "Подключите OpenRouter в настройках.";
   else if (!p.submissions.length) hint = "Решение ещё не отправлено на проверку.";
   $("submission-hint").textContent = hint;
@@ -256,11 +279,34 @@ function controls() {
   $("deadline").hidden = p.deadline === null || p.finalized || state.phase === "finished";
   if (!$("deadline").hidden) {
     const remaining = Math.max(0, Math.ceil(p.deadline - now()));
-    $("deadline").textContent = remaining ? `Your opponent finalized. Time left: ${Math.floor(remaining / 60)}:${String(remaining % 60).padStart(2, "0")}` : "Deadline expired. Finalizing automatically…";
+    $("deadline").textContent = remaining ? `Соперник завершил. Осталось ${Math.floor(remaining / 60)}:${String(remaining % 60).padStart(2, "0")}` : "Время истекло. Завершаем раунд…";
   }
 }
 
+function resultReason() {
+  if(state.result?.reason === "Equal scores; earlier finalization wins.") return "Оценки равны. Побеждает тот, кто завершил решение первым.";
+  if(state.result?.reason === "Higher final score.") return "Побеждает решение с более высокой итоговой оценкой.";
+  return state.result?.winner ? "За победу в раунде — один бутерброд." : "Одинаковые результаты. Бутерброды не начисляются.";
+}
+
+function finishLabel(player) {
+  if (!player.finalized_at) return "Ещё не завершено";
+  const equal = state.result && new Set(state.players.map(item=>item.score.score)).size === 1;
+  const order=equal && state.result.winner ? state.result.winner===player.id ? "Сдал первым" : "Сдал вторым" : "Завершено";
+  return `${order} · ${timeText(player.finalized_at)}`;
+}
+
+function renderResultComparison() {
+  if (state.phase !== "finished") return;
+  const signature=JSON.stringify([state.players.map(player=>[player.id,player.score,player.finalized_at]),state.result]);
+  if ($('result-comparison').dataset.signature===signature) return;
+  $('result-comparison').dataset.signature=signature;
+  $('result-comparison').replaceChildren();
+  for(const player of state.players){const item=document.createElement('div');item.className='result-player'+(state.result?.winner===player.id?' is-winner':'');const name=document.createElement('strong');name.textContent=player.id===state.me?'Вы':player.name;const score=document.createElement('div');score.className='result-number';score.textContent=player.score.score;const scale=document.createElement('span');scale.textContent=' / 10';score.append(scale);const detail=document.createElement('p');detail.textContent=`Проверок: ${player.score.counted} · Штраф: ${player.score.penalty}`;const finish=document.createElement("p");finish.textContent=finishLabel(player);item.append(name,score,detail,finish);$('result-comparison').append(item);}
+}
+
 function renderHistory(players = state.players, target = $("history")) {
+  if (target === $("history")) players=players.filter(player=>state.phase === "finished" ? reviewTab === "opponent" ? player.id !== state.me : player.id === state.me : player.id === state.me);
   if (target === $("history")) {
     const signature = JSON.stringify(players.map((p) => [p.name, p.submissions]));
     if (signature === historySignature) return;
@@ -270,11 +316,13 @@ function renderHistory(players = state.players, target = $("history")) {
   const focusId = focused?.id;
   const selection = focused?.selectionStart !== undefined ? [focused.selectionStart, focused.selectionEnd] : null;
   const opened = new Set([...target.querySelectorAll("details[open]")].map((d) => d.id));
+  const reviewKey = `${state.code}:${state.round}:${reviewTab}`;
+  const firstReview = target === $("history") && state.phase === "finished" && !initializedReviews.has(reviewKey);
   const content = document.createDocumentFragment();
   for (const p of players) {
     const heading = document.createElement("h3");
     heading.className = "history-owner";
-    heading.textContent = p.name + (p.id === state.me ? " · your submissions" : " · opponent");
+    heading.textContent = p.name + (p.id === state.me ? " · ваши попытки" : " · соперник");
     content.append(heading);
     if (!p.submissions.length) {
       const empty = document.createElement("p");
@@ -286,9 +334,9 @@ function renderHistory(players = state.players, target = $("history")) {
       const entry = document.createElement("details");
       entry.className = "submission";
       entry.id = `submission-${s.id}`;
-      entry.open = opened.has(entry.id);
+      entry.open = opened.has(entry.id) || (firstReview && index === p.submissions.length-1);
       const summary = document.createElement("summary");
-      summary.append(document.createTextNode(`Submission ${index + 1}`));
+      summary.append(document.createTextNode(`Попытка ${index + 1}`));
       const time = document.createElement("time");
       time.dateTime = new Date(s.submitted_at * 1000).toISOString();
       time.textContent = timeText(s.submitted_at);
@@ -311,7 +359,7 @@ function renderHistory(players = state.players, target = $("history")) {
       else if (s.status === "graded") { const text = document.createElement("p"); text.className = "muted"; text.textContent = "Подробный разбор откроется после раунда."; feedback.append(text); }
       if (s.error) { const error = document.createElement("p"); error.className = "error"; error.textContent = s.error; feedback.append(error); }
       if (s.solution !== undefined) {
-        section(p.id === state.me ? "Отправленное решение" : `${p.name}’s submitted solution`, s.solution || "Решение на изображениях.");
+        section(p.id === state.me ? "Отправленное решение" : `Решение ${p.name}`, s.solution || "Решение на изображениях.");
         window.appendSolutionImages(feedback, s.images || []);
       }
       else { const privateText = document.createElement("p"); privateText.className = "muted"; privateText.textContent = "Решение соперника откроется после раунда."; feedback.append(privateText); }
@@ -321,6 +369,7 @@ function renderHistory(players = state.players, target = $("history")) {
     }
   }
   target.replaceChildren(content);
+  if (firstReview) initializedReviews.add(reviewKey);
   if (focusId) { const replacement = document.getElementById(focusId); replacement?.focus({preventScroll:true}); if (selection && replacement?.setSelectionRange) replacement.setSelectionRange(...selection); }
 }
 
@@ -385,45 +434,30 @@ function renderRounds() {
   if (signature === roundHistorySignature) return;
   roundHistorySignature = signature;
   const list = $("round-history-list");
-  const opened = new Set([...list.querySelectorAll("details[open]")].map((entry) => entry.id));
-  list.replaceChildren();
-  for (const round of [...rounds].reverse()) {
-    const entry = document.createElement("details");
-    entry.id = `round-${round.round}`;
-    entry.className = "submission";
-    const summary = document.createElement("summary");
-    const winner = state.players.find((p) => p.id === round.result.winner);
-    summary.textContent = `Round ${round.round} · ${round.title} · ${winner ? `${winner.name} wins` : "Draw"} · ${state.players.map((p) => round.scores[p.id]).join(" : ")}`;
-    const body = document.createElement("div");
-    body.className = "feedback";
-    let loaded = false;
-    let busy = false;
-    entry.addEventListener("toggle", async () => {
-      if (!entry.open || loaded || busy) return;
-      busy = true;
-      body.textContent = "Загрузка раунда…";
-      try {
-        const archived = await api(sessionPath(`/rounds/${round.round}`));
-        body.replaceChildren();
-        for (const [title, text] of [["Условие", archived.problem.statement], ["Критерии", archived.problem.criterions], ["Эталонное решение", archived.problem.reference_solution]]) {
-          const heading = document.createElement("h3");
-          heading.textContent = title;
-          const content = document.createElement("div");
-          content.className = "rendered";
-          render(content, text);
-          body.append(heading, content);
-        }
-        const history = document.createElement("div");
-        renderHistory(archived.players, history);
-        body.append(history);
-        loaded = true;
-      } catch (error) { body.textContent = error.message; }
-      finally { busy = false; }
-    });
-    entry.append(summary, body);
-    entry.open = opened.has(entry.id);
-    list.append(entry);
+  const navigation=document.createElement('div');navigation.className='timeline-tabs';navigation.setAttribute('role','group');navigation.setAttribute('aria-label','Выбрать раунд');
+  const detail=document.createElement('div');detail.className='timeline-detail';
+  const cache=new Map();let selected=null;
+  async function selectRound(round,button){
+    selected=round.round;
+    navigation.querySelectorAll('button').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));
+    detail.textContent='Загрузка раунда…';
+    try {
+      const archived=cache.get(round.round) || await api(sessionPath(`/rounds/${round.round}`));cache.set(round.round,archived);
+      if(selected!==round.round)return;
+      detail.replaceChildren();const heading=document.createElement('h3');heading.textContent=round.title;detail.append(heading);
+      const reason=document.createElement('p');reason.className='field-help';const winner=state.players.find(player=>player.id===round.result.winner);reason.textContent=winner?`${winner.name} · +1 🥪`:'Ничья';detail.append(reason);
+      const tabs=document.createElement('div');tabs.className='review-tabs';tabs.role='group';tabs.setAttribute('aria-label','Разбор предыдущего раунда');const body=document.createElement('div');
+      for(const [key,label] of [['own','Ваше решение'],['opponent','Соперник'],['reference','Эталон']]){
+        const tab=document.createElement('button');tab.type='button';tab.textContent=label;tab.setAttribute('aria-pressed',String(key==='own'));tab.onclick=()=>{tabs.querySelectorAll('button').forEach(item=>item.setAttribute('aria-pressed',String(item===tab)));body.replaceChildren();if(key==='reference'){render(body,archived.problem.reference_solution);body.className='rendered';}else{body.className='';renderHistory(archived.players.filter(player=>key==='own'?player.id===state.me:player.id!==state.me),body);body.querySelector('details')?.setAttribute('open','');}};tabs.append(tab);
+      }
+      const statement=document.createElement('details');statement.className='review-problem';const summary=document.createElement('summary');summary.textContent='Условие задачи';const text=document.createElement('div');text.className='rendered';render(text,archived.problem.statement);statement.append(summary,text);detail.append(statement,tabs,body);tabs.querySelector('button').click();
+    }catch(error){if(selected===round.round)detail.textContent=error.message;}
   }
+  for(const round of [...rounds].reverse()){const button=document.createElement('button');button.type='button';button.textContent=`Раунд ${round.round} · ${state.players.map(player=>round.scores[player.id]).join(' : ')}`;button.onclick=()=>selectRound(round,button);navigation.append(button);}
+  list.replaceChildren(navigation,detail);
+  let firstLoaded=false;
+  $('round-history').ontoggle=()=>{if($('round-history').open && !firstLoaded){firstLoaded=true;navigation.querySelector('button')?.click();}};
+  if($('round-history').open){firstLoaded=true;navigation.querySelector('button')?.click();}
 }
 
 function renderChat() {
@@ -439,7 +473,7 @@ function renderChat() {
     const meta = document.createElement("div");
     meta.className = "chat-meta";
     const name = document.createElement("strong");
-    name.textContent = message.kind === "solution" ? `Reference solution · Round ${message.round}` : state.players.find((p) => p.id === message.player_id)?.name || "Player";
+    name.textContent = message.kind === "solution" ? `Эталон · раунд ${message.round}` : state.players.find((p) => p.id === message.player_id)?.name || "Игрок";
     const time = document.createElement("time");
     time.textContent = timeText(message.sent_at);
     meta.append(name, time);
@@ -479,7 +513,7 @@ async function saveDraft() {
           $("draft-conflict").hidden = false;
           notice(error.message, true);
         } else {
-          notice("Draft could not reach the server. Your local copy is kept; reconnecting will retry.", true);
+          notice("Черновик сохранён на устройстве. После восстановления связи отправим его на сервер.", true);
         }
         break;
       }
@@ -503,6 +537,7 @@ async function poll() {
       $("session").hidden = true;
       $("landing").hidden = false;
       $("join-code").value = code;
+      document.querySelector('[data-home-mode="join"]').click();
       notice("Присоединитесь к дуэли по приглашению.");
       return;
     }
@@ -527,6 +562,21 @@ async function action(callback) {
   finally { actionBusy = false; controls(); }
 }
 
+function hasUnsubmittedChanges() {
+  if (!state || !solutionImages) return false;
+  const solution = $("solution").value;
+  const images = solutionImages.value;
+  if (!solution.trim() && !images.length) return false;
+  const latest = me().submissions.at(-1);
+  if (!latest) return true;
+  if (acceptedPayload?.submissionId === latest.id) return acceptedPayload.solution !== solution || acceptedPayload.images.length !== images.length || images.some((image,index)=>image.name !== acceptedPayload.images[index]?.name || image.data_url !== acceptedPayload.images[index]?.data_url);
+  return latest.solution !== solution || !!images.length;
+}
+
+function persistImageDraft() {
+  return window.mathDrafts.put(draftKey(), {images:solutionImages.value, accepted:acceptedPayload});
+}
+
 async function submitSolution(finalize = false) {
   if ($("submit").disabled) return;
   await action(async () => {
@@ -537,26 +587,37 @@ async function submitSolution(finalize = false) {
       pendingRequest = { solution, images, request_id: requestId(), round: state.round };
     }
     const next = await api(sessionPath("/submissions"), "POST", {...pendingRequest, finalize});
+    const accepted = next.players.find(player=>player.id===next.me).submissions.find(submission=>submission.request_id===pendingRequest.request_id) || next.players.find(player=>player.id===next.me).submissions.at(-1);
+    acceptedPayload = {submissionId:accepted.id, solution, images};
     pendingRequest = null;
     apply(next);
+    await persistImageDraft().catch(()=>{imageBackupFailed=true;});
     notice("Решение принято. Проверка идёт в фоне.");
   });
 }
 
 async function init() {
-  if (!render) { notice("Rendering libraries could not load. Check your connection and reload.", true); return; }
+  if (!render) { notice("Не удалось загрузить отображение формул. Проверьте соединение и обновите страницу.", true); return; }
   solutionImages = new window.SolutionImages($("solution-images"), $("image-attachments"), $("solution"), () => {
     controls();
-    if (state && !restoringImages) window.mathDrafts.put(draftKey(), solutionImages.value).then(() => {imageBackupFailed=false; controls();}).catch(() => {imageBackupFailed=true; controls();});
+    if (state && !restoringImages) persistImageDraft().then(() => {imageBackupFailed=false; controls();}).catch(() => {imageBackupFailed=true; controls();});
   }, notice);
   solutionImages.setDisabled(true);
+  $("connect-key").onclick = () => window.mathAccount.open();
+  $("open-chat").onclick = () => $("chat-dialog").showModal();
+  $("close-chat").onclick = () => $("chat-dialog").close();
+  document.querySelectorAll('[data-review]').forEach(button=>button.addEventListener('click',()=>{reviewTab=button.dataset.review;document.querySelectorAll('[data-review]').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));historySignature="";if(state)apply(state);}));
+  document.querySelectorAll('[data-home-mode]').forEach(button=>button.onclick=()=>{$('create-form').hidden=button.dataset.homeMode!=='create';$('join-disclosure').hidden=button.dataset.homeMode!=='join';document.querySelectorAll('[data-home-mode]').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));});
+  document.querySelectorAll('[data-create-source]').forEach(button=>button.onclick=()=>{createSource=button.dataset.createSource;$('create-bank-fields').hidden=createSource!=='bank';$('create-custom-fields').hidden=createSource!=='custom';document.querySelector('.create-footer>.muted').textContent=createSource==='bank'?'Новая задача для обоих':'Эталон известен автору';document.querySelectorAll('[data-create-source]').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));});
+  document.querySelectorAll('[data-lobby-source]').forEach(button=>button.onclick=()=>{lobbySource=button.dataset.lobbySource;apply(state);if(lobbySource==='bank' && state.source==='custom')$('topic-form').requestSubmit();});
+  $('lobby-topic').addEventListener('change',()=>{$('topic-form').requestSubmit();});
   $("create-form").addEventListener("submit", (event) => {
     event.preventDefault();
     action(async () => {
       let problem;
       if (!window.mathAccount.user) { window.mathAccount.open(); return; }
-      try { problem = $("problem-json").value.trim() ? JSON.parse($("problem-json").value) : undefined; } catch { throw new Error("Проверьте формат JSON задачи."); }
-      enter(await api("/api/sessions", "POST", { name: window.mathAccount.user.display_name, topic: $("create-topic").value || null, ...(problem ? {problem} : {}), model: $("create-model").value }));
+      try { problem = createSource === "custom" ? JSON.parse($("problem-json").value) : undefined; } catch { throw new Error("Проверьте формат JSON задачи."); }
+      enter(await api("/api/sessions", "POST", { name: window.mathAccount.user.display_name, topic: $("create-topic").value || null, ...(problem ? {problem} : {}) }));
       notice("Дуэль создана. Отправьте приглашение другу.");
     });
   });
@@ -564,10 +625,11 @@ async function init() {
     const file = event.target.files[0];
     if (!file) return;
     try {
-      if (file.size > 150000) throw new Error("Problem JSON must be smaller than 150 KB.");
+      if (file.size > 150000) throw new Error("Файл задачи должен быть меньше 150 КБ.");
       $("problem-json").value = await file.text();
       JSON.parse($("problem-json").value);
-      notice("Problem JSON loaded.");
+      createSource="custom";document.querySelector('[data-create-source="custom"]').click();
+      notice("Задача загружена.");
     } catch (error) { notice(error.message, true); }
     event.target.value = "";
   });
@@ -583,29 +645,7 @@ async function init() {
   });
   $("copy-invite").addEventListener("click", async () => {
     try { await navigator.clipboard.writeText(`${location.origin}/s/${code}`); notice("Приглашение скопировано."); }
-    catch { notice(`Invite link: ${location.origin}/s/${code}`); }
-  });
-  $("key-form").addEventListener("submit", (event) => {
-    event.preventDefault();
-    action(async () => {
-      if (!$("session-key").value.trim()) throw new Error("Enter an OpenRouter API key.");
-      await api("/api/key", "PUT", { api_key: $("session-key").value });
-      $("session-key").value = "";
-      if (state) apply(await api(sessionPath()));
-      notice("Ключ сохранён.");
-    });
-  });
-  $("remove-key").addEventListener("click", () => action(async () => {
-    await api("/api/key", "DELETE");
-    apply(await api(sessionPath()));
-    notice("API key forgotten.");
-  }));
-  $("model-form").addEventListener("submit", (event) => {
-    event.preventDefault();
-    action(async () => {
-      apply(await api(sessionPath("/model"), "PUT", { model: $("lobby-model").value, round: state.round }));
-      notice("Shared model updated. Both players need to click Ready again.");
-    });
+    catch { notice(`Приглашение: ${location.origin}/s/${code}`); }
   });
   $("topic-form").addEventListener("submit", event => {event.preventDefault(); action(async () => {apply(await api(sessionPath('/topic'),'PUT',{topic:$('lobby-topic').value || null,round:state.round}));notice('Тема обновлена. Подтвердите готовность заново.');});});
   $("ready").addEventListener("click", () => action(async () => {
@@ -614,23 +654,27 @@ async function init() {
   $("rematch").addEventListener("click", () => action(async () => {
     apply(await api(sessionPath("/rematch"), "POST", { round: state.round }));
   }));
+  $("next-problem-json").addEventListener("input",()=>{customProblemDirty=true;controls();});
   $("next-problem-form").addEventListener("submit", (event) => {
     event.preventDefault();
     action(async () => {
       let problem;
-      try { problem = JSON.parse($("next-problem-json").value); } catch { throw new Error("Problem must be valid JSON."); }
-      apply(await api(sessionPath("/problem"), "PUT", { problem, round: state.round }));
-      notice("Problem updated for this round. Both players need to click Ready again.");
+      try { problem = JSON.parse($("next-problem-json").value); } catch { throw new Error("Проверьте формат JSON задачи."); }
+      const next=await api(sessionPath("/problem"), "PUT", { problem, round: state.round });
+      customProblemDirty=false;
+      apply(next);
+      notice("Задача обновлена. Подтвердите готовность заново.");
     });
   });
   $("next-problem-file").addEventListener("change", async (event) => {
     const file = event.target.files[0];
     if (!file) return;
     try {
-      if (file.size > 150000) throw new Error("Problem JSON must be smaller than 150 KB.");
+      if (file.size > 150000) throw new Error("Файл задачи должен быть меньше 150 КБ.");
       const text = await file.text();
       JSON.parse(text);
       $("next-problem-json").value = text;
+      customProblemDirty=true;controls();
     } catch (error) { notice(error.message, true); }
     event.target.value = "";
   });
@@ -648,7 +692,7 @@ async function init() {
   $("submit").addEventListener("click", () => submitSolution());
   $("finalize").addEventListener("click", async () => {
     const latest = me().submissions.at(-1);
-    const changed = !!($("solution").value.trim() || solutionImages.value.length) && (!latest || latest.solution !== $("solution").value || JSON.stringify(latest.images || []) !== JSON.stringify(solutionImages.value));
+    const changed = hasUnsubmittedChanges();
     if (changed) return submitSolution(true);
     if (!latest && !confirm("Завершить без отправленного решения? Вы получите 0 баллов.")) return;
     action(async () => { await saveDraft(); apply(await api(sessionPath("/finalize"), "POST", {round:state.round})); notice("Вы завершили решение. У соперника остаётся до пяти минут."); });
@@ -692,18 +736,20 @@ async function init() {
     document.querySelectorAll('[data-workspace]').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
   }));
   window.addEventListener('accountchange', event => {if (state && event.detail) {state.has_api_key=event.detail.has_api_key; controls();}});
+  window.addEventListener('accountauthenticated', async () => {if (code) await poll(); notice('Вы вошли. Можно продолжить.');});
   await window.mathAccount.ready;
   try {
     const topics = await api('/api/problems/topics');
     for (const topic of topics.topics) {const option = document.createElement('option'); option.value=topic.slug; option.textContent=`${topic.label} · ${topic.unseen_count ?? topic.count}`; $('create-topic').append(option); $('lobby-topic').append(option.cloneNode(true));}
     const data = await api("/api/sessions");
-    $("create-model").value = data.model;
+
     $("recent").hidden = !data.sessions.length;
     for (const session of data.sessions) {
       const link = document.createElement("a");
       link.className = "recent-link";
       link.href = `/s/${session.code}`;
-      link.textContent = `${session.code} · ${session.names.join(" vs ")} · ${session.phase}`;
+      const name=document.createElement('strong');name.textContent=session.names.join(' и ') || 'Ждём соперника';
+      const meta=document.createElement('div');meta.className='recent-meta';const phase=document.createElement('span');phase.textContent={lobby:'Ожидание друга',active:'Идёт раунд',grading:'Проверка решений',finished:'Раунд завершён'}[session.phase] || session.phase;const arrow=document.createElement('span');arrow.textContent='Продолжить →';meta.append(phase,arrow);link.append(name,meta);
       $("recent-list").append(link);
     }
     $("connection").textContent = "На связи";

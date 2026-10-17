@@ -32,7 +32,7 @@ function updateScore() {
   const penalty = Math.max(0, grades.length - 1);
   const best = grades.length ? Math.max(...grades.map((s) => s.grade.verdict)) : 0;
   $("score").querySelector("strong").textContent = Number((best - penalty).toFixed(2));
-  $("score-help").textContent = `Best verdict: ${best}. Counted submissions: ${grades.length}. Penalty: ${penalty}.`;
+  $("score-help").textContent = `Лучшая оценка: ${best}. Проверок: ${grades.length}. Штраф: ${penalty}.`;
 }
 
 function addSubmission(result, solution, images) {
@@ -43,7 +43,7 @@ function addSubmission(result, solution, images) {
   entry.open = true;
   const summary = document.createElement("summary");
   const label = document.createElement("span");
-  label.textContent = `Submission ${submissions.length}`;
+  label.textContent = `Попытка ${submissions.length}`;
   const time = document.createElement("time");
   time.dateTime = result.submitted_at;
   time.textContent = new Date(result.submitted_at).toLocaleTimeString();
@@ -71,11 +71,11 @@ function addSubmission(result, solution, images) {
     error.textContent = result.error;
     feedback.append(error);
   }
-  section("Отправленное решение", solution || "Solution provided in screenshots.");
+  section("Отправленное решение", solution || "Решение на изображениях.");
   window.appendSolutionImages(feedback, images);
   const meta = document.createElement("p");
   meta.className = "meta";
-  meta.textContent = `${result.attempts} grading attempt${result.attempts === 1 ? "" : "s"} · ${result.counted ? "Counts toward score" : "Excluded from submission count"}`;
+  meta.textContent = `Попыток проверки: ${result.attempts} · ${result.counted ? "Учтено в оценке" : "Без штрафа"}`;
   feedback.append(meta);
   entry.append(summary, feedback);
   $("history").prepend(entry);
@@ -91,7 +91,7 @@ async function submit(event) {
   updateButton();
   $("submit").textContent = "Проверяется…";
   $("problem-file").disabled = true;
-  status("Grading your solution. Invalid responses and inference errors are retried up to five times; this can take several minutes.");
+  status("Решение проверяется. Можно продолжать работу — проверка займёт некоторое время.");
   try {
     const response = await fetch("/api/grade", {
       method: "POST",
@@ -101,12 +101,12 @@ async function submit(event) {
     const result = await response.json();
     if (!response.ok) {
       const detail = typeof result.detail === "string" ? result.detail : result.detail?.map((error) => error.msg).join("; ");
-      throw new Error(detail || `Request failed (${response.status}). Check the input and try again.`);
+      throw new Error(detail || `Не удалось выполнить запрос (${response.status}). Попробуйте ещё раз.`);
     }
     addSubmission(result, solution, images);
     status(result.counted ? "Проверка завершена. Разбор — ниже." : result.error, !result.counted);
   } catch (error) {
-    status(`${error.message} No submission penalty was applied.`, true);
+    status(`${error.message} Штраф не применён.`, true);
   } finally {
     pending = false;
     $("submit").textContent = "Проверить решение";
@@ -119,14 +119,14 @@ async function loadProblem(event) {
   const file = event.target.files[0];
   if (!file) return;
   try {
-    if (file.size > 150_000) throw new Error("Problem JSON must be smaller than 150 KB.");
+    if (file.size > 150_000) throw new Error("Файл задачи должен быть меньше 150 КБ.");
     const problem = JSON.parse(await file.text());
     const fields = { title: 300, statement: 30000, criterions: 30000, reference_solution: 30000 };
-    if (!problem || Array.isArray(problem) || typeof problem !== "object") throw new Error("Expected a JSON object.");
-    if (Object.keys(problem).some((key) => !(key in fields))) throw new Error("Problem JSON contains unknown fields.");
+    if (!problem || Array.isArray(problem) || typeof problem !== "object") throw new Error("Ожидается объект JSON.");
+    if (Object.keys(problem).some((key) => !(key in fields))) throw new Error("В JSON задачи есть неизвестные поля.");
     for (const [key, max] of Object.entries(fields)) {
       if (typeof problem[key] !== "string" || !problem[key].trim() || problem[key].length > max) {
-        throw new Error(`Provide a nonempty ${key} string (at most ${max} characters).`);
+        throw new Error(`Заполните поле ${key} (до ${max} символов).`);
       }
     }
     customProblem = problem;
@@ -153,7 +153,7 @@ async function loadProblem(event) {
 
 async function init() {
   if (!window.marked || !window.DOMPurify || !window.katex) {
-    status("Rendering libraries could not load. Check your internet connection and reload the page.", true);
+    status("Не удалось загрузить отображение формул. Проверьте соединение и обновите страницу.", true);
     return;
   }
   solutionImages = new window.SolutionImages($("solution-images"), $("image-attachments"), $("solution"), () => {updateButton(); storePracticeDraft();}, status);
@@ -164,7 +164,7 @@ async function init() {
     storePracticeDraft();
   });
   $("practice-key-settings").onclick = () => window.mathAccount.open();
-  window.addEventListener('accountchange', event => {$("practice-key-state").textContent = event.detail?.has_api_key ? 'OpenRouter подключён · ключ сохранён' : 'Подключите ключ в настройках для проверки'; updateButton();});
+  window.addEventListener('accountchange', event => {$("practice-key-settings").hidden=!!event.detail?.has_api_key;$("practice-key-state").textContent = event.detail?.has_api_key ? '' : 'Для проверки решений нужен ключ.'; updateButton();});
   document.querySelectorAll('[data-workspace]').forEach(button => button.onclick = () => {document.body.dataset.workspace=button.dataset.workspace; document.querySelectorAll('[data-workspace]').forEach(item => item.setAttribute('aria-pressed',String(item === button)));});
   $("submit-form").addEventListener("submit", submit);
   $("solution").addEventListener("keydown", (event) => {
@@ -172,7 +172,8 @@ async function init() {
   });
   $("problem-file").addEventListener("change", loadProblem);
   await window.mathAccount.ready;
-  $("practice-key-state").textContent = window.mathAccount.user?.has_api_key ? 'OpenRouter подключён · ключ сохранён' : 'Подключите ключ в настройках для проверки';
+  $("practice-key-settings").hidden=!!window.mathAccount.user?.has_api_key;
+  $("practice-key-state").textContent = window.mathAccount.user?.has_api_key ? '' : 'Для проверки решений нужен ключ.';
   const request = window.mathAccount.request;
   async function showCatalog() {
     const data = await request('/api/problems' + ($('bank-topic').value ? '?topic='+encodeURIComponent($('bank-topic').value) : ''));
@@ -181,7 +182,7 @@ async function init() {
       const row = document.createElement('button'); row.type='button'; row.className='bank-row';
       const title=document.createElement('strong');title.textContent=problem.title;
       const meta=document.createElement('span');meta.textContent=problem.topic_label + (problem.seen ? ' · Уже открывали' : ' · Новая');row.append(title,meta);
-      row.onclick=()=>{if (!window.mathAccount.user) {window.mathAccount.open();return;} location.href='/practice?problem='+encodeURIComponent(problem.id);};$('bank-list').append(row);
+      row.onclick=()=>{if (!window.mathAccount.user) {window.mathAccount.onSignedIn=()=>{location.href="/practice?problem="+encodeURIComponent(problem.id);};window.mathAccount.open();return;} location.href='/practice?problem='+encodeURIComponent(problem.id);};$('bank-list').append(row);
     }
     if (!data.problems.length) $('bank-list').textContent='В этой теме пока нет задач.';
   }

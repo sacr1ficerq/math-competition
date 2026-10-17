@@ -13,18 +13,19 @@
   <script defer src="/static/rendering.js"></script>
   <script defer src="/static/attachments.js"></script>
   <script defer src="/static/draft-storage.js"></script>
+  <script defer src="/static/ui.js"></script>
   <script defer src="/static/account.js"></script>
   <script defer src="/static/app.js"></script>
 </head>
 <body>
   <main>
-    <header><a class="brand" href="/"><span class="brand-mark">∑</span> Дуэли</a><nav><a href="/">Дуэль</a><button id="open-settings" type="button" class="quiet">Настройки</button></nav></header><div id="account-shell"></div>
-    <section id="problem-bank"><div class="bank-heading"><div><p class="eyebrow">Решайте в своём темпе</p><h1>Банк задач</h1><p class="muted">Выберите тему и задачу. Просмотренные условия учитываются при подборе дуэлей.</p></div><label class="file-button">Своя задача<input id="problem-file-bank" type="file" accept=".json,application/json"></label></div><label class="sr-only" for="bank-topic">Тема</label><select id="bank-topic"><option value="">Все темы</option></select><div id="bank-list" class="bank-list" aria-live="polite"></div><p id="bank-error" class="error" role="alert"></p></section>
+<header class="app-header"><a class="brand" href="/"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m4 5 7 7-7 7M20 5l-7 7 7 7M4 12h5m6 0h5"/></svg><span>Дуэли</span></a><nav class="primary-nav" aria-label="Разделы"><a href="/">Дуэль</a><a href="/practice" aria-current="page">Тренировка</a></nav><div class="header-actions"><button id="open-appearance" type="button" class="quiet appearance-trigger" aria-label="Оформление"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.4 1.4m11.2 11.2L19 19M5 19l1.4-1.4M17.6 6.4 19 5"/></svg></button><button id="open-settings" type="button" class="quiet account-trigger">Войти</button></div></header><div id="account-shell"></div>
+    <section id="problem-bank"><div class="bank-heading"><div><h1>Банк задач</h1><p class="muted">Выберите тему и задачу. Просмотренные условия учитываются при подборе дуэлей.</p></div><label class="file-button">Своя задача<input id="problem-file-bank" type="file" accept=".json,application/json"></label></div><label class="sr-only" for="bank-topic">Тема</label><select id="bank-topic" data-picker><option value="">Все темы</option></select><div id="bank-list" class="bank-list" aria-live="polite"></div><p id="bank-error" class="error" role="alert"></p></section>
     <div id="practice-work" hidden><a href="/practice" class="back-link">← Банк задач</a>
     <section class="problem-card" aria-labelledby="problem-title">
       <div class="problem-top">
         <h1 id="problem-title">Загрузка задачи…</h1>
-        <label class="file-button" title="Upload a problem JSON with title, statement, criterions, and reference_solution">
+        <label class="file-button" title="Загрузить свою задачу">
           Своя задача · JSON
           <input id="problem-file" type="file" accept=".json,application/json">
         </label>
@@ -33,19 +34,7 @@
       <p id="problem-error" class="error" role="alert" hidden></p>
     </section>
 
-    <div class="workspace-tabs" role="group" aria-label="Режим редактора"><button type="button" data-workspace="editor" aria-pressed="true">Решение</button><button type="button" data-workspace="preview" aria-pressed="false">Предпросмотр</button></div><section class="workspace" aria-label="Solution editor and preview">
-      <div class="editor-pane">
-        <div class="pane-heading"><label for="solution">Ваше решение</label><span>Markdown + LaTeX</span></div>
-        <textarea id="solution" placeholder="Запишите доказательство…&#10;&#10;Формулы: $a^2$ в строке и $$…$$ отдельным блоком." spellcheck="false" maxlength="50000"></textarea>
-        <div class="editor-tip">Inline math: <code>$…$</code> · Display math: <code>$$…$$</code> · <kbd>Ctrl / ⌘ + Enter</kbd> to submit</div>
-      </div>
-      <div class="preview-pane">
-        <div class="pane-heading"><span>Предпросмотр</span><span>Live</span></div>
-        <div id="preview" class="rendered preview"><p class="muted">Здесь появится ваше решение.</p></div>
-      </div>
-    </section>
-
-    <section class="attachments" aria-label="Solution screenshots"><label class="file-button">Добавить изображения<input id="solution-images" type="file" accept="image/png,image/jpeg,image/webp" multiple aria-label="Add solution screenshots"></label><small>Можно вставить изображение из буфера. До 4 изображений, каждое до 3 МиБ.</small><div id="image-attachments"></div></section>
+    <div class="proof-surface"><div class="editor-toolbar"><div class="workspace-tabs" role="group" aria-label="Режим редактора"><button type="button" data-workspace="editor" aria-pressed="true">Решение</button><button type="button" data-workspace="preview" aria-pressed="false">Предпросмотр</button></div><span class="subtle">Черновик на устройстве</span></div><section class="workspace" aria-label="Редактор решения"><div class="editor-pane"><label class="sr-only" for="solution">Ваше решение</label><textarea id="solution" placeholder="Запишите доказательство…" spellcheck="false" maxlength="50000"></textarea></div><div class="preview-pane"><div id="preview" class="rendered preview"><p class="muted">Здесь появится ваше решение.</p></div></div></section><section class="attachments" aria-label="Изображения решения"><label class="file-button quiet">Прикрепить изображение<input id="solution-images" type="file" accept="image/png,image/jpeg,image/webp" multiple aria-label="Прикрепить изображения"></label><span class="subtle">или вставьте из буфера · до 4 файлов</span><div id="image-attachments"></div></section><div class="editor-tip"><span>Формулы: <code>$a²$</code> · Отдельная строка: <code>$$…$$</code></span><span>Ctrl / ⌘ + Enter</span></div></div>
 
     <form id="submit-form" class="submit-bar">
       <div class="key-field"><button id="practice-key-settings" type="button" class="quiet">Настроить OpenRouter</button><small id="practice-key-state"></small></div>
@@ -54,7 +43,7 @@
     <p id="status" role="status" aria-live="polite"></p>
 
     <section class="history-section" aria-labelledby="history-title">
-      <div class="history-heading"><h2 id="history-title">Попытки</h2><div id="score" tabindex="0" aria-describedby="score-help">Score <strong>0</strong><span> / 10</span><span id="score-help" class="score-tooltip" role="tooltip">Best verdict: 0. Counted submissions: 0. Penalty: 0.</span></div></div>
+      <div class="section-heading"><h2 id="history-title">Попытки</h2><div id="score" tabindex="0" aria-describedby="score-help">Оценка <strong>0</strong><span> / 10</span><span id="score-help" class="score-tooltip" role="tooltip">Лучшая оценка: 0. Проверок: 0. Штраф: 0.</span></div></div>
       <p id="history-empty" class="muted">Первая проверка без штрафа. Каждая следующая успешная проверка — минус 1 балл.</p>
       <div id="history"></div>
     </section>
