@@ -69,6 +69,10 @@ class KeyRequest(BaseModel):
 
 def authenticated_response(request, response, result):
     account, raw = result
+    legacy_key = request.cookies.get("math_openrouter_key")
+    if legacy_key and not account["api_key"]:
+        request.app.state.accounts.set_key(account["id"], legacy_key)
+        account = request.app.state.accounts.authenticate(raw)
     # Replace browser identity with the canonical one; logout clears it to protect
     # account-owned duels from continued anonymous access on shared devices.
     for name, value in [(AUTH_COOKIE, raw), ("math_player", account["player_token"])]:

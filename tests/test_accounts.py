@@ -68,6 +68,19 @@ class AccountsTest(unittest.TestCase):
         other.delete("/api/auth/key")
         self.assertIsNone(self.app.state.accounts.get_key(user["id"]))
 
+    def test_legacy_key_migrates_without_overwriting_account_key(self):
+        self.client.cookies.set("math_openrouter_key", "legacy-provider-key")
+        user = self.register()
+        self.assertTrue(user["has_api_key"])
+        self.assertEqual(self.accounts.get_key(user["id"]), "legacy-provider-key")
+        self.assertNotIn("legacy-provider-key", str(user))
+        self.client.put("/api/auth/key", json={"api_key": "saved-account-key"})
+        other = TestClient(self.app)
+        other.cookies.set("math_openrouter_key", "another-browser-key")
+        response = other.post("/api/auth/login", json={"login": "alice", "password": "safe-password"})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.accounts.get_key(user["id"]), "saved-account-key")
+
     def test_legacy_sessions_and_history_link_without_player_changes(self):
         store = Store(self.path)
         problem = Problem(title="Test", statement="Question", reference_solution="Answer", criterions="Criteria")
