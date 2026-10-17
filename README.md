@@ -258,11 +258,18 @@ Start with a single-player page for writing and grading solutions. Two-player se
 
 ### Appeals
 
-Allow players to appeal a grading verdict for either their own solution or their opponent's submission.
+Each successfully graded submission in the current duel round can receive one
+appeal. The author explains which part of the original verdict is incorrect;
+the submitted solution and screenshots cannot be changed. The same grading
+model reviews the original work, original verdict, and appeal together.
 
-Unresolved questions:
-
-- How does a player submit an appeal, and what information must they provide?
-- Does an appeal trigger another LLM review? If so, should it use the same model or a different one?
-- Can players appeal during the competition, or only after solutions and feedback are revealed?
-- How does a successful appeal affect verdicts, scores, and the competition result?
+- If the reviewed verdict is strictly higher, it replaces the original score.
+- Otherwise the submission score decreases by exactly one point, including
+  from zero to minus one. An appeal adds no submission-count penalty.
+- An appeal verdict cannot itself be appealed. Technical failures apply no
+  score penalty and permit a retry.
+- Original and reviewed verdicts remain in the history. Appeals never change
+  finalization timestamps or the equal-score finalization-order tie-break.
+- An appeal can change a finished round's winner and move its single sandwich
+  to the new winner. The next round cannot start while a review is pending.
+- Appeals apply to the current round only; archived rounds are immutable.
