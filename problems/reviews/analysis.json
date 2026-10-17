@@ -1,0 +1,342 @@
+{
+  "reviewed_at": "2026-10-18",
+  "independent_of_author": true,
+  "publication_changed": false,
+  "count": 40,
+  "records": [
+    {
+      "id": "shad-analysis-001",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Равномерный логарифмический остаток суммируется в O(n^-2); коэффициент 1/(3n) проверен.",
+      "content_sha256": "8a5c40b5054689342991e0af3b6aaf1b7d68f06ecaaa418e17b791d1389bd55b"
+    },
+    {
+      "id": "shad-analysis-002",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Положительная рекурсия убывает к нулю; разности обратных →1/2 и Чезаро дают nx_n→2.",
+      "content_sha256": "710cfadbef1f8cad35af750c75b1cabe0013e5bc29c6ecd427bd7d861fcd6eec"
+    },
+    {
+      "id": "shad-analysis-003",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Точная ошибка Ньютона и преобразование q→q² верны; исправлен ошибочный заголовок про кратный корень.",
+      "content_sha256": "2f8ef7156aee033cd93ca56208ef99d0512019e25ed2b80f660e72683a1d1297"
+    },
+    {
+      "id": "shad-analysis-004",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Масштаб sqrt(n), мажоранта exp(-t²) и гауссов хвост корректны.",
+      "content_sha256": "5328f84c515bf74a89e35166bf37833db9aaab8deb806363fb6ccce6654b39b5"
+    },
+    {
+      "id": "shad-analysis-005",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Телескопирование хвоста разностей даёт +1/(2n), знак и индекс проверены.",
+      "content_sha256": "6a05037270b98c273ae2715e7b19bf155b024ea62941705f4b79a761952186b3"
+    },
+    {
+      "id": "shad-analysis-006",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Максимум при x=1/(n+1), высота→e^-1; интеграл n/[(n+1)(n+2)].",
+      "content_sha256": "b778155a14509c1d2e650c392a054520caf83d174dcd8498c9b1f998098b41e4"
+    },
+    {
+      "id": "shad-analysis-007",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Масса пика n²xe^-nx→дельта в нуле; отсутствие L1-мажоранты следует из предела массы1.",
+      "content_sha256": "5c0fce5d019f402ae33a23055bb78d79e238c3577299f02d41ef2b0b40196f58"
+    },
+    {
+      "id": "shad-analysis-008",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Верхняя ограниченность превращается в двустороннюю у нуля и даёт непрерывность аддитивной функции.",
+      "content_sha256": "acd20842290c269f7c1c251931ecff5e5d9b44eeb9abe545e4c2954d401e4869"
+    },
+    {
+      "id": "shad-analysis-009",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Единая ширина отделённых пиков противоречит интегрируемости; треугольные узкие пики корректны.",
+      "content_sha256": "7f92428748934a976c77358ebc92e1adc02f2129eb26b6d45d494aefe1e5549e"
+    },
+    {
+      "id": "shad-analysis-010",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Единая нормировка ядра и хвост дают равномерность; липшицева оценка L/(n+1).",
+      "content_sha256": "096cda369f4c78ba8b765fecf88063a0f14bf8944965cd6ed75a9c8649e38fb8"
+    },
+    {
+      "id": "shad-analysis-011",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Отрицательная полуось один корень; положительная минимум e²/4; касание в2 кратности2.",
+      "content_sha256": "14e26665e2232d8ae877e19232d93c2b35475906440ab78a102e1ac1e578bf16"
+    },
+    {
+      "id": "shad-analysis-012",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Компактность C1-производной даёт q<1; случай q=0 отдельно обработан.",
+      "content_sha256": "bacca8e68cf08142d286f5dac1e28b6bf649df538416976e312f87acf08695d1"
+    },
+    {
+      "id": "shad-analysis-013",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Вычитание mx²/2 и жёсткость хорды верны, все случаи равенства указаны.",
+      "content_sha256": "f2d5e966a82fe7fc005c2e13650ec40e99fff8c07eebe584f9e4601b65228bf1"
+    },
+    {
+      "id": "shad-analysis-014",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Интегрирование с K=x(1-x)/2 даёт правильный знак и точную константу1/12.",
+      "content_sha256": "6b0b3484aefb3d51a8cd1d58a3c327bd4b8ac680d9775d606109ab8e222af213"
+    },
+    {
+      "id": "shad-analysis-015",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Сильная выпуклость даёт коэрцитивность и обе оценки зазора риска.",
+      "content_sha256": "624997cc821688d91d20c5456e9c77fb24d3e6f08ec264771632466513212178"
+    },
+    {
+      "id": "shad-analysis-016",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Производная по параметру и J(a)=π/[2(1+a)] корректны; численно проверены пять параметров.",
+      "content_sha256": "43fe42dcacca914a5a1fecbe0c1bb72f92771969c11b7cd69c295a58f0a3b9fe"
+    },
+    {
+      "id": "shad-analysis-017",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Фруллани выведен Тонелли для неотрицательного параметрического интеграла, оба порядка a,b.",
+      "content_sha256": "d3dd605f0dcb28cd498b528e78234a9efc79a19eed93bb07f952e706c241ec22"
+    },
+    {
+      "id": "shad-analysis-018",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Тангенциальная замена даёт Kprime=π/(1+a); численно проверены пять параметров, включая1.",
+      "content_sha256": "455246819c10becd8cecf6c3d8dab0db9d0302bc2269d0c773abaa768ac8433f"
+    },
+    {
+      "id": "shad-analysis-019",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Хвост ≤2R^-p, абсолютная сходимость ровно p>1; интервальная нижняя оценка верна.",
+      "content_sha256": "4a759190720780fe7225eb42881a588fdc5272ca2ce5900568aee8f5823f838b"
+    },
+    {
+      "id": "shad-analysis-020",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Фубини и beta-интеграл дают a^(2n)/(2n)! с правильной базой.",
+      "content_sha256": "77e4d088c69e5972f42f65b1deb22474c07d3bdf1f1497719390dae23bf5b1f4"
+    },
+    {
+      "id": "shad-analysis-021",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Сумма 1+(1/x-1)log(1-x), значения0,1,-1 и равномерность проверены.",
+      "content_sha256": "4819119075b0718e445452428e5ad55c2d6ca3c68c10d09cf926885e210fab55"
+    },
+    {
+      "id": "shad-analysis-022",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Полная карта p,q: p>1 или p=1,q>1; сравнения степеней верны.",
+      "content_sha256": "f1126fa4a5587d02db0a7b54b32f3dcde8f606e80dfd9005fa05212ed30ebff5"
+    },
+    {
+      "id": "shad-analysis-023",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Дирихле равномерен вдали от нулевого угла; блок n=N..2N при x=1/N опровергает глобальную равномерность.",
+      "content_sha256": "e1d062c1d2ce291503a60f2177b7762d642ab118810b90ccc9ed16696a3cc02a"
+    },
+    {
+      "id": "shad-analysis-024",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Неотрицательность позволяет перестановку без кругового предположения сходимости.",
+      "content_sha256": "b6abe56a0a64bc15daf4550f04415306abb01e05b5743f9d7e2c11653229b769"
+    },
+    {
+      "id": "shad-analysis-025",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Лакунарный ряд равномерен на [-1,1]; разностное отношение при1 неограниченно снизу.",
+      "content_sha256": "a3a8e9f51735862418cfa3a19152ba8193d2177c73509c55a498a0c4434ff6a8"
+    },
+    {
+      "id": "shad-analysis-026",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Кривая y=x³ даёт разрыв1/2; все направленные производные0, полный дифференциал невозможен.",
+      "content_sha256": "22f30f6f465bbfd8dce9d4bae2f11d9c1011c989e176230c49ae936a8c9079a6"
+    },
+    {
+      "id": "shad-analysis-027",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Радиальная оценка доказывает непрерывность; диагональное отношение1/2 исключает дифференцируемость.",
+      "content_sha256": "b974d8713b38145af99dcd479d00e2b58c97255b96f36edc93d329f04757c6e6"
+    },
+    {
+      "id": "shad-analysis-028",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Разложение quartic корректно разделяет a>-1, a=-1, a<-1 и строгий/нестрогий минимум.",
+      "content_sha256": "7dacc484c4a4ca2e49cbb68ef11b329feb37bf02483ac8bd8f0cf30badb39197"
+    },
+    {
+      "id": "shad-analysis-029",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Неявная производная -1 и вторая -2/3 верны; добавлена явная положительная ветвь квадратного корня.",
+      "content_sha256": "cffbf4c5d9369ed22df45fa10fc5ba1e14f5850b79f790d3c1f138f3642ab717"
+    },
+    {
+      "id": "shad-analysis-030",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Замена (u,v)=(x+y,x/(x+y)) биективна, якобиан |J|=u и ответ e²/3.",
+      "content_sha256": "b977f1a696e6579de2a5f3e9a55fb90f4a8e1d5b8de93d916d70420d5cb84193"
+    },
+    {
+      "id": "shad-analysis-031",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "AM-GM даёт ±1 и полные восемь знаковых точек сферы.",
+      "content_sha256": "4d4726c1c7b4e2b23418152710a78607262f0c2d8b8c88a8e6c1640c36db10e0"
+    },
+    {
+      "id": "shad-analysis-032",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Взвешенное log-неравенство доказывает глобальный минимум и единственность на открытом симплексе.",
+      "content_sha256": "b081761c63b9771a8020d1d7d40cbb052a13b29f100e617e19bd8b87638fa082"
+    },
+    {
+      "id": "shad-analysis-033",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Сведение к t=x²≥0 корректно учитывает ветвление при b=1/2 и обе ближайшие точки.",
+      "content_sha256": "4ec1c96c303aeafb72bdc79989e6884f1bc2726d58b58a4356dde4accd0ca26d"
+    },
+    {
+      "id": "shad-analysis-034",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Невырожденная замена s,d даёт границу λ=-1/2; линейная неограниченность на границе учтена.",
+      "content_sha256": "b6d7a94c14cf6959b3b54a681d48a6d67b3f82094a523a3c287fe2e678ff1e21"
+    },
+    {
+      "id": "shad-analysis-035",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Интегральный Коши даёт1/12 и все квадратичные случаи равенства.",
+      "content_sha256": "c5aa72dd86cf788828c980d48a18b7d5a2df32127cc244208026b472a5cce90f"
+    },
+    {
+      "id": "shad-analysis-036",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Фурье-нормировка a0=2π²/3,an=4(-1)^n/n² и подстановкаπ корректны.",
+      "content_sha256": "d57aede901a01e16a722f65fe0aa9bf392d1b70542da387a2d4c5d66b565564b"
+    },
+    {
+      "id": "shad-analysis-037",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Пуассоновское ядро и интеграл квадрата2π(1+r²)/(1-r²) корректны и при отрицательном r.",
+      "content_sha256": "6f1eb1ce3cfb80b2a6b3916ea08938a48a7f405e889f2acd44cede63e1249e23"
+    },
+    {
+      "id": "shad-analysis-038",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Ортогональная проекция даёт (a,b,c)=(π²/3,-4,0), ошибка8π^5/45-16π.",
+      "content_sha256": "ce83488b58489a41307f5df57f326354e67e792cc967f8bde33625cb811c4d6a"
+    },
+    {
+      "id": "shad-analysis-039",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Сдвиг коэффициентов обнуляет частоты вне3Z; абсолютная сходимость и Фейер обосновывают обратное.",
+      "content_sha256": "dd0611f10a9ee1cc9021187a36e76f36c80a9ed98686270bd298c7608f8d226e"
+    },
+    {
+      "id": "shad-analysis-040",
+      "status": "pass",
+      "reviewer": "shad_admissions_research",
+      "review_scope": "statement, proof, edge conditions, scoring milestones",
+      "note": "Конечная двойная сумма нормирует ядро Фейера; единая хвостовая оценка корректна.",
+      "content_sha256": "213f24682cdef6a7ffb34c1f9ea5fff4dfda9ed27925cbe39100de9cae4b0a63"
+    }
+  ],
+  "hash_algorithm": {
+    "name": "sha256",
+    "scope": [
+      "title",
+      "statement",
+      "criterions",
+      "reference_solution"
+    ],
+    "serialization": "json.dumps(content, ensure_ascii=False, sort_keys=True).encode(\"utf-8\")",
+    "json_separators": "Python default separators: comma followed by space, colon followed by space",
+    "unicode_normalization": "none",
+    "trailing_newline": false,
+    "definition": "content = {k: problem[k] for k in [\"title\", \"statement\", \"criterions\", \"reference_solution\"]}; digest = hashlib.sha256(json.dumps(content, ensure_ascii=False, sort_keys=True).encode(\"utf-8\")).hexdigest()"
+  }
+}
