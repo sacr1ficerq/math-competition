@@ -21,6 +21,15 @@ let playerSignature = "";
 let roundHistorySignature = "";
 let solutionImages;
 
+function requestId() {
+  if (typeof crypto.randomUUID === "function") return crypto.randomUUID();
+  const bytes = crypto.getRandomValues(new Uint8Array(16));
+  bytes[6] = (bytes[6] & 0x0f) | 0x40;
+  bytes[8] = (bytes[8] & 0x3f) | 0x80;
+  const hex = Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join("");
+  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
+}
+
 function notice(message, error = false) {
   $("notice").textContent = message;
   $("notice").classList.toggle("error", error);
@@ -135,7 +144,7 @@ function apply(next) {
   }
   $("result").hidden = state.phase !== "finished";
   $("revealed").hidden = state.phase !== "finished";
-  $("feedback-hint").textContent = state.phase === "finished" ? "Reasoning and evidence are now available" : "Feedback appears after both players finish";
+  $("feedback-hint").textContent = state.phase === "finished" ? "Both solutions and detailed feedback are now available" : "Opponent solutions and feedback appear when the round ends";
   if (state.result) {
     const winner = state.players.find((p) => p.id === state.result.winner);
     $("result-title").textContent = winner ? `${winner.name} wins${winner.id === state.me ? " — well played!" : "."}` : "A draw.";
@@ -146,7 +155,7 @@ function apply(next) {
   renderChat();
   controls();
   if (previousPhase === "lobby" && state.phase === "active") notice("Both players are ready. The problem is now revealed.");
-  if (previousPhase && previousPhase !== "finished" && state.phase === "finished") notice("Competition complete. Detailed feedback and the reference solution are now available.");
+  if (previousPhase && previousPhase !== "finished" && state.phase === "finished") notice("Round complete. Both players’ solutions, detailed feedback, and the reference solution are now available.");
   if (roundChanged) notice(`Round ${state.round} is ready in the same session. Both players can click Ready when set.`);
 }
 
@@ -278,10 +287,10 @@ function renderHistory(players = state.players, target = $("history")) {
       else if (s.status === "graded") { const text = document.createElement("p"); text.className = "muted"; text.textContent = "Detailed feedback is hidden until the competition ends."; feedback.append(text); }
       if (s.error) { const error = document.createElement("p"); error.className = "error"; error.textContent = s.error; feedback.append(error); }
       if (s.solution !== undefined) {
-        section("Your submitted solution", s.solution || "Solution provided in screenshots.");
+        section(p.id === state.me ? "Your submitted solution" : `${p.name}’s submitted solution`, s.solution || "Solution provided in screenshots.");
         window.appendSolutionImages(feedback, s.images || []);
       }
-      else { const privateText = document.createElement("p"); privateText.className = "muted"; privateText.textContent = "Your opponent’s solution is private."; feedback.append(privateText); }
+      else { const privateText = document.createElement("p"); privateText.className = "muted"; privateText.textContent = "Your opponent’s solution is hidden until the round ends."; feedback.append(privateText); }
       entry.append(summary, feedback);
       content.append(entry);
     }
@@ -350,12 +359,16 @@ function renderChat() {
     const meta = document.createElement("div");
     meta.className = "chat-meta";
     const name = document.createElement("strong");
-    name.textContent = state.players.find((p) => p.id === message.player_id)?.name || "Player";
+    name.textContent = message.kind === "solution" ? `Reference solution · Round ${message.round}` : state.players.find((p) => p.id === message.player_id)?.name || "Player";
     const time = document.createElement("time");
     time.textContent = timeText(message.sent_at);
     meta.append(name, time);
-    const text = document.createElement("p");
-    text.textContent = message.text;
+    const text = document.createElement(message.kind === "solution" ? "div" : "p");
+    if (message.kind === "solution") {
+      entry.classList.add("chat-solution");
+      text.className = "rendered";
+      render(text, message.text);
+    } else text.textContent = message.text;
     entry.append(meta, text);
     content.append(entry);
   }
@@ -441,7 +454,7 @@ async function submitSolution() {
     const images = solutionImages.value;
     saveDraft();
     if (!pendingRequest || pendingRequest.solution !== solution || pendingRequest.images.length !== images.length || pendingRequest.images.some((image, index) => image !== images[index])) {
-      pendingRequest = { solution, images, request_id: crypto.randomUUID(), round: state.round };
+      pendingRequest = { solution, images, request_id: requestId(), round: state.round };
     }
     const next = await api(sessionPath("/submissions"), "POST", pendingRequest);
     pendingRequest = null;

@@ -216,7 +216,9 @@ async def submit(code: str, body: SubmitRequest, request: Request):
 async def submission_image(code: str, submission_id: str, index: int, request: Request):
     value = token(request)
     session = store(request).read(code, value)
-    players = [Store.player(r, value) for r in [session, *session["rounds"]]]
+    me = Store.player(session, value)
+    players = [p for p in session["players"] if p["id"] == me["id"] or session["phase"] == "finished"]
+    players.extend(p for round in session["rounds"] for p in round["players"])
     submission = next((s for p in players for s in p["submissions"] if s["id"] == submission_id), None)
     if submission is None or not 0 <= index < len(submission.get("images", [])):
         raise HTTPException(404, "Screenshot not found.")

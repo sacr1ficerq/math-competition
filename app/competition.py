@@ -283,9 +283,22 @@ class Store:
     def chat(self, code: str, token: str, text: str) -> dict:
         with self.edit(code) as session:
             player = self.player(session, token)
-            if len(session["chat"]) >= 1000:
+            solution_command = text.strip().lower() == "/solution"
+            reference = None
+            if solution_command:
+                if len(session["players"]) != 2 or not all(p["finalized"] for p in session["players"]):
+                    raise CompetitionError("The reference solution is available after both players finalize.")
+                reference = session["problem"].get("reference_solution")
+                if not reference or not reference.strip():
+                    raise CompetitionError("No reference solution is available for this round.", 404)
+            if len(session["chat"]) + (2 if solution_command else 1) > 1000:
                 raise CompetitionError("This session has reached its 1,000-message limit.")
             session["chat"].append({"id": str(uuid4()), "player_id": player["id"], "text": text, "sent_at": time.time()})
+            if solution_command:
+                session["chat"].append({
+                    "id": str(uuid4()), "player_id": None, "kind": "solution",
+                    "round": session["round"], "text": reference, "sent_at": time.time(),
+                })
             return session
 
     def tick(self, recover: bool = False) -> None:
@@ -312,7 +325,7 @@ def snapshot(session: dict, token: str) -> dict:
         for s in player["submissions"]:
             item = {k: s[k] for k in ("id", "submitted_at", "status", "attempts", "error")}
             item["verdict"] = s["grade"]["verdict"] if s["grade"] else None
-            if own:
+            if own or finished:
                 item["solution"] = s["solution"]
                 item["images"] = [
                     {"name": image["name"], "url": f'/api/sessions/{session["code"]}/submissions/{s["id"]}/images/{index}'}

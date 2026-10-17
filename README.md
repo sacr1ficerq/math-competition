@@ -43,8 +43,10 @@ shared grading model in the lobby; doing so resets both players' readiness. Once
 both players click **Ready**, the problem appears and the solution editors unlock.
 Submit with the button or Ctrl/⌘ + Enter. Grading runs in the background, and
 multiple submissions can be pending at once. Both players see timestamps and
-verdicts, but only their own submitted solutions. Reasoning and evidence remain
-hidden until the competition ends.
+verdicts, but only their own submitted solutions during play. Once the round ends
+and all pending grading finishes, both players can see each other's submitted
+solutions and screenshots, along with reasoning and evidence. Unsubmitted drafts
+remain private.
 
 Click **Finalize** to lock your submissions and start the other player's five-minute
 deadline. They can finalize manually; the server automatically finalizes them at
@@ -66,8 +68,9 @@ and **20 megapixels**. Animated images are not supported.
 
 The grader receives the text and images together, so select an OpenRouter model
 that supports both **image input** and structured JSON output. Submitted competition
-screenshots persist in SQLite and appear in your submission history. They remain
-private to their author, including after the competition finishes. Image data is
+screenshots persist in SQLite and appear in your submission history. They stay
+private during play and pending grading, then become visible to both players when
+the round finishes. Image data is
 served through authenticated URLs rather than included in every polling response.
 Selected screenshots are held in the current page; only text drafts autosave before
 submission. Practice attachments and history remain in memory until you reload.
@@ -92,6 +95,13 @@ competition by pasting JSON or using **Load file**:
 The supplied problem is stored on the backend. The statement is withheld in the
 lobby; grading criteria and the reference solution are revealed only after the
 competition finishes. Chat is available in the lobby, during play, and afterward.
+
+In chat, send **`/solution`** after both players finalize to post the supplied reference
+solution for both players, rendered with Markdown and LaTeX. If no reference solution
+exists, the command reports that it is unavailable. The reply is labeled with its
+round number and stays in chat through rematches and reloads. The command is available
+immediately after both manual/automatic finalizations, even while grading is pending.
+It stays locked while either player can still submit.
 
 ### Persistence and reconnection
 
@@ -129,8 +139,9 @@ and draws. A draw gives neither player a win. Wins are counted exactly once when
 round finishes, including while the result panel is still open before a rematch.
 Existing completed sessions count as round 1 and can be rematched immediately.
 
-**Previous rounds** retains results, grading feedback, reference solutions, and your
-own submitted text/screenshots. Opponent solutions and screenshots stay private.
+**Previous rounds** retains results, grading feedback, reference solutions, and both
+players' submitted text/screenshots. Finished-round solutions remain available to
+both players after a rematch starts; new-round solutions stay private until it ends.
 Round history and match scores persist in SQLite through reloads and server restarts.
 Round-specific actions carry the round number so delayed requests from an earlier
 round cannot submit, finalize, or overwrite drafts in the new one.
@@ -188,7 +199,7 @@ The session creator supplies a JSON document with these fields:
 
 - **Shared sessions:** Both players can join the same session without an account. “Logging in” means joining a competition session.
 - **API keys:** Players enter an OpenRouter API key after joining a session. The key is stored in cookies for later use.
-- **Submission visibility:** Players can see each other's submission history, including verdicts and timestamps, but not the solutions themselves.
+- **Submission visibility:** Players can see each other's verdicts and timestamps during play. Submitted solutions and screenshots are revealed to both players after the round and all pending grading finish. Unsubmitted drafts remain private.
 - **Chat:** Provide a shared chat where both players can exchange messages.
 - **Delayed feedback:** LLM comments on solutions are hidden until the competition ends.
 - **Reconnection:** Reconnecting preserves the player's identity, draft solution, submission history, chat, and competition state.

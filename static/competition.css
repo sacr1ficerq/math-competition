@@ -56,6 +56,8 @@ form > .primary { margin-top: 20px; }
 .chat-message .chat-meta { display: flex; justify-content: space-between; gap: 8px; color: var(--rose); font-size: 11px; }
 .chat-message time { color: var(--muted); }
 .chat-message p { margin: 5px 0 0; white-space: pre-wrap; }
+.chat-solution .rendered { margin-top: 8px; }
+.chat-solution .rendered p { white-space: normal; }
 #chat-input { min-height: 70px; padding: 10px; border: 1px solid var(--line); border-radius: 7px; margin: 12px 0 8px; font: 13px/1.5 system-ui, sans-serif; }
 #chat-form button { width: 100%; }
 #histories .history-heading { gap: 10px; align-items: baseline; }

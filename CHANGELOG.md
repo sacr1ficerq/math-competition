@@ -4,6 +4,8 @@
 
 ### Added
 
+- `/solution` chat command that posts the reference solution once both players have
+  finalized, even while grading is pending, with Markdown/LaTeX rendering and a round label.
 - Same-session rematches with retained players, API-key cookies, chat, and invite link.
 - Cumulative player wins, draw counts, round numbers, and private archived round history.
 - Optional new-problem loading in the rematch lobby, with readiness reset on changes.
@@ -12,7 +14,8 @@
 - Screenshot attachments in competition and practice submissions, with file upload,
   clipboard paste, previews, removal, and image-only solutions.
 - Multimodal grading that evaluates typed text and attached screenshots together.
-- Persistent competition screenshots with authenticated author-only image access.
+- Persistent competition screenshots with authenticated participant access and
+  opponent images withheld until the round finishes.
 - Validation for up to four PNG, JPEG, or WebP screenshots per submission, with
   per-image limits of 3 MiB and 20 megapixels.
 - Grading lifecycle logs and visible finalization timestamps, with clearer messaging
@@ -20,6 +23,8 @@
 
 ### Changed
 
+- Both players' submitted solutions and screenshots are revealed when a round
+  finishes, including in previous-round history. Unsubmitted drafts remain private.
 - Equal final scores now use the earlier finalization timestamp as the tie-break.
   Identical finalization timestamps are a draw; automatic finalization uses the deadline.
 - Graceful server shutdown waits for accepted grading jobs to complete.
