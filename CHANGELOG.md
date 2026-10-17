@@ -34,6 +34,14 @@
 
 ### Changed
 
+- Shared visual direction across the home, lobby, editor, task catalog, and
+  account sheets: open layouts, paired participant identities, grouped tasks,
+  and a two-place winner podium with a once-per-round motion reveal.
+
+- Submission history uses a compact attempt navigator and one reading surface
+  instead of stacked cards. Submitted work is visible immediately; final feedback
+  and appeals appear after the round finishes.
+
 - Appeals become available only after both players finalize and all original
   checks finish; the server rejects attempts to appeal during solving or grading.
 
