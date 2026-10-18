@@ -59,6 +59,7 @@ class GradingTests(unittest.IsolatedAsyncioTestCase):
         self.assertIsNotNone(result.submitted_at.tzinfo)
         arguments = create.call_args.kwargs
         self.assertEqual(arguments["response_format"]["type"], "json_schema")
+        self.assertIn("Write reasoning and evidence in Russian", arguments["messages"][0]["content"])
         payload = json.loads(arguments["messages"][1]["content"])
         self.assertEqual(payload["submitted_solution"], "My proof")
         self.assertIn("criterions", payload["problem"])

@@ -65,6 +65,8 @@ reasoning: a nonempty string explaining your assessment;
 verdict: a number between 0 and 10 (10 means fully correct);
 evidence: a nonempty string citing specific steps, gaps, or errors in the submission.
 Use Markdown and LaTeX where helpful. Never invent steps absent from the solution.
+Write reasoning and evidence in Russian. Keep the assessment focused and avoid
+repeating the same explanation in both fields; preserve all necessary mathematical detail.
 """
 
 
