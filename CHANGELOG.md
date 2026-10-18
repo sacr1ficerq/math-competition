@@ -4,6 +4,9 @@
 
 ### Added
 
+- Personal room-list removal with undo, preserving shared results and exposure history.
+- Dedicated completed-round review addresses, including read-only archived rounds.
+
 - Persistent accounts with remembered sessions, legacy-session linking, and encrypted
   OpenRouter keys shared across devices.
 - Topic-based task bank with permanent exposure history; each duel task is unseen
@@ -33,6 +36,18 @@
   when finalizing without a submission or while grading is pending.
 
 ### Changed
+
+- Rebuilt the home artwork with four independent pointer-responsive layers;
+  reduced-motion and touch devices keep a static composition.
+- Reorganized the duel lobby around both players, the series score, and one
+  connected task/readiness area, including the guest view of subsequent rounds.
+- Restored whole-card problem selection without redundant action text.
+- Moved custom duel authoring into a separate dialog, kept editor layout stable
+  when opening the reserved desktop chat column, and separated review sections
+  into dedicated views instead of a combined inline archive.
+- Review shows the current appealed verdict, with the original verdict retained
+  as history. Catalog metadata now includes localized subtopics without exposing
+  unseen conditions or marking tasks as viewed.
 
 - Appeal eligibility shares one per-player round budget across every submission;
   technical failures allow retry. Result labels distinguish appeal reductions

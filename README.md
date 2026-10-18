@@ -71,6 +71,14 @@ The room creator can close a room with confirmation. Closing keeps saved drafts,
 submitted work, chat, and results available for reading, but blocks joining and all
 further play. Already accepted grading jobs can finish without reopening the room.
 
+Each participant can remove a room from their own recent-room list and undo that
+action. This preference does not close the shared room or erase results, messages,
+or task-exposure history. A hidden room remains readable through its direct link.
+
+Completed-round reviews have their own address, `/s/CODE?round=N`, with separate
+work, grading, appeal, and reference views. Previous rounds open as read-only
+archives; the current finished round retains its appeal window.
+
 ## Problems and practice
 
 The task bank is loaded from `problems/*.json`. Each task has a stable identity and
