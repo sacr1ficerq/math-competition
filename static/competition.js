@@ -162,17 +162,19 @@ function apply(next) {
   if(!lobbyMode || state.phase !== 'lobby')lobbyMode=savedTaskMode;
   $('topic-form').hidden=state.phase !== 'lobby' || state.me !== state.host || lobbyMode !== 'topic';
   $('lobby-task-controls').hidden=state.me !== state.host;
-  $('lobby-task-summary').hidden=state.me === state.host;
+  $('lobby-task-summary').hidden=false;
   $('task-selection-title').textContent=state.round === 1 ? 'Задача дуэли' : 'Следующая задача';
   const selectedTopic=state.available_topics?.find(topic=>topic.slug===state.topic);
-  $('lobby-task-summary').textContent=savedTaskMode === 'custom' ? 'Своя задача' : savedTaskMode === 'topic' ? `Тема: ${selectedTopic?.label || state.topic}` : 'Случайная новая задача из банка';
+  $('lobby-task-summary').textContent=savedTaskMode === 'custom' ? 'Своя задача · условие откроется после старта' : savedTaskMode === 'topic' ? `${selectedTopic?.label || state.topic} · новая задача для обоих` : 'Случайная задача · новая для обоих';
+  $('task-owner-note').hidden=state.me===state.host;
+  $('task-owner-note').textContent=`Задачу выбирает ${state.players.find(p=>p.id===state.host)?.name || 'создатель комнаты'}`;
   document.querySelectorAll('[data-lobby-mode]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.lobbyMode===lobbyMode)));
   const topicsSignature=JSON.stringify(state.available_topics || []);
   if(topicsSignature !== lobbyTopicsSignature){lobbyTopicsSignature=topicsSignature;const current=$('lobby-topic').value;$('lobby-topic').replaceChildren(new Option('Выберите тему',''));for(const topic of state.available_topics || [])$('lobby-topic').append(new Option(topic.label,topic.slug));$('lobby-topic').value=current;}
   if(document.activeElement !== $('lobby-topic'))$('lobby-topic').value=state.source === 'bank' ? state.topic || '' : '';
   $("lobby").hidden = !!state.closed_at || state.phase !== "lobby";
   const waitingForOpponent=state.players.length < 2;
-  $('lobby-title').textContent=waitingForOpponent?'Пригласите соперника':state.round===1?'Можно начинать':`Раунд ${state.round}`;
+  $('lobby-title').textContent=waitingForOpponent?'Пригласите друга':`Раунд ${state.round}`;
   $('lobby-description').textContent=waitingForOpponent?'Отправьте ссылку другу — он присоединится к этой комнате.':'Условие откроется одновременно, когда вы оба будете готовы.';
   $('invite-url').value=`${location.origin}/s/${state.code}`;
   $('copy-lobby-invite').classList.toggle('primary',waitingForOpponent);
@@ -180,7 +182,9 @@ function apply(next) {
   if(!inviteFeedbackTimer || !waitingForOpponent)$('invite-feedback').textContent=waitingForOpponent?'Ждём второго игрока.':'Вы оба в комнате. Подтвердите готовность.';
   $('lobby').dataset.players=waitingForOpponent?'one':'two';
   $('lobby-readiness').hidden=waitingForOpponent;
-  $('lobby-model-state').textContent=`Проверка: ${state.model}`;
+  $('lobby-model-state').textContent=`Проверка решений · ${state.model}`;
+  $('edit-custom-task').hidden=state.me!==state.host || lobbyMode!=='custom';
+  if(state.phase!=='lobby' && $('custom-task-dialog').open)$('custom-task-dialog').close();
   document.body.dataset.phase=state.closed_at?"closed":state.phase;
   $("next-problem").hidden = state.phase !== "lobby" || state.me !== state.host || lobbyMode !== "custom";
   $("topic-availability").textContent = selectedTopic ? `Новых задач для вас обоих: ${selectedTopic.unseen_count}.` : "Выберите тему перед подтверждением готовности.";
@@ -216,10 +220,19 @@ function apply(next) {
   const historyHost = state.phase === "finished" ? $("result-history-host") : state.closed_at ? $("closed-history-host") : $("active-history-host");
   if ($("histories").parentElement !== historyHost) historyHost.append($("histories"));
   renderResultComparison();
-  renderHistory();
+  if(state.phase!=='finished')renderHistory();
+  $('round-review-link').href=`/s/${encodeURIComponent(code)}?round=${state.round}`;
+  const ownWorks=me()?.submissions || [];
+  const appealed=ownWorks.find(work=>['pending','graded'].includes(work.appeal?.status));
+  const eligible=ownWorks.filter(work=>work.appeal_eligible).sort((a,b)=>(typeof b.verdict==='number'?b.verdict:-Infinity)-(typeof a.verdict==='number'?a.verdict:-Infinity))[0];
+  const appealWork=appealed || (!state.closed_at?eligible:null);
+  $('result-appeal-link').hidden=state.phase!=='finished' || !appealWork;
+  if(appealWork){$('result-appeal-link').href=`/s/${encodeURIComponent(code)}?round=${state.round}&view=appeal&attempt=${encodeURIComponent(appealWork.id)}`;$('result-appeal-link').textContent=appealed?appealed.appeal.status==='pending'?'Апелляция рассматривается':'Посмотреть апелляцию':'Подать апелляцию';}
+
   renderRounds();
   renderChat();
   controls();
+  window.dispatchEvent(new CustomEvent('math:state',{detail:state}));
   if (previousPhase === "lobby" && state.phase === "active") notice("Оба готовы. Условие открыто — можно решать.");
   if (previousPhase && previousPhase !== "finished" && state.phase === "finished") notice("");
   if (roundChanged) notice(`Раунд ${state.round}. Подтвердите готовность к новой задаче.`);
@@ -292,7 +305,10 @@ function renderPlayers() {
     sides.forEach((card,index)=>{card.classList.add("match-player");card.querySelector(".player-initials")?.remove();const wins=card.querySelector(".win-count");if(wins){if(state.phase==="finished")wins.textContent=state.players[index].wins;wins.setAttribute("aria-label",`Бутерброды ${state.players[index].name}: ${state.players[index].wins}`);tally.append(wins);}if(!index){const colon=document.createElement("span");colon.className="tally-colon";colon.textContent=":";colon.setAttribute("aria-hidden","true");tally.append(colon);}});
     cards.insertBefore(tally,sides[1]);
   }else{
-    const axis=document.createElement("span");axis.className="duel-axis";axis.setAttribute("aria-hidden","true");axis.textContent="vs";cards.insertBefore(axis,cards.children[1]);
+    const axis=document.createElement("div");axis.className="lobby-series";
+    const caption=document.createElement('span');caption.textContent='Счёт серии';
+    const tally=document.createElement('strong');tally.textContent=`${state.players[0]?.wins || 0} : ${state.players[1]?.wins || 0}`;
+    axis.append(caption,tally);cards.insertBefore(axis,cards.children[1]);
   }
   $("player-cards").replaceChildren(cards);
   if (focused?.startsWith("card-score-")) $(focused)?.focus();
@@ -443,13 +459,14 @@ function renderReviewEntry(submission,content,toolbar,player,currentRound,finish
   if(submission.grade||submission.error){
     const grading=document.createElement('section');grading.className='review-region review-grading';
     const heading=document.createElement('h3');heading.textContent='Почему такая оценка';grading.append(heading);
+    const currentGrade=submission.appeal?.status==='graded'?(submission.appeal.grade || submission.grade):submission.grade;
     if(submission.appeal?.status==='graded'&&typeof submission.original_verdict==='number'){
-      const original=document.createElement('p');original.className='grade-original-score';original.textContent=`Исходная оценка: ${submission.original_verdict} из 10`;grading.append(original);
+      const original=document.createElement('p');original.className='grade-original-score';original.textContent=`После апелляции: ${submission.appeal.effective_verdict} из 10 · исходная оценка ${submission.original_verdict}`;grading.append(original);
     }
     if(submission.error){const error=document.createElement('p');error.className='error';error.textContent=submission.error;grading.append(error);}
     if(submission.grade){
-      const reasoning=document.createElement('div');reasoning.className='rendered';render(reasoning,submission.grade.reasoning);grading.append(reasoning);
-      if(submission.grade.evidence&&submission.grade.evidence!==submission.grade.reasoning){const evidence=document.createElement('section');evidence.className='grade-evidence';const label=document.createElement('h4');label.textContent='Обоснование оценки';const body=document.createElement('div');body.className='rendered';render(body,submission.grade.evidence);evidence.append(label,body);grading.append(evidence);}
+      const reasoning=document.createElement('div');reasoning.className='rendered';render(reasoning,currentGrade.reasoning || submission.grade.reasoning);grading.append(reasoning);
+      if(currentGrade.evidence&&currentGrade.evidence!==currentGrade.reasoning){const evidence=document.createElement('section');evidence.className='grade-evidence';const label=document.createElement('h4');label.textContent='Обоснование оценки';const body=document.createElement('div');body.className='rendered';render(body,currentGrade.evidence);evidence.append(label,body);grading.append(evidence);}
     }
     layout.append(grading);
   }
@@ -489,7 +506,7 @@ function buildAppealRegion(submission,player,currentRound) {
     else status.textContent='Апелляция рассмотрена.';
     decision.append(status);
     if(appeal.error){const error=document.createElement('p');error.className='muted';error.textContent=appeal.error;decision.append(error);}
-    if(appeal.grade){const review=document.createElement('div');review.className='rendered';render(review,appeal.grade.reasoning);decision.append(review);if(appeal.grade.evidence&&appeal.grade.evidence!==appeal.grade.reasoning){const label=document.createElement('h5');label.textContent='Обоснование пересмотра';const evidence=document.createElement('div');evidence.className='rendered';render(evidence,appeal.grade.evidence);decision.append(label,evidence);}}
+    if(appeal.status==='graded' && submission.grade){const history=document.createElement('details');history.className='original-grade-history';const summary=document.createElement('summary');summary.textContent=`Исходная оценка: ${appeal.old_verdict} из 10`;const review=document.createElement('div');review.className='rendered';render(review,submission.grade.reasoning);history.append(summary,review);decision.append(history);}
     region.append(decision);
   }
   if(canSubmit){
@@ -520,45 +537,26 @@ function buildAppealRegion(submission,player,currentRound) {
 }
 
 function renderRounds() {
-  const rounds = state.previous_rounds;
-  $("round-history").hidden = !rounds.length;
-  const signature = JSON.stringify(rounds);
-  if (signature === roundHistorySignature) return;
-  roundHistorySignature = signature;
-  const list = $("round-history-list");
-  const navigation=document.createElement('div');navigation.className='timeline-tabs';navigation.setAttribute('role','group');navigation.setAttribute('aria-label','Выбрать раунд');
-  const detail=document.createElement('div');detail.className='timeline-detail';
-  const cache=new Map();let selected=null;
-  async function selectRound(round,button){
-    selected=round.round;
-    navigation.querySelectorAll('button').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));
-    detail.textContent='Загрузка раунда…';
-    try {
-      const archived=cache.get(round.round) || await api(sessionPath(`/rounds/${round.round}`));cache.set(round.round,archived);
-      if(selected!==round.round)return;
-      detail.replaceChildren();const heading=document.createElement('h3');heading.textContent=round.title;detail.append(heading);
-      const reason=document.createElement('p');reason.className='field-help';const winner=state.players.find(player=>player.id===round.result.winner);reason.textContent=winner?`${winner.name} · +1 🥪`:'Ничья';detail.append(reason);
-      const tabs=document.createElement('div');tabs.className='review-tabs';tabs.role='group';tabs.setAttribute('aria-label','Разбор предыдущего раунда');const body=document.createElement('div');
-      for(const [key,label] of [['own','Ваше решение'],['opponent','Соперник'],['reference','Эталон']]){
-        const tab=document.createElement('button');tab.type='button';tab.textContent=label;tab.setAttribute('aria-pressed',String(key==='own'));tab.onclick=()=>{tabs.querySelectorAll('button').forEach(item=>item.setAttribute('aria-pressed',String(item===tab)));body.replaceChildren();if(key==='reference'){render(body,archived.problem.reference_solution || "Автор не добавил полное решение.");body.className='rendered';}else{body.className='';renderHistory(archived.players.filter(player=>key==='own'?player.id===state.me:player.id!==state.me),body);body.querySelector('details')?.setAttribute('open','');}};tabs.append(tab);
-      }
-      const statement=document.createElement('details');statement.className='review-problem';const summary=document.createElement('summary');summary.textContent='Условие задачи';const text=document.createElement('div');text.className='rendered';render(text,archived.problem.statement);statement.append(summary,text);detail.append(statement,tabs,body);tabs.querySelector('button').click();
-    }catch(error){if(selected===round.round)detail.textContent=error.message;}
+  const rounds=state.previous_rounds || [];
+  $('round-history').hidden=!rounds.length;
+  const signature=JSON.stringify(rounds);if(signature===roundHistorySignature)return;roundHistorySignature=signature;
+  const list=$('round-history-list');list.replaceChildren();
+  for(const round of [...rounds].reverse()){
+    const link=document.createElement('a');link.className='round-history-link';link.href=`/s/${encodeURIComponent(code)}?round=${round.round}`;
+    const title=document.createElement('strong');title.textContent=`Раунд ${round.round}`;
+    const task=document.createElement('span');task.textContent=round.title;
+    const score=document.createElement('span');score.textContent=state.players.map(player=>round.scores[player.id]).join(' : ');
+    link.append(title,task,score);list.append(link);
   }
-  for(const round of [...rounds].reverse()){const button=document.createElement('button');button.type='button';button.textContent=`Раунд ${round.round} · ${state.players.map(player=>round.scores[player.id]).join(' : ')}`;button.onclick=()=>selectRound(round,button);navigation.append(button);}
-  list.replaceChildren(navigation,detail);
-  let firstLoaded=false;
-  $('round-history').ontoggle=()=>{if($('round-history').open && !firstLoaded){firstLoaded=true;navigation.querySelector('button')?.click();}};
-  if($('round-history').open){firstLoaded=true;navigation.querySelector('button')?.click();}
 }
 
 function renderChat() {
   const opponent=state.players.find(player=>player.id!==state.me);
   $('chat-title').textContent=opponent?.name || 'Чат дуэли';
   $('chat-room-status').textContent=state.closed_at?'Комната закрыта · история':`Раунд ${state.round}`;
-  const signature=JSON.stringify(state.chat);
+  const signature=JSON.stringify({chat:state.chat,opponent:opponent?.id,closed:state.closed_at,round:state.round});
   if(signature===chatSignature)return;
-  const previous=chatSignature?JSON.parse(chatSignature):[];
+  const previous=chatSignature?JSON.parse(chatSignature).chat:[];
   chatSignature=signature;
   const container=$('chat-messages');
   const atBottom=container.scrollHeight-container.scrollTop-container.clientHeight<60;
@@ -580,7 +578,7 @@ function renderChat() {
     const bubble=document.createElement('p');bubble.className='chat-bubble';bubble.textContent=message.text;
     const time=document.createElement('time');time.dateTime=new Date(message.sent_at*1000).toISOString();time.textContent=new Date(message.sent_at*1000).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit',hour12:false});time.title=new Date(message.sent_at*1000).toLocaleString('ru-RU');group.append(bubble,time);
   }
-  if(!state.chat.length){const empty=document.createElement('p');empty.className='chat-empty';empty.textContent=state.closed_at?'Сообщений пока нет.':opponent?`Напишите ${opponent.name}`:'Чат появится здесь, когда присоединится соперник.';content.append(empty);}
+  if(!state.chat.length){const empty=document.createElement('p');empty.className='chat-empty';empty.textContent=state.closed_at?'Сообщений пока нет.':opponent?'Сообщений пока нет. Начните разговор.':'Чат появится здесь, когда присоединится соперник.';content.append(empty);}
   container.replaceChildren(content);
   container.scrollTop=atBottom?container.scrollHeight:scroll;
   if(previous.length&&state.chat.length>previous.length&&state.chat.at(-1).player_id!==state.me)$('chat-announcement').textContent='Новое сообщение от соперника.';
@@ -674,7 +672,7 @@ async function poll() {
 
 function enter(next) {
   code = next.code;
-  history.replaceState(null, "", `/s/${code}`);
+  history.replaceState(null, "", `/s/${code}${location.search}`);
   apply(next);
   pollTimer = setTimeout(poll, 1200);
 }
@@ -754,9 +752,12 @@ async function init() {
   document.querySelectorAll('[data-lobby-mode]').forEach(button=>button.onclick=()=>{
     lobbyMode=button.dataset.lobbyMode;
     apply(state);
+    if(lobbyMode==='custom')$('custom-task-dialog').showModal();
     if(lobbyMode==='random' && (state.source!=='bank' || state.topic))action(async()=>{apply(await api(sessionPath('/topic'),'PUT',{topic:null,round:state.round}));});
     else withdrawReadyForSelection();
   });
+  $('edit-custom-task').onclick=()=>$('custom-task-dialog').showModal();
+  $('close-custom-task').onclick=()=>$('custom-task-dialog').close();
   $('lobby-topic').addEventListener('change',()=>{if($('lobby-topic').value)$('topic-form').requestSubmit();});
   $("create-form").addEventListener("submit", (event) => {
     event.preventDefault();
@@ -808,7 +809,7 @@ async function init() {
   customProblemForm=window.mathProblemForm($('duel-problem-fields'),{prefix:'duel-custom',fileId:'next-problem-file',onChange:customEdited});
   // The hidden serialized field is retained for importing older local QA fixtures.
   $('next-problem-json').addEventListener('input',()=>{try{customProblemForm.fill(JSON.parse($('next-problem-json').value));}catch{}customEdited();});
-  $('next-problem-form').addEventListener('submit',event=>{event.preventDefault();action(async()=>{const problem=customProblemForm.get();const next=await api(sessionPath('/problem'),'PUT',{problem,round:state.round});customProblemDirty=false;apply(next);notice('Задача обновлена. Подтвердите готовность заново.');});});
+  $('next-problem-form').addEventListener('submit',event=>{event.preventDefault();action(async()=>{const problem=customProblemForm.get();const next=await api(sessionPath('/problem'),'PUT',{problem,round:state.round});customProblemDirty=false;apply(next);$('custom-task-dialog').close();notice('Задача обновлена. Подтвердите готовность заново.');});});
   $("solution").addEventListener("input", () => {
     draftDirty = true;
     backupDraft();
@@ -883,7 +884,21 @@ async function init() {
       link.href = `/s/${session.code}`;
       const name=document.createElement('strong');name.textContent=session.names.join(' и ') || 'Ждём соперника';
       const meta=document.createElement('div');meta.className='recent-meta';const phase=document.createElement('span');phase.textContent=session.closed_at?'Комната закрыта':{lobby:'Ожидание друга',active:'Идёт раунд',grading:'Проверка решений',finished:'Раунд завершён'}[session.phase] || session.phase;const arrow=document.createElement('span');arrow.textContent=session.closed_at?'Посмотреть':'Продолжить →';meta.append(phase,arrow);link.append(name,meta);
-      $("recent-list").append(link);
+      const row=document.createElement('div');row.className='recent-room';
+      const hide=document.createElement('button');hide.type='button';hide.className='quiet hide-recent-room';hide.textContent='Убрать из списка';hide.setAttribute('aria-label',`Убрать из списка комнату ${session.code}`);
+      hide.onclick=async()=>{
+        hide.disabled=true;
+        try{
+          await api(`/api/sessions/${encodeURIComponent(session.code)}/visibility`,'PUT',{hidden:true});
+          const next=row.nextSibling;row.remove();$('recent').hidden=!$('recent-list').children.length;
+          let feedback=$('recent-feedback');if(!feedback){feedback=document.createElement('div');feedback.id='recent-feedback';feedback.className='recent-feedback';feedback.setAttribute('role','status');$('recent').before(feedback);}
+          const message=document.createElement('span');message.textContent='Комната убрана из вашего списка.';
+          const undo=document.createElement('button');undo.type='button';undo.className='text-button';undo.textContent='Вернуть';
+          undo.onclick=async()=>{undo.disabled=true;try{await api(`/api/sessions/${encodeURIComponent(session.code)}/visibility`,'PUT',{hidden:false});$('recent-list').insertBefore(row,next?.isConnected?next:null);$('recent').hidden=false;hide.disabled=false;feedback.replaceChildren();hide.focus();}catch(error){notice(error.message,true);undo.disabled=false;}};
+          feedback.replaceChildren(message,undo);
+        }catch(error){notice(error.message,true);hide.disabled=false;}
+      };
+      row.append(link,hide);$('recent-list').append(row);
     }
     $("connection").textContent = "На связи";
     if (code) await poll(); else $("landing").hidden = false;

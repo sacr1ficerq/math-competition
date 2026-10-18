@@ -1256,7 +1256,7 @@ dialog::backdrop {
 
 @media (max-width: 900px) {
   .attempt-review-layout { display:flex; flex-direction:column; gap:24px; }
-  .attempt-review-layout>.review-grading { order: -1; }
+
   .review-region { width: 100%; }
   .results .review-region { padding:24px 0; }
   .results .review-grading { border:0; padding:24px; border-radius:var(--radius-surface); }
@@ -1266,7 +1266,7 @@ dialog::backdrop {
 
 @container (max-width: 760px) {
   .attempt-review-layout { display:flex; flex-direction:column; gap:24px; }
-  .attempt-review-layout>.review-grading { order: -1; }
+
   .review-region { width: 100%; }
   .results .review-region { padding:24px 0; }
   .results .review-grading { border:0; padding:24px; border-radius:var(--radius-surface); }

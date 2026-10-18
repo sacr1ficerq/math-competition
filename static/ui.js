@@ -18,7 +18,7 @@
     wrapper.addEventListener('keydown',event=>{const options=[...menu.children].filter(item=>!item.disabled);let index=options.indexOf(document.activeElement);if(event.key==='Escape'){event.preventDefault();close(true);}else if(['ArrowDown','ArrowUp','Home','End'].includes(event.key)){event.preventDefault();if(menu.hidden){open(event.key==='ArrowUp');return;}index=event.key==='Home'?0:event.key==='End'?options.length-1:(index+(event.key==='ArrowDown'?1:-1)+options.length)%options.length;options[index]?.focus();}else if(event.key==='Tab')close();});
     document.addEventListener('pointerdown',event=>{if(!wrapper.contains(event.target))close();});select.addEventListener('change',sync);new MutationObserver(build).observe(select,{childList:true,subtree:true,attributes:true,attributeFilter:['disabled','selected']});pickers.push(sync);build();
   }
-  window.mathUI={syncPickers(){pickers.forEach(sync=>sync());}};
+  window.mathUI={enhanceSelect:enhance,syncPickers(){pickers.forEach(sync=>sync());}};
   document.querySelectorAll('select[data-picker]').forEach(enhance);
 })();
 

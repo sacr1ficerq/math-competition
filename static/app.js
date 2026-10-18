@@ -156,7 +156,7 @@ async function init() {
       const visible=topic?problems.slice(catalogPage*12,(catalogPage+1)*12):problems.slice(0,matchMedia('(max-width:720px)').matches?2:4);
       for(const problem of visible){
         const row=document.createElement('button');row.type='button';row.className='bank-row';
-        const title=document.createElement('strong');title.textContent=problem.title;row.append(title);
+        const title=document.createElement('strong');title.textContent=problem.title;row.append(title);const meta=document.createElement('span');meta.className='bank-row-meta';meta.textContent=problem.subtopic_label || problem.topic_label;row.prepend(meta);
         if(problem.seen){const seen=document.createElement('span');seen.className='bank-seen';seen.textContent='Открывали';row.append(seen);}
         row.onclick=()=>{if(!window.mathAccount.user){window.mathAccount.onSignedIn=()=>{location.href='/practice?problem='+encodeURIComponent(problem.id);};window.mathAccount.open();return;}location.href='/practice?problem='+encodeURIComponent(problem.id);};grid.append(row);
       }group.append(grid);

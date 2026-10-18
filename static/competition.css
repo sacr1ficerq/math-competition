@@ -1,18 +1,6 @@
-/* Duel screens each have one primary task; shared primitives live in styles.css. */
-#landing { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:0 64px; align-items:center; padding-top:40px; isolation:isolate; }
-.home-heading { grid-column:1; margin-bottom:24px; }
-.home-heading h1 { font-size:52px; line-height:1.08; letter-spacing:-2px; margin:0; max-width:16ch; }
-.home-heading p { margin:16px 0 0; color:var(--muted); max-width:45ch; }
-.math-arena { grid-column:2; grid-row:1/3; display:flex; align-items:center; justify-content:center; gap:24px; margin:0; padding:24px 0; min-height:280px; pointer-events:none; }
-.home-person { display:flex; flex-direction:column; align-items:center; gap:16px; color:var(--muted); font-size:13px; }
-.home-person>span { display:grid; place-items:center; width:64px; height:64px; border:1px solid var(--line); border-radius:50%; color:var(--foam); font:32px Georgia,serif; background:var(--overlay); }
-.home-prize { width:200px; text-align:center; color:var(--muted); font-size:12px; }
-.home-prize img { display:block; width:200px; height:180px; }
+
 .home-panel { grid-column:1; width:100%; padding-top:8px; }
 .home-panel .create-panel,.home-panel .join-panel { padding:24px 0 0; }
-#landing .recent-section { grid-column:1/-1; margin-top:32px; }
-@media(max-width:900px) { #landing { gap:0 24px; } .math-arena { gap:12px; padding:24px 12px; } .home-person>span { width:44px; height:44px; } .home-prize,.home-prize img { width:100px; } }
-@media(max-width:720px) { #landing { display:block; padding-top:8px; } .home-heading h1 { font-size:32px; max-width:none; } .math-arena { min-height:0; padding:16px 0; margin-bottom:16px; } .home-prize img { height:90px; } .home-person { gap:8px; } }
 
 .create-panel {
   padding: 24px;
@@ -266,8 +254,6 @@ body[data-phase="lobby"] .win-count { order: 0; font-size: 16px; }
   scroll-margin-top: 104px;
   padding-top:0;
 }
-
-.lobby-surface { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:24px 48px; padding:0; }
 .lobby-task-settings { min-width:0; }
 .lobby-invite { min-width:0; }
 /* Invite first; task configuration stays a secondary disclosure. */
@@ -306,15 +292,6 @@ body[data-phase="lobby"] .win-count { order: 0; font-size: 16px; }
   margin-bottom: 16px;
 }
 
-.task-mode-tabs {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 4px;
-  padding: 4px;
-  border-radius: 10px;
-  background: var(--base);
-}
-
 .task-mode-tabs>button {
   min-width: 0;
   padding: 8px 12px;
@@ -329,10 +306,7 @@ body[data-phase="lobby"] .win-count { order: 0; font-size: 16px; }
   color: var(--text);
   box-shadow: inset 0 1px 0 var(--material-rim);
 }
-
-.lobby-model-state,.lobby-bottom { grid-column:1/-1; }
 #lobby[data-players="two"] .lobby-task-settings { grid-column:1/-1; }
-@media(max-width:720px) { .lobby-surface { display:flex; flex-direction:column; gap:24px; } }
 
 .lobby-model-state {
   font-size: 12px;
@@ -637,8 +611,6 @@ body[data-phase="lobby"] .win-count { order: 0; font-size: 16px; }
 /* Desktop chat reserves space; only narrow screens use a full-screen dialog. */
 .session-layout { min-width: 0; }
 .competition-grid { min-width: 0; }
-
-body[data-chat="docked"] .session-layout { display: grid; grid-template-columns: minmax(0,1fr) 376px; gap: 28px; align-items: start; }
 .chat-dock { position: sticky; top: 96px; min-width: 0; border-left: 1px solid var(--line); padding-left: 20px; }
 .chat-panel { display: flex; flex-direction: column; height: max(420px,calc(100dvh - var(--chat-top,280px))); max-height: 900px; min-width: 0; }
 .chat-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 0 16px; }
@@ -669,17 +641,6 @@ body[data-chat="docked"] .session-layout { display: grid; grid-template-columns:
 .chat-dialog:not([open]) { display: none; }
 .chat-dialog::backdrop { background: var(--base); backdrop-filter: none; -webkit-backdrop-filter: none; }
 .chat-dialog .chat-panel { height: 100%; max-height: none; }
-@media (min-width:1001px) and (max-width:1699px) {
-
-  body[data-chat="docked"] .session-layout { grid-template-columns: minmax(0,1fr) 344px; gap: 24px; }
-  body[data-chat="docked"] .proof-surface .workspace { display: block; }
-  body[data-chat="docked"] .editor-toolbar { display: flex; justify-content: space-between; padding: 8px 0; gap: 12px; }
-  body[data-chat="docked"] .editor-toolbar>.workspace-tabs { display: flex; }
-  body[data-chat="docked"] .wide-editor-title,body[data-chat="docked"] .wide-preview-title { display: none; }
-  body[data-chat="docked"] .editor-toolbar>.subtle { margin: 0; }
-  body[data-chat="docked"]:not([data-workspace="preview"]) .preview-pane { display: none; }
-  body[data-chat="docked"][data-workspace="preview"] .editor-pane { display: none; }
-}
 
 .appeal-status { margin: 0 0 16px; font-size: 15px; font-weight: 500; }
 .appeal-warning { color: var(--muted); font-size: 12px; line-height: 1.6; margin: 12px 0 0; max-width: 75ch; }
