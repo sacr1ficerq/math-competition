@@ -98,6 +98,10 @@ class JoinSession(BaseModel):
     name: Name | None = None
 
 
+class VisibilityRequest(BaseModel):
+    hidden: bool
+
+
 class RoundRequest(BaseModel):
     round: int = Field(default=1, ge=1)
 
@@ -211,6 +215,12 @@ async def join(code: str, body: JoinSession, request: Request, response: Respons
 @router.get("/sessions/{code}")
 async def get_session(code: str, request: Request):
     return view(request, store(request).read(code, token(request)))
+
+
+@router.put("/sessions/{code}/visibility")
+async def room_visibility(code: str, body: VisibilityRequest, request: Request):
+    store(request).visibility(code, token(request), body.hidden)
+    return {"hidden": body.hidden}
 
 
 @router.get("/sessions/{code}/rounds/{round_number}")

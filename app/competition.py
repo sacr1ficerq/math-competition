@@ -101,6 +101,9 @@ class Store:
         with self.connection() as db:
             db.execute("PRAGMA journal_mode=WAL")
             db.execute("CREATE TABLE IF NOT EXISTS sessions (code TEXT PRIMARY KEY, state TEXT NOT NULL)")
+            db.execute("""CREATE TABLE IF NOT EXISTS hidden_sessions (
+                code TEXT NOT NULL, identity TEXT NOT NULL, hidden_at REAL NOT NULL,
+                PRIMARY KEY(code, identity))""")
 
     @contextmanager
     def connection(self):
@@ -198,12 +201,26 @@ class Store:
         digest = identity(token)
         with self.connection() as db:
             rows = db.execute("SELECT state FROM sessions").fetchall()
+            hidden = {row[0] for row in db.execute("SELECT code FROM hidden_sessions WHERE identity=?", (digest,))}
         sessions = [json.loads(row[0]) for row in rows]
         return [
             {"code": s["code"], "phase": s["phase"], "created_at": s["created_at"], "closed_at": s.get("closed_at"), "names": [p["name"] for p in s["players"]]}
             for s in sorted(sessions, key=lambda s: s["created_at"], reverse=True)
-            if any(p["identity"] == digest for p in s["players"])
+            if s["code"] not in hidden and any(p["identity"] == digest for p in s["players"])
         ][:20]
+
+    def visibility(self, code: str, token: str, hidden: bool):
+        """A personal list preference never changes the shared room or exposure history."""
+        with self.connection() as db:
+            db.execute("BEGIN IMMEDIATE")
+            row = db.execute("SELECT state FROM sessions WHERE code=?", (code.upper(),)).fetchone()
+            if row is None:
+                raise CompetitionError("Session not found. Check your invite code.", 404)
+            self.player(json.loads(row[0]), token)
+            if hidden:
+                db.execute("INSERT OR IGNORE INTO hidden_sessions VALUES (?,?,?)", (code.upper(), identity(token), time.time()))
+            else:
+                db.execute("DELETE FROM hidden_sessions WHERE code=? AND identity=?", (code.upper(), identity(token)))
 
     def ready(self, code: str, token: str, ready: bool, round: int | None = None, bank: ProblemBank | None = None) -> dict:
         with self.edit(code, with_connection=True) as (session, db):
