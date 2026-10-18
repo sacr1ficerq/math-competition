@@ -84,6 +84,12 @@ archives; the current finished round retains its appeal window.
 
 ## Problems and practice
 
+Keyboard controls: `Ctrl/⌘ K` opens action search, `?` shows shortcuts, and `Esc`
+closes the current panel. Outside text fields, `C` toggles chat, `I` focuses the
+solution, `G H` opens home, and `G B` opens the bank. In the bank, `J/K` selects
+cards and `Enter` opens the selected task. `Ctrl/⌘ Enter` checks the solution
+from its editor. Single-letter shortcuts can be disabled in the action menu.
+
 The task bank is loaded from `problems/*.json`. Each task has a stable identity and
 content revision. Topic selection excludes the union of both players' exposure
 histories across every room and practice, including tasks merely opened without a

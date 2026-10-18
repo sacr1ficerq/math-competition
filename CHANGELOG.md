@@ -4,6 +4,11 @@
 
 ### Added
 
+- Keyboard action search, discoverable shortcuts, and optional single-letter
+  navigation that stays inactive while typing.
+- An illustrated victory podium with a one-time award animation, name-only
+  participants, translucent surfaces, and coordinated hover/focus states.
+
 - Personal room-list removal with undo, preserving shared results and exposure history.
 - Dedicated completed-round review addresses, including read-only archived rounds.
 
