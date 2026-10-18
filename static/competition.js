@@ -37,6 +37,72 @@ const initializedReviews = new Set();
 let lobbyTopicsSignature = "";
 let inviteFeedbackTimer;
 let lobbyMode = null;
+let duelModels = [];
+let duelModelsPromise = null;
+let duelModelSignature = "";
+let duelInitialModel = null;
+let duelModelRoom = null;
+let duelModelOpenIntent = false;
+function syncDuelModel() {
+  if(!state)return;
+  if(duelModelRoom!==state.code){duelModelRoom=state.code;duelInitialModel=state.me===state.host ? window.mathAccount.user?.default_model || state.model : state.model;}
+  $('lobby-model-label').textContent=state.me===state.host && state.model===duelInitialModel?'Модель по умолчанию':'Модель дуэли';
+  const editable=state.phase==='lobby' && state.me===state.host && !state.closed_at;
+  $('lobby-model-form').hidden=!editable;
+  $('lobby-model-owner-note').hidden=editable;
+  if(!editable)closeDuelModels();
+  $('lobby-model-name').textContent=duelModels.find(model=>model.id===state.model)?.name || state.model;
+  const signature=JSON.stringify([state.code,state.round,state.model]);
+  if(signature!==duelModelSignature){
+    duelModelSignature=signature;
+    $('lobby-model-search').value=state.model;
+    $('lobby-model-status').textContent='';
+  }
+}
+function closeDuelModels() {
+  duelModelOpenIntent=false;
+  $('lobby-model-options').hidden=true;
+  $('lobby-model-search').setAttribute('aria-expanded','false');
+}
+function showDuelModels() {
+  if(!state || state.phase!=='lobby' || state.me!==state.host || state.closed_at)return;
+  const options=$('lobby-model-options'),input=$('lobby-model-search');
+  const query=input.value.trim().toLowerCase();
+  options.replaceChildren();
+  const matches=duelModels.filter(model=>(model.id+' '+(model.name || '')).toLowerCase().includes(query)).slice(0,40);
+  for(const model of matches){
+    const button=document.createElement('button');button.type='button';button.role='option';
+    button.setAttribute('aria-selected',String(model.id===input.value));
+    const name=document.createElement('span');name.textContent=model.name || model.id;
+    const id=document.createElement('small');id.textContent=model.id;button.append(name,id);
+    button.addEventListener('pointerdown',event=>event.preventDefault());
+    button.addEventListener('click',()=>{
+      input.value=model.id;input.focus();closeDuelModels();
+      $('lobby-model-status').textContent='Нажмите «Применить к дуэли», чтобы сохранить выбор.';
+    });
+    options.append(button);
+  }
+  if(!matches.length){
+    const hint=document.createElement('p');hint.className='field-help';
+    hint.textContent=duelModels.length?'Ничего не найдено. Укажите provider/model вручную.':'Можно указать provider/model вручную.';
+    options.append(hint);
+  }
+  duelModelOpenIntent=true;
+  options.hidden=false;input.setAttribute('aria-expanded','true');
+}
+async function loadDuelModels() {
+  if(duelModelsPromise)return duelModelsPromise;
+  duelModelsPromise=api('/api/models').then(data=>{
+    duelModels=data.models || [];
+
+    syncDuelModel();
+    $('lobby-model-status').textContent=data.stale?'Список может быть неполным. Можно указать provider/model вручную.':'Найдите модель по названию или укажите provider/model.';
+  }).catch(()=>{
+    $('lobby-model-status').textContent='Список недоступен. Укажите provider/model вручную.';
+    duelModelsPromise=null;
+  });
+  return duelModelsPromise;
+}
 let customProblemDirty = false;
 let customProblemForm;
 let chatOpen = false;
@@ -185,7 +251,7 @@ function apply(next) {
   if(!inviteFeedbackTimer || !waitingForOpponent)$('invite-feedback').textContent=waitingForOpponent?'Ждём второго игрока.':'Вы оба в комнате. Подтвердите готовность.';
   $('lobby').dataset.players=waitingForOpponent?'one':'two';
   $('lobby-readiness').hidden=waitingForOpponent;
-  $('lobby-model-state').textContent=`Проверка решений · ${state.model}`;
+  syncDuelModel();
   $('edit-custom-task').hidden=state.me!==state.host || lobbyMode!=='custom';
   if(state.phase!=='lobby' && $('custom-task-dialog').open)$('custom-task-dialog').close();
   document.body.dataset.phase=state.closed_at?"closed":state.phase;
@@ -332,6 +398,9 @@ function controls() {
   const customPending=state.phase === 'lobby' && state.me === state.host && lobbyMode === 'custom' && (state.source !== 'custom' || customProblemDirty);
   const topicPending=state.phase === 'lobby' && state.me === state.host && lobbyMode === 'topic' && (state.source !== 'bank' || !state.topic);
   const randomPending=state.phase === 'lobby' && state.me === state.host && lobbyMode === 'random' && (state.source !== 'bank' || !!state.topic);
+  const modelLocked=!!state.closed_at || state.phase!=='lobby' || state.me!==state.host || actionBusy;
+  $('lobby-model-search').disabled=modelLocked;
+  $('save-lobby-model').disabled=modelLocked;
   $('ready').disabled=!!state.closed_at || actionBusy || !!readinessWithdrawal || state.players.length < 2 || customPending || topicPending || randomPending;
   if(customPending)$('lobby-hint').textContent='Добавьте и примените свою задачу перед стартом.';
   if(topicPending)$('lobby-hint').textContent='Выберите тему задачи перед стартом.';
@@ -770,6 +839,49 @@ async function init() {
     if(lobbyMode==='custom')$('custom-task-dialog').showModal();
     if(lobbyMode==='random' && (state.source!=='bank' || state.topic))action(async()=>{apply(await api(sessionPath('/topic'),'PUT',{topic:null,round:state.round}));});
     else withdrawReadyForSelection();
+  });
+  $('lobby-model-details').addEventListener('toggle',()=>{
+    if($('lobby-model-details').open && state?.phase==='lobby')loadDuelModels();
+    else closeDuelModels();
+  });
+  const modelInput=$('lobby-model-search'),modelOptions=$('lobby-model-options');
+  modelInput.addEventListener('focus',()=>{
+    modelInput.select();
+    duelModelOpenIntent=true;
+    loadDuelModels().then(()=>{if(duelModelOpenIntent && document.activeElement===modelInput && $('lobby-model-details').open)showDuelModels();});
+  });
+  modelInput.addEventListener('input',()=>{$('lobby-model-status').textContent='';showDuelModels();});
+  modelInput.addEventListener('keydown',event=>{
+    if(event.key==='Escape' && !modelOptions.hidden){event.preventDefault();event.stopPropagation();closeDuelModels();}
+    else if(event.key==='ArrowDown'){event.preventDefault();showDuelModels();modelOptions.querySelector('button')?.focus();}
+  });
+  modelOptions.addEventListener('keydown',event=>{
+    const buttons=[...modelOptions.querySelectorAll('button')],index=buttons.indexOf(document.activeElement);
+    if(event.key==='Escape'){event.preventDefault();event.stopPropagation();modelInput.focus();closeDuelModels();}
+    else if(['ArrowDown','ArrowUp','Home','End'].includes(event.key)){
+      event.preventDefault();
+      const next=event.key==='Home'?0:event.key==='End'?buttons.length-1:(index+(event.key==='ArrowDown'?1:-1)+buttons.length)%buttons.length;
+      buttons[next]?.focus();
+    }
+  });
+  $('duel-model-picker').addEventListener('focusout',event=>{if(!event.currentTarget.contains(event.relatedTarget))closeDuelModels();});
+  document.addEventListener('pointerdown',event=>{if(!event.target.closest('#duel-model-picker'))closeDuelModels();});
+  $('lobby-model-form').addEventListener('submit',event=>{
+    event.preventDefault();
+    if(!state || state.phase!=='lobby' || state.me!==state.host || state.closed_at || actionBusy)return;
+    const model=modelInput.value.trim();
+    if(!model || model.length>200 || !/^[\w.:-]+\/[\w.:-]+$/.test(model)){
+      $('lobby-model-status').textContent='Укажите модель в формате provider/model.';
+      modelInput.focus();return;
+    }
+    closeDuelModels();
+    action(async()=>{
+      try{
+        apply(await api(sessionPath('/model'),'PUT',{model,round:state.round}));
+        $('lobby-model-status').textContent='Модель дуэли сохранена.';
+        notice('Модель обновлена. Подтвердите готовность заново.');
+      }catch(error){$('lobby-model-status').textContent=error.message;throw error;}
+    });
   });
   $('edit-custom-task').onclick=()=>$('custom-task-dialog').showModal();
   $('close-custom-task').onclick=()=>$('custom-task-dialog').close();
