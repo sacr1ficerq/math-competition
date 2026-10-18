@@ -106,6 +106,10 @@ class RoundRequest(BaseModel):
     round: int = Field(default=1, ge=1)
 
 
+class RematchRequest(RoundRequest):
+    ready: bool = True
+
+
 class ReadyRequest(RoundRequest):
     ready: bool
 
@@ -238,9 +242,9 @@ async def close_session(code: str, body: RoundRequest, request: Request):
 
 
 @router.post("/sessions/{code}/rematch")
-async def rematch(code: str, body: RoundRequest, request: Request):
-    session = store(request).rematch(code, token(request), body.round)
-    logger.info("Rematch lobby: session=%s round=%d", code, session["round"])
+async def rematch(code: str, body: RematchRequest, request: Request):
+    session = store(request).rematch(code, token(request), body.round, body.ready)
+    logger.info("Next round consent: session=%s round=%d phase=%s ready=%s", code, session["round"], session["phase"], body.ready)
     return view(request, session)
 
 

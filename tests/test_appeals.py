@@ -186,6 +186,7 @@ class AppealTests(unittest.TestCase):
         self.finish()
         _, _, appeal, _ = self.appeal()
         self.store.complete_appeal(self.code, self.submission["id"], appeal["id"], result(8))
+        self.store.rematch(self.code, "bob", 1)
         self.store.rematch(self.code, "alice", 1)
         self.store.ready(self.code, "alice", True, round=2)
         self.store.ready(self.code, "bob", True, round=2)
@@ -215,6 +216,7 @@ class AppealTests(unittest.TestCase):
         self.assertEqual([(p["finalized_at"], p["finalized_order"]) for p in state["players"]], times)
         self.assertEqual(list(match_score(state)["wins"].values()), [1, 0])
         self.store.read(self.code, "alice")
+        self.store.rematch(self.code, "bob", 1)
         rematch = self.store.rematch(self.code, "alice", 1)
         self.assertEqual(list(match_score(rematch)["wins"].values()), [1, 0])
         with self.assertRaises(CompetitionError):

@@ -148,7 +148,7 @@ class Store:
     def new_player(token: str, name: str) -> dict:
         return {
             "id": str(uuid4()), "identity": identity(token), "name": name,
-            "ready": False, "finalized": False, "finalized_at": None,
+            "ready": False, "next_round_ready": False, "finalized": False, "finalized_at": None,
             "deadline": None, "draft": "", "draft_revision": 0, "submissions": [],
         }
 
@@ -283,16 +283,19 @@ class Store:
                 p["ready"] = False
             return session
 
-    def rematch(self, code: str, token: str, round: int) -> dict:
+    def rematch(self, code: str, token: str, round: int, ready: bool = True) -> dict:
         with self.edit(code) as session:
             self.check_open(session)
-            self.player(session, token)
+            player = self.player(session, token)
             # Concurrent clicks/retries from the just-finished round reset only once.
             if round == session["round"] - 1:
                 return session
             self.check_round(session, round)
-            if session["phase"] != "finished" or pending_appeals(session):
+            if session["phase"] != "finished" or (ready and pending_appeals(session)):
                 raise CompetitionError("Wait until the round and all pending grading and appeals have finished.")
+            player["next_round_ready"] = ready
+            if not ready or len(session["players"]) != 2 or not all(p.get("next_round_ready", False) for p in session["players"]):
+                return session
             session["rounds"].append(deepcopy({
                 key: session[key] for key in
                 ("round", "model", "problem", "players", "started_at", "ended_at", "result")
@@ -303,7 +306,7 @@ class Store:
             if session.get("source") == "bank":
                 session["problem"] = None
             for p in session["players"]:
-                p.update(ready=False, finalized=False, finalized_at=None, finalized_order=None, deadline=None,
+                p.update(ready=False, next_round_ready=False, finalized=False, finalized_at=None, finalized_order=None, deadline=None,
                          draft="", draft_revision=p["draft_revision"] + 1, submissions=[])
             return session
 
@@ -408,6 +411,10 @@ class Store:
                 "grade": None, "error": None, "attempts": 0,
             }
             attempts.append(appeal)
+            # A new review invalidates consent to the old result. Both players
+            # must confirm again after the appeal has completed.
+            for participant in session["players"]:
+                participant["next_round_ready"] = False
             return session, submission, appeal, True
 
     def complete_appeal(self, code: str, submission_id: str, appeal_id: str, result: dict) -> None:
@@ -502,7 +509,8 @@ def snapshot(session: dict, token: str) -> dict:
                 item["grade"] = s["grade"]
             history.append(item)
         public = {k: player[k] for k in ("id", "name", "ready", "finalized", "finalized_at", "deadline")}
-        public.update(score=score(player), submissions=history, wins=tally["wins"][player["id"]])
+        public.update(score=score(player), submissions=history, wins=tally["wins"][player["id"]],
+                      next_round_ready=player.get("next_round_ready", False))
         if own:
             public.update(draft=player["draft"], draft_revision=player["draft_revision"])
         players.append(public)

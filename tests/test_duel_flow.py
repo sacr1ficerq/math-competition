@@ -147,6 +147,8 @@ class DuelFlowTests(unittest.IsolatedAsyncioTestCase):
         await self.alice.post(self.path+"/chat", json={"text":"Keep this chat"})
         await self.alice.post(self.path+"/finalize")
         await self.bob.post(self.path+"/finalize")
+        consent = (await self.bob.post(self.path+"/rematch", json={"round":1})).json()
+        self.assertEqual(consent["phase"], "finished")
         rematch = (await self.alice.post(self.path+"/rematch", json={"round":1})).json()
         self.assertEqual((rematch["source"], rematch["topic"]), ("bank","geometry"))
         self.assertIsNone(rematch["problem"])

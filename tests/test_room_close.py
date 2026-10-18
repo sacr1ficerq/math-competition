@@ -168,6 +168,7 @@ class CloseRoomTests(unittest.TestCase):
     def test_archived_results_stay_readable_after_closing_next_round(self):
         self.start()
         finished=self.finish()
+        self.store.rematch(self.code,"bob",1)
         rematch=self.store.rematch(self.code,"alice",1)
         closed=self.store.close(self.code,"alice",2)
         self.assertEqual(closed["rounds"][0]["result"],finished["result"])
@@ -191,6 +192,7 @@ class CloseRoomApiTests(unittest.IsolatedAsyncioTestCase):
                         store.finalize(code,"alice")
                         store.finalize(code,"bob")
                         store.rematch(code,"alice",1)
+                        store.rematch(code,"bob",1)
                         path=f"/api/sessions/{code}"
                         denied=await bob.post(path+"/close",json={"round":2})
                         self.assertEqual(denied.status_code,403)

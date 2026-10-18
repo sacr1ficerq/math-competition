@@ -311,6 +311,7 @@ class CompetitionTests(unittest.TestCase):
         self.store.complete(self.code, submission["id"], outcome())
         reopened = Store(self.path).read(self.code, "alice-token")
         self.assertEqual(snapshot(reopened, "alice-token")["chat"][-1], reply)
+        self.store.rematch(self.code, "bob-token", 1)
         self.store.rematch(self.code, "alice-token", 1)
         with self.assertRaises(CompetitionError):
             self.store.chat(self.code, "bob-token", "/solution")
@@ -349,6 +350,7 @@ class CompetitionTests(unittest.TestCase):
         self.submit("bob-token", verdict=8)
         finished = self.end()
         ids = [p["id"] for p in finished["players"]]
+        self.store.rematch(self.code, "alice-token", 1)
         session = self.store.rematch(self.code, "bob-token", 1)
         self.assertEqual(session["code"], self.code)
         self.assertEqual(session["round"], 2)
@@ -376,6 +378,7 @@ class CompetitionTests(unittest.TestCase):
     def test_rematch_retries_and_both_players_click_reset_only_once(self):
         self.start()
         self.end()
+        self.store.rematch(self.code, "bob-token", 1)
         self.store.rematch(self.code, "alice-token", 1)
         self.store.ready(self.code, "alice-token", True, round=2)
         session = self.store.rematch(self.code, "bob-token", 1)
@@ -396,7 +399,8 @@ class CompetitionTests(unittest.TestCase):
         with self.assertRaises(CompetitionError) as error:
             self.store.rematch(self.code, "outsider", 1)
         self.assertEqual(error.exception.status, 403)
-        self.assertEqual(self.store.rematch(self.code, "alice-token", 1)["round"], 2)
+        self.assertEqual(self.store.rematch(self.code, "alice-token", 1)["round"], 1)
+        self.assertEqual(self.store.rematch(self.code, "bob-token", 1)["round"], 2)
         self.store.complete(self.code, submission["id"], outcome(0))
         self.assertEqual(match_score(self.store.read(self.code, "alice-token"))["completed_rounds"], 1)
 
@@ -405,11 +409,13 @@ class CompetitionTests(unittest.TestCase):
         self.submit(verdict=9)
         self.submit("bob-token", verdict=8)
         self.end()
+        self.store.rematch(self.code, "bob-token", 1)
         self.store.rematch(self.code, "alice-token", 1)
         self.start()
         self.submit(verdict=7)
         self.submit("bob-token", verdict=10)
         self.end()
+        self.store.rematch(self.code, "alice-token", 2)
         self.store.rematch(self.code, "bob-token", 2)
         self.start()
         self.submit(verdict=5)
@@ -422,6 +428,7 @@ class CompetitionTests(unittest.TestCase):
             self.assertEqual(list(tally["wins"].values()), [2, 1])
             self.assertEqual(tally["draws"], 0)
             self.assertEqual(tally["completed_rounds"], 3)
+        self.store.rematch(self.code, "bob-token", 3)
         session = self.store.rematch(self.code, "alice-token", 3)
         self.assertEqual(match_score(session), tally)
         self.assertEqual(session["round"], 4)
@@ -429,6 +436,7 @@ class CompetitionTests(unittest.TestCase):
     def test_stale_round_actions_and_draft_revisions_cannot_affect_rematch(self):
         self.start()
         self.end()
+        self.store.rematch(self.code, "bob-token", 1)
         self.store.rematch(self.code, "alice-token", 1)
         for action in [
             lambda: self.store.ready(self.code, "alice-token", True, round=1),
@@ -449,6 +457,7 @@ class CompetitionTests(unittest.TestCase):
     def test_new_problem_is_creator_only_lobby_only_and_resets_readiness(self):
         self.start()
         self.end()
+        self.store.rematch(self.code, "bob-token", 1)
         self.store.rematch(self.code, "alice-token", 1)
         self.store.ready(self.code, "bob-token", True, round=2)
         problem = PROBLEM.model_copy(update={"title": "Round two", "statement": "NEW_SECRET_STATEMENT"})
@@ -473,7 +482,8 @@ class CompetitionTests(unittest.TestCase):
         session = self.store.read(self.code, "alice-token")
         self.assertEqual(session["round"], 1)
         self.assertEqual(list(match_score(session)["wins"].values()), [1, 0])
-        self.assertEqual(self.store.rematch(self.code, "alice-token", 1)["round"], 2)
+        self.assertEqual(self.store.rematch(self.code, "alice-token", 1)["round"], 1)
+        self.assertEqual(self.store.rematch(self.code, "bob-token", 1)["round"], 2)
 
 
 class SessionApiTests(unittest.IsolatedAsyncioTestCase):
@@ -671,6 +681,29 @@ class SessionApiTests(unittest.IsolatedAsyncioTestCase):
         view = (await self.alice.get(self.path)).json()
         self.assertEqual(view["players"][0]["submissions"], [])
 
+    async def test_rematch_api_mutual_consent_default_and_withdrawal(self):
+        await self.start()
+        await self.alice.post(self.path + "/finalize")
+        await self.bob.post(self.path + "/finalize")
+        for _ in range(2):
+            response = await self.alice.post(self.path + "/rematch", json={"round": 1})
+            self.assertEqual(response.status_code, 200)
+            view = response.json()
+            self.assertEqual((view["round"], view["phase"]), (1, "finished"))
+            self.assertEqual([p["next_round_ready"] for p in view["players"]], [True, False])
+            self.assertEqual(view["previous_rounds"], [])
+        withdrawn = await self.alice.post(self.path + "/rematch", json={"round": 1, "ready": False})
+        self.assertEqual(withdrawn.status_code, 200)
+        self.assertFalse(withdrawn.json()["players"][0]["next_round_ready"])
+        waiting = await self.bob.post(self.path + "/rematch", json={"round": 1, "ready": True})
+        self.assertEqual(waiting.json()["round"], 1)
+        started = await self.alice.post(self.path + "/rematch", json={"round": 1, "ready": True})
+        self.assertEqual((started.json()["round"], started.json()["phase"]), (2, "lobby"))
+        self.assertFalse(any(p["next_round_ready"] for p in started.json()["players"]))
+        stale = await self.bob.post(self.path + "/rematch", json={"round": 1, "ready": False})
+        self.assertEqual(stale.json()["round"], 2)
+        self.assertEqual(len(stale.json()["previous_rounds"]), 1)
+
     async def test_rematch_preserves_cookies_and_revealed_archived_solutions(self):
         await self.start()
         await self.alice.put("/api/key", json={"api_key": "test-secret"})
@@ -682,6 +715,9 @@ class SessionApiTests(unittest.IsolatedAsyncioTestCase):
         await self.alice.post(self.path + "/finalize")
         finished = (await self.bob.post(self.path + "/finalize")).json()
         image_url = (await self.alice.get(self.path)).json()["players"][0]["submissions"][0]["images"][0]["url"]
+        consent = await self.alice.post(self.path + "/rematch", json={"round": 1})
+        self.assertEqual(consent.json()["round"], 1)
+        self.assertTrue(consent.json()["players"][0]["next_round_ready"])
         response = await self.bob.post(self.path + "/rematch", json={"round": 1})
         self.assertEqual(response.status_code, 200)
         view = response.json()
