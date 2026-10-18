@@ -257,8 +257,6 @@ function renderPlayers() {
     const card = document.createElement("div");
     card.className = "player-card";
     card.dataset.ready=String(p.ready);
-    const avatar=document.createElement("span");avatar.className="player-initials";avatar.setAttribute("aria-hidden","true");avatar.textContent=p.name.trim().split(/\s+/).slice(0,2).map(part=>part[0]).join("").toUpperCase();
-    card.append(avatar);
     const top = document.createElement("div");
     top.className = "player-top";
     const name = document.createElement("strong");
@@ -297,7 +295,7 @@ function renderPlayers() {
   if (state.players.length === 1) {
     const waiting = document.createElement("div");
     waiting.className = "player-card muted";
-    const seat=document.createElement("span");seat.className="player-initials";seat.textContent="?";seat.setAttribute("aria-hidden","true");const caption=document.createElement("strong");caption.textContent="Ждём соперника";waiting.append(seat,caption);
+    const caption=document.createElement("strong");caption.textContent="Ждём соперника";waiting.append(caption);
     cards.append(waiting);
   }
   $("player-cards").classList.toggle("scoreboard",state.phase!=="lobby"||!!state.closed_at);
