@@ -8,6 +8,7 @@ from contextlib import contextmanager
 from pathlib import Path
 
 from app.config import ROOT, Problem
+from app.problem_subtopics import SUBTOPIC_LABELS
 
 
 class ProblemBankError(Exception):
@@ -20,6 +21,7 @@ class ProblemBank:
     def __init__(self, path, problems_dir=ROOT / "problems"):
         self.path = str(path)
         self.problems_dir = Path(problems_dir)
+        self.public_labels = {}
         with self.connection() as db:
             db.executescript("""
                 CREATE TABLE IF NOT EXISTS bank_problems (
@@ -50,6 +52,7 @@ class ProblemBank:
         manifest = json.loads(manifest_path.read_text()) if manifest_path.exists() else {}
         entries = manifest.get("problems", []) if isinstance(manifest, dict) else manifest
         overrides = {entry.get("file", entry.get("id", "") + ".json"): entry for entry in entries}
+        public_labels = {}
         with self.connection() as db:
             db.execute("BEGIN IMMEDIATE")
             db.execute("UPDATE bank_problems SET retired = 1")
@@ -58,6 +61,8 @@ class ProblemBank:
                     continue
                 entry = overrides.get(path.name, {})
                 raw = json.loads(path.read_text(encoding="utf-8"))
+                identifier = entry.get("id", raw.get("id", path.stem))
+                public_labels[identifier] = SUBTOPIC_LABELS.get(entry.get("subtopic", raw.get("subtopic")), "")
                 content = Problem.model_validate({k: raw[k] for k in Problem.model_fields}).model_dump()
                 serialized = json.dumps(content, ensure_ascii=False, sort_keys=True)
                 topic = entry.get("topic", raw.get("topic", "algebra" if path.stem.startswith("quadratic") else "combinatorics"))
@@ -67,6 +72,7 @@ class ProblemBank:
                     version=excluded.version, retired=excluded.retired, content=excluded.content""",
                     (entry.get("id", raw.get("id", path.stem)), topic, label,
                      hashlib.sha256(serialized.encode()).hexdigest()[:16], int(entry.get("retired", raw.get("retired", False))), serialized))
+        self.public_labels = public_labels
 
     @staticmethod
     def record_status(db, identity, problem_id, status="seen"):
@@ -90,7 +96,7 @@ class ProblemBank:
     def catalog(self, participant_keys=(), topic=None):
         with self.connection() as db:
             rows, seen = self._rows(db, participant_keys, topic)
-            return [{"id": r[0], "topic": r[1], "topic_label": r[2], "version": r[3], "title": json.loads(r[4])["title"], "seen": r[0] in seen} for r in rows]
+            return [{"id": r[0], "topic": r[1], "topic_label": r[2], "subtopic_label": self.public_labels.get(r[0], ""), "version": r[3], "title": json.loads(r[4])["title"], "seen": r[0] in seen} for r in rows]
 
     def topics(self, participant_keys=()):
         result = {}

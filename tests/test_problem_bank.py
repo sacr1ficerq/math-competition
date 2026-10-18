@@ -37,6 +37,21 @@ class ProblemBankTests(unittest.TestCase):
         self.assertNotIn("private", public)
         self.assertNotIn("statement", public)
 
+    def test_public_subtopic_does_not_reveal_or_mark_condition(self):
+        path = self.problems / "count.json"
+        raw = json.loads(path.read_text())
+        raw["subtopic"] = "inclusion_exclusion"
+        path.write_text(json.dumps(raw))
+        self.bank.sync_catalog()
+        entry = next(p for p in self.bank.catalog(["reader"]) if p["id"] == "count")
+        self.assertEqual(entry["subtopic_label"], "Включения и исключения")
+        self.assertFalse(entry["seen"])
+        self.assertNotIn("statement", entry)
+        self.assertNotIn("reference_solution", entry)
+        self.assertNotIn("criterions", entry)
+        self.assertEqual(self.bank.reveal_practice("reader", "count")["statement"], "count")
+        self.assertTrue(next(p for p in self.bank.catalog(["reader"]) if p["id"] == "count")["seen"])
+
     def test_revision_retirement_preserve_history_and_snapshot(self):
         original = self.bank.select("abc", 1, ["a"], "combinatorics")
         self.write("count", "changed statement")
