@@ -1,0 +1,1745 @@
+{
+  "date": "2026-10-18",
+  "hash_algorithm": "sha256(statement+criterions+reference_solution UTF-8)",
+  "checked_conditions": 240,
+  "rendered_math_expressions": 1205,
+  "katex_errors": 0,
+  "records": [
+    {
+      "id": "shad-algorithms-001",
+      "before_content_hash": "ccf12700ea6bb42f36f616382c09b1c2a0a4af670aff5bb4270eec8fc74b8564",
+      "content_hash": "d039161ec3ff6d6c58748f96afb71d5fc432ee5446783551f7ce321872ed502d",
+      "reviewer": "root",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": 4653
+    },
+    {
+      "id": "shad-algorithms-002",
+      "before_content_hash": "49f0c4a6af39f6a644838f5dbbfb5cc14766de3b6a736b97de89d1529ef4984d",
+      "content_hash": "4c9b860e291ef779231bff63f9632a044227dd8c5bae2458462a1152d34a31b4",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-algorithms-003",
+      "before_content_hash": "d4927e0140cb23e4e4217686ccb16a0fde91d9b24c3a1141f81f084cbf500f92",
+      "content_hash": "fbda5eee8901aad3cd497af2cb0c32fce243d6daf180196395aea1ee1f294741",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-algorithms-004",
+      "before_content_hash": "abebb2352d57f0d501213a404b19d9bb4318b4927c452dc52a06682620011a0e",
+      "content_hash": "af2b217cc1d546a1f1e7b3a0318f8b8d2c23de186703fe839dffe1998b536a36",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-algorithms-005",
+      "before_content_hash": "dd6d4ef5fa961d77c8a78262f0170ff0a28ff0212cf0c0d20bce29815e033380",
+      "content_hash": "da5c4d5a037938c6ed19b507405f2f7288684e5f92df2acdb62c1da0ccd0cfcb",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-algorithms-006",
+      "before_content_hash": "b8ecf9a1776ae511812bd09c2e1b9d0e5b9a11d9b07dec67129501551ffff3c4",
+      "content_hash": "91867f8e7a83714969d246ef6b716437467a821afcaa4d35257541169cfbedab",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-algorithms-007",
+      "before_content_hash": "2972515f207e22e8f17db43110037273c7e9413a3ade9d716fa5a19966b209ce",
+      "content_hash": "e296b48cf05fd68e856f57759d4be387049b758e23f1aa67c5ba3f498fb87c94",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-algorithms-008",
+      "before_content_hash": "9b87c7bc2cd0ef57835be88786c92790e05b0e3e8fa405e94b17807501b9daae",
+      "content_hash": "6dec8e7cca07137a4e5b92a360255d7fe862d35f2bb2b4ddf1f4385913b08545",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-algorithms-009",
+      "before_content_hash": "3bef518dac47219cc07df4e9d5680fdd1256212bda507c7d96a9ca0a6f299272",
+      "content_hash": "d09d339a2c1f45e90f1152b5a7c21d7ac2a1b67311f1a01ca98087b4ae1fe4e0",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-algorithms-010",
+      "before_content_hash": "0bcc77abe4a13df0a566a5cfcb1eea3e6c11e35adfc41a21079139b3c46e83db",
+      "content_hash": "cf43b630e2423683c82e7b86ed45f8ce4bcc376a99b13fb33266991ec73b724a",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-algorithms-011",
+      "before_content_hash": "ce847b65db9bdd593e2f5939d77cc15c984d32a05e7a8f63358c7b81ba89b339",
+      "content_hash": "f7b2cf19e37a62eedc66d599faaa6b51845d4511413f5a10866525d51cbb48ac",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-algorithms-012",
+      "before_content_hash": "bda9cfa65ee68490a8d18f553cd788815fa7c97809c457e0d9a3035467612117",
+      "content_hash": "6d9eacc046f88519fef4c345ec4679d0518a15aaa00e5307a0fbab402d9d560e",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-algorithms-013",
+      "before_content_hash": "65f15e51bdb26eec6a4c773028ac88c2c42616a6b9ac0615d73bb9e32beb9930",
+      "content_hash": "a22370f890447fa6b924505c4cbe1690aa1205f14564c9fa4e46f25bd58e85d5",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-algorithms-014",
+      "before_content_hash": "40d802cd2a0bf3039be624816e9bc2bf3a9060529c9c988825a5ce87a51ef63e",
+      "content_hash": "7ef71fefe247f138af8191d5639ff102f3d6039228c676534232d5ef5898f994",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-algorithms-015",
+      "before_content_hash": "5749474f554d4ef50452b7ea429a758b2b0cd0e596abaa219064b834df6df31c",
+      "content_hash": "6ade845aaf4d219a974210e7572b32f354b2be7e9492b3a0f50257d62e5f3ccf",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-algorithms-016",
+      "before_content_hash": "fc42d9c0d15cf01a7857dfe22e74d1c71fdfde02e4b0699306125f4b4b0b0665",
+      "content_hash": "033c31db97308d1b197f6348180c2b4ae8dace64ff81169e689e4f7c3d5a5f33",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-algorithms-017",
+      "before_content_hash": "50fc6d1d3fa029e901e7f0867da3c89c4cb38ab078a3f43132697b37e3acea38",
+      "content_hash": "ed79c0e3d8395373775e37855bbfd8dbec685181119d4e91e4dfdd80f69787ab",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-algorithms-018",
+      "before_content_hash": "1a07f2b9c6bac99fd6363986d424190671a639a466fb73134016033a21bc9ec4",
+      "content_hash": "13d188cbad9e814564a8c54f2205e26cdd2d086157a83ee3151bf4bbe0201052",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-algorithms-019",
+      "before_content_hash": "301949726c2f8bfa3310cffb7455d2f1df59080725ad767eacbe50c9293ef0cf",
+      "content_hash": "8548dcfe867735bba53f1a6c334d3ff4a881dbe2c3d07713de9e43770a0e361e",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-algorithms-020",
+      "before_content_hash": "60d8dc42d84d27bbf20a46a654c1cfc975695b47077a583a47af8e17e338ee19",
+      "content_hash": "fd73d8c64142297634aaa9fceec03caca7ea0fab6c6862b639070533cff6ad4b",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-algorithms-021",
+      "before_content_hash": "c9626379ff6c4f7e1bc070b504c655e90ff2cccf002b87f30bf9fd54cc6ce661",
+      "content_hash": "6ef55d86c7022172c32461c876b645985302fa78aee9ead2ab9cae0c069b8ae8",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-algorithms-022",
+      "before_content_hash": "262e69f0fc94259e2e7119799b8d535fcc6447bbece7be594ed2758f4df3829e",
+      "content_hash": "6fe4e2ca21b98b3204b02f42799c229e9bfd536d4f24f57d2dbd5c9728c928c1",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-algorithms-023",
+      "before_content_hash": "b8000f3b2f5aa0f4295a93a877057f054167dd6d5d0f44233a825c04617c5ad0",
+      "content_hash": "be261376d9f4675486e8a997381265fa0063a8b822ca646a748f3c728c3bf080",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-algorithms-024",
+      "before_content_hash": "906fa61bd3a35c172142c644751b7efcdf6f0d361795b8b9a7c33732ab04dc9a",
+      "content_hash": "92dc0a9d03909130251916f3a118a24ee4ff688ffd1d75bff9b9a8b4cb17bf43",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-algorithms-025",
+      "before_content_hash": "830cb25e40e914e6fa61d89856b2b1ffb22545e80587a7aa930c91be5b5f6289",
+      "content_hash": "7ce7d5fe6c5d91ccc641e82ff673755c16ccdde2fd86dedfe8a048aa62f0d3ec",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-algorithms-026",
+      "before_content_hash": "941af9140763e1f345d0b97952de2a5e6b67bc84ce1a69c3ac5ca6b9baf03694",
+      "content_hash": "912a3553fd0d5d59de79c93b96a02c1d286a361804590e7ef1402cb86421bd23",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-algorithms-027",
+      "before_content_hash": "e31aee2e708e7e9d9c3f2d0ec7b360a7823885163174115ed2a54b68ca758ef9",
+      "content_hash": "5c53a0b350715b03ef421637f6e6b109b21399d2fcae0c1c64bc2fca2398d57f",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-algorithms-028",
+      "before_content_hash": "5090af8148719f48b2c4bcd8f5dd1aacdbb944547881e9dcbd90d93096fc8d96",
+      "content_hash": "1ed75263f4a556bdadaeaffa3feb3b0cd7ba0283e17d6c0d18218d28a65856c0",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-algorithms-029",
+      "before_content_hash": "786ccdc0fb0ccbc30321eb5a016667c753928c8bcd00d49d9d8af2c6b28fee61",
+      "content_hash": "547d586a73d04aed7da1f173d4839ef87f4001c2b0babd1824b57749953517e1",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-algorithms-030",
+      "before_content_hash": "40f561de008cd8dccaa90c03098372770c2a90aef94e4d44331f58d8cb65cf3b",
+      "content_hash": "1c52cc0fffc0317317af8f3edb9f5e7dd9a3fd0fe6486260de86c62669018fa2",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-algorithms-031",
+      "before_content_hash": "445ba74605422d036f3b5876fe453c0900e778b2a9e84db849e84cb000de21b3",
+      "content_hash": "9948c36ba90db20d0f3e66d586dd018916a2ac3cd8e088dd52490a958d42da7c",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-algorithms-032",
+      "before_content_hash": "264ce745a09778f59c7c3c75758fc91480d04818aedc3e9cd7d5546f0f649a67",
+      "content_hash": "7abc0c0e12ece5e2d7e1214c1ef20a9f60ec4b4cd29066fb64a69d5eff4770ef",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-algorithms-033",
+      "before_content_hash": "6563ccd18f11e1d610577a9620f7cf42b243e538c123a77ee47bab14ced12fcb",
+      "content_hash": "d651a65eb5e37b0e81c36fd7319671bf2a58e1fdc28e2bf03527f5697fffa9f9",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-algorithms-034",
+      "before_content_hash": "86a2a210f0dc768d98479ef0f06819fbe99ddf5f226c6c40351bc5eb4d7c53d7",
+      "content_hash": "1fe9b1c680ec0af5d1ac229153602103016cf33bc2612793c8f7671658d2247c",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-algorithms-035",
+      "before_content_hash": "ec9e2bf1ba1d44c909924ebd62731010ce169f024bafa4b6de6f3a08264806d0",
+      "content_hash": "35d642843ad43f114376f000aeb957a1a0a64c884f2423ce90b7d6b5fd795a8a",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-algorithms-036",
+      "before_content_hash": "7ca014aea852c58e9d2dcc09ec30461290b5d43ff8b31033a68b07a0062b16e0",
+      "content_hash": "eec97dd47c0eeca87679a5969974d691bb849768d9506e4e26aba719297cca4d",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-algorithms-037",
+      "before_content_hash": "b2cbb0aa69ee2a814a1494d7fff6321e9647802f87b2c674434741ac2b2b3ad6",
+      "content_hash": "2c33d64e71e8d2b969e2bacf1dfab5b900512b3514956dd86d2d320f4e756cbc",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-algorithms-038",
+      "before_content_hash": "8e1dbeca1a96e66146a03a47d560ef2740b2463130ee659b7e9c67d14ada2d52",
+      "content_hash": "0deebb19cd494f2dd6493637eda1b84363d6c2c8f6a107f99c0519dd2e119db3",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-algorithms-039",
+      "before_content_hash": "46482d5e1e18c266cd77e1aeda20e42135cdd50ac3a167f522b6929801059bbc",
+      "content_hash": "f2e4ff832c70ef0f14c8a25df46add77da2ccf680152c08bff65d9a91bfdd1cb",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-algorithms-040",
+      "before_content_hash": "f8d5dec33577c090b62f7e32f3de04277ec87fc37d4c600ca3c932acca8108ab",
+      "content_hash": "9912a309862fc9f0a7409d9c2bd7bb8427061333044da9b48a5e3eb90d2a9025",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-analysis-001",
+      "before_content_hash": "1553e420ea1754dc94fe1693f33c5bf8da019bf294de28908cace054fc3b7942",
+      "content_hash": "9969e12a70c9a6e4493fa1cdb83a182174d0df0d98d0d69ba44e0a9b41141f1a",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-analysis-002",
+      "before_content_hash": "29659d02fd7b563a4e205cfc438db9ce16979b08cdaca4da6418c481195395da",
+      "content_hash": "08b4a1ae9f60bf7050dec43ecfcf8e97e5ee297042236998ce4381195b99d1b0",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-analysis-003",
+      "before_content_hash": "7e9d9f0dfc1279a0e6e58706bbc250a6018785b53680b5c2ea9120426ff0036b",
+      "content_hash": "690215b9e1103426ed8e97f5b523b3e7a4888326b216bc950948770f50421d91",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-analysis-004",
+      "before_content_hash": "f565e3e735211adadba22a1f59e2886a186e2de94bea9381d270fbaf238308b9",
+      "content_hash": "802ce9419f883d8219ef9a98f87c8bb9f544311fedfc6ae54b204ab658d2c8a4",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-analysis-005",
+      "before_content_hash": "be39ae2ae1d6d69438d5fe340ea69b47006a022d36dc55cf6e413e78dddcb844",
+      "content_hash": "37b750a849c3187359b0fab42d52b5d4e509f0339002d1aac4424bca55fcac20",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-analysis-007",
+      "before_content_hash": "213696f0e6381cc78d84e7be2286f9444874542f4b0960e2a64fa5df0a438260",
+      "content_hash": "e7e8860922a0be76e3735dd79152b8d7fde1481fad80d04abe348214c83cf7c2",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-analysis-008",
+      "before_content_hash": "55eb86f0db41efd00236fb5e14f7af99391bc0fef4f8f8452f795789bd5a48b5",
+      "content_hash": "3f6ba46bb1fc0cc550591739b4b6adebdf8e915ca880b7e3c512f1c037457755",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-analysis-009",
+      "before_content_hash": "d5af46f855661fac1529ab2794ee90feef2607b0b00574bf0a1818c1d86454fb",
+      "content_hash": "c94044a27cd3cf58252240c309da200d67926f8e448ccd2c088c4be8034d6705",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-analysis-010",
+      "before_content_hash": "75ec1adda4e84722972e6eb9ef95dbf6f175c341b0e637cfab51840841017151",
+      "content_hash": "ea7edb6a3c6a1acaa043b1997ee76836ebea72cefb1cc8fd9289d0d64cc6592f",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-analysis-011",
+      "before_content_hash": "0aef3c764bb6682b6c857ce401296f840bf1ac859f55dbe3f1fa20656fe5564c",
+      "content_hash": "221fd743ebc1e6a91571dc29fc69bf1276818b2bd0c1829be8fa356ed5bf3d1a",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-analysis-012",
+      "before_content_hash": "785084221382f69d925279081581e582d8e2d5763400391405097f3d55949482",
+      "content_hash": "071339a467430ee4b70dc90f921b166f5a24c21e91782ef13948b9b39975d2d6",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-analysis-013",
+      "before_content_hash": "bb52f89d21baea54d5833f6e65f60940049d004fa2c5f6df27ea1993db144595",
+      "content_hash": "701d86c43c2086eee75cb8a10a2a5936fe7fbf72f159b8dda6447f95df2dafb6",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-analysis-014",
+      "before_content_hash": "c16f1b6ecdfa1e5a365ffd4824311b104a5f18939ef4e17cabed4ff7aa5fc0f2",
+      "content_hash": "3593da501da7ce67756b41d70a9de92fd96938d14e0d8026055e6db9c688736b",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-analysis-015",
+      "before_content_hash": "b859590b6e816125e60a02d653d788a6d2fe3e9fda4b86e7fb6c1ef80ac2a3b2",
+      "content_hash": "b53b15d2b28d71ad1c2f263aa2d5c9e905f7ac8c3b7c876ba0e33f6d2625c411",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-analysis-016",
+      "before_content_hash": "94e11775de7b4ef2943bc36b9b25af6acc5dc90b12239eaeb577419470e15ca6",
+      "content_hash": "abf75e93fe0afc495f24fd365bb54a30f33b78796deded3dcc753297df437d9e",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-analysis-017",
+      "before_content_hash": "e1c41f7b41303120e0e1497c9ba5b4fa520df8cec86daceea30c9cbf025b4d58",
+      "content_hash": "f102563e1cbc01ed0bba7b0b9d4f423d2a0362b6c9d021e6460905c4b1eb08ae",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-analysis-018",
+      "before_content_hash": "ea5d082d79f8d8426a1bb6efdf7b68f572e2548cb1e4765802a95a9ce06f5116",
+      "content_hash": "3f3a281f2e130b24e5505b5cea6a58ba966731ec4c1f0e28b1559bb768658841",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-analysis-019",
+      "before_content_hash": "1144161c29ee69493f6c9b91fe3098cdc375f29b9bf3ea0ac330a73e27f87f9d",
+      "content_hash": "5dc6fd4e993feaf74d60e67a8bc891032ec3373310f022d858939da24b6459e8",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-analysis-020",
+      "before_content_hash": "ebb23ff99ca2a328be890674eb92d50f21f0a62c1302abd85c219ad3ac60c874",
+      "content_hash": "39a35f7df96c61e5f39820c60feb568fd8dbafd784836bb775990a47546fbbc2",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-analysis-021",
+      "before_content_hash": "82bfb45580b709791315333f71f39e2e81fbc8516fbdbfc053beac0759227cb0",
+      "content_hash": "2435c73c682359fa6c3532f7958263efc62a20e46cbee844e3f6d4368bb1f664",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-analysis-022",
+      "before_content_hash": "29d6a4bd3c39772659109a681471256e430af09d29904d7d72c482949c18e62b",
+      "content_hash": "8af4de9d96549902c41573b9854268f0b1caab3f936a3589163743c09e3fcb60",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-analysis-023",
+      "before_content_hash": "d6373c8d6db7da1b8d7c3d153694ab24a45d6f0940af303e65334add99ddb31b",
+      "content_hash": "eac5fdfa055bfc3f4e347d00d5b737212f79352900cfbd4f8c147683b33131cc",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-analysis-024",
+      "before_content_hash": "5dc453aeafcd13a6725c703af94af8697b290a594e6d20d8a3873eb93ebd48e9",
+      "content_hash": "762b3071c82840411e61f4f05cf6cb4b1c29ce7ca4aa295546208b6d20a32a20",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-analysis-025",
+      "before_content_hash": "b5edb59b0c8409c214a945957e159a98d9e4dd779515c8f5829f00011e15c689",
+      "content_hash": "79172ecae8711743d54eda1e7ea47b39196d6cf5b596d1ffbb16d64b7f3b28f0",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-analysis-026",
+      "before_content_hash": "aa40a7ba3189466391267afe5c0dfafc51340a35e8a8bb28f49f7b89573b577f",
+      "content_hash": "a686577d53e0469e33f8e9d8446e5f41c4e0c9fc866e126a78cd61e5f8bf295c",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-analysis-027",
+      "before_content_hash": "7e548f4e2dfbd0a37098347cc37f739750fe3f8067bbbb06df48a3be326342c4",
+      "content_hash": "89bf6bd2c438a42cb982617912d3d20e675eacd720e879c1adf9468d8256b113",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-analysis-028",
+      "before_content_hash": "470236e43cb71a630961a0bfe32e2338c60fb549c0eaf12380969d4c3176402f",
+      "content_hash": "e8b7e68879829362064d4c82fc379b3e5b96cc65da9e4716f85686c1c09786ff",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-analysis-029",
+      "before_content_hash": "c21cc6ee3562e481700e6b8a1ef5aa0bcd778b6d582ec7292d5a00e0bb3e9a77",
+      "content_hash": "3d9efce8b9c4e0ef44e6e50f8adcf4da47bcede0e20a74b2cba531aa150ba3b8",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-analysis-030",
+      "before_content_hash": "84142f197ae992bc7cb9e5a50f4876222200d0548f6e7c452ab153ba093e1b23",
+      "content_hash": "43290f4fb60cdf7af7035a0639aa0a4ca97083b64a07be2d26c352cfcde44264",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-analysis-031",
+      "before_content_hash": "4c80ace25bd6ffd8cbc343c30886fd19e6c99ffbf4b22a99ae1cf80033962d58",
+      "content_hash": "dcc33d7687e3f04e1dc79c142e9a3f276e13e7519c477422610b344281f845d0",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-analysis-032",
+      "before_content_hash": "dcd7e59da737842d7fe58a9e31916492e9d6ce5f20a6348af84cd256eab15170",
+      "content_hash": "de3bd47ac425e19042312f884c7bfe2c49f07493542dbce4352809dd962d05d1",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-analysis-033",
+      "before_content_hash": "16e6c375fc4d53335560a44cee601adfe80217c8dd29fb0afeb80c13a2309622",
+      "content_hash": "bff02572cf13cab089c577d4711ab2a56870b9efd43418cd904c5e795344c57b",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-analysis-034",
+      "before_content_hash": "4eea75503c8eaca5eaa99da906f3b2da1222211f7b120e35e756740cf7fe1e5f",
+      "content_hash": "5e3909dd8d87b223aa74af51c7765b69311c0cb91064f7dcfe43cd273d433ae3",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-analysis-035",
+      "before_content_hash": "254c799e72f52e2f87f4df86c30527581a4866551d8b93dd961cc465118e01d1",
+      "content_hash": "87ca78a3b11dd5e555e6d9df617d8b8a8f4c82ef991e39a19761d9dd7f95ac9b",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-analysis-036",
+      "before_content_hash": "df6c1f9f168eadc775e2054821e28fb06a6783a0659e7184573491d696bdd0f1",
+      "content_hash": "0f173eeb66ecb093997f3803d3d64aac2f292ba22fce552c10a0eecbb18477c5",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-analysis-037",
+      "before_content_hash": "15225ac067f03be5eeb7692ce0b3d140089bfd23ed2c549381dc560476cb8bfa",
+      "content_hash": "a2a933e11fecd7afbee51b75e879b6713dc8f283527f151c7153b4e67029e394",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-analysis-038",
+      "before_content_hash": "2fe75e273bedf20138604cf1de182948269b6c8f3f2097ebcd1099593e138265",
+      "content_hash": "0bc11b1d636a6661efe75a1421a6a3c47ab638de1027f4b8fc50a5bc5f723974",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-analysis-039",
+      "before_content_hash": "a4339959088b9149aeac996e6c6444126fcba8c9fab90e9b2b1dcc16da320a05",
+      "content_hash": "42d41c3e78e9180c8edb41151dea1841b859ef4ef985eaf9efbfe2439308340b",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-analysis-040",
+      "before_content_hash": "015e00a1ecdfe283e9f65e40a9e4a7d4b9abaa5599ee1dba57b18d84800899c6",
+      "content_hash": "95347321c29c8fc4797552cbd75487a9008bfc6aea997be1b9a83d0e27169084",
+      "reviewer": "math_analysis_algorithms",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-combinatorics-001",
+      "before_content_hash": "a3994a04ba7d5b77330bd59633ee84016611eb55119c5997d993047a9fe8a118",
+      "content_hash": "8af1936c5294dc7ee936740236eefe9e5d83cfeb8f7cdeb4505e0a6a93da3f26",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-combinatorics-003",
+      "before_content_hash": "17a4fde64b939a0e6c235fdedd1000bd22dc4d95fd75b41f9818b2283a08ad04",
+      "content_hash": "7a6f098fb41aa4b0ee135d07da950d0d52f9bf053335e98bd787ea236220973c",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-combinatorics-004",
+      "before_content_hash": "16ea677d98ed70c69a511fa5e73377071432b6d68b758feb520178cb898108b4",
+      "content_hash": "5f7e50b5733bb0a58a8e8885bb535bcf6fcc1b692c52be7d936ef9a8e5a92411",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-combinatorics-005",
+      "before_content_hash": "ac284a3869d32b72f8529ead6c4a843313c07730f90c7742b279eb7e89a38089",
+      "content_hash": "a0bf3c67ae004f9dc887fbb8a1a54e174fef1fd04f957945dd85496f4c3c0f13",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-combinatorics-007",
+      "before_content_hash": "e2c007dacb11f9239e9f393983c3124507493693a0a33116ebaf18bd5a497ba5",
+      "content_hash": "8b71aa02b7a728a74632c512713f0f074d9324838b328dc7166b85a0e1c6ac06",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-combinatorics-008",
+      "before_content_hash": "c26235966d87b97c3961de7de6e517ffcc68833d278d05cb92737636b1c19c66",
+      "content_hash": "7508f46c5a99de6e6c6e6c8763c398f37bf86a81787f525139537ff45b7d5f88",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-combinatorics-009",
+      "before_content_hash": "a57bbb605ae79e3e4e5e509ae46c4b5eec3004eb6bb14ec3ce3c23df9eed55a1",
+      "content_hash": "4d7e00680cb54ea96792588d2b70c87f8d2c8a3552a032e675b9ccaa8d0391f2",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-combinatorics-010",
+      "before_content_hash": "f4dab55e70cf66a44ab4d6cb28cbb41b545cb45af649fb252e6d75c71e7f802c",
+      "content_hash": "a331a306f7ed348317c11eca71e614f974024a7e06c406ad72e69a81e1bd1b6f",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-combinatorics-013",
+      "before_content_hash": "5968651e5dff45edafa16c1fed47422c32ef1da2b965e313941e065df5d8456d",
+      "content_hash": "abb303c11bf924ec3d851f6c67b116f6312018168f08697b9332618526e5dad7",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-combinatorics-016",
+      "before_content_hash": "9eee152472c1882990bb932b891ddfa79cdeebbf6b5eae90d50541b315d241ef",
+      "content_hash": "7dd130e12b4aef245b24bba56b45e790e6a518635990cfcb0d6342649c77f6df",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-combinatorics-017",
+      "before_content_hash": "4cc6ec5eb66ae43748dbb241a6e70af95a7fbdcec8c69ac70f8ef86d2e410dba",
+      "content_hash": "5f3ac49db960aa0bb74b23186f9d851d00cc09035e88093d5b9f8855ccb04233",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-combinatorics-021",
+      "before_content_hash": "5306cb302ba9cfc7e450da8092675ab806c35da520736e73fa3feb7f9b0fa450",
+      "content_hash": "159b6f90a4718aba9ec9e1306293d1fa31f0eb627360b49a2e0750eef3c49148",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-combinatorics-022",
+      "before_content_hash": "347475a69dfb88874eef86103c467507cecd3a64ba1923bbe19a2083fe27b8fe",
+      "content_hash": "baa088d51b03b43404ad650f3b743c9666842f7121e9efeb843c2117d72d3b14",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-combinatorics-024",
+      "before_content_hash": "c69c7ed3de8539f682711b0a264852583de8a7bbb02632aa1eaf2a35625b5dbd",
+      "content_hash": "177bf82b3e89b41ab5d3fe69a93b60a4c9ef6fd29168c49d52fc0d9d4c0d7a0e",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-combinatorics-025",
+      "before_content_hash": "a5aa88540cce2ef3c450d891d8693ae2bdb686402624bad6cd97e8f3b45b8daa",
+      "content_hash": "fe6aaef7242bc3a3274503102618340ca797069fcaad7de1919a2cb1133f72db",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-combinatorics-027",
+      "before_content_hash": "2f34d346ce6bd5d4878f635ad91b01577dd0d488de69a9550e9666d478681027",
+      "content_hash": "7ae39a5115efa440b18a92e728493ca0c310464c306dd54c5635869a93f39e73",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-combinatorics-030",
+      "before_content_hash": "16317be7308eeb23486d0d4569711bb0b57e01ef1df522688e032bb637089e66",
+      "content_hash": "6f710258b9741d526bd2b9e9ec2cec15dd34449447d6ea85602276b1411d4570",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-combinatorics-032",
+      "before_content_hash": "7b01a02ab0d35153378eabb7115f305c1d8b68574bb7afb6d4aace1276d6559b",
+      "content_hash": "d395a021ceb3c2a0afdca999e82c1cfbeba49ff2bd7ade60d9031c859438445d",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-combinatorics-033",
+      "before_content_hash": "bfee07940224f0ddf891d4fac1053bcdc01e8bad2b74625d5d9c54a3067c97e5",
+      "content_hash": "2298c2f4a8ef682ddfcf8fa826dbee9f7311e82923161b051b1abb07c19cc1a3",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-combinatorics-035",
+      "before_content_hash": "6f3dc2497970f519ad73c801e8a59e1bfa177523deaf52bbe165da620c8a02da",
+      "content_hash": "5bd98e5016d7217b77605cb60c390bef91ad1fd1a5d0f2deb07da1013bbd2cad",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-combinatorics-037",
+      "before_content_hash": "3675d933e02dd7838ba7b4f53180d6eacdb5528dd778f725cdb606040cbbf3b7",
+      "content_hash": "207ea092875db691ce96b2f38388606a0e0b61ba38e48808f7b31eb363fd8fe2",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-combinatorics-039",
+      "before_content_hash": "7c00e6d8e18cdc96d8c5bbbaa2d512889a9a6b093a6ce16d11093a0eb0839897",
+      "content_hash": "b79f50dcfac43d335d77b5dd810b32a4855b5f82368111bd1fcd919efb482892",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-data-001",
+      "before_content_hash": "df7231b0a919caf86210b82e48cae3be705befb1f43a666ac1ef7cbda2e973f6",
+      "content_hash": "8cc0790f3ca9350060b2b98576b9693a49810a28d057f0fcd380a50321dafa84",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-data-002",
+      "before_content_hash": "bf93c9ab76110d2cf0fe9e85df3c2a21af335570fdaf0c8a75042410c128397e",
+      "content_hash": "8299c433a96eb1e9ea2401a2d53635807fbc0bc2d236962152d9fdf510303ae6",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-data-003",
+      "before_content_hash": "4a7ef273c9963d7fda3fd0aaf2b4f4b0395f79ff6010f34e95a9471cf0e106ab",
+      "content_hash": "d88c5c18fcb881dd2b066c0217648bcce0ffbf9a309be89654db3783243f483e",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-data-004",
+      "before_content_hash": "2b2e07ab60fdac84017414b03a33e5ad088841b5739322bf6d5efa7a89a56d2f",
+      "content_hash": "1d28dd5028ebe8cedb293d1939e95b24acf50f600f567f28a60a469b19b5eedf",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-data-005",
+      "before_content_hash": "8ab0ae4d7c6ca34b2a467b7cf5f38d6e8e9679c8dab6d913f80a71ec39d6f611",
+      "content_hash": "4411e557ac0724030554be34ed5af79168fa112a46c50259c518be60373ff209",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-data-006",
+      "before_content_hash": "d0c75b18578589f7126ea15c2edf0e3c5c3bc1b2e6d844bc992c43ec94de3456",
+      "content_hash": "eacdb768b22a2acf173caa0212998dc00ee2a0e4eac4108f4d37788fa4b77269",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-data-007",
+      "before_content_hash": "098ca1d7f3f07e045cb011ed5c5209e9ffe2b196ff8dd2ac87c59ff6493779ff",
+      "content_hash": "c5e0b38ebee21deee2b198b16abb7235ded0d3a0876ee4225679b358f51d7afd",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-data-008",
+      "before_content_hash": "36904c49e92e3186a5736e87175301b0b2ec5f31fe7b51b927f2e3878ab53f9b",
+      "content_hash": "7082b921df97ee42fa601f72efcf6ad45213bfe6f1c4b3926373ecd534a12006",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-data-009",
+      "before_content_hash": "072ee11f98431d24a9e8c6ee3151ac3f28ae36709cc9d5a364899c2b45bc2069",
+      "content_hash": "fc27d5e376b1cf54e9af4cfff165bc7368717c4fb356a41b2c71112240bd09cb",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-data-010",
+      "before_content_hash": "afb51ba932bc87d6a5a621d101eb3750cb5c7cfd4056e0d9b9aec42faee6f268",
+      "content_hash": "b2073f3e9c4f191bb93c6e7572387f8cc1a2119d6a8b4f48d0eb7572494c1de0",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-data-011",
+      "before_content_hash": "fc4a3592a5bb2b2077bd12d6fdb3abd0aaccf7add9495f64afa1b82ce233d162",
+      "content_hash": "39367838ce0f9bcd8f518aa0f09c0db4ce6d8ca4900506192d5a96246182817b",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-data-012",
+      "before_content_hash": "e044ad331ea4fc577c6fd2d1ba0a2eb8369ee9e4459103dbbbf08f4c048e311e",
+      "content_hash": "8fff7460e4f7bcaf9a817bf191581971b1c2d3dc79f64850abbac83b8e4e4607",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-data-013",
+      "before_content_hash": "9c505b4a12fbeab38b093d552654cc7202bfa18ab09d4285410d74d9c8145646",
+      "content_hash": "0e80a352865d37b9e4261ac64d74ebd7a97a9f5779ccc6ce6a9c97f964d575d0",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-data-014",
+      "before_content_hash": "51fa29a0e4b720294c67df95d8db31063b536459420b8ade57eb1cfc7bd98f46",
+      "content_hash": "1faee20b0bf0f53520716bda8e775e647f71b983bdc4f19286c2cb8ec82b6570",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-data-015",
+      "before_content_hash": "664de53e04530116984cdd99153373a0482993a1a282d7f04d7933191046300e",
+      "content_hash": "179d3aab5680a602277c3dd503b8514b04b8b1762e1ec9427ec27cf280906d0d",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-data-016",
+      "before_content_hash": "b47d0acf7620af4280bd82def28847d6708a87db5fa0cb35f7b9e37579c8ba63",
+      "content_hash": "fa635c89560672e3938fb1a520228f5807a65b222915ecb46ffef006b0b65204",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-data-017",
+      "before_content_hash": "3ecc553be22df3c7a22416befc23990d87538c014f005af21a367bfabf7a30ad",
+      "content_hash": "08dbf16f1b9cd07b36e009799ad77100df7c420510b609dcedd90a0075069285",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-data-018",
+      "before_content_hash": "60fcb5f24e7acc4ab55d72433153457a1529e42edf0d35dc90c56759ca580e21",
+      "content_hash": "c2efe669bc302637fce8f5ab92dc61b8dcadbb0a420c5a4da384fcb0faf56828",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-data-019",
+      "before_content_hash": "97476ff9d5b47f47d9d682d19124baaf406494b164b6f6edf93be714ff3b46a2",
+      "content_hash": "e7e776d74900c5f51116d0effcafa11ef2ff283ac9a448495fba387dabf1a180",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-data-020",
+      "before_content_hash": "a96d2fe5b3bd02119b6a29d3cda261779e77153df0661bae1f463923ef00ba8d",
+      "content_hash": "623eb615fc7425c178a965cb8199820168bdc3f1fb01930cfdbaeb6fe58e0db7",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-data-022",
+      "before_content_hash": "76d4ff8f739c26c0eadc5662490d0ea5a70da5d3921850c5738ef184ba1c76fa",
+      "content_hash": "bb30098ee0280beb98e67da61180dab3f223d65a15787ee54e9fe706a43d4732",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-data-023",
+      "before_content_hash": "935d583dd9408f46aa63bc99a236175a8a99a8f3b7f17ae48841d6861f255efd",
+      "content_hash": "aac6d9c2ad9cdbcdb342a6fc2ac2c65115284603defbe4244e9189e663ed0663",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-data-024",
+      "before_content_hash": "0284acd209d73a2f748df47aa139493cfdbdadb03f3e758694db7be9ec6a19b9",
+      "content_hash": "c255ce785b089b84429a58256ae505cdf146f9e079b215047f7a26d6ccdabf1e",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-data-025",
+      "before_content_hash": "427883142d6cab1998c9a4ddc84e9fcfd1e9fdbdc0121725d5c9c300c72af0b1",
+      "content_hash": "a0372772073017519552526bfd82d68d7f509d160724fc6d6bd02863d22e8c14",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-data-026",
+      "before_content_hash": "5da33031b3369a907fc5367c0c95c8d2f6652862e365f28fa2400e0d6b6736d6",
+      "content_hash": "0064d64baab15d7370782a4962da3d38b87bd970e6170ade498bb05ae1023688",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-data-028",
+      "before_content_hash": "d6a71480988fa35fd6ae3e160e7615261333ea54416ed7338e13c8e9477e013f",
+      "content_hash": "197bf32e189ba1657142de824e396fbfd540717c82af48e1d67c06f1296563d4",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-data-029",
+      "before_content_hash": "5a437f8e0f91087107396397fba084a5289ca4ceeb1e8df51b1f9887e89ce1a6",
+      "content_hash": "7dd70600bb812d6f13073702b99bfb4bae7bc46d3a7b67ec327ea7af3f437b6c",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-data-030",
+      "before_content_hash": "b8ffb23ef9bcbc95e514fa16c299044ebd240ac276cadb01ce52768ec3639e62",
+      "content_hash": "b4060e1db676cbc0c4c5f492ddaf9ab53e5305ca00c830220b1df0209206004b",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-data-031",
+      "before_content_hash": "44e5cfa623b3c8cd5551ed674f3599ec72b624b9ae900fb62f6b1f7f5d999123",
+      "content_hash": "170e160ba910f5eb9432764ae91b224060a05f82f68c3535c4dbf02d2c6441a1",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-data-032",
+      "before_content_hash": "9f5c905d09d0d61b51f04b054ce0789fdaf741f9c2288ee7d29296d2c01b1e6e",
+      "content_hash": "48a61b8e76f48724ec063c27bd001ac858103feca782c41cb9d3955a7b73be75",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-data-034",
+      "before_content_hash": "8e6d103b2863e2bf7f84e00830ffb1122861ef4205050e41036a9cb467007294",
+      "content_hash": "514d025ad82c6daa331b88a6d15e5728d4ebfab1f1fc11249ae6b69fcf94e884",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-data-035",
+      "before_content_hash": "cddc2246abd91e55f5f6d4fdf543f90549f3cd321e36ae705bf73d46288b359c",
+      "content_hash": "0662facdce4f75a5e819700e3b3d5374c561026ab7b05e1b9f5404bb0f0fcc63",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-data-037",
+      "before_content_hash": "13bf5de24a2952fbd94dd1dd30752894bf298ea1747911f790913467ce079e7b",
+      "content_hash": "1c94684c11d888299cfbf60b7517d4f15224737af19707d6f59c77bc72751dcf",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-data-038",
+      "before_content_hash": "82ffd0e456471cbaef6fdd5cbdf36445a077ffde366d6afc855d686d1374925f",
+      "content_hash": "e932a042948f7d4ce5a42801627ce61bef2dce1e0230ee764c8262bb04e0f4e6",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-data-039",
+      "before_content_hash": "160d0a35a737f5e7579336287ab3c5bff4a77f7f681458a0664e7ea2201c777a",
+      "content_hash": "c6d5fb91bf75d0e67b4ff4b6fef67dbc0412cb87359d1074bd6058f607e897a8",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-data-040",
+      "before_content_hash": "6e917161b30ccfb9209f02073a33c9543c22205dd3f7724e208e8a7b0edcbcf2",
+      "content_hash": "17371a2320cbe60046312a6a1208bfa4c7ff1354300dba5d9e79ece027af967a",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-001",
+      "before_content_hash": "f0a37c63ea85af94b0d85a0e12a4730b5c342bc399774c1026d49c83193f022f",
+      "content_hash": "ae16a94661c132822d49b3fec5daa49362bccb139b5959024ffc675758ffdbe8",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-002",
+      "before_content_hash": "6870b3ffdac362e4d42ef6943ab08f7c334da36d69841ada4ce6ed594c622191",
+      "content_hash": "b478b012867b87a23bcdae012b7ab2b525d65c20524337caf508f3a7d2bd2482",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-003",
+      "before_content_hash": "163fe6e4ab12afd358a676aa029f20f686b664f43efcc93a53ac52013fc5f336",
+      "content_hash": "6c70bbef8c0c280c4e212831771a9512e17068aa9e2f4c32501947fe385724e9",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-004",
+      "before_content_hash": "d7c8f3c742a1869e5062bd09e4ebd7928e2fa415aadcaa91fc1009743967ffa2",
+      "content_hash": "a0b3bf16ebd5b2d9c1a8f353429149d5c772c62e5d1f346d5ad13aacea913601",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-005",
+      "before_content_hash": "25fd4386b688463e3bb328ff3e746d14ecc7acc14c8fde00ea72b9b5fbd78430",
+      "content_hash": "cf3bc0ca76b97e97d9c99f93151d377f681cbeb7cf58dc0b3ad02c78052e03cc",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-006",
+      "before_content_hash": "0dedcf1490142a5430427e88de3206e5e040bd567a30b99d15524ee5376ae840",
+      "content_hash": "1674850ebc74d787dc9f244c11a75c45d742efedc504f2f65848b423f2cb4779",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-007",
+      "before_content_hash": "e17aaca3c066d9a25b1aaff83b7f4507021d908484966bae1290c4943da67fe5",
+      "content_hash": "88289229ab8fc608edc4a8e15ace81a68202cba33d2925af4cb60a462f8d2bd8",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-008",
+      "before_content_hash": "6d230f9ca7dbea27b274f34281a8e2bef942468e1880fa35ccdf98797155bf90",
+      "content_hash": "e377d86753489d984adb676e49f12c3d887e19c5d06edfdbe478ff81fbe75046",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-009",
+      "before_content_hash": "62a54f5b2a72eda5a21470ecd19bbe5d3befc8121f115066943af2099621bc68",
+      "content_hash": "4bbc831b5f4eb4653381e87b39c933ca7f2eb6c2287f0a23ed9ba77ba3e28233",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-010",
+      "before_content_hash": "0c7c0f1741492a39af61ea6e80168fe8de1d0a597b71516b5111fd3002ac65c7",
+      "content_hash": "5461d692cf85f7e93645a15f70a3fe2b8e5e03517a01a188fa3d3afdbb95b1e8",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-011",
+      "before_content_hash": "ba1eaf5721eb03cb6c825f7075be6b44fe90c944e3e376191ce7c8e665cad085",
+      "content_hash": "298344a08917becd070e06c40f23012e58ab17369cbf94b0f6c507a62434b1bc",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-012",
+      "before_content_hash": "45ee876ae3e6665bf37ddde1959566df45020c7a19e1da18cdc9cbda82a1488a",
+      "content_hash": "6b851910e163809df9105292593c88bc06382c75e49b2e0cdff99ce82bb8e430",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-013",
+      "before_content_hash": "b170c3373ab4728d0a164194536eafd60258feba856843b769b110bc822d93df",
+      "content_hash": "4fe47f2b801276f909b6612bc8dcc5e237b122bf2ba7fe5c48b83c49eba79bb5",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-014",
+      "before_content_hash": "17b413697889744063bff18e7ce8d15da24f226301083a8e975566cacea21add",
+      "content_hash": "95020c04453a1ccbc6729092dcacad040641c13701e06706873921b91617100e",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-015",
+      "before_content_hash": "3968e7f39aa441e4c9094de98d4ebb89a3a7f07ffc0979f9efeafc836d367356",
+      "content_hash": "9f8b29abbfaa46dad662db07c0b3da0bb4f81de529ed6a4c9a089f86b2d78cb5",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-016",
+      "before_content_hash": "6082480cd6546f2e3c68d8d8739e10c293f1e37413a76705718f5e2d36a07130",
+      "content_hash": "fe85eeba917338ab9969f9d93b37b2511eeb8478945c78aeec80a1a70e1fcb8f",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-017",
+      "before_content_hash": "8af5bb52c5e6682e91451a7f1715001a12d103f2707346a5b3dda0988a81383a",
+      "content_hash": "a38ab9a8ec24eac9cd3e9a1ea54e46412d9340777dc247e32907aa028639582e",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-018",
+      "before_content_hash": "a169893bb3a4bce9b2788d28b7e05ffbeb9fc8afb9ff63eeef4568e85acf50cc",
+      "content_hash": "11d8a63ffb061d4858a0cc9789f6c2c2f7d4a1d5ea09605c68a93f63035bec6c",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-019",
+      "before_content_hash": "e0bd21a984f32cd8ed002449c81c8d6c847e7901cc4923727cb618c57caebe1a",
+      "content_hash": "ff602913443cc1d740855bdcf0949f776e52162780962f4043cd09daa197b183",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-020",
+      "before_content_hash": "f656673155ca14c9aa423e59e4bbc651a93a6ccc277346d8861bf0382e4c975a",
+      "content_hash": "022895302ad792425c6be6a5907ef72f3bf07db6824468e7c15648f19eaa860d",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-021",
+      "before_content_hash": "5324e522347b10df994b3fe980537a99d0372a3fe7759e04309f129991d1edae",
+      "content_hash": "40b4dc6a6eabe22fd802cbaf06026547258758650ffb22a5a18500cb7e30f454",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-022",
+      "before_content_hash": "b1099d3f25a1ae0751c8698af9a29c5307794cc8ced3e1afa0b327747f2c44e4",
+      "content_hash": "8f93d94c591f25a0d8f44cd4608182d8c57b20d8957d20941081dbdd11c31885",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-023",
+      "before_content_hash": "5044f5be8631c25c7e1dc790ac9ca04cc4c04085db90a14f7a1cda5b9bc57d3a",
+      "content_hash": "5dd59cee3c5b11c6b8e72fb9ab7d97291ef2fecd067ef28a3cf50f2841471bf6",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-024",
+      "before_content_hash": "ebbdd310074985b82afa052ddeca52fe3b79f4d379fe673fcec96b20acd0e1fd",
+      "content_hash": "439fee6044b4a88da7d325535ed79425df180bc8b93b228cf7c00a54a2344c5e",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-025",
+      "before_content_hash": "cdf3630a245885f0b1db0a62f40d3eb986edf826142da63892fc5d882f84c9b2",
+      "content_hash": "f5f6a5a88cd7cb6c6ead26530eb3c29ca43156601d395261b12af32e6827332b",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-026",
+      "before_content_hash": "18e53bb224b30458cf1289b92419fe662a71d7634daf9d70a2af4ed47ad5c147",
+      "content_hash": "97a81d80692e11996d4cd477ae2b7eb2d8a2df0e2d44a89620fb9b07c9dc1cc1",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-027",
+      "before_content_hash": "6b53bc291079420e16480ae116084a16e9ca55b531ce1422a71e46b16c19de02",
+      "content_hash": "02056aa6e2bd4ef5b41a08b3321b8bd1cd98f497faf520c3a54e981b9d4ab520",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-028",
+      "before_content_hash": "50eabfb1cb543e6363a4784d5cea2d30f34160935b277528de202461ce73db01",
+      "content_hash": "425261183e4658a6c01caa0540cd77fde0f6a0509c2465d520bbd6633c5f6327",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-029",
+      "before_content_hash": "9c932798a0e85c4c8c469138bfd6bf666645f81fe6c04f811575b10ce73ce390",
+      "content_hash": "6186cbc85ed44825c5a68f2f95b8a16ccc8ac01e28b1fc8e05265281c222def9",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-030",
+      "before_content_hash": "1c0b79d46b13231951bb01e25f776a6b2bf23f2c0924efe9480f58f2b92f0fae",
+      "content_hash": "84ed5fc5a2a3c2844591b816e49de3a7ebe855f2207a12df17ca3bc6cb9206e4",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-031",
+      "before_content_hash": "1cdf232182af6da8f0df43bd3d6e9bbce9309d50cfb91c4c21ea1f6e7a3943c6",
+      "content_hash": "55a1382d0197e42fe509c1481d2f9712757c57f9289c8c9c9fd47ad14c313262",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-032",
+      "before_content_hash": "44848066d3352264fd8a9a4a6753f886454f786ca815906f710bbf8bf3ba35b6",
+      "content_hash": "567e8457a8a4cdb70d2ca643eb31fa0d4f7df8f1a1be2c52e939a6ccbf55ccdb",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-033",
+      "before_content_hash": "e7150b5f06297b29df062db9eeb44d39e80c466dcc3fd9df5fae8a2f53f0fb8f",
+      "content_hash": "438b5970ca81ee5ece0e56b16bce4a08f6719b7a4bcb29ca8f888b6e48d1f706",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-034",
+      "before_content_hash": "f0581f79fc78736281f8d21887bd030f373db8ac33d1fd0cb13e2d9d307fc777",
+      "content_hash": "8a8a18633dcb6d3412aa0df26defc5ee6b9bddaad976600ff0744426e6acde69",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-035",
+      "before_content_hash": "997ba4aac75e55eb1fb17ae3adeb686da262f624eb39b7b5f3961e8f73fae58e",
+      "content_hash": "72725a30b1c66d1f45900dced138f52232d5cabd6557f13137bc130e5c13abe6",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-036",
+      "before_content_hash": "6be6e78d8493081df8e4e91e4d6b488840403ba9475a99b5b08b452f9d84a0af",
+      "content_hash": "ce3aa67c9a216b765ae1eb7530601d6fce8c5edf9f9ccfaa5c13c74aa7d08689",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-037",
+      "before_content_hash": "83479984bbd8dddfe6029a2598145c6414c55d4f1aa2c5af3087bf2593829acd",
+      "content_hash": "5fa28e71c002ebbb88b04d713151252125a1e5dfcf03111790a555cd1ba664ac",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-038",
+      "before_content_hash": "a68cfd9487d3ea9801d3b109ed36122ededf1563d0e89cf29389b12a6d6e97b9",
+      "content_hash": "cc4150fe25059c7bbda690e469f983f9558c71e290be01418b30be11dbbb6670",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-039",
+      "before_content_hash": "ac2ce7627bfbee721180714841ff9d8dc375a55526baa4199dbd2ac45715baa4",
+      "content_hash": "174246fdbdce09030a045c8badd638cc8ec7d7754715dd21493a771e5909fb3f",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-linear-040",
+      "before_content_hash": "66fcb4c95dfd91cf0d3f8d04ab2c2f86977e9d0989f0c722d2c7bb8d4fd9f196",
+      "content_hash": "507b2a3f50475dae20a8680e90ef8bb926fa9571bc1bc525659a4d8dd6dac7b8",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-001",
+      "before_content_hash": "e0e6a2b4d808e23917b8022cbcd40d764c368410ae84d30871d4024ae640c50e",
+      "content_hash": "d0a693d938af45a4a434f83f3e947b242275b456d45ee37ba0b6aac44c1e34ea",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-002",
+      "before_content_hash": "20119bfc60d34f18f5ec5b3ae2697c53c2abb2e9bde71bc855b785164d772e0f",
+      "content_hash": "4f33878800cf88fe7ac063a1e477b896307f5ab1122398086981581033b2e99b",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-003",
+      "before_content_hash": "34252892757823fa342e9a69641821be9579f13ab90326e5405d8f7213b9494c",
+      "content_hash": "8173572b124b474c5f31053c893cb184375668d4d212374e3001d102b571c81f",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-004",
+      "before_content_hash": "070fb3ed0dc66732df72ded11b099a194185637d95816ef08e9c7f54a908585b",
+      "content_hash": "48344beb78379d283d0f23786601c8a9554d245a8de12984adb3aae808c8915b",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-005",
+      "before_content_hash": "a8c7cfd0bace96ae562fccccf55e986188a8cd8b6845383da4a0c25999c7ea34",
+      "content_hash": "7efcbf2b1465e34977dac7370d322854fe72be11d21995a97b65d0f60ea6c258",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-006",
+      "before_content_hash": "54e1b34e4da041f44f93d1e671a776a6f93269ce0f4d5a7aa7f16b36d4bff8bc",
+      "content_hash": "8bf146725fd0250448fd4ed93407d6095d4189832e545bfc3370cbde2d342157",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-007",
+      "before_content_hash": "e4cb9b86702eab6916ee81c5f76199b0034d44ba0d9cce044cd4c7fdb21a971d",
+      "content_hash": "ae85cdec86cbaed622dbd63c8e4e99bac4e2930a4cf9e9ab597fa35876a15f64",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-008",
+      "before_content_hash": "37016b04806e23b9369857156e71f59f61cd23be53aa531d165533d62487db50",
+      "content_hash": "da27f3a28fc5e9602623e7c9a0ed542a180ba75de894230de15214d4a56f8a2b",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-009",
+      "before_content_hash": "b9c58f0b7a7791b4d0a7527528f499d23e79b67d418b3b6acde1e32070a4d4bc",
+      "content_hash": "033fd5126b89b1074bca247fd9d93bcba8e168193ae31c61f54337fdd977e2c7",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-010",
+      "before_content_hash": "c59b23574b581342a8798b0d18e50bdcee13e7c34a7c7e12b710b3df08df5197",
+      "content_hash": "436466222746d8ba4b41f38615d058b823faa55e27fa469a543e12f1999f4e0d",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-011",
+      "before_content_hash": "310a7f8f5d617ed7556433ea7f58c4c8a010ef9ed33ec6857906aee4d05a1956",
+      "content_hash": "4db0b4c776205d74d0e8780d5078f76727e1f78f4bb7666636ab1d27661a2749",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-012",
+      "before_content_hash": "ac126db881a20cfe4b9696834412c22e6d437a535ea459ec76778846a8b940a8",
+      "content_hash": "2dcaae4f9ff63d6c923c8c06b4fb37b20f9058195c5d7ce0c205b95af6d96376",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-013",
+      "before_content_hash": "956d489935b0492c21307e0ed814d91a7905b443eb9c7af3df74b3c1ea5975f5",
+      "content_hash": "bf015e556b5e1796b2947ec0257b54d87ccf380dbd57bbad1e4b9a87fa701a48",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-014",
+      "before_content_hash": "490ade8b1d8a4c844cea7c2f560ebf095f4494297d2b9edbce6e5b69014ff105",
+      "content_hash": "9bcfd10c49895376b14581c38aad4feaca57e391a11449c580ce6056cb1e8669",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-015",
+      "before_content_hash": "0d53a747abf608f1b0f2b50abeb46965ae89db7bf1271866be8361eb2e4fd7b7",
+      "content_hash": "d92cdb8534c1a38376b77b0294835071b1a68e9fa0e9015f5b29f71bd5cd421f",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-016",
+      "before_content_hash": "89cd5ad8507719af838a910d29a89855998d5e7c1cc89a25f4209f7fe0dee40c",
+      "content_hash": "05b9945d1096f69b5324d7cc0881e87df7ea2326494ae63bf66943ad3d5d54b3",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-017",
+      "before_content_hash": "956b95ccb77779baa152d5c94e352af9a2ef6fe28beed0255e2170ee6e68d371",
+      "content_hash": "a1912b9e72744d1b0e0f618a5bbe31ac8d57ab7760a2fddc00e08f2ea1b2c8aa",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-018",
+      "before_content_hash": "402e5d99e6d5adede4a2eb62f53b42c9d036d0c4798ec7b416e462d2ee57c11b",
+      "content_hash": "67050320986afce9a669dd8d117a0302f6adc98f74b098184e4f242d91841abc",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-019",
+      "before_content_hash": "3cfdf2edd0d7fce35a97be20fb75d0f5f72ca326c7097c9a3e3648aa5cdc26e8",
+      "content_hash": "a9d60dd3fc9389667da04ce2e2fd388f15d5d8a09b749e1f2325235d1567948f",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-020",
+      "before_content_hash": "de5378158f99250c9e7dd0768b13594d8a291c078e926410c77783a362dba7f9",
+      "content_hash": "8234ce8ea2bd8230c1a68e2c3e57674edd915d071bd5c2cb2d836618633db277",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-021",
+      "before_content_hash": "0e7968a606de779dc2b9a1c17c33df382e9bbcd2d78242c6cd2e4f3183c5cd18",
+      "content_hash": "9961463684f5a36ac946cd392db135fd8ca5bd90a65b7920781fdcc23afe81c8",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-022",
+      "before_content_hash": "126822fc9a22a49917bb3bb91298c09a76c3ec0863c533a7ae147ae9ef136761",
+      "content_hash": "07d465795433708d1405fbfe88c7034fdd19380f5745d4923c7a8ff1fcaead23",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-023",
+      "before_content_hash": "975915f2a55fb7e8e742d1127bc735eef11c993f1f42fb13692dabbac39da3b0",
+      "content_hash": "b7f0114501229d229367fd567d57d581e7661f85448981746c416733e2aefb99",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-024",
+      "before_content_hash": "738285565ea8161112d486fb257f618ca9b108ec26f937710672f15f9432335b",
+      "content_hash": "125e35f128d9ce991604698410076d656b71ea62e559fb6a5230eb27dda9f33f",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-025",
+      "before_content_hash": "e8cbdac500e4af6d52f3bd65c0158cc69c40dcd9234f08f7cb5dc3448f5e1e9c",
+      "content_hash": "4794b056c092ea2f52edd948ad5b8a5d9b02840eedd028e3b67667f3bc2baf6c",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-026",
+      "before_content_hash": "c6c5609d2686e42068a72075915dc3f692fe35175cd5e678cf130539089f4e37",
+      "content_hash": "d04e154a0ab8137dab892c74918241fe523ab626d8faf2bb8d7584ac0492985c",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-027",
+      "before_content_hash": "07c80c9011e638cee6391f7e5c51797eb3315780c0dfcd4f4cd52cfaae3aae85",
+      "content_hash": "5790f6cc295b4cbda7451773ab2f07725b0d730e7aab79d2885b609b49a7ebd5",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-028",
+      "before_content_hash": "0b1a203b3f1663045afda41a88eea1e5359168774c9f8ea7cd6d4cbda0a0d99b",
+      "content_hash": "fb185a80931efa828023b8036ed86a3d8cbb60f96c15dc59da2b7433c9b88f45",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-029",
+      "before_content_hash": "0397bd3bdf24a66bce63734727ce6953ec6c619e283b2b5ea45219bbf995d668",
+      "content_hash": "cb61b78fa7322d307e0404b4a34515fe15e29dbe8726ee68c46e1547cedcfdb5",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-030",
+      "before_content_hash": "b78752366b2bc49e24bc6260ab8266a7b6ef566d08000ceded4ccd5500531e0e",
+      "content_hash": "e872ed15eea98d6949062b5947a217d35789ebe283c43c8d92a9e612a0733988",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-031",
+      "before_content_hash": "c2fe700a3855e95a3827ed274785981c3903683f00b2fe77526f5eda230e420e",
+      "content_hash": "70e655641414e758d4c4ac119200332f88aa525d214ba61303ac294e7af443a5",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-032",
+      "before_content_hash": "901721c1b5670b136d62d7e1c4bff00a81b27c845db2f4a1e9c96be56057bd96",
+      "content_hash": "ef705482380708c23c609da2a3c4b0c9d4979a03017c7926db44858dfd1d2c9e",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-033",
+      "before_content_hash": "6b30fdf4f612c6742fc6585580917498b006801d4d7a3853b135ae3d53ae09e2",
+      "content_hash": "28866e27f998921c6b1066edc093415e0de798845e6c727ea24646c7cbe9d42f",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-034",
+      "before_content_hash": "2bebc8c0f46974812b8f553d3d90cb722069f87778444c11b1321bee3d2f7d9c",
+      "content_hash": "a1ecc269587a4edf1ca111d6a10969317a3f330653a47380b0b0594536ecd8e2",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-035",
+      "before_content_hash": "93b2abf8924c7c706332caed33c6f0ea4b2dbc82751bd42ae1162e301932e76c",
+      "content_hash": "157c62ee227d92cb5c737fb14f7dcde3a4b156a2e29b5c60e79acd3231350822",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-036",
+      "before_content_hash": "c30f11ffb95093ab26e487b59ebe649e17a55038d0459fcccee374f563b6ab23",
+      "content_hash": "b53055768435c7860abd2bac4516ac0767cddfd4fb06cbc7a3ed8a52f4d2664c",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-037",
+      "before_content_hash": "1a832d289676fa2dfb09e7c11110420567d3a80124edaff3b6128d84f0b6d8d0",
+      "content_hash": "81c88af810e38bd2d8b5eb3f6480627f54be646a467c7de2bf03ea6fd0e12a93",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-038",
+      "before_content_hash": "425d5764faaf8f54ea70a0ae809c1808f9760dec91c710608eb413cf488466fd",
+      "content_hash": "5b24dddc7a82189f1582efc96fc58ec375b5c39777944b5e0113bb241ae06e7f",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-039",
+      "before_content_hash": "bc0c744326276bb0292cf71af2207563c15154eacb3839110d814054ee3fc859",
+      "content_hash": "ff290904a1fb556453a24d8d8fc893c53f417552656fe0d993b0d119ba421603",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    },
+    {
+      "id": "shad-probability-040",
+      "before_content_hash": "1a60a1a624dbfeb4ea49275cf1efe3e7d1b6d1398a8cb33d12bc40b4d6d38424",
+      "content_hash": "e9117c0b458003a4d178a23673c09c66b0f2b29a343f9b6f14f9b7840cd88039",
+      "reviewer": "bank_math_audit",
+      "scope": "Mathematical notation and paragraph structure; original mathematical task preserved.",
+      "reference_pseudocode_exhaustive_cases": null
+    }
+  ]
+}

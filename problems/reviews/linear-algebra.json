@@ -6,56 +6,80 @@
       "status": "passed_independent_mathematical_review",
       "reason": "Ограничение A на im A даёт s>=2r-n; размеры блоков конструкции суммируются в n.",
       "fix": null,
-      "checkedexamples": []
+      "checkedexamples": [],
+      "mathematical_review_content_hash": "f0a37c63ea85af94b0d85a0e12a4730b5c342bc399774c1026d49c83193f022f",
+      "content_hash": "ae16a94661c132822d49b3fec5daa49362bccb139b5959024ffc675758ffdbe8",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "shad-linear-002.json",
       "status": "passed_independent_mathematical_review",
       "reason": "E+ и E- образуют прямую сумму; ограничения равны A+I и A-I.",
       "fix": null,
-      "checkedexamples": []
+      "checkedexamples": [],
+      "mathematical_review_content_hash": "6870b3ffdac362e4d42ef6943ab08f7c334da36d69841ada4ce6ed594c622191",
+      "content_hash": "b478b012867b87a23bcdae012b7ab2b525d65c20524337caf508f3a7d2bd2482",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "shad-linear-003.json",
       "status": "passed_independent_mathematical_review",
       "reason": "Пересечение образов уничтожается A+B; равенство ядер следует из размерностей.",
       "fix": null,
-      "checkedexamples": []
+      "checkedexamples": [],
+      "mathematical_review_content_hash": "163fe6e4ab12afd358a676aa029f20f686b664f43efcc93a53ac52013fc5f336",
+      "content_hash": "6c70bbef8c0c280c4e212831771a9512e17068aa9e2f4c32501947fe385724e9",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "shad-linear-004.json",
       "status": "passed_independent_mathematical_review",
       "reason": "Ранговый нормальный вид работает и для r=0; rank AXA<=rank X.",
       "fix": null,
-      "checkedexamples": []
+      "checkedexamples": [],
+      "mathematical_review_content_hash": "d7c8f3c742a1869e5062bd09e4ebd7928e2fa415aadcaa91fc1009743967ffa2",
+      "content_hash": "a0b3bf16ebd5b2d9c1a8f353429149d5c772c62e5d1f346d5ad13aacea913601",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "shad-linear-005.json",
       "status": "passed_independent_mathematical_review",
       "reason": "Все недиагональные координаты независимы; циклическая перестановка без неподвижных точек обратима.",
       "fix": null,
-      "checkedexamples": []
+      "checkedexamples": [],
+      "mathematical_review_content_hash": "25fd4386b688463e3bb328ff3e746d14ecc7acc14c8fde00ea72b9b5fbd78430",
+      "content_hash": "cf3bc0ca76b97e97d9c99f93151d377f681cbeb7cf58dc0b3ad02c78052e03cc",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "shad-linear-006.json",
       "status": "passed_independent_mathematical_review",
       "reason": "Два исключения блоков K не требуют m=n; порядок скалярных перекрёстных множителей проверен.",
       "fix": null,
-      "checkedexamples": []
+      "checkedexamples": [],
+      "mathematical_review_content_hash": "0dedcf1490142a5430427e88de3206e5e040bd567a30b99d15524ee5376ae840",
+      "content_hash": "1674850ebc74d787dc9f244c11a75c45d742efedc504f2f65848b423f2cb4779",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "shad-linear-007.json",
       "status": "passed_independent_mathematical_review",
       "reason": "Полилинейность зануляет >=2 заменённых столбца; ранги n-1 и n достижимы с ненулевыми u,v.",
       "fix": "Уточнена рубрика для полного ранга.",
-      "checkedexamples": []
+      "checkedexamples": [],
+      "mathematical_review_content_hash": "e17aaca3c066d9a25b1aaff83b7f4507021d908484966bae1290c4943da67fe5",
+      "content_hash": "88289229ab8fc608edc4a8e15ace81a68202cba33d2925af4cb60a462f8d2bd8",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "shad-linear-008.json",
       "status": "passed_independent_mathematical_review",
       "reason": "Блочное подобие не требует AB=BA; контрпример даёт 1 против0.",
       "fix": null,
-      "checkedexamples": []
+      "checkedexamples": [],
+      "mathematical_review_content_hash": "6d230f9ca7dbea27b274f34281a8e2bef942468e1880fa35ccdf98797155bf90",
+      "content_hash": "e377d86753489d984adb676e49f12c3d887e19c5d06edfdbe478ff81fbe75046",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "shad-linear-009.json",
@@ -64,189 +88,270 @@
       "fix": null,
       "checkedexamples": [
         "Executed exact Fraction TG=I for every entry, n=1,...,8."
-      ]
+      ],
+      "mathematical_review_content_hash": "62a54f5b2a72eda5a21470ecd19bbe5d3befc8121f115066943af2099621bc68",
+      "content_hash": "4bbc831b5f4eb4653381e87b39c933ca7f2eb6c2287f0a23ed9ba77ba3e28233",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "shad-linear-010.json",
       "status": "passed_independent_mathematical_review",
       "reason": "Комплексное подобие вещественного представления даёт C и conjugate(C); определитель положителен при det C!=0.",
       "fix": null,
-      "checkedexamples": []
+      "checkedexamples": [],
+      "mathematical_review_content_hash": "0c7c0f1741492a39af61ea6e80168fe8de1d0a597b71516b5111fd3002ac65c7",
+      "content_hash": "5461d692cf85f7e93645a15f70a3fe2b8e5e03517a01a188fa3d3afdbb95b1e8",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "shad-linear-011.json",
       "status": "passed_independent_mathematical_review",
       "reason": "Минимальный многочлен без кратных корней; p,q=(r+-t)/2 целые и неотрицательные.",
       "fix": null,
-      "checkedexamples": []
+      "checkedexamples": [],
+      "mathematical_review_content_hash": "ba1eaf5721eb03cb6c825f7075be6b44fe90c944e3e376191ce7c8e665cad085",
+      "content_hash": "298344a08917becd070e06c40f23012e58ab17369cbf94b0f6c507a62434b1bc",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "shad-linear-012.json",
       "status": "passed_independent_mathematical_review",
       "reason": "Вторые разности рангов считают блоки ровно k; пример состоит из4блоков J3.",
       "fix": null,
-      "checkedexamples": []
+      "checkedexamples": [],
+      "mathematical_review_content_hash": "45ee876ae3e6665bf37ddde1959566df45020c7a19e1da18cdc9cbda82a1488a",
+      "content_hash": "6b851910e163809df9105292593c88bc06382c75e49b2e0cdff99ce82bb8e430",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "shad-linear-013.json",
       "status": "passed_independent_mathematical_review",
       "reason": "Циклический вектор en определяет коммутант; det p(J)=c0^n.",
       "fix": null,
-      "checkedexamples": []
+      "checkedexamples": [],
+      "mathematical_review_content_hash": "b170c3373ab4728d0a164194536eafd60258feba856843b769b110bc822d93df",
+      "content_hash": "4fe47f2b801276f909b6612bc8dcc5e237b122bf2ba7fe5c48b83c49eba79bb5",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "shad-linear-014.json",
       "status": "passed_independent_mathematical_review",
       "reason": "Остатки многочлена p по (x-1)^2 и x+1 дают проектор; прямота ядер по Безу.",
       "fix": null,
-      "checkedexamples": []
+      "checkedexamples": [],
+      "mathematical_review_content_hash": "17b413697889744063bff18e7ce8d15da24f226301083a8e975566cacea21add",
+      "content_hash": "95020c04453a1ccbc6729092dcacad040641c13701e06706873921b91617100e",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "shad-linear-015.json",
       "status": "passed_independent_mathematical_review",
       "reason": "N ненулевой и N²=0; отрицательные степени получены через I-N.",
       "fix": null,
-      "checkedexamples": []
+      "checkedexamples": [],
+      "mathematical_review_content_hash": "3968e7f39aa441e4c9094de98d4ebb89a3a7f07ffc0979f9efeafc836d367356",
+      "content_hash": "9f8b29abbfaa46dad662db07c0b3da0bb4f81de529ed6a4c9a089f86b2d78cb5",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "shad-linear-016.json",
       "status": "passed_independent_mathematical_review",
       "reason": "Сопряжённые пары имеют произведение1; нечётное число вещественных корней и чётное число -1.",
       "fix": null,
-      "checkedexamples": []
+      "checkedexamples": [],
+      "mathematical_review_content_hash": "6082480cd6546f2e3c68d8d8739e10c293f1e37413a76705718f5e2d36a07130",
+      "content_hash": "fe85eeba917338ab9969f9d93b37b2511eeb8478945c78aeec80a1a70e1fcb8f",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "shad-linear-017.json",
       "status": "passed_independent_mathematical_review",
       "reason": "Невырожденная кососимметричная плоскость отделяется конгруэнцией; индукция включает нулевую форму.",
       "fix": null,
-      "checkedexamples": []
+      "checkedexamples": [],
+      "mathematical_review_content_hash": "8af5bb52c5e6682e91451a7f1715001a12d103f2707346a5b3dda0988a81383a",
+      "content_hash": "a38ab9a8ec24eac9cd3e9a1ea54e46412d9340777dc247e32907aa028639582e",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "shad-linear-018.json",
       "status": "passed_independent_mathematical_review",
       "reason": "Любой SPDкорень сохраняет eigenspaces A и равен sqrt(lambda)I на каждом.",
       "fix": null,
-      "checkedexamples": []
+      "checkedexamples": [],
+      "mathematical_review_content_hash": "a169893bb3a4bce9b2788d28b7e05ffbeb9fc8afb9ff63eeef4568e85acf50cc",
+      "content_hash": "11d8a63ffb061d4858a0cc9789f6c2c2f7d4a1d5ea09605c68a93f63035bec6c",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "shad-linear-019.json",
       "status": "passed_independent_mathematical_review",
       "reason": "Коэффициент s2 вычислен через главные2миноры; CayleyHamilton применим к жордановым матрицам.",
       "fix": null,
-      "checkedexamples": []
+      "checkedexamples": [],
+      "mathematical_review_content_hash": "e0bd21a984f32cd8ed002449c81c8d6c847e7901cc4923727cb618c57caebe1a",
+      "content_hash": "ff602913443cc1d740855bdcf0949f776e52162780962f4043cd09daa197b183",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "shad-linear-020.json",
       "status": "passed_independent_mathematical_review",
       "reason": "Циклический блок даёт1-(-t)^ell; дефект I-P равен числу циклов.",
       "fix": null,
-      "checkedexamples": []
+      "checkedexamples": [],
+      "mathematical_review_content_hash": "f656673155ca14c9aa423e59e4bbc651a93a6ccc277346d8861bf0382e4c975a",
+      "content_hash": "022895302ad792425c6be6a5907ef72f3bf07db6824468e7c15648f19eaa860d",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "shad-linear-021.json",
       "status": "passed_independent_mathematical_review",
       "reason": "Замена z=x+A^-1 By конгруэнтна diag(A,S); возможное нулевое eigenspace S не исключено.",
       "fix": null,
-      "checkedexamples": []
+      "checkedexamples": [],
+      "mathematical_review_content_hash": "5324e522347b10df994b3fe980537a99d0372a3fe7759e04309f129991d1edae",
+      "content_hash": "40b4dc6a6eabe22fd802cbaf06026547258758650ffb22a5a18500cb7e30f454",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "shad-linear-022.json",
       "status": "passed_independent_mathematical_review",
       "reason": "PSDформа ноль эквивалентна вектору в ядре; без PSD противоположные единичные матрицы нарушают формулу.",
       "fix": null,
-      "checkedexamples": []
+      "checkedexamples": [],
+      "mathematical_review_content_hash": "b1099d3f25a1ae0751c8698af9a29c5307794cc8ced3e1afa0b327747f2c44e4",
+      "content_hash": "8f93d94c591f25a0d8f44cd4608182d8c57b20d8957d20941081dbdd11c31885",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "shad-linear-023.json",
       "status": "passed_independent_mathematical_review",
       "reason": "Whitening A^-1/2 B A^-1/2 симметричен; определители связаны det A.",
       "fix": null,
-      "checkedexamples": []
+      "checkedexamples": [],
+      "mathematical_review_content_hash": "5044f5be8631c25c7e1dc790ac9ca04cc4c04085db90a14f7a1cda5b9bc57d3a",
+      "content_hash": "5dd59cee3c5b11c6b8e72fb9ab7d97291ef2fecd067ef28a3cf50f2841471bf6",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "shad-linear-024.json",
       "status": "passed_independent_mathematical_review",
       "reason": "G положительно определена; исключение Шура даёт отношение определителей и критерий нулевого расстояния.",
       "fix": null,
-      "checkedexamples": []
+      "checkedexamples": [],
+      "mathematical_review_content_hash": "ebbdd310074985b82afa052ddeca52fe3b79f4d379fe673fcec96b20acd0e1fd",
+      "content_hash": "439fee6044b4a88da7d325535ed79425df180bc8b93b228cf7c00a54a2344c5e",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "shad-linear-025.json",
       "status": "passed_independent_mathematical_review",
       "reason": "H=PQP идемпотентна из PQPQ=PQ; квадрат Frobenius нормы QP-PQP равен0.",
       "fix": null,
-      "checkedexamples": []
+      "checkedexamples": [],
+      "mathematical_review_content_hash": "cdf3630a245885f0b1db0a62f40d3eb986edf826142da63892fc5d882f84c9b2",
+      "content_hash": "f5f6a5a88cd7cb6c6ead26530eb3c29ca43156601d395261b12af32e6827332b",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "shad-linear-026.json",
       "status": "passed_independent_mathematical_review",
       "reason": "Проекция на im B разделяет ошибку ортогонально; trace(PAA^T)<=суммы r старших eigenvalues и SVD достигает границы.",
       "fix": null,
-      "checkedexamples": []
+      "checkedexamples": [],
+      "mathematical_review_content_hash": "18e53bb224b30458cf1289b92419fe662a71d7634daf9d70a2af4ed47ad5c147",
+      "content_hash": "97a81d80692e11996d4cd477ae2b7eb2d8a2df0e2d44a89620fb9b07c9dc1cc1",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "shad-linear-027.json",
       "status": "passed_independent_mathematical_review",
       "reason": "Коши в метрике A даёт границу; допустимое приращение ортогонально Ax* и доказывает единственность.",
       "fix": null,
-      "checkedexamples": []
+      "checkedexamples": [],
+      "mathematical_review_content_hash": "6b53bc291079420e16480ae116084a16e9ca55b531ce1422a71e46b16c19de02",
+      "content_hash": "02056aa6e2bd4ef5b41a08b3321b8bd1cd98f497faf520c3a54e981b9d4ab520",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "shad-linear-028.json",
       "status": "passed_independent_mathematical_review",
       "reason": "При c!=0 пространство разлагается в Aортогональную прямую и гиперплоскость; нулевой индекс ограничения исключён невырожденностью.",
       "fix": null,
-      "checkedexamples": []
+      "checkedexamples": [],
+      "mathematical_review_content_hash": "50eabfb1cb543e6363a4784d5cea2d30f34160935b277528de202461ce73db01",
+      "content_hash": "425261183e4658a6c01caa0540cd77fde0f6a0509c2465d520bbd6633c5f6327",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "shad-linear-029.json",
       "status": "passed_independent_mathematical_review",
       "reason": "PSDпредставление Gram; зависимость даёт строгость благодаря di>0, независимость и GramSchmidt дают полную характеристику равенства.",
       "fix": null,
-      "checkedexamples": []
+      "checkedexamples": [],
+      "mathematical_review_content_hash": "9c932798a0e85c4c8c469138bfd6bf666645f81fe6c04f811575b10ce73ce390",
+      "content_hash": "6186cbc85ed44825c5a68f2f95b8a16ccc8ac01e28b1fc8e05265281c222def9",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "shad-linear-030.json",
       "status": "passed_independent_mathematical_review",
       "reason": "Выбор независимых столбцов Gram даёт положительный главный минор; indefiniteконтрпример при r=1.",
       "fix": null,
-      "checkedexamples": []
+      "checkedexamples": [],
+      "mathematical_review_content_hash": "1c0b79d46b13231951bb01e25f776a6b2bf23f2c0924efe9480f58f2b92f0fae",
+      "content_hash": "84ed5fc5a2a3c2844591b816e49de3a7ebe855f2207a12df17ca3bc6cb9206e4",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "shad-linear-031.json",
       "status": "passed_independent_mathematical_review",
       "reason": "Полный строчный ранг гарантирует AA^T>0; решения отличаются элементом ker A и Pythagoras даёт единственность.",
       "fix": null,
-      "checkedexamples": []
+      "checkedexamples": [],
+      "mathematical_review_content_hash": "1cdf232182af6da8f0df43bd3d6e9bbce9309d50cfb91c4c21ea1f6e7a3943c6",
+      "content_hash": "55a1382d0197e42fe509c1481d2f9712757c57f9289c8c9c9fd47ad14c313262",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "shad-linear-032.json",
       "status": "passed_independent_mathematical_review",
       "reason": "Коши в Gметрике даёт G-xxT>0 при hi<1; знак разности beta-i-beta проверен.",
       "fix": null,
-      "checkedexamples": []
+      "checkedexamples": [],
+      "mathematical_review_content_hash": "44848066d3352264fd8a9a4a6753f886454f786ca815906f710bbf8bf3ba35b6",
+      "content_hash": "567e8457a8a4cdb70d2ca643eb31fa0d4f7df8f1a1be2c52e939a6ccbf55ccdb",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "shad-linear-033.json",
       "status": "passed_independent_mathematical_review",
       "reason": "SVDпо положительным числам корректен при rank0; обе нормы имеют суммы с монотонными коэффициентами.",
       "fix": null,
-      "checkedexamples": []
+      "checkedexamples": [],
+      "mathematical_review_content_hash": "e7150b5f06297b29df062db9eeb44d39e80c466dcc3fd9df5fae8a2f53f0fb8f",
+      "content_hash": "438b5970ca81ee5ece0e56b16bce4a08f6719b7a4bcb29ca8f888b6e48d1f706",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "shad-linear-034.json",
       "status": "passed_independent_mathematical_review",
       "reason": "qInfinity<1 даёт существование через ряд разностей; хвост начинается с q*d(k-1)/(1-q).",
       "fix": null,
-      "checkedexamples": []
+      "checkedexamples": [],
+      "mathematical_review_content_hash": "f0581f79fc78736281f8d21887bd030f373db8ac33d1fd0cb13e2d9d307fc777",
+      "content_hash": "8a8a18633dcb6d3412aa0df26defc5ee6b9bddaad976600ff0744426e6acde69",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "shad-linear-035.json",
       "status": "passed_independent_mathematical_review",
       "reason": "Нулевое уменьшение за проход означает нулевые изменения всех координат; компактность сферы превращает строгость в единый q<1.",
       "fix": null,
-      "checkedexamples": []
+      "checkedexamples": [],
+      "mathematical_review_content_hash": "997ba4aac75e55eb1fb17ae3adeb686da262f624eb39b7b5f3961e8f73fae58e",
+      "content_hash": "72725a30b1c66d1f45900dced138f52232d5cabd6557f13137bc130e5c13abe6",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "shad-linear-036.json",
@@ -255,35 +360,50 @@
       "fix": null,
       "checkedexamples": [
         "Executed complex numerical sum for n=2,...,14; absolute error<1e-9."
-      ]
+      ],
+      "mathematical_review_content_hash": "6be6e78d8493081df8e4e91e4d6b488840403ba9475a99b5b08b452f9d84a0af",
+      "content_hash": "ce3aa67c9a216b765ae1eb7530601d6fce8c5edf9f9ccfaa5c13c74aa7d08689",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "shad-linear-037.json",
       "status": "passed_independent_mathematical_review",
       "reason": "Старший коэффициент Лагранжа для k<n; остаток xn-P имеет коэффициент sum xi.",
       "fix": null,
-      "checkedexamples": []
+      "checkedexamples": [],
+      "mathematical_review_content_hash": "83479984bbd8dddfe6029a2598145c6414c55d4f1aa2c5af3087bf2593829acd",
+      "content_hash": "5fa28e71c002ebbb88b04d713151252125a1e5dfcf03111790a555cd1ba664ac",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "shad-linear-038.json",
       "status": "passed_independent_mathematical_review",
       "reason": "L=(UcapW)+(VcapW) содержится в (U+V)capW; delta>=0 вычитается, три прямые дают контрпример.",
       "fix": null,
-      "checkedexamples": []
+      "checkedexamples": [],
+      "mathematical_review_content_hash": "a68cfd9487d3ea9801d3b109ed36122ededf1563d0e89cf29389b12a6d6e97b9",
+      "content_hash": "cc4150fe25059c7bbda690e469f983f9558c71e290be01418b30be11dbbb6670",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "shad-linear-039.json",
       "status": "passed_independent_mathematical_review",
       "reason": "Размерности annihilators дают равенство; g(u+v)=f(v) корректна благодаря f|UcapV=0.",
       "fix": null,
-      "checkedexamples": []
+      "checkedexamples": [],
+      "mathematical_review_content_hash": "ac2ce7627bfbee721180714841ff9d8dc375a55526baa4199dbd2ac45715baa4",
+      "content_hash": "174246fdbdce09030a045c8badd638cc8ec7d7754715dd21493a771e5909fb3f",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "shad-linear-040.json",
       "status": "passed_independent_mathematical_review",
       "reason": "G=S^-T S^-1 даёт метрику; HAH^-1 симметрична и обеспечивает вещественную диагонализируемость.",
       "fix": null,
-      "checkedexamples": []
+      "checkedexamples": [],
+      "mathematical_review_content_hash": "66fcb4c95dfd91cf0d3f8d04ab2c2f86977e9d0989f0c722d2c7bb8d4fd9f196",
+      "content_hash": "507b2a3f50475dae20a8680e90ef8bb926fa9571bc1bc525659a4d8dd6dac7b8",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     }
   ]
 }

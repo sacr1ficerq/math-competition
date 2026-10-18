@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Corrected mathematical notation in 217 task statements; all 240 active conditions
+  pass KaTeX rendering checks. Historical rounds receive exact presentation-only
+  corrections without changing grading inputs.
+- Removed competing width limits from the task condition workspace.
+
 ### Added
 
 - Keyboard action search, discoverable shortcuts, and optional single-letter

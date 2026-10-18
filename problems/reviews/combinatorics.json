@@ -5,7 +5,7 @@
     {
       "file": "problems/shad-combinatorics-001.json",
       "status": "verified",
-      "content_hash": "a3994a04ba7d5b77330bd59633ee84016611eb55119c5997d993047a9fe8a118",
+      "content_hash": "8af1936c5294dc7ee936740236eefe9e5d83cfeb8f7cdeb4505e0a6a93da3f26",
       "proof_checkpoints": [
         "Знаковая сумма derangements равна det(J-I)",
         "спектр n-1,-1"
@@ -14,7 +14,9 @@
         "n=2: единственная транспозиция, разность -1"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "a3994a04ba7d5b77330bd59633ee84016611eb55119c5997d993047a9fe8a118",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-combinatorics-002.json",
@@ -34,7 +36,7 @@
     {
       "file": "problems/shad-combinatorics-003.json",
       "status": "verified",
-      "content_hash": "17a4fde64b939a0e6c235fdedd1000bd22dc4d95fd75b41f9818b2283a08ad04",
+      "content_hash": "7a6f098fb41aa4b0ee135d07da950d0d52f9bf053335e98bd787ea236220973c",
       "proof_checkpoints": [
         "Вставка максимума сохраняет k спусков в k+1 местах",
         "остальные добавляют спуск"
@@ -44,12 +46,14 @@
         "k<0 или k>=n:0"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "17a4fde64b939a0e6c235fdedd1000bd22dc4d95fd75b41f9818b2283a08ad04",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-combinatorics-004.json",
       "status": "verified",
-      "content_hash": "16ea677d98ed70c69a511fa5e73377071432b6d68b758feb520178cb898108b4",
+      "content_hash": "5f7e50b5733bb0a58a8e8885bb535bcf6fcc1b692c52be7d936ef9a8e5a92411",
       "proof_checkpoints": [
         "Первое пересечение y=x+1 отражается в путь к (a+1,b-1)",
         "операция обратима"
@@ -59,12 +63,14 @@
         "b=1 допустимо"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "16ea677d98ed70c69a511fa5e73377071432b6d68b758feb520178cb898108b4",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-combinatorics-005.json",
       "status": "verified",
-      "content_hash": "ac284a3869d32b72f8529ead6c4a843313c07730f90c7742b279eb7e89a38089",
+      "content_hash": "a0bf3c67ae004f9dc887fbb8a1a54e174fef1fd04f957945dd85496f4c3c0f13",
       "proof_checkpoints": [
         "Поворот с длиной цикла d фиксирует C(n/d,k/d)",
         "multiplicity phi(d)"
@@ -74,7 +80,9 @@
         "n=1"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "ac284a3869d32b72f8529ead6c4a843313c07730f90c7742b279eb7e89a38089",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-combinatorics-006.json",
@@ -93,7 +101,7 @@
     {
       "file": "problems/shad-combinatorics-007.json",
       "status": "verified",
-      "content_hash": "e2c007dacb11f9239e9f393983c3124507493693a0a33116ebaf18bd5a497ba5",
+      "content_hash": "8b71aa02b7a728a74632c512713f0f074d9324838b328dc7166b85a0e1c6ac06",
       "proof_checkpoints": [
         "IE сдвигает j координат на b+1",
         "соглашение binomial upper<m-1 даёт0"
@@ -103,12 +111,14 @@
         "N>mb сумма сокращается в0"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "e2c007dacb11f9239e9f393983c3124507493693a0a33116ebaf18bd5a497ba5",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-combinatorics-008.json",
       "status": "verified",
-      "content_hash": "c26235966d87b97c3961de7de6e517ffcc68833d278d05cb92737636b1c19c66",
+      "content_hash": "7508f46c5a99de6e6c6e6c8763c398f37bf86a81787f525139537ff45b7d5f88",
       "proof_checkpoints": [
         "Совместимость запрещённых клеток эквивалентна различным строкам и столбцам"
       ],
@@ -117,12 +127,14 @@
         "диагональ даёт derangements"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "c26235966d87b97c3961de7de6e517ffcc68833d278d05cb92737636b1c19c66",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-combinatorics-009.json",
       "status": "verified",
-      "content_hash": "a57bbb605ae79e3e4e5e509ae46c4b5eec3004eb6bb14ec3ce3c23df9eed55a1",
+      "content_hash": "4d7e00680cb54ea96792588d2b70c87f8d2c8a3552a032e675b9ccaa8d0391f2",
       "proof_checkpoints": [
         "IE сюръекций после j=n-i даёт знак (-1)^n",
         "fibers дают n!S(m,n)"
@@ -132,12 +144,14 @@
         "m=n:(-1)^n n!"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "a57bbb605ae79e3e4e5e509ae46c4b5eec3004eb6bb14ec3ce3c23df9eed55a1",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-combinatorics-010.json",
       "status": "verified",
-      "content_hash": "f4dab55e70cf66a44ab4d6cb28cbb41b545cb45af649fb252e6d75c71e7f802c",
+      "content_hash": "a331a306f7ed348317c11eca71e614f974024a7e06c406ad72e69a81e1bd1b6f",
       "proof_checkpoints": [
         "Запрещённые циклы пересекаются только несовместимо",
         "знак (-1)^(a+b)"
@@ -147,7 +161,9 @@
         "a+2b=n оставляет n^0=1"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "f4dab55e70cf66a44ab4d6cb28cbb41b545cb45af649fb252e6d75c71e7f802c",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-combinatorics-011.json",
@@ -182,7 +198,7 @@
     {
       "file": "problems/shad-combinatorics-013.json",
       "status": "verified",
-      "content_hash": "5968651e5dff45edafa16c1fed47422c32ef1da2b965e313941e065df5d8456d",
+      "content_hash": "abb303c11bf924ec3d851f6c67b116f6312018168f08697b9332618526e5dad7",
       "proof_checkpoints": [
         "Знаковая рекурсия dn=dn-1-dn-2",
         "возврат пары (1,1) через6"
@@ -191,7 +207,9 @@
         "n=0 пустая tiling имеет положительный знак"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "5968651e5dff45edafa16c1fed47422c32ef1da2b965e313941e065df5d8456d",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-combinatorics-014.json",
@@ -224,7 +242,7 @@
     {
       "file": "problems/shad-combinatorics-016.json",
       "status": "verified",
-      "content_hash": "9eee152472c1882990bb932b891ddfa79cdeebbf6b5eae90d50541b315d241ef",
+      "content_hash": "7dd130e12b4aef245b24bba56b45e790e6a518635990cfcb0d6342649c77f6df",
       "proof_checkpoints": [
         "Prüfer кратности di-1",
         "декодирование минимального оставшегося leaf"
@@ -236,12 +254,14 @@
       "corrections": [
         "Декодирование выбирает метку среди ещё не удалённых; добавлен инвариант остаточной степени"
       ],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "9eee152472c1882990bb932b891ddfa79cdeebbf6b5eae90d50541b315d241ef",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-combinatorics-017.json",
       "status": "verified",
-      "content_hash": "4cc6ec5eb66ae43748dbb241a6e70af95a7fbdcec8c69ac70f8ef86d2e410dba",
+      "content_hash": "5f3ac49db960aa0bb74b23186f9d851d00cc09035e88093d5b9f8855ccb04233",
       "proof_checkpoints": [
         "Переход в heavy component уменьшает её размер",
         "второй centroid только сосед"
@@ -251,7 +271,9 @@
         "две half-компоненты при одном vertex невозможны"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "4cc6ec5eb66ae43748dbb241a6e70af95a7fbdcec8c69ac70f8ef86d2e410dba",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-combinatorics-018.json",
@@ -301,7 +323,7 @@
     {
       "file": "problems/shad-combinatorics-021.json",
       "status": "verified",
-      "content_hash": "5306cb302ba9cfc7e450da8092675ab806c35da520736e73fa3feb7f9b0fa450",
+      "content_hash": "159b6f90a4718aba9ec9e1306293d1fa31f0eb627360b49a2e0750eef3c49148",
       "proof_checkpoints": [
         "Соседи конца longest path лежат на нём",
         "два одинаковых parity indices дают even cycle"
@@ -313,12 +335,14 @@
       "corrections": [
         "Исключён пустой граф; вопрос о точности степени согласован с критериями"
       ],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "5306cb302ba9cfc7e450da8092675ab806c35da520736e73fa3feb7f9b0fa450",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-combinatorics-022.json",
       "status": "verified",
-      "content_hash": "347475a69dfb88874eef86103c467507cecd3a64ba1923bbe19a2083fe27b8fe",
+      "content_hash": "baa088d51b03b43404ad650f3b743c9666842f7121e9efeb843c2117d72d3b14",
       "proof_checkpoints": [
         "Insertion первой вершины, побеждённой новой, сохраняет Hamilton path"
       ],
@@ -327,7 +351,9 @@
         "n=1:0 queries"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "347475a69dfb88874eef86103c467507cecd3a64ba1923bbe19a2083fe27b8fe",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-combinatorics-023.json",
@@ -349,7 +375,7 @@
     {
       "file": "problems/shad-combinatorics-024.json",
       "status": "verified",
-      "content_hash": "c69c7ed3de8539f682711b0a264852583de8a7bbb02632aa1eaf2a35625b5dbd",
+      "content_hash": "177bf82b3e89b41ab5d3fe69a93b60a4c9ef6fd29168c49d52fc0d9d4c0d7a0e",
       "proof_checkpoints": [
         "Triangle-free edge: du+dv<=n",
         "sum degrees²<=nm и >=4m²/n"
@@ -361,12 +387,14 @@
       "corrections": [
         "Отдельно обработан пустой граф до деления на n"
       ],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "c69c7ed3de8539f682711b0a264852583de8a7bbb02632aa1eaf2a35625b5dbd",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-combinatorics-025.json",
       "status": "verified",
-      "content_hash": "a5aa88540cce2ef3c450d891d8693ae2bdb686402624bad6cd97e8f3b45b8daa",
+      "content_hash": "fe6aaef7242bc3a3274503102618340ca797069fcaad7de1919a2cb1133f72db",
       "proof_checkpoints": [
         "Два общих соседа дают C4",
         "sum C(dv,2)<=C(n,2), затем quadratic bound"
@@ -376,7 +404,9 @@
         "n=2:bound1"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "a5aa88540cce2ef3c450d891d8693ae2bdb686402624bad6cd97e8f3b45b8daa",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-combinatorics-026.json",
@@ -396,7 +426,7 @@
     {
       "file": "problems/shad-combinatorics-027.json",
       "status": "verified",
-      "content_hash": "2f34d346ce6bd5d4878f635ad91b01577dd0d488de69a9550e9666d478681027",
+      "content_hash": "7ae39a5115efa440b18a92e728493ca0c310464c306dd54c5635869a93f39e73",
       "proof_checkpoints": [
         "Kirchhoff minor и Schur complement b^a det(aI-aJ/b)"
       ],
@@ -405,7 +435,9 @@
         "a=1 также даёт1"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "2f34d346ce6bd5d4878f635ad91b01577dd0d488de69a9550e9666d478681027",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-combinatorics-028.json",
@@ -440,7 +472,7 @@
     {
       "file": "problems/shad-combinatorics-030.json",
       "status": "verified",
-      "content_hash": "16317be7308eeb23486d0d4569711bb0b57e01ef1df522688e032bb637089e66",
+      "content_hash": "6f710258b9741d526bd2b9e9ec2cec15dd34449447d6ea85602276b1411d4570",
       "proof_checkpoints": [
         "Планарная средняя degree<6 наследуется при удалении",
         "обратная6-color greedy"
@@ -450,7 +482,9 @@
         "disconnected соединяется без пересечений"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "16317be7308eeb23486d0d4569711bb0b57e01ef1df522688e032bb637089e66",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-combinatorics-031.json",
@@ -480,7 +514,7 @@
     {
       "file": "problems/shad-combinatorics-032.json",
       "status": "verified",
-      "content_hash": "7b01a02ab0d35153378eabb7115f305c1d8b68574bb7afb6d4aace1276d6559b",
+      "content_hash": "d395a021ceb3c2a0afdca999e82c1cfbeba49ff2bd7ade60d9031c859438445d",
       "proof_checkpoints": [
         "Окружения v: >=A red или >=B blue",
         "induction plus Pascal"
@@ -490,12 +524,14 @@
         "recursion доказывает конечность"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "7b01a02ab0d35153378eabb7115f305c1d8b68574bb7afb6d4aace1276d6559b",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-combinatorics-033.json",
       "status": "verified",
-      "content_hash": "bfee07940224f0ddf891d4fac1053bcdc01e8bad2b74625d5d9c54a3067c97e5",
+      "content_hash": "2298c2f4a8ef682ddfcf8fa826dbee9f7311e82923161b051b1abb07c19cc1a3",
       "proof_checkpoints": [
         "Перестановочные maximal chains meet antichain <=1",
         "A contributes |A|!(n-|A|)!"
@@ -505,7 +541,9 @@
         "central layer attains"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "bfee07940224f0ddf891d4fac1053bcdc01e8bad2b74625d5d9c54a3067c97e5",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-combinatorics-034.json",
@@ -524,7 +562,7 @@
     {
       "file": "problems/shad-combinatorics-035.json",
       "status": "verified",
-      "content_hash": "6f3dc2497970f519ad73c801e8a59e1bfa177523deaf52bbe165da620c8a02da",
+      "content_hash": "5bd98e5016d7217b77605cb60c390bef91ad1fd1a5d0f2deb07da1013bbd2cad",
       "proof_checkpoints": [
         "Пары LIS/LDS lengths для разных индексов различны",
         "r decreasing blocks length s"
@@ -534,7 +572,9 @@
         "distinct values обязательны"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "6f3dc2497970f519ad73c801e8a59e1bfa177523deaf52bbe165da620c8a02da",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-combinatorics-036.json",
@@ -571,7 +611,7 @@
     {
       "file": "problems/shad-combinatorics-037.json",
       "status": "verified",
-      "content_hash": "3675d933e02dd7838ba7b4f53180d6eacdb5528dd778f725cdb606040cbbf3b7",
+      "content_hash": "207ea092875db691ce96b2f38388606a0e0b61ba38e48808f7b31eb363fd8fe2",
       "proof_checkpoints": [
         "Odd-part chains дают максимум n и equality exactly one representative",
         "Divisibility representatives iff odd-part divisibility and nondecreasing exponent",
@@ -594,7 +634,9 @@
           "subsets": 4706
         }
       ],
-      "independent_gate": "math_analysis_algorithms"
+      "independent_gate": "math_analysis_algorithms",
+      "mathematical_review_content_hash": "3675d933e02dd7838ba7b4f53180d6eacdb5528dd778f725cdb606040cbbf3b7",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-combinatorics-038.json",
@@ -614,7 +656,7 @@
     {
       "file": "problems/shad-combinatorics-039.json",
       "status": "verified",
-      "content_hash": "7c00e6d8e18cdc96d8c5bbbaa2d512889a9a6b093a6ce16d11093a0eb0839897",
+      "content_hash": "b79f50dcfac43d335d77b5dd810b32a4855b5f82368111bd1fcd919efb482892",
       "proof_checkpoints": [
         "Разности di дают ci=di-di+1",
         "integer d0 требует sum i ci=0 mod n"
@@ -624,7 +666,9 @@
         "x0 произвольное целое"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "7c00e6d8e18cdc96d8c5bbbaa2d512889a9a6b093a6ce16d11093a0eb0839897",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-combinatorics-040.json",

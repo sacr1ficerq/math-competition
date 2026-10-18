@@ -318,7 +318,7 @@ body[data-chat="docked"] .chat-panel {
   max-height:none;
 }
 .solve .problem-card {
-  max-width:80ch;
+  max-width:none;
   margin-bottom:24px;
 }
 .solve .problem-card h1 {

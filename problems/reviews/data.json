@@ -5,8 +5,10 @@
     "specific_proof_checkpoints": "Условное среднее ортогонально остаткам; towerproperty даёт точный выигрыш E(m2-m1)².",
     "edge_cases": "Нулевые вероятности X, признак Z без нового условного среднего, L2интегрируемость.",
     "corrections": [],
-    "content_hash": "df7231b0a919caf86210b82e48cae3be705befb1f43a666ac1ef7cbda2e973f6",
-    "executed_checks": []
+    "content_hash": "8cc0790f3ca9350060b2b98576b9693a49810a28d057f0fcd380a50321dafa84",
+    "executed_checks": [],
+    "mathematical_review_content_hash": "df7231b0a919caf86210b82e48cae3be705befb1f43a666ac1ef7cbda2e973f6",
+    "typography_review": "See typography.json: notation-only revision, mathematical review retained."
   },
   {
     "file": "shad-data-002.json",
@@ -14,10 +16,12 @@
     "specific_proof_checkpoints": "Левый/правый наклон F(a-)-tau и F(a)-tau; ноль в субдифференциале эквивалентен полному множеству квантилей.",
     "edge_cases": "Атом, плато CDF, tau строго между0и1, интегрируемость.",
     "corrections": [],
-    "content_hash": "bf93c9ab76110d2cf0fe9e85df3c2a21af335570fdaf0c8a75042410c128397e",
+    "content_hash": "8299c433a96eb1e9ea2401a2d53635807fbc0bc2d236962152d9fdf510303ae6",
     "executed_checks": [
       "Executed 21 exact Fraction atom/gap quantile candidate checks; passed."
-    ]
+    ],
+    "mathematical_review_content_hash": "bf93c9ab76110d2cf0fe9e85df3c2a21af335570fdaf0c8a75042410c128397e",
+    "typography_review": "See typography.json: notation-only revision, mathematical review retained."
   },
   {
     "file": "shad-data-003.json",
@@ -25,8 +29,10 @@
     "specific_proof_checkpoints": "Алгебра энтропия+binaryKL; производная (q-eta)/(q(1-q)) задаёт единственный условный минимум.",
     "edge_cases": "Eta/q в открытом интервале; оптимальность лишь на положительном support.",
     "corrections": [],
-    "content_hash": "4a7ef273c9963d7fda3fd0aaf2b4f4b0395f79ff6010f34e95a9471cf0e106ab",
-    "executed_checks": []
+    "content_hash": "d88c5c18fcb881dd2b066c0217648bcce0ffbf9a309be89654db3783243f483e",
+    "executed_checks": [],
+    "mathematical_review_content_hash": "4a7ef273c9963d7fda3fd0aaf2b4f4b0395f79ff6010f34e95a9471cf0e106ab",
+    "typography_review": "See typography.json: notation-only revision, mathematical review retained."
   },
   {
     "file": "shad-data-004.json",
@@ -34,10 +40,12 @@
     "specific_proof_checkpoints": "Стоимость решения1=c01(1-eta), решения0=c10 eta; разность модулей даёт точный regret.",
     "edge_cases": "Равенство на пороге имеет нулевой зазор, любой выбор gstar.",
     "corrections": [],
-    "content_hash": "2b2e07ab60fdac84017414b03a33e5ad088841b5739322bf6d5efa7a89a56d2f",
+    "content_hash": "1d28dd5028ebe8cedb293d1939e95b24acf50f600f567f28a60a469b19b5eedf",
     "executed_checks": [
       "Executed exact weighted-cost regret identity on 500 seeded rational populations; passed."
-    ]
+    ],
+    "mathematical_review_content_hash": "2b2e07ab60fdac84017414b03a33e5ad088841b5739322bf6d5efa7a89a56d2f",
+    "typography_review": "See typography.json: notation-only revision, mathematical review retained."
   },
   {
     "file": "shad-data-005.json",
@@ -45,8 +53,10 @@
     "specific_proof_checkpoints": "Squareexcess=E(f-m)²; при ошибке знака |m|<=|f-m|; Коши завершает границу.",
     "edge_cases": "f=0 при отрицательном m и m=0; конечность рисков.",
     "corrections": [],
-    "content_hash": "8ab0ae4d7c6ca34b2a467b7cf5f38d6e8e9679c8dab6d913f80a71ec39d6f611",
-    "executed_checks": []
+    "content_hash": "4411e557ac0724030554be34ed5af79168fa112a46c50259c518be60373ff209",
+    "executed_checks": [],
+    "mathematical_review_content_hash": "8ab0ae4d7c6ca34b2a467b7cf5f38d6e8e9679c8dab6d913f80a71ec39d6f611",
+    "typography_review": "See typography.json: notation-only revision, mathematical review retained."
   },
   {
     "file": "shad-data-006.json",
@@ -54,8 +64,10 @@
     "specific_proof_checkpoints": "Полный строчный ранг даёт интерполятор X^T(XX^T)^-1 y; постоянство прогноза эквивалентно z perpendicular kerX.",
     "edge_cases": "Ненулевой kernelprojection h0 даёт zTh0=norm(h0)², все realпрогнозы.",
     "corrections": [],
-    "content_hash": "d0c75b18578589f7126ea15c2edf0e3c5c3bc1b2e6d844bc992c43ec94de3456",
-    "executed_checks": []
+    "content_hash": "eacdb768b22a2acf173caa0212998dc00ee2a0e4eac4108f4d37788fa4b77269",
+    "executed_checks": [],
+    "mathematical_review_content_hash": "d0c75b18578589f7126ea15c2edf0e3c5c3bc1b2e6d844bc992c43ec94de3456",
+    "typography_review": "See typography.json: notation-only revision, mathematical review retained."
   },
   {
     "file": "shad-data-007.json",
@@ -63,8 +75,10 @@
     "specific_proof_checkpoints": "Оптимизация a даёт центрирование; нормальные уравнения и kernelхарактеризуют все beta.",
     "edge_cases": "Rankdeficient Xc, константные признаки, проекция обеспечивает существование и unique fittedvector.",
     "corrections": [],
-    "content_hash": "098ca1d7f3f07e045cb011ed5c5209e9ffe2b196ff8dd2ac87c59ff6493779ff",
-    "executed_checks": []
+    "content_hash": "c5e0b38ebee21deee2b198b16abb7235ded0d3a0876ee4225679b358f51d7afd",
+    "executed_checks": [],
+    "mathematical_review_content_hash": "098ca1d7f3f07e045cb011ed5c5209e9ffe2b196ff8dd2ac87c59ff6493779ff",
+    "typography_review": "See typography.json: notation-only revision, mathematical review retained."
   },
   {
     "file": "shad-data-008.json",
@@ -72,8 +86,10 @@
     "specific_proof_checkpoints": "Фиксированная сумма коэффициентов c минимизирует штраф при bj=c/k; lambda эффективно делится на k.",
     "edge_cases": "x=0 либо xTy=0 прогнозы не меняются; численный пример x=y=1 проверен.",
     "corrections": [],
-    "content_hash": "36904c49e92e3186a5736e87175301b0b2ec5f31fe7b51b927f2e3878ab53f9b",
-    "executed_checks": []
+    "content_hash": "7082b921df97ee42fa601f72efcf6ad45213bfe6f1c4b3926373ecd534a12006",
+    "executed_checks": [],
+    "mathematical_review_content_hash": "36904c49e92e3186a5736e87175301b0b2ec5f31fe7b51b927f2e3878ab53f9b",
+    "typography_review": "See typography.json: notation-only revision, mathematical review retained."
   },
   {
     "file": "shad-data-009.json",
@@ -81,8 +97,10 @@
     "specific_proof_checkpoints": "Популяционная производная даёт CovXY/VarX; модель даёт omittedterm gammaCovXZ/VarX.",
     "edge_cases": "Wнезависимая с positivevariance устраняет коллинеарность; beta=gamma=1 даёт -1.",
     "corrections": [],
-    "content_hash": "072ee11f98431d24a9e8c6ee3151ac3f28ae36709cc9d5a364899c2b45bc2069",
-    "executed_checks": []
+    "content_hash": "fc27d5e376b1cf54e9af4cfff165bc7368717c4fb356a41b2c71112240bd09cb",
+    "executed_checks": [],
+    "mathematical_review_content_hash": "072ee11f98431d24a9e8c6ee3151ac3f28ae36709cc9d5a364899c2b45bc2069",
+    "typography_review": "See typography.json: notation-only revision, mathematical review retained."
   },
   {
     "file": "shad-data-010.json",
@@ -90,8 +108,10 @@
     "specific_proof_checkpoints": "Noisyeta=a+(1-a-b)eta; совпадение всех порогов требует a=b при positive slope.",
     "edge_cases": "Порог вне[0,1], tieпри1/2, контрпример eta=.4,a=.3,b=.1 даёт .54.",
     "corrections": [],
-    "content_hash": "afb51ba932bc87d6a5a621d101eb3750cb5c7cfd4056e0d9b9aec42faee6f268",
-    "executed_checks": []
+    "content_hash": "b2073f3e9c4f191bb93c6e7572387f8cc1a2119d6a8b4f48d0eb7572494c1de0",
+    "executed_checks": [],
+    "mathematical_review_content_hash": "afb51ba932bc87d6a5a621d101eb3750cb5c7cfd4056e0d9b9aec42faee6f268",
+    "typography_review": "See typography.json: notation-only revision, mathematical review retained."
   },
   {
     "file": "shad-data-011.json",
@@ -99,8 +119,10 @@
     "specific_proof_checkpoints": "XTX=I разделяет координаты; subgradient[-z-lambda,-z+lambda] даёт softthreshold.",
     "edge_cases": "z=+-lambda имеет uniquezero; ridge нормировка(1+lambda) проверена.",
     "corrections": [],
-    "content_hash": "fc4a3592a5bb2b2077bd12d6fdb3abd0aaccf7add9495f64afa1b82ce233d162",
-    "executed_checks": []
+    "content_hash": "39367838ce0f9bcd8f518aa0f09c0db4ce6d8ca4900506192d5a96246182817b",
+    "executed_checks": [],
+    "mathematical_review_content_hash": "fc4a3592a5bb2b2077bd12d6fdb3abd0aaccf7add9495f64afa1b82ce233d162",
+    "typography_review": "See typography.json: notation-only revision, mathematical review retained."
   },
   {
     "file": "shad-data-012.json",
@@ -108,8 +130,10 @@
     "specific_proof_checkpoints": "Beta=Sgamma превращает штраф в betaT S^-T S^-1 beta; поляризация даёт ортогональность.",
     "edge_cases": "Отрицательное диагональное масштабирование учитывается квадратом sj²; Sобратима.",
     "corrections": [],
-    "content_hash": "e044ad331ea4fc577c6fd2d1ba0a2eb8369ee9e4459103dbbbf08f4c048e311e",
-    "executed_checks": []
+    "content_hash": "8fff7460e4f7bcaf9a817bf191581971b1c2d3dc79f64850abbac83b8e4e4607",
+    "executed_checks": [],
+    "mathematical_review_content_hash": "e044ad331ea4fc577c6fd2d1ba0a2eb8369ee9e4459103dbbbf08f4c048e311e",
+    "typography_review": "See typography.json: notation-only revision, mathematical review retained."
   },
   {
     "file": "shad-data-013.json",
@@ -117,8 +141,10 @@
     "specific_proof_checkpoints": "Дополнение квадрата posterior имеет precision XTX/sigma²+I/tau²; MAP=mean.",
     "edge_cases": "RankdeficientX не мешает SPD; ridgeparameter sigma²/tau² точно согласован с нормировкой.",
     "corrections": [],
-    "content_hash": "9c505b4a12fbeab38b093d552654cc7202bfa18ab09d4285410d74d9c8145646",
-    "executed_checks": []
+    "content_hash": "0e80a352865d37b9e4261ac64d74ebd7a97a9f5779ccc6ce6a9c97f964d575d0",
+    "executed_checks": [],
+    "mathematical_review_content_hash": "9c505b4a12fbeab38b093d552654cc7202bfa18ab09d4285410d74d9c8145646",
+    "typography_review": "See typography.json: notation-only revision, mathematical review retained."
   },
   {
     "file": "shad-data-014.json",
@@ -126,8 +152,10 @@
     "specific_proof_checkpoints": "Разложение w по rowspace+kernel делает orthogonalpart излишним; dualformula решает нормальные уравнения.",
     "edge_cases": "Phiпроизвольногоранга, lambda>0 обеспечивает обе обратимости и unique minimizer.",
     "corrections": [],
-    "content_hash": "51fa29a0e4b720294c67df95d8db31063b536459420b8ade57eb1cfc7bd98f46",
-    "executed_checks": []
+    "content_hash": "1faee20b0bf0f53520716bda8e775e647f71b983bdc4f19286c2cb8ec82b6570",
+    "executed_checks": [],
+    "mathematical_review_content_hash": "51fa29a0e4b720294c67df95d8db31063b536459420b8ade57eb1cfc7bd98f46",
+    "typography_review": "See typography.json: notation-only revision, mathematical review retained."
   },
   {
     "file": "shad-data-015.json",
@@ -135,8 +163,10 @@
     "specific_proof_checkpoints": "ODEпоeigenspace даёт (1-exp(-ht))/h; alpha(h)=h/(exp(ht)-1) strictlydecreasing.",
     "edge_cases": "t>0,h>0; XTsurjective позволяет активировать каждое направление, речь об операторах всехy.",
     "corrections": [],
-    "content_hash": "664de53e04530116984cdd99153373a0482993a1a282d7f04d7933191046300e",
-    "executed_checks": []
+    "content_hash": "179d3aab5680a602277c3dd503b8514b04b8b1762e1ec9427ec27cf280906d0d",
+    "executed_checks": [],
+    "mathematical_review_content_hash": "664de53e04530116984cdd99153373a0482993a1a282d7f04d7933191046300e",
+    "typography_review": "See typography.json: notation-only revision, mathematical review retained."
   },
   {
     "file": "shad-data-016.json",
@@ -146,8 +176,10 @@
     "corrections": [
       "Уточнено n>=1, исключён пустой набор с вакуумной разделимостью."
     ],
-    "content_hash": "b47d0acf7620af4280bd82def28847d6708a87db5fa0cb35f7b9e37579c8ba63",
-    "executed_checks": []
+    "content_hash": "fa635c89560672e3938fb1a520228f5807a65b222915ecb46ffef006b0b65204",
+    "executed_checks": [],
+    "mathematical_review_content_hash": "b47d0acf7620af4280bd82def28847d6708a87db5fa0cb35f7b9e37579c8ba63",
+    "typography_review": "See typography.json: notation-only revision, mathematical review retained."
   },
   {
     "file": "shad-data-017.json",
@@ -155,8 +187,10 @@
     "specific_proof_checkpoints": "L2penalty делает losscoercive и Hessian>=lambdaI; значениевнуле ограничиваетnorm.",
     "edge_cases": "Все координаты штрафуются; разделимость/rankdeficiency не влияют; n=0 также даёт beta0.",
     "corrections": [],
-    "content_hash": "3ecc553be22df3c7a22416befc23990d87538c014f005af21a367bfabf7a30ad",
-    "executed_checks": []
+    "content_hash": "08dbf16f1b9cd07b36e009799ad77100df7c420510b609dcedd90a0075069285",
+    "executed_checks": [],
+    "mathematical_review_content_hash": "3ecc553be22df3c7a22416befc23990d87538c014f005af21a367bfabf7a30ad",
+    "typography_review": "See typography.json: notation-only revision, mathematical review retained."
   },
   {
     "file": "shad-data-018.json",
@@ -166,8 +200,10 @@
     "corrections": [
       "X уточнён как конечный, вывод применяется на положительном support."
     ],
-    "content_hash": "60fcb5f24e7acc4ab55d72433153457a1529e42edf0d35dc90c56759ca580e21",
-    "executed_checks": []
+    "content_hash": "c2efe669bc302637fce8f5ab92dc61b8dcadbb0a420c5a4da384fcb0faf56828",
+    "executed_checks": [],
+    "mathematical_review_content_hash": "60fcb5f24e7acc4ab55d72433153457a1529e42edf0d35dc90c56759ca580e21",
+    "typography_review": "See typography.json: notation-only revision, mathematical review retained."
   },
   {
     "file": "shad-data-019.json",
@@ -177,10 +213,12 @@
     "corrections": [
       "Явно выписаны оба минимальных риска."
     ],
-    "content_hash": "97476ff9d5b47f47d9d682d19124baaf406494b164b6f6edf93be714ff3b46a2",
+    "content_hash": "e7e776d74900c5f51116d0effcafa11ef2ff283ac9a448495fba387dabf1a180",
     "executed_checks": [
       "Executed exact recalibration tower identity on 500 seeded rational populations, including merged score groups; passed."
-    ]
+    ],
+    "mathematical_review_content_hash": "97476ff9d5b47f47d9d682d19124baaf406494b164b6f6edf93be714ff3b46a2",
+    "typography_review": "See typography.json: notation-only revision, mathematical review retained."
   },
   {
     "file": "shad-data-020.json",
@@ -188,10 +226,12 @@
     "specific_proof_checkpoints": "Ортогональное разложение Brier плюс полная дисперсия даёт calibration-resolution+uncertainty.",
     "edge_cases": "Pi0/1 допустимы; строгий критерий лучше константы resolution>calibrationerror.",
     "corrections": [],
-    "content_hash": "a96d2fe5b3bd02119b6a29d3cda261779e77153df0661bae1f463923ef00ba8d",
+    "content_hash": "623eb615fc7425c178a965cb8199820168bdc3f1fb01930cfdbaeb6fe58e0db7",
     "executed_checks": [
       "Executed exact Brier decomposition on 500 seeded rational populations; passed."
-    ]
+    ],
+    "mathematical_review_content_hash": "a96d2fe5b3bd02119b6a29d3cda261779e77153df0661bae1f463923ef00ba8d",
+    "typography_review": "See typography.json: notation-only revision, mathematical review retained."
   },
   {
     "file": "shad-data-021.json",
@@ -208,8 +248,10 @@
     "specific_proof_checkpoints": "Precision=pi*t/(pi*t+(1-pi)*f); derivative=tf/den²>0.",
     "edge_cases": "t,f в(0,1), positive denominator; pi=.01 даёт8/107, pi=.5 даёт8/9.",
     "corrections": [],
-    "content_hash": "76d4ff8f739c26c0eadc5662490d0ea5a70da5d3921850c5738ef184ba1c76fa",
-    "executed_checks": []
+    "content_hash": "bb30098ee0280beb98e67da61180dab3f223d65a15787ee54e9fe706a43d4732",
+    "executed_checks": [],
+    "mathematical_review_content_hash": "76d4ff8f739c26c0eadc5662490d0ea5a70da5d3921850c5738ef184ba1c76fa",
+    "typography_review": "See typography.json: notation-only revision, mathematical review retained."
   },
   {
     "file": "shad-data-023.json",
@@ -219,10 +261,12 @@
     "corrections": [
       "Пороговое обязательное включение/исключение ограничено положительным support."
     ],
-    "content_hash": "935d583dd9408f46aa63bc99a236175a8a99a8f3b7f17ae48841d6861f255efd",
+    "content_hash": "aac6d9c2ad9cdbcdb342a6fc2ac2c65115284603defbe4244e9189e663ed0663",
     "executed_checks": [
       "Enumerated all16 decision regions on each of500 seeded rational populations and checked every optimal threshold support; passed."
-    ]
+    ],
+    "mathematical_review_content_hash": "935d583dd9408f46aa63bc99a236175a8a99a8f3b7f17ae48841d6861f255efd",
+    "typography_review": "See typography.json: notation-only revision, mathematical review retained."
   },
   {
     "file": "shad-data-024.json",
@@ -230,8 +274,10 @@
     "specific_proof_checkpoints": "ТочныйOLSсintercept допускает среднююконстанту, поэтому SSE<=TSS; upperboundотSSE>=0.",
     "edge_cases": "Непостоянныеy обеспечиваютTSS>0; тестпример(-1,1),(M,-M) даёт1-(M+1)².",
     "corrections": [],
-    "content_hash": "0284acd209d73a2f748df47aa139493cfdbdadb03f3e758694db7be9ec6a19b9",
-    "executed_checks": []
+    "content_hash": "c255ce785b089b84429a58256ae505cdf146f9e079b215047f7a26d6ccdabf1e",
+    "executed_checks": [],
+    "mathematical_review_content_hash": "0284acd209d73a2f748df47aa139493cfdbdadb03f3e758694db7be9ec6a19b9",
+    "typography_review": "See typography.json: notation-only revision, mathematical review retained."
   },
   {
     "file": "shad-data-025.json",
@@ -239,8 +285,10 @@
     "specific_proof_checkpoints": "Параметрf=FP даётвсематрицы; производнаяF1=2eps/den²>0, границыпри0,eps.",
     "edge_cases": "Eps<min(pi,1-pi) делаетвесьотрезокдопустимым и знаменателиположительными.",
     "corrections": [],
-    "content_hash": "427883142d6cab1998c9a4ddc84e9fcfd1e9fdbdc0121725d5c9c300c72af0b1",
-    "executed_checks": []
+    "content_hash": "a0372772073017519552526bfd82d68d7f509d160724fc6d6bd02863d22e8c14",
+    "executed_checks": [],
+    "mathematical_review_content_hash": "427883142d6cab1998c9a4ddc84e9fcfd1e9fdbdc0121725d5c9c300c72af0b1",
+    "typography_review": "See typography.json: notation-only revision, mathematical review retained."
   },
   {
     "file": "shad-data-026.json",
@@ -248,8 +296,10 @@
     "specific_proof_checkpoints": "Singletoncategorytargetencoding=ownlabel; LOOcodingотдругихметокнезависим отYi.",
     "edge_cases": "Резервнаякодировканезависима от собственнойметки; новаячестнаяметкаошибка1/2.",
     "corrections": [],
-    "content_hash": "5da33031b3369a907fc5367c0c95c8d2f6652862e365f28fa2400e0d6b6736d6",
-    "executed_checks": []
+    "content_hash": "0064d64baab15d7370782a4962da3d38b87bd970e6170ade498bb05ae1023688",
+    "executed_checks": [],
+    "mathematical_review_content_hash": "5da33031b3369a907fc5367c0c95c8d2f6652862e365f28fa2400e0d6b6736d6",
+    "typography_review": "See typography.json: notation-only revision, mathematical review retained."
   },
   {
     "file": "shad-data-027.json",
@@ -268,8 +318,10 @@
     "specific_proof_checkpoints": "Безmask заполненныйпризнакконстанта; Bayesriskwithmaskсуммирует minсовместныхмассвдвухгруппах.",
     "edge_cases": "Пустыегруппыобработаныбезусловныхделений; pi=.5,a1,b0 даётrisk0.",
     "corrections": [],
-    "content_hash": "d6a71480988fa35fd6ae3e160e7615261333ea54416ed7338e13c8e9477e013f",
-    "executed_checks": []
+    "content_hash": "197bf32e189ba1657142de824e396fbfd540717c82af48e1d67c06f1296563d4",
+    "executed_checks": [],
+    "mathematical_review_content_hash": "d6a71480988fa35fd6ae3e160e7615261333ea54416ed7338e13c8e9477e013f",
+    "typography_review": "See typography.json: notation-only revision, mathematical review retained."
   },
   {
     "file": "shad-data-029.json",
@@ -277,8 +329,10 @@
     "specific_proof_checkpoints": "Normal equations дают bg=ng/(ng+lambda)(mug-a); aweightedmean и sum bg=0.",
     "edge_cases": "k>=1,ng>0; quadraticincrements строгоpositive несмотряна unpenalizedintercept.",
     "corrections": [],
-    "content_hash": "5a437f8e0f91087107396397fba084a5289ca4ceeb1e8df51b1f9887e89ce1a6",
-    "executed_checks": []
+    "content_hash": "7dd70600bb812d6f13073702b99bfb4bae7bc46d3a7b67ec327ea7af3f437b6c",
+    "executed_checks": [],
+    "mathematical_review_content_hash": "5a437f8e0f91087107396397fba084a5289ca4ceeb1e8df51b1f9887e89ce1a6",
+    "typography_review": "See typography.json: notation-only revision, mathematical review retained."
   },
   {
     "file": "shad-data-030.json",
@@ -286,8 +340,10 @@
     "specific_proof_checkpoints": "Independentmasks: covariancepqCov и variancespVar,qVar; commonmask: allmomentsfactorp.",
     "edge_cases": "p,q>0 и positivevariances нужныдляcorrelation; p=q1 сохраняетrho.",
     "corrections": [],
-    "content_hash": "b8ffb23ef9bcbc95e514fa16c299044ebd240ac276cadb01ce52768ec3639e62",
-    "executed_checks": []
+    "content_hash": "b4060e1db676cbc0c4c5f492ddaf9ab53e5305ca00c830220b1df0209206004b",
+    "executed_checks": [],
+    "mathematical_review_content_hash": "b8ffb23ef9bcbc95e514fa16c299044ebd240ac276cadb01ce52768ec3639e62",
+    "typography_review": "See typography.json: notation-only revision, mathematical review retained."
   },
   {
     "file": "shad-data-031.json",
@@ -295,8 +351,10 @@
     "specific_proof_checkpoints": "Оптимальная константа — среднее; ANOVAразложение даёт nLnR/(nL+nR)*(muL-muR)².",
     "edge_cases": "Непустые дети; XORчетырёхравновесныхточек даётобаfirstgains0 и depth2error0.",
     "corrections": [],
-    "content_hash": "44e5cfa623b3c8cd5551ed674f3599ec72b624b9ae900fb62f6b1f7f5d999123",
-    "executed_checks": []
+    "content_hash": "170e160ba910f5eb9432764ae91b224060a05f82f68c3535c4dbf02d2c6441a1",
+    "executed_checks": [],
+    "mathematical_review_content_hash": "44e5cfa623b3c8cd5551ed674f3599ec72b624b9ae900fb62f6b1f7f5d999123",
+    "typography_review": "See typography.json: notation-only revision, mathematical review retained."
   },
   {
     "file": "shad-data-032.json",
@@ -304,8 +362,10 @@
     "specific_proof_checkpoints": "Giniразность сводится к2w(1-w)(pL-pR)²; Hsecond=-1/(p(1-p)) даёт strictconcavity.",
     "edge_cases": "pL/pR=0или1 обрабатываютсянепрерывностью; positiveweights исключаютлишниеравенства.",
     "corrections": [],
-    "content_hash": "9f5c905d09d0d61b51f04b054ce0789fdaf741f9c2288ee7d29296d2c01b1e6e",
-    "executed_checks": []
+    "content_hash": "48a61b8e76f48724ec063c27bd001ac858103feca782c41cb9d3955a7b73be75",
+    "executed_checks": [],
+    "mathematical_review_content_hash": "9f5c905d09d0d61b51f04b054ce0789fdaf741f9c2288ee7d29296d2c01b1e6e",
+    "typography_review": "See typography.json: notation-only revision, mathematical review retained."
   },
   {
     "file": "shad-data-033.json",
@@ -324,8 +384,10 @@
     "corrections": [
       "В выборе направления явно добавлен модуль; без него найден контрпример h=e1,e2,r=(-1,0)."
     ],
-    "content_hash": "8e6d103b2863e2bf7f84e00830ffb1122861ef4205050e41036a9cb467007294",
-    "executed_checks": []
+    "content_hash": "514d025ad82c6daa331b88a6d15e5728d4ebfab1f1fc11249ae6b69fcf94e884",
+    "executed_checks": [],
+    "mathematical_review_content_hash": "8e6d103b2863e2bf7f84e00830ffb1122861ef4205050e41036a9cb467007294",
+    "typography_review": "See typography.json: notation-only revision, mathematical review retained."
   },
   {
     "file": "shad-data-035.json",
@@ -335,8 +397,10 @@
     "corrections": [
       "Добавлено необходимое wi proportional exp(-yiFi) для связи Z с исходной потерей."
     ],
-    "content_hash": "cddc2246abd91e55f5f6d4fdf543f90549f3cd321e36ae705bf73d46288b359c",
-    "executed_checks": []
+    "content_hash": "0662facdce4f75a5e819700e3b3d5374c561026ab7b05e1b9f5404bb0f0fcc63",
+    "executed_checks": [],
+    "mathematical_review_content_hash": "cddc2246abd91e55f5f6d4fdf543f90549f3cd321e36ae705bf73d46288b359c",
+    "typography_review": "See typography.json: notation-only revision, mathematical review retained."
   },
   {
     "file": "shad-data-036.json",
@@ -355,8 +419,10 @@
     "specific_proof_checkpoints": "Lloydcenters0,25/3 имеютboundary25/6<5,assignedgroupsнеизменныстрого.",
     "edge_cases": "Стоимость50/3 против25/2; duplicate10 считаютсядвумянаблюдениями; лучшийкандидатнеобязанглобальный.",
     "corrections": [],
-    "content_hash": "13bf5de24a2952fbd94dd1dd30752894bf298ea1747911f790913467ce079e7b",
-    "executed_checks": []
+    "content_hash": "1c94684c11d888299cfbf60b7517d4f15224737af19707d6f59c77bc72751dcf",
+    "executed_checks": [],
+    "mathematical_review_content_hash": "13bf5de24a2952fbd94dd1dd30752894bf298ea1747911f790913467ce079e7b",
+    "typography_review": "See typography.json: notation-only revision, mathematical review retained."
   },
   {
     "file": "shad-data-038.json",
@@ -364,8 +430,10 @@
     "specific_proof_checkpoints": "PCAerror=traceSigma-tracePSigma; diagonalprojectorweights0..1sumr даютtailboundиattainment.",
     "edge_cases": "Strictgapзаставляетdiagonalweights1/0, затемPej=ej/0; rankdeficientSigma включена.",
     "corrections": [],
-    "content_hash": "82ffd0e456471cbaef6fdd5cbdf36445a077ffde366d6afc855d686d1374925f",
-    "executed_checks": []
+    "content_hash": "e932a042948f7d4ce5a42801627ce61bef2dce1e0230ee764c8262bb04e0f4e6",
+    "executed_checks": [],
+    "mathematical_review_content_hash": "82ffd0e456471cbaef6fdd5cbdf36445a077ffde366d6afc855d686d1374925f",
+    "typography_review": "See typography.json: notation-only revision, mathematical review retained."
   },
   {
     "file": "shad-data-039.json",
@@ -373,8 +441,10 @@
     "specific_proof_checkpoints": "IndependentfairU,V даютcovdiag(M,1), leadingaxisuniqueM>1; signalV независимотfirstPC.",
     "edge_cases": "VarY1, fullXpredictorsecondcoordinateerror0, BayesfirstPCrisk1; PCsignневажен.",
     "corrections": [],
-    "content_hash": "160d0a35a737f5e7579336287ab3c5bff4a77f7f681458a0664e7ea2201c777a",
-    "executed_checks": []
+    "content_hash": "c6d5fb91bf75d0e67b4ff4b6fef67dbc0412cb87359d1074bd6058f607e897a8",
+    "executed_checks": [],
+    "mathematical_review_content_hash": "160d0a35a737f5e7579336287ab3c5bff4a77f7f681458a0664e7ea2201c777a",
+    "typography_review": "See typography.json: notation-only revision, mathematical review retained."
   },
   {
     "file": "shad-data-040.json",
@@ -382,7 +452,9 @@
     "specific_proof_checkpoints": "Все2clusterpartitionsчетырёхточек имеют2+2 или1+3; pairedcosthalf-distance²,triplecostone-thirdpairdistances.",
     "edge_cases": "1+3cost8/3(a²+b²)>4min(a²,b²); a!=buniqueorientation; scale0<c<b/a flips.",
     "corrections": [],
-    "content_hash": "6e917161b30ccfb9209f02073a33c9543c22205dd3f7724e208e8a7b0edcbcf2",
-    "executed_checks": []
+    "content_hash": "17371a2320cbe60046312a6a1208bfa4c7ff1354300dba5d9e79ece027af967a",
+    "executed_checks": [],
+    "mathematical_review_content_hash": "6e917161b30ccfb9209f02073a33c9543c22205dd3f7724e208e8a7b0edcbcf2",
+    "typography_review": "See typography.json: notation-only revision, mathematical review retained."
   }
 ]

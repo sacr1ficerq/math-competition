@@ -5,7 +5,7 @@
     {
       "file": "problems/shad-probability-001.json",
       "status": "verified",
-      "content_hash": "e0e6a2b4d808e23917b8022cbcd40d764c368410ae84d30871d4024ae640c50e",
+      "content_hash": "d0a693d938af45a4a434f83f3e947b242275b456d45ee37ba0b6aac44c1e34ea",
       "proof_checkpoints": [
         "Геометрический ряд zb/(1-za)",
         "остаток Exp(lambda) при каждом N=k"
@@ -16,12 +16,14 @@
         "a<1"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "e0e6a2b4d808e23917b8022cbcd40d764c368410ae84d30871d4024ae640c50e",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-probability-002.json",
       "status": "verified",
-      "content_hash": "20119bfc60d34f18f5ec5b3ae2697c53c2abb2e9bde71bc855b785164d772e0f",
+      "content_hash": "4f33878800cf88fe7ac063a1e477b896307f5ab1122398086981581033b2e99b",
       "proof_checkpoints": [
         "Два состояния дают знаменатель 1-(1-p)z-p(1-p)z²",
         "ET=(1+p)/p²"
@@ -31,12 +33,14 @@
         "T ограничено 2Geom(p²)"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "20119bfc60d34f18f5ec5b3ae2697c53c2abb2e9bde71bc855b785164d772e0f",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-probability-003.json",
       "status": "verified",
-      "content_hash": "34252892757823fa342e9a69641821be9579f13ab90326e5405d8f7213b9494c",
+      "content_hash": "8173572b124b474c5f31053c893cb184375668d4d212374e3001d102b571c81f",
       "proof_checkpoints": [
         "Независимость ожиданий следует из постоянного условного закона",
         "сумма Var Geom"
@@ -46,12 +50,14 @@
         "n=2"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "34252892757823fa342e9a69641821be9579f13ab90326e5405d8f7213b9494c",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-probability-004.json",
       "status": "verified",
-      "content_hash": "070fb3ed0dc66732df72ded11b099a194185637d95816ef08e9c7f54a908585b",
+      "content_hash": "48344beb78379d283d0f23786601c8a9554d245a8de12984adb3aae808c8915b",
       "proof_checkpoints": [
         "Равномерные слабые композиции N=n-k в m=k+1 частей; ET_r=r(n+1)/(k+1)",
         "Коэффициенты 2x²(1-x)^(-m-2) и x²(1-x)^(-m-2) выводят факториальный и смешанный моменты",
@@ -74,12 +80,14 @@
           "all_k_r_s": true,
           "cases": 330
         }
-      ]
+      ],
+      "mathematical_review_content_hash": "070fb3ed0dc66732df72ded11b099a194185637d95816ef08e9c7f54a908585b",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-probability-005.json",
       "status": "verified",
-      "content_hash": "a8c7cfd0bace96ae562fccccf55e986188a8cd8b6845383da4a0c25999c7ea34",
+      "content_hash": "7efcbf2b1465e34977dac7370d322854fe72be11d21995a97b65d0f60ea6c258",
       "proof_checkpoints": [
         "Включения–исключения D(n-k)",
         "поточечные массы e^-1/k! и контроль хвоста"
@@ -89,12 +97,14 @@
         "k=n-1: D1=0"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "a8c7cfd0bace96ae562fccccf55e986188a8cd8b6845383da4a0c25999c7ea34",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-probability-006.json",
       "status": "verified",
-      "content_hash": "54e1b34e4da041f44f93d1e671a776a6f93269ce0f4d5a7aa7f16b36d4bff8bc",
+      "content_hash": "8bf146725fd0250448fd4ed93407d6095d4189832e545bfc3370cbde2d342157",
       "proof_checkpoints": [
         "Вставка j имеет j равновероятных обратимых вариантов",
         "Bernoulli независимы"
@@ -103,12 +113,14 @@
         "j=1: B1=1 и нулевая дисперсия"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "54e1b34e4da041f44f93d1e671a776a6f93269ce0f4d5a7aa7f16b36d4bff8bc",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-probability-007.json",
       "status": "verified",
-      "content_hash": "e4cb9b86702eab6916ee81c5f76199b0034d44ba0d9cce044cd4c7fdb21a971d",
+      "content_hash": "ae85cdec86cbaed622dbd63c8e4e99bac4e2930a4cf9e9ab597fa35876a15f64",
       "proof_checkpoints": [
         "Объединение инцидентных рёбер имеет 2n-3 элементов",
         "Cov=p(1-p)^(2n-3)"
@@ -117,12 +129,14 @@
         "n=2: Z равен 0 либо 2"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "e4cb9b86702eab6916ee81c5f76199b0034d44ba0d9cce044cd4c7fdb21a971d",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-probability-008.json",
       "status": "verified",
-      "content_hash": "37016b04806e23b9369857156e71f59f61cd23be53aa531d165533d62487db50",
+      "content_hash": "da27f3a28fc5e9602623e7c9a0ed542a180ba75de894230de15214d4a56f8a2b",
       "proof_checkpoints": [
         "Общее ребро даёт p5-p6",
         "число неупорядоченных пар C(n,2)C(n-2,2)"
@@ -132,12 +146,14 @@
         "общая вершина не создаёт зависимости"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "37016b04806e23b9369857156e71f59f61cd23be53aa531d165533d62487db50",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-probability-009.json",
       "status": "verified",
-      "content_hash": "b9c58f0b7a7791b4d0a7527528f499d23e79b67d418b3b6acde1e32070a4d4bc",
+      "content_hash": "033fd5126b89b1074bca247fd9d93bcba8e168193ae31c61f54337fdd977e2c7",
       "proof_checkpoints": [
         "Каждому набору n-1 битов соответствует один исходный",
         "ковариация I/4"
@@ -147,12 +163,14 @@
         "чётность всех n фиксирована"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "b9c58f0b7a7791b4d0a7527528f499d23e79b67d418b3b6acde1e32070a4d4bc",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-probability-010.json",
       "status": "verified",
-      "content_hash": "c59b23574b581342a8798b0d18e50bdcee13e7c34a7c7e12b710b3df08df5197",
+      "content_hash": "436466222746d8ba4b41f38615d058b823faa55e27fa469a543e12f1999f4e0d",
       "proof_checkpoints": [
         "P(два пусты)=(1-2/n)^m",
         "IE для отсутствия пустых"
@@ -164,12 +182,14 @@
       "corrections": [
         "Условие явно запрашивает знак ковариации согласно критериям"
       ],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "c59b23574b581342a8798b0d18e50bdcee13e7c34a7c7e12b710b3df08df5197",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-probability-011.json",
       "status": "verified",
-      "content_hash": "310a7f8f5d617ed7556433ea7f58c4c8a010ef9ed33ec6857906aee4d05a1956",
+      "content_hash": "4db0b4c776205d74d0e8780d5078f76727e1f78f4bb7666636ab1d27661a2749",
       "proof_checkpoints": [
         "Якобиан x=sr,y=s(1-r) равен s",
         "S и R факторизуются"
@@ -179,12 +199,14 @@
         "условие S=s через плотность"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "310a7f8f5d617ed7556433ea7f58c4c8a010ef9ed33ec6857906aee4d05a1956",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-probability-012.json",
       "status": "verified",
-      "content_hash": "ac126db881a20cfe4b9696834412c22e6d437a535ea459ec76778846a8b940a8",
+      "content_hash": "2dcaae4f9ff63d6c923c8c06b4fb37b20f9058195c5d7ce0c205b95af6d96376",
       "proof_checkpoints": [
         "Плотность экстремумов n(n-1)(m-l)^(n-2)",
         "второй якобиан 1-r"
@@ -194,12 +216,14 @@
         "R<1 п.н."
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "ac126db881a20cfe4b9696834412c22e6d437a535ea459ec76778846a8b940a8",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-probability-013.json",
       "status": "verified",
-      "content_hash": "956d489935b0492c21307e0ed814d91a7905b443eb9c7af3df74b3c1ea5975f5",
+      "content_hash": "bf015e556b5e1796b2947ec0257b54d87ccf380dbd57bbad1e4b9a87fa701a48",
       "proof_checkpoints": [
         "Полярная плотность факторизуется",
         "интеграл |y| даёт Cauchy"
@@ -209,12 +233,14 @@
         "обе части EX/Y бесконечны"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "956d489935b0492c21307e0ed814d91a7905b443eb9c7af3df74b3c1ea5975f5",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-probability-014.json",
       "status": "verified",
-      "content_hash": "490ade8b1d8a4c844cea7c2f560ebf095f4494297d2b9edbce6e5b69014ff105",
+      "content_hash": "9bcfd10c49895376b14581c38aad4feaca57e391a11449c580ce6056cb1e8669",
       "proof_checkpoints": [
         "Ортогональная замена сохраняет нормальную плотность",
         "Q сумма n-1 квадратов"
@@ -224,12 +250,14 @@
         "sigma>0"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "490ade8b1d8a4c844cea7c2f560ebf095f4494297d2b9edbce6e5b69014ff105",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-probability-015.json",
       "status": "verified",
-      "content_hash": "0d53a747abf608f1b0f2b50abeb46965ae89db7bf1271866be8361eb2e4fd7b7",
+      "content_hash": "d92cdb8534c1a38376b77b0294835071b1a68e9fa0e9015f5b29f71bd5cd421f",
       "proof_checkpoints": [
         "R=X-mu1-a(S-mu1-mu2)/(a+b) некоррелирован с S",
         "MSE разложена"
@@ -240,12 +268,14 @@
       "corrections": [
         "Добавлена явная факторизация характеристической функции нормального остатка"
       ],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "0d53a747abf608f1b0f2b50abeb46965ae89db7bf1271866be8361eb2e4fd7b7",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-probability-016.json",
       "status": "verified",
-      "content_hash": "89cd5ad8507719af838a910d29a89855998d5e7c1cc89a25f4209f7fe0dee40c",
+      "content_hash": "05b9945d1096f69b5324d7cc0881e87df7ea2326494ae63bf66943ad3d5d54b3",
       "proof_checkpoints": [
         "Выбор фрагмента по длине делает вторую точку равномерной независимо первой"
       ],
@@ -253,12 +283,14 @@
         "равные части при первом разломе: вырожденный треугольник исключён"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "89cd5ad8507719af838a910d29a89855998d5e7c1cc89a25f4209f7fe0dee40c",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-probability-017.json",
       "status": "verified",
-      "content_hash": "956b95ccb77779baa152d5c94e352af9a2ef6fe28beed0255e2170ee6e68d371",
+      "content_hash": "a1912b9e72744d1b0e0f618a5bbe31ac8d57ab7760a2fddc00e08f2ea1b2c8aa",
       "proof_checkpoints": [
         "Якобиан 1/x на p<x<1",
         "fP=-log p",
@@ -269,12 +301,14 @@
         "endpoints не требуют условного закона"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "956b95ccb77779baa152d5c94e352af9a2ef6fe28beed0255e2170ee6e68d371",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-probability-018.json",
       "status": "verified",
-      "content_hash": "402e5d99e6d5adede4a2eb62f53b42c9d036d0c4798ec7b416e462d2ee57c11b",
+      "content_hash": "67050320986afce9a669dd8d117a0302f6adc98f74b098184e4f242d91841abc",
       "proof_checkpoints": [
         "Совместные плотности m,d факторизуются",
         "остаточные rates mu/lambda"
@@ -284,12 +318,14 @@
         "оба I имеют положительную массу"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "402e5d99e6d5adede4a2eb62f53b42c9d036d0c4798ec7b416e462d2ee57c11b",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-probability-019.json",
       "status": "verified",
-      "content_hash": "3cfdf2edd0d7fce35a97be20fb75d0f5f72ca326c7097c9a3e3648aa5cdc26e8",
+      "content_hash": "a9d60dd3fc9389667da04ce2e2fd388f15d5d8a09b749e1f2325235d1567948f",
       "proof_checkpoints": [
         "Маргиналы 2(1-x),2y",
         "EXY=1/4, Cov=1/36 и rho=1/2"
@@ -299,12 +335,14 @@
         "нормировка исходной площади 1/2"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "3cfdf2edd0d7fce35a97be20fb75d0f5f72ca326c7097c9a3e3648aa5cdc26e8",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-probability-020.json",
       "status": "verified",
-      "content_hash": "de5378158f99250c9e7dd0768b13594d8a291c078e926410c77783a362dba7f9",
+      "content_hash": "8234ce8ea2bd8230c1a68e2c3e57674edd915d071bd5c2cb2d836618633db277",
       "proof_checkpoints": [
         "Границы пересечения дают хвосты max(1-2t,0) и 1-t"
       ],
@@ -312,12 +350,14 @@
         "сингулярные связи V=U и V=1-U допустимы"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "de5378158f99250c9e7dd0768b13594d8a291c078e926410c77783a362dba7f9",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-probability-021.json",
       "status": "verified",
-      "content_hash": "0e7968a606de779dc2b9a1c17c33df382e9bbcd2d78242c6cd2e4f3183c5cd18",
+      "content_hash": "9961463684f5a36ac946cd392db135fd8ca5bd90a65b7920781fdcc23afe81c8",
       "proof_checkpoints": [
         "Cov XiXj=VarTheta",
         "Bernoulli marginal variance m(1-m)"
@@ -326,12 +366,14 @@
         "a,b>0: rho=1/(a+b+1) строго положительна"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "0e7968a606de779dc2b9a1c17c33df382e9bbcd2d78242c6cd2e4f3183c5cd18",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-probability-022.json",
       "status": "verified",
-      "content_hash": "126822fc9a22a49917bb3bb91298c09a76c3ec0863c533a7ae147ae9ef136761",
+      "content_hash": "07d465795433708d1405fbfe88c7034fdd19380f5745d4923c7a8ff1fcaead23",
       "proof_checkpoints": [
         "Гамма-интеграл даёт NB mass",
         "posterior shape a+k и rate b+t"
@@ -341,12 +383,14 @@
         "a не обязан быть целым"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "126822fc9a22a49917bb3bb91298c09a76c3ec0863c533a7ae147ae9ef136761",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-probability-023.json",
       "status": "verified",
-      "content_hash": "975915f2a55fb7e8e742d1127bc735eef11c993f1f42fb13692dabbac39da3b0",
+      "content_hash": "b7f0114501229d229367fd567d57d581e7661f85448981746c416733e2aefb99",
       "proof_checkpoints": [
         "Y²=X² доказывает зависимость",
         "CF полусумма exp(-(s±t)²/2)"
@@ -355,12 +399,14 @@
         "нулевая covariance при невырожденных маргиналах не означает Gaussian vector"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "975915f2a55fb7e8e742d1127bc735eef11c993f1f42fb13692dabbac39da3b0",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-probability-024.json",
       "status": "verified",
-      "content_hash": "738285565ea8161112d486fb257f618ca9b108ec26f937710672f15f9432335b",
+      "content_hash": "125e35f128d9ce991604698410076d656b71ea62e559fb6a5230eb27dda9f33f",
       "proof_checkpoints": [
         "Поточечный минимум weighted densities",
         "логарифмический порог c"
@@ -370,12 +416,14 @@
         "граница нулевой массы"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "738285565ea8161112d486fb257f618ca9b108ec26f937710672f15f9432335b",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-probability-025.json",
       "status": "verified",
-      "content_hash": "e8cbdac500e4af6d52f3bd65c0158cc69c40dcd9234f08f7cb5dc3448f5e1e9c",
+      "content_hash": "4794b056c092ea2f52edd948ad5b8a5d9b02840eedd028e3b67667f3bc2baf6c",
       "proof_checkpoints": [
         "Условная ортогональность заменяет X на M",
         "равенство Коши требует c>0"
@@ -385,12 +433,14 @@
         "отрицательный c даёт минимум"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "e8cbdac500e4af6d52f3bd65c0158cc69c40dcd9234f08f7cb5dc3448f5e1e9c",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-probability-026.json",
       "status": "verified",
-      "content_hash": "c6c5609d2686e42068a72075915dc3f692fe35175cd5e678cf130539089f4e37",
+      "content_hash": "d04e154a0ab8137dab892c74918241fe523ab626d8faf2bb8d7584ac0492985c",
       "proof_checkpoints": [
         "CDF max=(m/theta)^n",
         "Var исправленной max theta²/[n(n+2)]"
@@ -400,12 +450,14 @@
         "alpha in (0,1) обеспечивает cAlpha>1"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "c6c5609d2686e42068a72075915dc3f692fe35175cd5e678cf130539089f4e37",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-probability-027.json",
       "status": "verified",
-      "content_hash": "07c80c9011e638cee6391f7e5c51797eb3315780c0dfcd4f4cd52cfaae3aae85",
+      "content_hash": "5790f6cc295b4cbda7451773ab2f07725b0d730e7aab79d2885b609b49a7ebd5",
       "proof_checkpoints": [
         "Отрицательные моменты Gamma(n,lambda)",
         "Var((n-1)/S)=lambda²/(n-2)"
@@ -414,12 +466,14 @@
         "n=2 несмещённость есть, второй момент бесконечен"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "07c80c9011e638cee6391f7e5c51797eb3315780c0dfcd4f4cd52cfaae3aae85",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-probability-028.json",
       "status": "verified",
-      "content_hash": "0b1a203b3f1663045afda41a88eea1e5359168774c9f8ea7cd6d4cbda0a0d99b",
+      "content_hash": "fb185a80931efa828023b8036ed86a3d8cbb60f96c15dc59da2b7433c9b88f45",
       "proof_checkpoints": [
         "Раскрытие суммы даёт sum XiYi-n XbarYbar",
         "внедиагональные пары факторизуются"
@@ -429,12 +483,14 @@
         "независимость внутри пары не нужна"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "0b1a203b3f1663045afda41a88eea1e5359168774c9f8ea7cd6d4cbda0a0d99b",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-probability-029.json",
       "status": "verified",
-      "content_hash": "0397bd3bdf24a66bce63734727ce6953ec6c619e283b2b5ea45219bbf995d668",
+      "content_hash": "cb61b78fa7322d307e0404b4a34515fe15e29dbe8726ee68c46e1547cedcfdb5",
       "proof_checkpoints": [
         "Медиана Beta(m+1,m+1)",
         "биномиальный стандартизованный порог стремится -z"
@@ -444,12 +500,14 @@
         "нечётное n"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "0397bd3bdf24a66bce63734727ce6953ec6c619e283b2b5ea45219bbf995d668",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-probability-030.json",
       "status": "verified",
-      "content_hash": "b78752366b2bc49e24bc6260ab8266a7b6ef566d08000ceded4ccd5500531e0e",
+      "content_hash": "e872ed15eea98d6949062b5947a217d35789ebe283c43c8d92a9e612a0733988",
       "proof_checkpoints": [
         "Условные моменты при независимой N",
         "контрпример N зависит от X2"
@@ -459,12 +517,14 @@
         "контрпример ES=1 против mu EN=3/4"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "b78752366b2bc49e24bc6260ab8266a7b6ef566d08000ceded4ccd5500531e0e",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-probability-031.json",
       "status": "verified",
-      "content_hash": "c2fe700a3855e95a3827ed274785981c3903683f00b2fe77526f5eda230e420e",
+      "content_hash": "70e655641414e758d4c4ac119200332f88aa525d214ba61303ac294e7af443a5",
       "proof_checkpoints": [
         "CF среднего e^-|t|",
         "положительный хвост вне любого конечного интервала"
@@ -474,12 +534,14 @@
         "EX неопределено, а не равно нулю"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "c2fe700a3855e95a3827ed274785981c3903683f00b2fe77526f5eda230e420e",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-probability-032.json",
       "status": "verified",
-      "content_hash": "901721c1b5670b136d62d7e1c4bff00a81b27c845db2f4a1e9c96be56057bd96",
+      "content_hash": "ef705482380708c23c609da2a3c4b0c9d4979a03017c7926db44858dfd1d2c9e",
       "proof_checkpoints": [
         "Борель–Кантелли разделяет b>1 и b<=1",
         "p-момент n^(ap-b)"
@@ -489,12 +551,14 @@
         "ap=b: момент ровно1"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "901721c1b5670b136d62d7e1c4bff00a81b27c845db2f4a1e9c96be56057bd96",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-probability-033.json",
       "status": "verified",
-      "content_hash": "6b30fdf4f612c6742fc6585580917498b006801d4d7a3853b135ae3d53ae09e2",
+      "content_hash": "28866e27f998921c6b1066edc093415e0de798845e6c727ea24646c7cbe9d42f",
       "proof_checkpoints": [
         "Логарифм произведения: сумма ошибки <=max p sum p",
         "предел Poisson CF"
@@ -504,12 +568,14 @@
         "комплексный log берётся около1"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "6b30fdf4f612c6742fc6585580917498b006801d4d7a3853b135ae3d53ae09e2",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-probability-034.json",
       "status": "verified",
-      "content_hash": "2bebc8c0f46974812b8f553d3d90cb722069f87778444c11b1321bee3d2f7d9c",
+      "content_hash": "a1ecc269587a4edf1ca111d6a10969317a3f330653a47380b0b0594536ecd8e2",
       "proof_checkpoints": [
         "Теорема среднего и tight Z_n убивают остаток",
         "Slutsky даёт v/m²"
@@ -519,12 +585,14 @@
         "v>0 для невырожденного предела"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "2bebc8c0f46974812b8f553d3d90cb722069f87778444c11b1321bee3d2f7d9c",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-probability-035.json",
       "status": "verified",
-      "content_hash": "93b2abf8924c7c706332caed33c6f0ea4b2dbc82751bd42ae1162e301932e76c",
+      "content_hash": "157c62ee227d92cb5c737fb14f7dcde3a4b156a2e29b5c60e79acd3231350822",
       "proof_checkpoints": [
         "CDF max и (1-e^-x/n)^n",
         "две оценки n^-epsilon и exp(-n^epsilon)"
@@ -534,12 +602,14 @@
         "отношение рассматривается n>1"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "93b2abf8924c7c706332caed33c6f0ea4b2dbc82751bd42ae1162e301932e76c",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-probability-036.json",
       "status": "verified",
-      "content_hash": "c30f11ffb95093ab26e487b59ebe649e17a55038d0459fcccee374f563b6ab23",
+      "content_hash": "b53055768435c7860abd2bac4516ac0767cddfd4fb06cbc7a3ed8a52f4d2664c",
       "proof_checkpoints": [
         "Разбиение по Z>theta EZ и Коши",
         "ES²=(np)²+np(1-p)"
@@ -549,12 +619,14 @@
         "n=1 граница точна p"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "c30f11ffb95093ab26e487b59ebe649e17a55038d0459fcccee374f563b6ab23",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-probability-037.json",
       "status": "verified",
-      "content_hash": "1a832d289676fa2dfb09e7c11110420567d3a80124edaff3b6128d84f0b6d8d0",
+      "content_hash": "81c88af810e38bd2d8b5eb3f6480627f54be646a467c7de2bf03ea6fd0e12a93",
       "proof_checkpoints": [
         "Четыре атома дают Frechet interval",
         "rho=-1 iff q=1-p"
@@ -563,12 +635,14 @@
         "p,q in (0,1) обеспечивают denominator>0"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "1a832d289676fa2dfb09e7c11110420567d3a80124edaff3b6128d84f0b6d8d0",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-probability-038.json",
       "status": "verified",
-      "content_hash": "425d5764faaf8f54ea70a0ae809c1808f9760dec91c710608eb413cf488466fd",
+      "content_hash": "5b24dddc7a82189f1582efc96fc58ec375b5c39777944b5e0113bb241ae06e7f",
       "proof_checkpoints": [
         "Chernoff h выпукла, e^t*=a(1-p)/(p(1-a))",
         "h(t*)=-D"
@@ -578,12 +652,14 @@
         "a>p обеспечивает t*>0"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "425d5764faaf8f54ea70a0ae809c1808f9760dec91c710608eb413cf488466fd",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-probability-039.json",
       "status": "verified",
-      "content_hash": "bc0c744326276bb0292cf71af2207563c15154eacb3839110d814054ee3fc859",
+      "content_hash": "ff290904a1fb556453a24d8d8fc893c53f417552656fe0d993b0d119ba421603",
       "proof_checkpoints": [
         "Poisson thinning mass факторизуется",
         "обратный law Bin(n,alpha/(alpha+beta))"
@@ -595,12 +671,14 @@
       "corrections": [
         "Условие согласовано с критерием об условной зависимости; оговорено n=0"
       ],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "bc0c744326276bb0292cf71af2207563c15154eacb3839110d814054ee3fc859",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "file": "problems/shad-probability-040.json",
       "status": "verified",
-      "content_hash": "1a60a1a624dbfeb4ea49275cf1efe3e7d1b6d1398a8cb33d12bc40b4d6d38424",
+      "content_hash": "e9117c0b458003a4d178a23673c09c66b0f2b29a343f9b6f14f9b7840cd88039",
       "proof_checkpoints": [
         "Абсолютная сходимость для каждого набора знаков",
         "двоичные цилиндры дают uniform"
@@ -610,7 +688,9 @@
         "t=0 непрерывное значение1"
       ],
       "corrections": [],
-      "executed_checks": []
+      "executed_checks": [],
+      "mathematical_review_content_hash": "1a60a1a624dbfeb4ea49275cf1efe3e7d1b6d1398a8cb33d12bc40b4d6d38424",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     }
   ]
 }

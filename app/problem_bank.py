@@ -22,6 +22,8 @@ class ProblemBank:
         self.path = str(path)
         self.problems_dir = Path(problems_dir)
         self.public_labels = {}
+        self._presentation_stamp = None
+        self._presentation_texts = {}
         with self.connection() as db:
             db.executescript("""
                 CREATE TABLE IF NOT EXISTS bank_problems (
@@ -97,6 +99,25 @@ class ProblemBank:
         with self.connection() as db:
             rows, seen = self._rows(db, participant_keys, topic)
             return [{"id": r[0], "topic": r[1], "topic_label": r[2], "subtopic_label": self.public_labels.get(r[0], ""), "version": r[3], "title": json.loads(r[4])["title"], "seen": r[0] in seen} for r in rows]
+
+    def presentation_text(self, text):
+        """Exact, reviewed typography revisions for immutable historical snapshots.
+
+        Never infer mathematical notation or change the text sent to the grader.
+        The private mapping is only applied after normal statement access checks.
+        """
+        path = self.problems_dir / "presentation" / "typography.json"
+        try:
+            stat = path.stat()
+            stamp = (stat.st_mtime_ns, stat.st_size)
+            if stamp != self._presentation_stamp:
+                payload = json.loads(path.read_text(encoding="utf-8"))
+                texts = payload.get("texts", {}) if isinstance(payload, dict) else {}
+                self._presentation_texts = {key: value for key, value in texts.items() if isinstance(value, str)}
+                self._presentation_stamp = stamp
+        except (OSError, ValueError, AttributeError):
+            return text
+        return self._presentation_texts.get(hashlib.sha256(text.encode()).hexdigest(), text)
 
     def topics(self, participant_keys=()):
         result = {}

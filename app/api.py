@@ -59,6 +59,12 @@ def preferred_model(request: Request) -> str:
 
 def decorate(request: Request, session: dict, value: str) -> dict:
     result = snapshot(session, value)
+    if result.get("problem") and hasattr(request.app.state, "problem_bank"):
+        # Finished snapshots may reference the stored dict; copy before presentation.
+        result["problem"] = dict(result["problem"])
+        for field in ("statement", "reference_solution"):
+            if field in result["problem"]:
+                result["problem"][field] = request.app.state.problem_bank.presentation_text(result["problem"][field])
     result["has_api_key"] = bool(provider_key(request))
     if session["phase"] == "lobby" and hasattr(request.app.state, "problem_bank"):
         result["available_topics"] = request.app.state.problem_bank.topics([p["identity"] for p in session["players"]])

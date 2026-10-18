@@ -10,7 +10,9 @@
       "reviewer": "shad_admissions_research",
       "review_scope": "statement, proof, edge conditions, scoring milestones",
       "note": "Равномерный логарифмический остаток суммируется в O(n^-2); коэффициент 1/(3n) проверен.",
-      "content_sha256": "8a5c40b5054689342991e0af3b6aaf1b7d68f06ecaaa418e17b791d1389bd55b"
+      "content_sha256": "a26df9f50081773cabac6b8c4bb71a53a7c3f4c5605975d3ec2442823df4a7a3",
+      "mathematical_review_content_hash": "8a5c40b5054689342991e0af3b6aaf1b7d68f06ecaaa418e17b791d1389bd55b",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "id": "shad-analysis-002",
@@ -18,7 +20,9 @@
       "reviewer": "shad_admissions_research",
       "review_scope": "statement, proof, edge conditions, scoring milestones",
       "note": "Положительная рекурсия убывает к нулю; разности обратных →1/2 и Чезаро дают nx_n→2.",
-      "content_sha256": "710cfadbef1f8cad35af750c75b1cabe0013e5bc29c6ecd427bd7d861fcd6eec"
+      "content_sha256": "253d270b3f0ca08f8cced0e9b91c40458a217db58e88fa9b67f4e8af8f571497",
+      "mathematical_review_content_hash": "710cfadbef1f8cad35af750c75b1cabe0013e5bc29c6ecd427bd7d861fcd6eec",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "id": "shad-analysis-003",
@@ -26,7 +30,9 @@
       "reviewer": "shad_admissions_research",
       "review_scope": "statement, proof, edge conditions, scoring milestones",
       "note": "Точная ошибка Ньютона и преобразование q→q² верны; исправлен ошибочный заголовок про кратный корень.",
-      "content_sha256": "2f8ef7156aee033cd93ca56208ef99d0512019e25ed2b80f660e72683a1d1297"
+      "content_sha256": "7dea7796272c10e09a279d29c0f8dd67390b19955f624ad695cc52f595a8f757",
+      "mathematical_review_content_hash": "2f8ef7156aee033cd93ca56208ef99d0512019e25ed2b80f660e72683a1d1297",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "id": "shad-analysis-004",
@@ -34,7 +40,9 @@
       "reviewer": "shad_admissions_research",
       "review_scope": "statement, proof, edge conditions, scoring milestones",
       "note": "Масштаб sqrt(n), мажоранта exp(-t²) и гауссов хвост корректны.",
-      "content_sha256": "5328f84c515bf74a89e35166bf37833db9aaab8deb806363fb6ccce6654b39b5"
+      "content_sha256": "f686d6dbd6dd6ee53eab8cc1433fbb0ce9c8f33b74bfaadf5cc9b5c84fa284cf",
+      "mathematical_review_content_hash": "5328f84c515bf74a89e35166bf37833db9aaab8deb806363fb6ccce6654b39b5",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "id": "shad-analysis-005",
@@ -42,7 +50,9 @@
       "reviewer": "shad_admissions_research",
       "review_scope": "statement, proof, edge conditions, scoring milestones",
       "note": "Телескопирование хвоста разностей даёт +1/(2n), знак и индекс проверены.",
-      "content_sha256": "6a05037270b98c273ae2715e7b19bf155b024ea62941705f4b79a761952186b3"
+      "content_sha256": "6f06ed19b94050cf272e5179d5b35a955523e857a24dc37adf5822acb99169c5",
+      "mathematical_review_content_hash": "6a05037270b98c273ae2715e7b19bf155b024ea62941705f4b79a761952186b3",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "id": "shad-analysis-006",
@@ -58,7 +68,9 @@
       "reviewer": "shad_admissions_research",
       "review_scope": "statement, proof, edge conditions, scoring milestones",
       "note": "Масса пика n²xe^-nx→дельта в нуле; отсутствие L1-мажоранты следует из предела массы1.",
-      "content_sha256": "5c0fce5d019f402ae33a23055bb78d79e238c3577299f02d41ef2b0b40196f58"
+      "content_sha256": "a61aeedd282c412d2fb4ec2a9eb669df25426f9b44f9a12b48753349b92820af",
+      "mathematical_review_content_hash": "5c0fce5d019f402ae33a23055bb78d79e238c3577299f02d41ef2b0b40196f58",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "id": "shad-analysis-008",
@@ -66,7 +78,9 @@
       "reviewer": "shad_admissions_research",
       "review_scope": "statement, proof, edge conditions, scoring milestones",
       "note": "Верхняя ограниченность превращается в двустороннюю у нуля и даёт непрерывность аддитивной функции.",
-      "content_sha256": "acd20842290c269f7c1c251931ecff5e5d9b44eeb9abe545e4c2954d401e4869"
+      "content_sha256": "9d6413ecee90ea0380120f8e7d4a40273a1362b9b3c8009a0e85c690575a71ec",
+      "mathematical_review_content_hash": "acd20842290c269f7c1c251931ecff5e5d9b44eeb9abe545e4c2954d401e4869",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "id": "shad-analysis-009",
@@ -74,7 +88,9 @@
       "reviewer": "shad_admissions_research",
       "review_scope": "statement, proof, edge conditions, scoring milestones",
       "note": "Единая ширина отделённых пиков противоречит интегрируемости; треугольные узкие пики корректны.",
-      "content_sha256": "7f92428748934a976c77358ebc92e1adc02f2129eb26b6d45d494aefe1e5549e"
+      "content_sha256": "81024c7da119a647f444af42a47692c259bbdd63e076a2fe8bb3d1bbc5feb209",
+      "mathematical_review_content_hash": "7f92428748934a976c77358ebc92e1adc02f2129eb26b6d45d494aefe1e5549e",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "id": "shad-analysis-010",
@@ -82,7 +98,9 @@
       "reviewer": "shad_admissions_research",
       "review_scope": "statement, proof, edge conditions, scoring milestones",
       "note": "Единая нормировка ядра и хвост дают равномерность; липшицева оценка L/(n+1).",
-      "content_sha256": "096cda369f4c78ba8b765fecf88063a0f14bf8944965cd6ed75a9c8649e38fb8"
+      "content_sha256": "34be45934e1e0e2ede88f03c0abcdd95b108cc95e4a35c438fcf94ceeef6e92b",
+      "mathematical_review_content_hash": "096cda369f4c78ba8b765fecf88063a0f14bf8944965cd6ed75a9c8649e38fb8",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "id": "shad-analysis-011",
@@ -90,7 +108,9 @@
       "reviewer": "shad_admissions_research",
       "review_scope": "statement, proof, edge conditions, scoring milestones",
       "note": "Отрицательная полуось один корень; положительная минимум e²/4; касание в2 кратности2.",
-      "content_sha256": "14e26665e2232d8ae877e19232d93c2b35475906440ab78a102e1ac1e578bf16"
+      "content_sha256": "f1fabcf7b87912e9f379c01a8c870f4e926efacf7c778b7e5ad9dab896bc16fa",
+      "mathematical_review_content_hash": "14e26665e2232d8ae877e19232d93c2b35475906440ab78a102e1ac1e578bf16",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "id": "shad-analysis-012",
@@ -98,7 +118,9 @@
       "reviewer": "shad_admissions_research",
       "review_scope": "statement, proof, edge conditions, scoring milestones",
       "note": "Компактность C1-производной даёт q<1; случай q=0 отдельно обработан.",
-      "content_sha256": "bacca8e68cf08142d286f5dac1e28b6bf649df538416976e312f87acf08695d1"
+      "content_sha256": "9bc2f3d8d358dd406b882d97ebc0b73b33f3d5260491a69a0d11c9448c2ea11c",
+      "mathematical_review_content_hash": "bacca8e68cf08142d286f5dac1e28b6bf649df538416976e312f87acf08695d1",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "id": "shad-analysis-013",
@@ -106,7 +128,9 @@
       "reviewer": "shad_admissions_research",
       "review_scope": "statement, proof, edge conditions, scoring milestones",
       "note": "Вычитание mx²/2 и жёсткость хорды верны, все случаи равенства указаны.",
-      "content_sha256": "f2d5e966a82fe7fc005c2e13650ec40e99fff8c07eebe584f9e4601b65228bf1"
+      "content_sha256": "b5513974f3a6ef4f270c24cf4be689f6552100dc45f89f530028e9483e28d29a",
+      "mathematical_review_content_hash": "f2d5e966a82fe7fc005c2e13650ec40e99fff8c07eebe584f9e4601b65228bf1",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "id": "shad-analysis-014",
@@ -114,7 +138,9 @@
       "reviewer": "shad_admissions_research",
       "review_scope": "statement, proof, edge conditions, scoring milestones",
       "note": "Интегрирование с K=x(1-x)/2 даёт правильный знак и точную константу1/12.",
-      "content_sha256": "6b0b3484aefb3d51a8cd1d58a3c327bd4b8ac680d9775d606109ab8e222af213"
+      "content_sha256": "745a45c87cc1cbf307aea1ceaa62b29a6ea296a3eee0b5e1dbdea16117af0ecc",
+      "mathematical_review_content_hash": "6b0b3484aefb3d51a8cd1d58a3c327bd4b8ac680d9775d606109ab8e222af213",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "id": "shad-analysis-015",
@@ -122,7 +148,9 @@
       "reviewer": "shad_admissions_research",
       "review_scope": "statement, proof, edge conditions, scoring milestones",
       "note": "Сильная выпуклость даёт коэрцитивность и обе оценки зазора риска.",
-      "content_sha256": "624997cc821688d91d20c5456e9c77fb24d3e6f08ec264771632466513212178"
+      "content_sha256": "1a379b04b3db823e31b60d655986660c3a7624f00b4f77c9d4e8478e5ad7cb0b",
+      "mathematical_review_content_hash": "624997cc821688d91d20c5456e9c77fb24d3e6f08ec264771632466513212178",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "id": "shad-analysis-016",
@@ -130,7 +158,9 @@
       "reviewer": "shad_admissions_research",
       "review_scope": "statement, proof, edge conditions, scoring milestones",
       "note": "Производная по параметру и J(a)=π/[2(1+a)] корректны; численно проверены пять параметров.",
-      "content_sha256": "43fe42dcacca914a5a1fecbe0c1bb72f92771969c11b7cd69c295a58f0a3b9fe"
+      "content_sha256": "b634d99a63909b640bb73a4777545903337e49a6ed3ccd67469127e74cd78d22",
+      "mathematical_review_content_hash": "43fe42dcacca914a5a1fecbe0c1bb72f92771969c11b7cd69c295a58f0a3b9fe",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "id": "shad-analysis-017",
@@ -138,7 +168,9 @@
       "reviewer": "shad_admissions_research",
       "review_scope": "statement, proof, edge conditions, scoring milestones",
       "note": "Фруллани выведен Тонелли для неотрицательного параметрического интеграла, оба порядка a,b.",
-      "content_sha256": "d3dd605f0dcb28cd498b528e78234a9efc79a19eed93bb07f952e706c241ec22"
+      "content_sha256": "02a9ebe4eabf20a05de33bef3b5b07be6febc6e5d7c826bc7c63d4ff0fe8d381",
+      "mathematical_review_content_hash": "d3dd605f0dcb28cd498b528e78234a9efc79a19eed93bb07f952e706c241ec22",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "id": "shad-analysis-018",
@@ -146,7 +178,9 @@
       "reviewer": "shad_admissions_research",
       "review_scope": "statement, proof, edge conditions, scoring milestones",
       "note": "Тангенциальная замена даёт Kprime=π/(1+a); численно проверены пять параметров, включая1.",
-      "content_sha256": "455246819c10becd8cecf6c3d8dab0db9d0302bc2269d0c773abaa768ac8433f"
+      "content_sha256": "96368eb8570fc3b95c9bea2a165fce67f508869a75e54bb8bce4860cd41f1a9b",
+      "mathematical_review_content_hash": "455246819c10becd8cecf6c3d8dab0db9d0302bc2269d0c773abaa768ac8433f",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "id": "shad-analysis-019",
@@ -154,7 +188,9 @@
       "reviewer": "shad_admissions_research",
       "review_scope": "statement, proof, edge conditions, scoring milestones",
       "note": "Хвост ≤2R^-p, абсолютная сходимость ровно p>1; интервальная нижняя оценка верна.",
-      "content_sha256": "4a759190720780fe7225eb42881a588fdc5272ca2ce5900568aee8f5823f838b"
+      "content_sha256": "c35b72871f8bf1bc70813e4124965d6c2241c365daa19ceb91a7f64db6fb0c11",
+      "mathematical_review_content_hash": "4a759190720780fe7225eb42881a588fdc5272ca2ce5900568aee8f5823f838b",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "id": "shad-analysis-020",
@@ -162,7 +198,9 @@
       "reviewer": "shad_admissions_research",
       "review_scope": "statement, proof, edge conditions, scoring milestones",
       "note": "Фубини и beta-интеграл дают a^(2n)/(2n)! с правильной базой.",
-      "content_sha256": "77e4d088c69e5972f42f65b1deb22474c07d3bdf1f1497719390dae23bf5b1f4"
+      "content_sha256": "b9ec2563b88ca18acc357c51dc7d47ffe1c33b34300b34abd78921f692cb3ce7",
+      "mathematical_review_content_hash": "77e4d088c69e5972f42f65b1deb22474c07d3bdf1f1497719390dae23bf5b1f4",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "id": "shad-analysis-021",
@@ -170,7 +208,9 @@
       "reviewer": "shad_admissions_research",
       "review_scope": "statement, proof, edge conditions, scoring milestones",
       "note": "Сумма 1+(1/x-1)log(1-x), значения0,1,-1 и равномерность проверены.",
-      "content_sha256": "4819119075b0718e445452428e5ad55c2d6ca3c68c10d09cf926885e210fab55"
+      "content_sha256": "6f23c683a6b40c7f36919eae9ed38faef790092e81820f1067733cf0873c743c",
+      "mathematical_review_content_hash": "4819119075b0718e445452428e5ad55c2d6ca3c68c10d09cf926885e210fab55",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "id": "shad-analysis-022",
@@ -178,7 +218,9 @@
       "reviewer": "shad_admissions_research",
       "review_scope": "statement, proof, edge conditions, scoring milestones",
       "note": "Полная карта p,q: p>1 или p=1,q>1; сравнения степеней верны.",
-      "content_sha256": "f1126fa4a5587d02db0a7b54b32f3dcde8f606e80dfd9005fa05212ed30ebff5"
+      "content_sha256": "2ff5b489d688936e121c0bbf3de2b395892b84f5ec5d74d5652e5dabc686bb8a",
+      "mathematical_review_content_hash": "f1126fa4a5587d02db0a7b54b32f3dcde8f606e80dfd9005fa05212ed30ebff5",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "id": "shad-analysis-023",
@@ -186,7 +228,9 @@
       "reviewer": "shad_admissions_research",
       "review_scope": "statement, proof, edge conditions, scoring milestones",
       "note": "Дирихле равномерен вдали от нулевого угла; блок n=N..2N при x=1/N опровергает глобальную равномерность.",
-      "content_sha256": "e1d062c1d2ce291503a60f2177b7762d642ab118810b90ccc9ed16696a3cc02a"
+      "content_sha256": "8eb8821b5b1cd9174146bb0837949a4fdd5ba896e0aa8043efe1762b3ec79b83",
+      "mathematical_review_content_hash": "e1d062c1d2ce291503a60f2177b7762d642ab118810b90ccc9ed16696a3cc02a",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "id": "shad-analysis-024",
@@ -194,7 +238,9 @@
       "reviewer": "shad_admissions_research",
       "review_scope": "statement, proof, edge conditions, scoring milestones",
       "note": "Неотрицательность позволяет перестановку без кругового предположения сходимости.",
-      "content_sha256": "b6abe56a0a64bc15daf4550f04415306abb01e05b5743f9d7e2c11653229b769"
+      "content_sha256": "f4d24298170363a50241692d13255c0ce76ae87bb63ac7a829a9390e2be426d7",
+      "mathematical_review_content_hash": "b6abe56a0a64bc15daf4550f04415306abb01e05b5743f9d7e2c11653229b769",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "id": "shad-analysis-025",
@@ -202,7 +248,9 @@
       "reviewer": "shad_admissions_research",
       "review_scope": "statement, proof, edge conditions, scoring milestones",
       "note": "Лакунарный ряд равномерен на [-1,1]; разностное отношение при1 неограниченно снизу.",
-      "content_sha256": "a3a8e9f51735862418cfa3a19152ba8193d2177c73509c55a498a0c4434ff6a8"
+      "content_sha256": "2ae3c51b5521b0e4ec46c69123d1cfed75612bb27db1045693d73ada0aa06fa9",
+      "mathematical_review_content_hash": "a3a8e9f51735862418cfa3a19152ba8193d2177c73509c55a498a0c4434ff6a8",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "id": "shad-analysis-026",
@@ -210,7 +258,9 @@
       "reviewer": "shad_admissions_research",
       "review_scope": "statement, proof, edge conditions, scoring milestones",
       "note": "Кривая y=x³ даёт разрыв1/2; все направленные производные0, полный дифференциал невозможен.",
-      "content_sha256": "22f30f6f465bbfd8dce9d4bae2f11d9c1011c989e176230c49ae936a8c9079a6"
+      "content_sha256": "173441cdf521ebc62e94eb813ddcf291901e55cf0553dc2ff75f7adf73a94036",
+      "mathematical_review_content_hash": "22f30f6f465bbfd8dce9d4bae2f11d9c1011c989e176230c49ae936a8c9079a6",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "id": "shad-analysis-027",
@@ -218,7 +268,9 @@
       "reviewer": "shad_admissions_research",
       "review_scope": "statement, proof, edge conditions, scoring milestones",
       "note": "Радиальная оценка доказывает непрерывность; диагональное отношение1/2 исключает дифференцируемость.",
-      "content_sha256": "b974d8713b38145af99dcd479d00e2b58c97255b96f36edc93d329f04757c6e6"
+      "content_sha256": "dd6623812da5c71c2dc743eaf15ca8f57683c267b9713360d8c61344b19602e7",
+      "mathematical_review_content_hash": "b974d8713b38145af99dcd479d00e2b58c97255b96f36edc93d329f04757c6e6",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "id": "shad-analysis-028",
@@ -226,7 +278,9 @@
       "reviewer": "shad_admissions_research",
       "review_scope": "statement, proof, edge conditions, scoring milestones",
       "note": "Разложение quartic корректно разделяет a>-1, a=-1, a<-1 и строгий/нестрогий минимум.",
-      "content_sha256": "7dacc484c4a4ca2e49cbb68ef11b329feb37bf02483ac8bd8f0cf30badb39197"
+      "content_sha256": "596ce688a76d5b4d326d89818d8b36dc10271f5054fe748ab6c7f252176dd33a",
+      "mathematical_review_content_hash": "7dacc484c4a4ca2e49cbb68ef11b329feb37bf02483ac8bd8f0cf30badb39197",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "id": "shad-analysis-029",
@@ -234,7 +288,9 @@
       "reviewer": "shad_admissions_research",
       "review_scope": "statement, proof, edge conditions, scoring milestones",
       "note": "Неявная производная -1 и вторая -2/3 верны; добавлена явная положительная ветвь квадратного корня.",
-      "content_sha256": "cffbf4c5d9369ed22df45fa10fc5ba1e14f5850b79f790d3c1f138f3642ab717"
+      "content_sha256": "d818ba504e41838a37e6e6184686af2942002bd1e66bbf1e9f8d410902cc1f94",
+      "mathematical_review_content_hash": "cffbf4c5d9369ed22df45fa10fc5ba1e14f5850b79f790d3c1f138f3642ab717",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "id": "shad-analysis-030",
@@ -242,7 +298,9 @@
       "reviewer": "shad_admissions_research",
       "review_scope": "statement, proof, edge conditions, scoring milestones",
       "note": "Замена (u,v)=(x+y,x/(x+y)) биективна, якобиан |J|=u и ответ e²/3.",
-      "content_sha256": "b977f1a696e6579de2a5f3e9a55fb90f4a8e1d5b8de93d916d70420d5cb84193"
+      "content_sha256": "6b75801391ac648557d14ad80da392b8e24ec4a78c5bb826bf28a20fd0f3ad67",
+      "mathematical_review_content_hash": "b977f1a696e6579de2a5f3e9a55fb90f4a8e1d5b8de93d916d70420d5cb84193",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "id": "shad-analysis-031",
@@ -250,7 +308,9 @@
       "reviewer": "shad_admissions_research",
       "review_scope": "statement, proof, edge conditions, scoring milestones",
       "note": "AM-GM даёт ±1 и полные восемь знаковых точек сферы.",
-      "content_sha256": "4d4726c1c7b4e2b23418152710a78607262f0c2d8b8c88a8e6c1640c36db10e0"
+      "content_sha256": "e236625d738a90b4bf9c509ea1017351a7d30a6997a6169e6681b79f7b46dcad",
+      "mathematical_review_content_hash": "4d4726c1c7b4e2b23418152710a78607262f0c2d8b8c88a8e6c1640c36db10e0",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "id": "shad-analysis-032",
@@ -258,7 +318,9 @@
       "reviewer": "shad_admissions_research",
       "review_scope": "statement, proof, edge conditions, scoring milestones",
       "note": "Взвешенное log-неравенство доказывает глобальный минимум и единственность на открытом симплексе.",
-      "content_sha256": "b081761c63b9771a8020d1d7d40cbb052a13b29f100e617e19bd8b87638fa082"
+      "content_sha256": "912ccbab10d2c6fc7cafa25df8f9d60213b5d3498a7f585fb7364fa81ce4cf3c",
+      "mathematical_review_content_hash": "b081761c63b9771a8020d1d7d40cbb052a13b29f100e617e19bd8b87638fa082",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "id": "shad-analysis-033",
@@ -266,7 +328,9 @@
       "reviewer": "shad_admissions_research",
       "review_scope": "statement, proof, edge conditions, scoring milestones",
       "note": "Сведение к t=x²≥0 корректно учитывает ветвление при b=1/2 и обе ближайшие точки.",
-      "content_sha256": "4ec1c96c303aeafb72bdc79989e6884f1bc2726d58b58a4356dde4accd0ca26d"
+      "content_sha256": "3ce28813b90fa7eb41403296d55acf9f2817f8586066c69a0f1b23ae9b6800c3",
+      "mathematical_review_content_hash": "4ec1c96c303aeafb72bdc79989e6884f1bc2726d58b58a4356dde4accd0ca26d",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "id": "shad-analysis-034",
@@ -274,7 +338,9 @@
       "reviewer": "shad_admissions_research",
       "review_scope": "statement, proof, edge conditions, scoring milestones",
       "note": "Невырожденная замена s,d даёт границу λ=-1/2; линейная неограниченность на границе учтена.",
-      "content_sha256": "b6d7a94c14cf6959b3b54a681d48a6d67b3f82094a523a3c287fe2e678ff1e21"
+      "content_sha256": "d50f07094a53132a53ad7603b2e0ee64b760a4a5bd8ff199d1df88a1ccaac500",
+      "mathematical_review_content_hash": "b6d7a94c14cf6959b3b54a681d48a6d67b3f82094a523a3c287fe2e678ff1e21",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "id": "shad-analysis-035",
@@ -282,7 +348,9 @@
       "reviewer": "shad_admissions_research",
       "review_scope": "statement, proof, edge conditions, scoring milestones",
       "note": "Интегральный Коши даёт1/12 и все квадратичные случаи равенства.",
-      "content_sha256": "c5aa72dd86cf788828c980d48a18b7d5a2df32127cc244208026b472a5cce90f"
+      "content_sha256": "f1902490feb5af85a624e48bad083dc6558a7462d30b0f252bed307929790a40",
+      "mathematical_review_content_hash": "c5aa72dd86cf788828c980d48a18b7d5a2df32127cc244208026b472a5cce90f",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "id": "shad-analysis-036",
@@ -290,7 +358,9 @@
       "reviewer": "shad_admissions_research",
       "review_scope": "statement, proof, edge conditions, scoring milestones",
       "note": "Фурье-нормировка a0=2π²/3,an=4(-1)^n/n² и подстановкаπ корректны.",
-      "content_sha256": "d57aede901a01e16a722f65fe0aa9bf392d1b70542da387a2d4c5d66b565564b"
+      "content_sha256": "13773c4af382e4582b1f3f7bba00afa03248fb2defa3c61574dd9f3c5024d64e",
+      "mathematical_review_content_hash": "d57aede901a01e16a722f65fe0aa9bf392d1b70542da387a2d4c5d66b565564b",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "id": "shad-analysis-037",
@@ -298,7 +368,9 @@
       "reviewer": "shad_admissions_research",
       "review_scope": "statement, proof, edge conditions, scoring milestones",
       "note": "Пуассоновское ядро и интеграл квадрата2π(1+r²)/(1-r²) корректны и при отрицательном r.",
-      "content_sha256": "6f1eb1ce3cfb80b2a6b3916ea08938a48a7f405e889f2acd44cede63e1249e23"
+      "content_sha256": "c088c90ee721e39cc772043bb05cfb72d41a6075065855fac077ea76eea2f026",
+      "mathematical_review_content_hash": "6f1eb1ce3cfb80b2a6b3916ea08938a48a7f405e889f2acd44cede63e1249e23",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "id": "shad-analysis-038",
@@ -306,7 +378,9 @@
       "reviewer": "shad_admissions_research",
       "review_scope": "statement, proof, edge conditions, scoring milestones",
       "note": "Ортогональная проекция даёт (a,b,c)=(π²/3,-4,0), ошибка8π^5/45-16π.",
-      "content_sha256": "ce83488b58489a41307f5df57f326354e67e792cc967f8bde33625cb811c4d6a"
+      "content_sha256": "4049d5c530a1cac75f0e4644d466a790c7bc17141c85b853c5f881f74e39d755",
+      "mathematical_review_content_hash": "ce83488b58489a41307f5df57f326354e67e792cc967f8bde33625cb811c4d6a",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "id": "shad-analysis-039",
@@ -314,7 +388,9 @@
       "reviewer": "shad_admissions_research",
       "review_scope": "statement, proof, edge conditions, scoring milestones",
       "note": "Сдвиг коэффициентов обнуляет частоты вне3Z; абсолютная сходимость и Фейер обосновывают обратное.",
-      "content_sha256": "dd0611f10a9ee1cc9021187a36e76f36c80a9ed98686270bd298c7608f8d226e"
+      "content_sha256": "dcdbfe0c537efb2058866914c353f7a4341df69dfe9e45d13cdf712af2a4fcb0",
+      "mathematical_review_content_hash": "dd0611f10a9ee1cc9021187a36e76f36c80a9ed98686270bd298c7608f8d226e",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     },
     {
       "id": "shad-analysis-040",
@@ -322,7 +398,9 @@
       "reviewer": "shad_admissions_research",
       "review_scope": "statement, proof, edge conditions, scoring milestones",
       "note": "Конечная двойная сумма нормирует ядро Фейера; единая хвостовая оценка корректна.",
-      "content_sha256": "213f24682cdef6a7ffb34c1f9ea5fff4dfda9ed27925cbe39100de9cae4b0a63"
+      "content_sha256": "3a3510862d83f732cef2b0f8a816cbee290ee4c5f6a86e24f80992b38cc9b48f",
+      "mathematical_review_content_hash": "213f24682cdef6a7ffb34c1f9ea5fff4dfda9ed27925cbe39100de9cae4b0a63",
+      "typography_review": "See typography.json: notation-only revision, mathematical review retained."
     }
   ],
   "hash_algorithm": {
