@@ -23,6 +23,9 @@ let solutionImages;
 let restoringImages = false;
 const appealDrafts = new Map();
 const appealRequests = new Set();
+function appealStorageKey(submissionId){return `math-appeal:${state.me}:${state.code}:${state.round}:${submissionId}`;}
+function savedAppealReason(submissionId){try{return localStorage.getItem(appealStorageKey(submissionId))||'';}catch{return '';}}
+function hasUnsentAppeal(){return (me()?.submissions||[]).some(work=>!['pending','graded'].includes(work.appeal?.status)&&(appealDrafts.get(`${state.code}:${state.round}:${work.id}`)?.reason||savedAppealReason(work.id)).trim());}
 let imageBackupFailed = false;
 let acceptedPayload = null;
 let keyPrompted = false;
@@ -344,8 +347,13 @@ function controls() {
   $("chat-input").disabled = !!state.closed_at;
   $("chat-form").querySelector("button").disabled = !!state.closed_at || chatSending || !$("chat-input").value.trim();
   $("chat-input").placeholder = state.closed_at?"Комната закрыта":"Сообщение сопернику…";
-  $("rematch").disabled = !!state.closed_at || actionBusy || state.phase !== "finished" || !!state.appeals_pending;
+  const unsentAppeal=state.phase==='finished'&&hasUnsentAppeal();
+  $("rematch").disabled = !!state.closed_at || actionBusy || state.phase !== "finished" || !!state.appeals_pending || (unsentAppeal&&!p.next_round_ready);
   $("rematch").title = state.appeals_pending ? "Дождитесь рассмотрения апелляции" : "";
+  $("rematch").textContent = p.next_round_ready ? "Отменить готовность" : "Следующий раунд";
+  const nextOpponent=state.players.find(player=>player.id!==state.me);
+  $('rematch-hint').textContent=state.appeals_pending?'Дождитесь решения по апелляции. Затем оба участника подтвердят переход заново.':p.next_round_ready?'Вы готовы. Ждём подтверждения соперника.':nextOpponent?.next_round_ready?'Соперник готов. Следующий раунд начнётся после вашего подтверждения.':'Следующий раунд начнётся после подтверждения обоих участников.';
+  if(unsentAppeal)$('rematch-hint').textContent='Есть черновик апелляции. Отправьте его или очистите текст перед переходом.';
   let hint = "";
   if (state.phase === "grading") hint = "Ждём окончания проверки…";
   else if (p.finalized && pending) hint = `Завершено · проверяется попыток: ${pending}. Оценка предварительная.`;
@@ -492,7 +500,7 @@ function buildAppealRegion(submission,player,currentRound) {
   if(!appeal&&!canSubmit)return null;
   const key=`${state.code}:${state.round}:${submission.id}`;
   let draft=appealDrafts.get(key);
-  if(!draft){draft={reason:appeal?.reason||'',requestId:null,open:false};appealDrafts.set(key,draft);}
+  if(!draft){draft={reason:appeal?.reason||(canSubmit?savedAppealReason(submission.id):''),requestId:null,open:false};appealDrafts.set(key,draft);}
   const region=document.createElement('section');region.className='attempt-appeal-region';region.id=`appeal-region-${submission.id}`;region.hidden=!draft.open;
   const heading=document.createElement('h3');heading.id=`appeal-heading-${submission.id}`;heading.tabIndex=-1;heading.textContent=`Апелляция к работе №${player.submissions.findIndex(item=>item.id===submission.id)+1}`;region.setAttribute('aria-labelledby',heading.id);region.append(heading);const context=document.createElement('p');context.className='appeal-context';context.textContent=`Работа отправлена ${timeText(submission.submitted_at)}. Исходный текст показан в разделе работы выше.`;region.append(context);
   if(appeal?.reason&&!canSubmit){const argument=document.createElement('section');argument.className='appeal-argument';const label=document.createElement('h4');label.textContent=player.id===state.me?'Ваш аргумент':'Аргумент соперника';const reason=document.createElement('p');reason.textContent=appeal.reason;argument.append(label,reason);region.append(argument);}
@@ -516,7 +524,16 @@ function buildAppealRegion(submission,player,currentRound) {
     const warning=document.createElement('p');warning.className='appeal-warning';warning.id=`appeal-warning-${submission.id}`;warning.textContent='Одна апелляция на задачу за раунд. Если оценку не повысят — минус 1 балл, даже ниже нуля. Проверка оплачивается вашим ключом.';reason.setAttribute('aria-describedby',warning.id);
     const error=document.createElement('p');error.className='error';error.setAttribute('role','alert');
     const button=document.createElement('button');button.type='submit';button.textContent=appealRequests.has(key)?'Отправляется…':'Отправить апелляцию';button.disabled=appealRequests.has(key)||!draft.reason.trim()||!state.has_api_key;
-    reason.addEventListener('input',()=>{if(draft.reason!==reason.value){draft.reason=reason.value;draft.requestId=null;}button.disabled=!reason.value.trim()||appealRequests.has(key)||!state.has_api_key;});
+    reason.addEventListener('input',()=>{
+      if(draft.reason!==reason.value){draft.reason=reason.value;draft.requestId=null;}
+      try{if(draft.reason)localStorage.setItem(appealStorageKey(submission.id),draft.reason);else localStorage.removeItem(appealStorageKey(submission.id));}catch{}
+      button.disabled=!reason.value.trim()||appealRequests.has(key)||!state.has_api_key;
+      controls();
+      if(me().next_round_ready&&!draft.withdrawing){
+        const editingRound=state.round;button.disabled=true;
+        draft.withdrawing=api(sessionPath('/rematch'),'POST',{round:editingRound,ready:false}).then(next=>{if(state.round===editingRound)apply(next);}).catch(failure=>{error.textContent='Не удалось отменить готовность к следующему раунду: '+failure.message;}).finally(()=>{draft.withdrawing=null;button.disabled=!reason.value.trim()||appealRequests.has(key)||!state.has_api_key;});
+      }
+    });
     const round=state.round;
     form.addEventListener('submit',async event=>{
       event.preventDefault();
@@ -803,7 +820,7 @@ async function init() {
     apply(await api(sessionPath("/ready"), "PUT", { ready: !me().ready, round: state.round }));
   }));
   $("rematch").addEventListener("click", () => action(async () => {
-    apply(await api(sessionPath("/rematch"), "POST", { round: state.round }));
+    apply(await api(sessionPath("/rematch"), "POST", { round: state.round, ready: !me().next_round_ready }));
   }));
   function customEdited(){const wasDirty=customProblemDirty;customProblemDirty=true;controls();if(!wasDirty)withdrawReadyForSelection();}
   customProblemForm=window.mathProblemForm($('duel-problem-fields'),{prefix:'duel-custom',fileId:'next-problem-file',onChange:customEdited});

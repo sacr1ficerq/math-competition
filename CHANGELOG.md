@@ -37,6 +37,10 @@
 
 ### Changed
 
+- Advancing rounds requires both participants to confirm. Either can withdraw;
+  submitting an appeal resets both confirmations. Appeal drafts survive reload,
+  block their author's confirmation, and withdraw it when editing resumes.
+
 - Rebuilt the home artwork with four independent pointer-responsive layers;
   reduced-motion and touch devices keep a static composition.
 - Reorganized the duel lobby around both players, the series score, and one

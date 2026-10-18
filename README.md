@@ -58,7 +58,10 @@ This is a local user service, not a deployment or a boot-time startup service.
 7. The first finalization gives the opponent five minutes. Once both have finalized
    and all checks finish, the result reveals solutions and feedback. Appeals become
    available only at this point.
-8. **Next problem** keeps the room, players, invitation, chat, and cumulative score.
+8. **Next problem** requires confirmation from both participants; either can
+   withdraw before the other confirms. Submitting an appeal clears both
+   confirmations, and its review must finish before confirming again.
+   The transition keeps the room, players, invitation, chat, and cumulative score.
    In the lobby the creator can keep or change the topic, select any topic, or upload
    a custom problem. Both players confirm readiness again.
 
