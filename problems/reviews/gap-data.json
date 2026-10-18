@@ -1,0 +1,69 @@
+{
+  "reviewed_on": "2026-10-18",
+  "reviewer": "shad_admissions_research",
+  "independent_of_author": true,
+  "scope": "Full10statements/reference proofs/rubrics and edgecases; formal fixes incorporated, no publication.",
+  "hash_algorithm": "SHA256(UTF8(json.dumps({k:problem[k] for k in [title,statement,criterions,reference_solution]}, ensure_ascii=False, sort_keys=True))); Python default separators comma-space and colon-space, no newline.",
+  "records": [
+    {
+      "id": "shad-gap-data-001",
+      "content_sha256": "2321287270f1981ef862080d27858be52fabbd4c6631edbd5e8641844d778b24",
+      "result": "pass",
+      "proof_review": "Gaussian minimum identity and negative selection bias verified; nested preprocessing/retraining protocol correct."
+    },
+    {
+      "id": "shad-gap-data-002",
+      "content_sha256": "ba68c1d2fe60ba9029c87a31f778ce90f9120d265c83e5871bcaeef2e9c4e5ac",
+      "result": "pass",
+      "proof_review": "Both exact temporal-risk formulas verified by conditional variance and fixed regime composition."
+    },
+    {
+      "id": "shad-gap-data-003",
+      "content_sha256": "70c7601415dc5bb5424b5862c58cd76e95a611eadff0fae7dd8762a277c528c9",
+      "result": "pass",
+      "proof_review": "User/record size-biased laws and strict reversal interval verified; group leakage distinguished from weighting."
+    },
+    {
+      "id": "shad-gap-data-004",
+      "content_sha256": "0998f877dbf2765f66d653634858e24c84164a3d95c3bcf1122429060d9c5c06",
+      "result": "pass",
+      "proof_review": "DCG exchange formula and strict two-query model reversal verified algebraically, zero IDCG handled."
+    },
+    {
+      "id": "shad-gap-data-005",
+      "content_sha256": "59f50530e2beb1855424d84bcc1e49d75d0ac899c1b8252eaca327b46f6282b1",
+      "result": "pass",
+      "proof_review": "Fixed-m positives pair probabilities, AP harmonic formula and exact excess over prevalence verified."
+    },
+    {
+      "id": "shad-gap-data-006",
+      "content_sha256": "88589e592cf7858f766ef15075ca8cfe15de4df1e7b6c713e7d89702d4df4a92",
+      "result": "pass",
+      "proof_review": "Joint intercept/category ridge normal equations, strict convexity, unseen prediction and both limits verified."
+    },
+    {
+      "id": "shad-gap-data-007",
+      "content_sha256": "37a3e5474eebd44eb18590028ea5fc1accee1a870e9f97cfa96f35529e932442",
+      "result": "pass",
+      "proof_review": "Unique category self-label leakage, all-zero exceptional event and OOF fallback risks verified."
+    },
+    {
+      "id": "shad-gap-data-008",
+      "content_sha256": "57bd6d1aa1e2bde9753f29a53590a6ad99f2f3a7b63a35646fb707129a2c1755",
+      "result": "pass",
+      "proof_review": "Bootstrap absence covariance, OOB binomial per item and simultaneous union bound verified."
+    },
+    {
+      "id": "shad-gap-data-009",
+      "content_sha256": "92ace09932e28dcf788da5558cbbf08d08975d0a4a3ab3fec16b76fc151003e7",
+      "result": "pass",
+      "proof_review": "Hoeffding union bound and oracle inequality constants verified; adaptively designed model caveat precise."
+    },
+    {
+      "id": "shad-gap-data-010",
+      "content_sha256": "2c7e4730cc4ff4d96005334f173eac19e3c65e09d81b4fd8d34eeaf23f506b6d",
+      "result": "pass",
+      "proof_review": "Exchangeable rank exact coverage and memorizing calibration counterexample verified, infinite threshold handled."
+    }
+  ]
+}

@@ -1,0 +1,444 @@
+{
+  "reviewer": "math_analysis_algorithms",
+  "hash_algorithm": "sha256(statement+criterions+reference_solution UTF8)",
+  "files": [
+    {
+      "file": "problems/shad-archive-probability-001.json",
+      "status": "verified",
+      "content_hash": "b30b9680b865cab9cff38859ce82f9d6f99f03e19fd815da9a5a93e47a1bd7a6",
+      "proof_checkpoints": [
+        "Ai conditionedonstartingpoint hasprob a^(n-1); unioncoverequivalence andbothdirectedgaps<=a impossibleunlessdiametricatboundary."
+      ],
+      "edge_cases": [
+        "n>=2; a=.5diametricprob0; noadditionclaimfora>.5."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-probability-002.json",
+      "status": "verified",
+      "content_hash": "bd5a028a0d774f9e43b4fb08b556ad708728b7af4f9b46c464b1134931c1fcd7",
+      "proof_checkpoints": [
+        "Firststeprecurrencesgiveu via geometricdifferences, t=(Nu-i)/(p-q) or i(N-i)/(2p)."
+      ],
+      "edge_cases": [
+        "Nconsecutive+1stepsprobp^N givesgeometrictailETfinite evenwithstay; harmonicmaximumprinciple givesunique."
+      ],
+      "corrections": [
+        "Уточнено событие N последовательных ходов с приращением+1, исключена неоднозначность слова изменения."
+      ],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-probability-003.json",
+      "status": "verified",
+      "content_hash": "d13b54708f754b05bb67842b73b6daa325ead0131e6c8311da44e34b53e1f460",
+      "proof_checkpoints": [
+        "AtX=x triangleintervalYbetween1-xand1+x hasconditionalprobx; weightedprior2x givesPA2/3."
+      ],
+      "edge_cases": [
+        "Bothdensitiesnormalized; posterior3x² andmean3/4; boundaryprob0."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-probability-004.json",
+      "status": "verified",
+      "content_hash": "870125f7c114c2ce86a1520c2a8bdc79d9e2807cca9d1ac10398fb1d17abb05b",
+      "proof_checkpoints": [
+        "Edgeisolatedindicatorcounts C(N-2,k-1),innerC(N-3,k-1); compressedpositionsbijection givesallisolated."
+      ],
+      "edge_cases": [
+        "k1both1;kNboth0; impossiblebinom0;N>=3 avoidsnegativeupperindex."
+      ],
+      "corrections": [],
+      "executed_checks": [
+        "Executed exact isolation expectation/allisolated probability over every k-subset, N=3,...,10 and every k; passed."
+      ]
+    },
+    {
+      "file": "problems/shad-archive-probability-005.json",
+      "status": "verified",
+      "content_hash": "d84556803f266c6a5822a073087a40ba7efdbff750ebe5ce6d2b9b8f86fffce4",
+      "proof_checkpoints": [
+        "Exchangeabilityofboundedratios timesh(S) givesconditionalmeans1/n andweightedexpectation."
+      ],
+      "edge_cases": [
+        "NoEXmomentneeded; equalmarginalsnonexchangeable(1,2),(2,4),(4,1)gives22/45."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-probability-006.json",
+      "status": "verified",
+      "content_hash": "3e1b1940637607474e88299028a68846ccebab964cc4495fa0a35566d1bbf0f0",
+      "proof_checkpoints": [
+        "Totalpaintedfaces equals externalfaces; localpaintcount<=exposure forces eachtypematch."
+      ],
+      "edge_cases": [
+        "q>=3; distinguishablecubespermprobproductfactorials/(q³)!; properrotationstabilizers3/2/4 yield1/8,1/12,1/6."
+      ],
+      "corrections": [
+        "Обоснован покубиковый переход от равенства общего числа граней к совпадению типов."
+      ],
+      "executed_checks": [
+        "Executed enumeration of all24 proper signed permutation rotations; stabilizer counts corner3,edge2,face4; passed."
+      ]
+    },
+    {
+      "file": "problems/shad-archive-probability-007.json",
+      "status": "verified",
+      "content_hash": "1d5882354432e93c9081e4a8fc428e3eabc5c0014134d1c8a8a362ebc28a55f1",
+      "proof_checkpoints": [
+        "Survivalindicatora=(1-1/M)^k, pairb=(1-2/M)^k; red=M-sumsurvivors givesmeanandvariance."
+      ],
+      "edge_cases": [
+        "k>=1,M>=2; covarianceb-a²<0; m1nopair andM2b0handled."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-probability-008.json",
+      "status": "verified",
+      "content_hash": "24bf5fc1c4b73887c0d11d8aeef4dd7969bab36f84ddf7976a5185acbcff987b",
+      "proof_checkpoints": [
+        "Unit-squaregeometry givesA=(1-h)²,B=2h-h²; intersection2integral(1-h..1)(u-h)du=2h-3h²."
+      ],
+      "edge_cases": [
+        "hstrictlybetween0and.5 ensuresregionformula; dependencedifferenceh²(2-4h+h²)>0."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-probability-009.json",
+      "status": "verified",
+      "content_hash": "49b6b38b6b987a34e17c99619ace0b72daef1e16fee4534602a08176705833c9",
+      "proof_checkpoints": [
+        "Negativebinomiallaw fromnthsuccess; independentgeometricwaits finitevariance(1-p)/p² giveCLT."
+      ],
+      "edge_cases": [
+        "n>=1integerexplicit;floorerror/sqrtnvanishes; movingthresholdcontinuitygivesPhi(cp/sqrt(1-p))."
+      ],
+      "corrections": [
+        "Явно указано n>=1 целое."
+      ],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-probability-010.json",
+      "status": "verified",
+      "content_hash": "89694aec97b7825f3e56ae34799410c005c1da6c07f41ff93b727c6111c6f809",
+      "proof_checkpoints": [
+        "ConditioningS=k makesuniformk-subset; fouratomscomb(n-2,k-a-b)/comb(n,k)."
+      ],
+      "edge_cases": [
+        "1<=k<=n-1 makesnegativecov strictly-k(n-k)/(n²(n-1)); binomialtails complement correct."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-combinatorics-001.json",
+      "status": "verified",
+      "content_hash": "b2b752589cb02dd9b5d0986fddfa4d11d5fcbfe563a8bfa10f8402a9dfddd504",
+      "proof_checkpoints": [
+        "Oddpartchains forbidonlyadjacent2multiples; maxceilL/2 achievedbyevenuexponents."
+      ],
+      "edge_cases": [
+        "Correctedfloorcount=sum_h[floorN/2^(2h)-floorN/2^(2h+1)];oldalternatingidentityfalseN4counterexample."
+      ],
+      "corrections": [
+        "Исправлена ложная alternatingceilidentity и итоговая floorформула; контрпример исходному выражению N=4."
+      ],
+      "executed_checks": [
+        "Executed exhaustive enumeration of all subsets for every N=1,...,16; corrected floorformula equals maximum; passed."
+      ]
+    },
+    {
+      "file": "problems/shad-archive-combinatorics-002.json",
+      "status": "verified",
+      "content_hash": "6a9b89afe8f7d6e415c08a14a3f376f035288b0caa10ee33fd96162ceb918a02",
+      "proof_checkpoints": [
+        "Complementcondition everytsethasisolated; connectedcomponent>=t forbidden byconnectedgrowth."
+      ],
+      "edge_cases": [
+        "t4atmostonenontrivialcomponent<=3;t5matchingoruniquecomponent3/4;maxHedges=max(floorN/2,6),N>=5."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-combinatorics-003.json",
+      "status": "verified",
+      "content_hash": "61fa023fbf5c586549b5a4cd7d880a1098c3ccf116e77730e99b11216f60c422",
+      "proof_checkpoints": [
+        "Fullstate directededge+nextturn gives4mstates andtransitionbijection fromlocalcyclicorder."
+      ],
+      "edge_cases": [
+        "Finitebijectionhasnopreperiod; repeatsinitialdirectededge, visitsinitialvertex within4m+1edges."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-combinatorics-004.json",
+      "status": "verified",
+      "content_hash": "2ff4b058592e522777f0230de66b6475b4279d2cc1df6e1b44280bcf15da3715",
+      "proof_checkpoints": [
+        "Trianglefree degreeedgebound+Cauchy provesMantel; withtriangleoutsideverticesadjacentatmostone impliestriangldegreesum<=N+3."
+      ],
+      "edge_cases": [
+        "EvenN>=6 pairdegree<=2(N+3)/3<=N;deleteadjacentpairloses<=N-1;N2/N4bases,balancedbipartiteattains."
+      ],
+      "corrections": [
+        "Явно указано n>=1 целое."
+      ],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-probability-011.json",
+      "status": "verified",
+      "content_hash": "655e54a640a28a13ebc45d6eacffd7da27f4aea8c8dea9a23a00f9984136cf3a",
+      "proof_checkpoints": [
+        "Gaussianconditionalmoments m²+b² andm4+6m²b²+3b4; variance4b²m²+2b4; orthogonalprojection givesuniquea.s.predictor."
+      ],
+      "edge_cases": [
+        "Finite-riskg inL2 becauseY²inL2; fourthmoment3byIBPwithvanishingboundary; a0allowed."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-probability-012.json",
+      "status": "verified",
+      "content_hash": "b71778cf5285347efd98452cfd9a4e6daf262c01388aa768ebac81861610e726",
+      "proof_checkpoints": [
+        "Exactlytwo gestures eventprobqk fromdisjointpairs; waitingtimesindependentgeombecauseconditionalfuturelaw depends onlycountk."
+      ],
+      "edge_cases": [
+        "pi>0 gives0<qk<1;k>=2;equalpi qk=(2^k-2)/3^(k-1);sumvariancevalidbyindependence."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-probability-013.json",
+      "status": "verified",
+      "content_hash": "56ac87795e52b988ae93cedeaaffb23f67d879c0b5773bb129591082d15c180b",
+      "proof_checkpoints": [
+        "Censoredlikelihood productmin(1,si/theta) equalsPjtheta^-j onbetween-sortedthresholds."
+      ],
+      "edge_cases": [
+        "Jb handles b0log; onlyj0hasu0andapositive; tieszerointervals; positivefiniteZ; posteriorandmeanratio correct."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-probability-014.json",
+      "status": "verified",
+      "content_hash": "f84323dff5eebde510a42665d12c4681ec6e1c75f6d8c7e473498dba1516f5b2",
+      "proof_checkpoints": [
+        "Uniformdemand integral yields k-k²/(2L) belowL; beyondLutilitystrictlydecreases."
+      ],
+      "edge_cases": [
+        "Alloptimalintegers nearestvertexv; A<=lambdazero, A>lambda v in(0,L), halfinteger tiesincluding0/1."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-probability-015.json",
+      "status": "verified",
+      "content_hash": "402d21fd8f5e238625e612139efb3c3b9626968eccc6ba28215c5c244743e765",
+      "proof_checkpoints": [
+        "Isotropic2DGaussianangleuniform yieldsmismatchedsignprobtheta/pi; iidboundedwins allowSLLNandCLT."
+      ],
+      "edge_cases": [
+        "Collinearangles0/pi deterministic centeredzero; allprojectionsnonzerowithprob1; variance4(theta/pi)(1-theta/pi)."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-probability-016.json",
+      "status": "verified",
+      "content_hash": "2be4bd4dd63d85439f17007c19d134bed6244ada5a604a1b2394a7852737101c",
+      "proof_checkpoints": [
+        "Tail=noAor noB givesbinomialinclusionexclusion; T=max(firstA,firstB)."
+      ],
+      "edge_cases": [
+        "Uniformweakcompositionsofunmarkedgaps provefirstmarkedmean(N+1)/(k+1); noindependencefirstpositionsneeded."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-probability-017.json",
+      "status": "verified",
+      "content_hash": "d2c8c3cbb6a88a7e2880b8a6e4c05a6e0323c4b071f0fe2e98d259bff013195a",
+      "proof_checkpoints": [
+        "ESn=clogn+O1,var<=ESn; Chebyshevatceil(expk²) summable,BC/countableeps andmonotoneinterpolation provea.s.ratio c."
+      ],
+      "edge_cases": [
+        "c>0,b>1; loggrowth comparison yieldspseriesforalphaabove/below1; criticalalpha1explicitlyexcluded."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-probability-018.json",
+      "status": "verified",
+      "content_hash": "6f40d2f1b20a219838ff84fd8baf3f4338bee81e735d933416dd72ffce75fa6d",
+      "proof_checkpoints": [
+        "LongerfragmentL density2 on(.5,1); secondbreakadmissibleinterval(l-.5,.5) length1-l."
+      ],
+      "edge_cases": [
+        "PA2log2-1; posterior2(1-l)/(lPA) andmean1/(4PA); boundaryeventsprob0."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-probability-019.json",
+      "status": "verified",
+      "content_hash": "9f327ac08b4785a116136ce8c6bd907b034d5313c230fce071ed987b6b39b5d5",
+      "proof_checkpoints": [
+        "Circlecrossesatmostonehorizontalandoneverticalline; no-crossinteriorarea givesp1."
+      ],
+      "edge_cases": [
+        "Cornerdistance<r gives4tiles, corner-squareoutsidequarterdisk gives3; p2remainder2r(a+b)-8r²; strictdiameterboundpreventsothercases."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-probability-020.json",
+      "status": "verified",
+      "content_hash": "9b7505c64d10214ddb7d2efadbf5152f6043b23abe4937b454bda93baea18260",
+      "proof_checkpoints": [
+        "DirectionVj expectationrho^(j-1),correlationEj>k rho^(j-k); finitearithmetic-geometric sums exact."
+      ],
+      "edge_cases": [
+        "rho1 forcescosTheta1a.s.; unit-circleotherthan1 stillfiniteformula; |rho|<1 limit(1-|rho|²)/|1-rho|²; symturnsrhocosalpha."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-combinatorics-005.json",
+      "status": "verified",
+      "content_hash": "c8bd83175df9363649f1cf3b3943c562424698331177c4cced3a7983deb7719f",
+      "proof_checkpoints": [
+        "Ruleviolations preciselyPnumber+notQletter; dangerousvisiblecardsmustallflipped."
+      ],
+      "edge_cases": [
+        "NonemptyproperP/Qallowhiddenadversarialviolationforanyunflippedcard; adaptivitycannotdistinguishwhentruthmustconfirmed."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-combinatorics-006.json",
+      "status": "verified",
+      "content_hash": "7a14924cd7ceaa568980b50cdbf9dcc84b15b55892832526fc86f33e7b80205a",
+      "proof_checkpoints": [
+        "Diameter<1coversatmostonevertexofregularsimplex,so dsetsinsufficient."
+      ],
+      "edge_cases": [
+        "Vertexhomothetyimageiffbarycentriccoordinate>=1-lambda;maxcoordinate>=1/(d+1)withcenterattaininggivesexactlambda>=d/(d+1)."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-combinatorics-007.json",
+      "status": "verified",
+      "content_hash": "4392c49b4c28176b109e2407da4cff4c22332517422ab2bee0a8b1093b5a681e",
+      "proof_checkpoints": [
+        "Truthstatementv ifftruthfulsetS subsetclosedNv; consistencyS iscliqueandexternalverticesnotadjacenttosomeS."
+      ],
+      "edge_cases": [
+        "Semptyimpossible; exactmaximalbyinclusioncliques; cycleC_n n>=4hasexactlyedgesasmaximalcliques, countn."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-combinatorics-008.json",
+      "status": "verified",
+      "content_hash": "ce2f127989b93fb0df7b8c32976e8298da2d2a5bca8d8bf43ec655ef9daa8265",
+      "proof_checkpoints": [
+        "Too-largeindependentset k-r+2 plusr-2others forbidsrclique; maximalindependentsetdominates."
+      ],
+      "edge_cases": [
+        "Sharp construction(k-r)isolates+cliqueN-k+rworksall2<=r<=k<=N,forcesdominationsizek-r+1."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-combinatorics-009.json",
+      "status": "verified",
+      "content_hash": "f54a8f29e7231ac0e142cf72f5db2105dcb63266b8b310122bc12da7c3341a55",
+      "proof_checkpoints": [
+        "Union/intersectionforxgivesbitsumb_i+b_j; oddcyclefixesstartingbit,treepropagates."
+      ],
+      "edge_cases": [
+        "Bipcomponenthascomplementarycolor-bitassignmentsindistinguishableincludingisolate; Omega nonempty; minedgesn attainedtriangle+leaves."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-combinatorics-010.json",
+      "status": "verified",
+      "content_hash": "c8245618a1261c58dfa9c7b038ac63d0ea2e796349e1ba409c894563fdb22478",
+      "proof_checkpoints": [
+        "Eachnested-squarechoice=independentleft/rightandbottom/topdeletionbinarysequences."
+      ],
+      "edge_cases": [
+        "Finalx/yneedx-1/y-1prefixdeletions; conditioningintermediatesplitssequencesyieldfourbinomialfactors; n1,k1,knandinvalidindices handled."
+      ],
+      "corrections": [
+        "Явно указана нумерация столбцов слева направо и строк снизу вверх."
+      ],
+      "executed_checks": [
+        "Executed every pair of binary deletion sequences for n=1,...,6 and every intermediate k; all counts equal four-binomial formula."
+      ]
+    },
+    {
+      "file": "problems/shad-archive-combinatorics-011.json",
+      "status": "verified",
+      "content_hash": "abbde22b27793fad8e3833001228192d289e9fedc6b7447d73cb954b579f0ccf",
+      "proof_checkpoints": [
+        "Componentdegreeparityevennecessary/sufficient; freeoff-forestedgesm-n+c,forestleafpeelinguniquecompletion."
+      ],
+      "edge_cases": [
+        "Oddcycletogglinghalvesedgeparities; bipartiteedgeparity=sumrequirementsonepartfixed; isolatesrequireeps0."
+      ],
+      "corrections": [],
+      "executed_checks": [
+        "Executed all1099 simple graphs with n=1,...,5, all spanning subgraphs, all vertex parity requirements and both edgeparities; exact formulas passed."
+      ]
+    },
+    {
+      "file": "problems/shad-archive-combinatorics-012.json",
+      "status": "verified",
+      "content_hash": "a4f699a30b22b8e6ba5be8e0fe8dd75163131f9a9210a16eeea0200e599f1cbb",
+      "proof_checkpoints": [
+        "Nonkingiffcovered; coveringstrictlyincreasesoutdegreeandistransitive, so eachvertexcoveredbykingorisking."
+      ],
+      "edge_cases": [
+        "Ifkinga→kingb thenb→c→a; ckinggives3rd,elsekingcoveringc distinctfroma,bgives3rd; singletonexists."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "reviewer": "root",
+  "independent_of_author": true,
+  "hash_algorithm": "sha256(json.dumps(four problem fields, ensure_ascii=False, sort_keys=True) UTF8; default separators)",
+  "executed_checks": {
+    "exhaustive_circular_arrays": 1092,
+    "binary_variance_length_cases": 1538
+  },
+  "records": [
+    {
+      "id": "shad-archive-algorithms-001",
+      "result": "pass",
+      "content_sha256": "0d000ebe3d6c06978096be09ea07cb30fb9dfe1de934bf436eb399efe0c3fb39",
+      "proof_review": "Adaptive indistinguishability on n antidiagonal cells valid; independent single-zero change preserves monotonicity; staircase at most2n-1 comparisons."
+    },
+    {
+      "id": "shad-archive-algorithms-002",
+      "result": "pass",
+      "content_sha256": "34e6add6570c2644dba27d2de44eaa7ff848e5796db1874cbde209dbc375ca9b",
+      "proof_review": "Nonempty Kadane dual extrema, full-minimum complement exclusion, all-negative and zeros cases proved; exhaustive ternary arrays checked."
+    },
+    {
+      "id": "shad-archive-algorithms-003",
+      "result": "pass",
+      "content_sha256": "afd6db26ab9c448f294c638cf07e145272d01f8276a5765dda7bebb4aeceaee2",
+      "proof_review": "Distinct ordered top-k outputs count n!/(n-k)!, n-1 first-defeat lower bound, maxheap and output reversal complexity checked."
+    },
+    {
+      "id": "shad-archive-algorithms-004",
+      "result": "pass",
+      "content_sha256": "c467e76b673eb9d2f04d9ba12861f63af39fb64f31421ec7048bf7a07281e5e9",
+      "proof_review": "Increasing-left/decreasing-right sort, equal-interval batches, inclusive right suffix and own exclusion checked; nonempty input made explicit."
+    },
+    {
+      "id": "shad-archive-algorithms-005",
+      "result": "pass",
+      "content_sha256": "7cd7003268117321f923288c7591ee716cfb16bc77994b001183c35bd12a07a1",
+      "proof_review": "Sorted doubly linked list has constant extreme deletion and known-node erase; sort reduction bounds insertion phase on some input, not every individual insertion."
+    },
+    {
+      "id": "shad-archive-algorithms-006",
+      "result": "pass",
+      "content_sha256": "0c6fc9cb80df5e096469d108c97178e467f0805351d870cbebac0478f4818c86",
+      "proof_review": "Healthy-tree exploration invariant and deeper-endpoint cut ensure one conducting path; all other non-tree relays off, multiedges allowed, at most4 toggles per chord."
+    },
+    {
+      "id": "shad-archive-algorithms-007",
+      "result": "pass",
+      "content_sha256": "03106bf46871a2e7d3b173dac3f817dc6c23c047d2fb767357fb54f79742d39b",
+      "proof_review": "Right-to-left suffix minimum over value ranks correctly gives closest future index for arbitrary signed thresholds and equality."
+    },
+    {
+      "id": "shad-archive-algorithms-008",
+      "result": "pass",
+      "content_sha256": "282abf04080671018660dc21164f8657b6e5cea3031ab721d14b9a9c6806e979",
+      "proof_review": "Minheap frontier reaches interval inside optimum before premature exhaustion; endpoint-only best state avoids O(k) copy per improvement; witnesses rescan valid."
+    },
+    {
+      "id": "shad-archive-algorithms-009",
+      "result": "pass",
+      "content_sha256": "fe5f4e7091b970f69254151447534bfd2ab79489269a20d5e1d139116165134d",
+      "proof_review": "Multiplicity missing invariant and monotone window discarding preserve shortest and leftmost; deterministic comparable-label assumption made explicit."
+    },
+    {
+      "id": "shad-archive-algorithms-010",
+      "result": "pass",
+      "content_sha256": "d41261cea1fa14df27521bd4348750677f3cb4a1af5eeec6524359985c941f24",
+      "proof_review": "All equal-time events complete before all-free sender/receiver matching; disjoint busy servers, positive times and linear transmissions ensure complexity."
+    },
+    {
+      "id": "shad-archive-algorithms-011",
+      "result": "pass",
+      "content_sha256": "61d33d1bbac036265e0456f0874382153440fefc48962ac34cb34cbbd0bb2461",
+      "proof_review": "Difference arrays separate earlier own edges and later incoming edges; weighted and ordinary degrees correct even with zero intervals/negative weights."
+    },
+    {
+      "id": "shad-archive-algorithms-012",
+      "result": "pass",
+      "content_sha256": "39f0e278b514c97919b417fe3aba5ce6567b8f7b0f3b189ad63262896017f430",
+      "proof_review": "Variance minimization reduces to two mean extrema, prefix feasibility with K constraint, witness retention and Lipschitz epsilon error verified exhaustively."
+    },
+    {
+      "id": "shad-archive-algorithms-013",
+      "result": "pass",
+      "content_sha256": "8d91f8c9031d2e8ed67629d20439f57b8ff6d1ecb8cff6cac39f1aa08d5ae42a",
+      "proof_review": "Greedy equal-bit trie minimizes XOR, preinsert query prevents same-instance pair, persistent IDs/duplicates valid; unit-cost RAM model clarified."
+    }
+  ]
+}

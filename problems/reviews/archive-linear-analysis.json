@@ -235,6 +235,216 @@
       ],
       "corrections": [],
       "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-linear-015.json",
+      "status": "verified",
+      "content_hash": "18099405589e6012ad56a272d24e166337f706d84323d5ae8b8bc910ea288d5b",
+      "proof_checkpoints": [
+        "A=ATR implies AT=RA and AR=RA; orthogonalR eigenspaces give symmetric/skew blocks; nonzeroreal eigenvectors have no skewcomponent."
+      ],
+      "edge_cases": [
+        "n parity unrestricted; zeroeigenvalues excluded fromvectorclaim; construction n2k supports arbitrary repeated/zero lambdas."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-linear-016.json",
+      "status": "verified",
+      "content_hash": "1f2481b06d83c5675c98219cd013bf1a2d97ed943c4283c7607581a4c1615bab",
+      "proof_checkpoints": [
+        "No proper nonzero invariantspace; real eigenvalue forces dimension1, nonreal eigenvalue gives invariantrealplane and dimension2."
+      ],
+      "edge_cases": [
+        "Explicit finite-dimensional assumption added to justify existencecomplexeigen; b!=0, commutant=span(I,J),dimensions1/2."
+      ],
+      "corrections": [
+        "Добавлена явная конечномерность V с согласия автора."
+      ],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-linear-017.json",
+      "status": "verified",
+      "content_hash": "0022ac4f9befa845587fe45d4e040354b02313fae039fca5bd3b682670e2e6f8",
+      "proof_checkpoints": [
+        "Independentbasischange S^TCT givesranknormalform; congruenceto orthoprojector iff symmetricPSD; similarityiffC²=C."
+      ],
+      "edge_cases": [
+        "r0/rn included; eigenspace dimensionsr,n-r,missing eigenvalue when its multiplicity0."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-linear-018.json",
+      "status": "verified",
+      "content_hash": "064ad182a100d310fc74822d0897982a92380a03466d4cad35459c65056c4fa8",
+      "proof_checkpoints": [
+        "rho<=opnorm<=Frob givesupperF with equalityforcingrank1; explicitdiagonalapproachesF forr>1."
+      ],
+      "edge_cases": [
+        "Rankr<n scalednilpotentattainsrho0; rankn triangular epsilonI+onesuperdiagonalhasnormFandrhoeps, nozeroattainment."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-linear-019.json",
+      "status": "verified",
+      "content_hash": "9d482c6ad257dfcf72f79eb59f8976ca5f2da42e0f75bc428cca0f82f4796e06",
+      "proof_checkpoints": [
+        "Monicgcd invariant under nonzero scaling andlcscales; q1=p+1,q2=-1 violatesadditivity."
+      ],
+      "edge_cases": [
+        "Degreep>=1 includinglinear; qeps=p+eps hasgcd1 andimagespprime+1, distinctfrompprime+p; zeroq/c included."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-linear-020.json",
+      "status": "verified",
+      "content_hash": "4fd9da3c7efb52ed14c99ee738aa0917134d0904cf63319cce50dc60e17933ef",
+      "proof_checkpoints": [
+        "OrthoprojectorsP,Qyield admissiblespaceX=PXQ; tracecyclicity shows PCQ is Frobeniusorthoprojection."
+      ],
+      "edge_cases": [
+        "A/Bfullcolumnrank notorthonormal; D0 allunitballmaximizers, otherwise uniqueD/normD."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-linear-021.json",
+      "status": "verified",
+      "content_hash": "d7b780713e5083684bd53fc6ec1510d088a2664ea2debdf532fba63936e5705d",
+      "proof_checkpoints": [
+        "Distanceidentity traceM-uTMu andminimumRayleighquotient givealloptimallinesinEmin."
+      ],
+      "edge_cases": [
+        "DimEmin1 unique,linefamilydimension>=2 infinite; allaxesiffMscalar, examplesdiag123 and112 valid."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-linear-022.json",
+      "status": "verified",
+      "content_hash": "b0d1ab9d030b17ebc4d3653a5abe7d5bc5e4ebe5c2308f266ec147a6611b8d49",
+      "proof_checkpoints": [
+        "Symmetric/skewX makesbothrowsandcols in UcapV; arbitrarybasisR givesuniqueX=RCRT vialeftinverse."
+      ],
+      "edge_cases": [
+        "C symmetry/skewiffX,dimensionsk(k+-1)/2; k0zero andk1skewzero handled."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-linear-023.json",
+      "status": "verified",
+      "content_hash": "552e848aed9c303edbacc3c57abe99e4dacce75296221c1c13c3e40a07b551ab",
+      "proof_checkpoints": [
+        "Paircolumnswithinrows; assignedpairtargets sumlambda vi; respondwithothercell to enforceweightedpaircontribution."
+      ],
+      "edge_cases": [
+        "Allvj!=0 permitsdivision; paireitheremptyorfullaftersecondturn; neven ensures secondhaslastmove."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-linear-024.json",
+      "status": "verified",
+      "content_hash": "268b6fa2f44355f71b4001345b5ebe36a366bc835e4f876d2e0b3a485fd70403",
+      "proof_checkpoints": [
+        "G=LWL^T withunittriangularPascalL givesdet/rank/inertia; alternatingPascalK inverse bybinomialcancellation."
+      ],
+      "edge_cases": [
+        "Arbitrarysigned/zeroweights forinertia; inverseonlyallnonzero, elementssumk>=maxij sign(-1)^{i+j}."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-analysis-005.json",
+      "status": "verified",
+      "content_hash": "e05e1ca6039ad175984e86c3adcc4144db2ab9c8e7626114cb865af3b6f0d8d7",
+      "proof_checkpoints": [
+        "Positivedecreasingarctanrecursion firstproveslimit0; reciprocal-squareincrement→2/3 andCesaro gives sqrt(n)xn→sqrt(3/2)."
+      ],
+      "edge_cases": [
+        "Realp includingnegative/zero; positiveasymptoticpowerspermitlimitcomparison, p2harmoniccritical."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-analysis-006.json",
+      "status": "verified",
+      "content_hash": "02e0f6b8d3d098bd17bf627e681b225d1c18e904cb972dd00dd3973ea7cb0f9f",
+      "proof_checkpoints": [
+        "Monotoneiteration cannotreturnif initialstepstrict; decreasingmap squareincreasing forcesperiod<=2."
+      ],
+      "edge_cases": [
+        "Continuouscompositionrootg of1-x³ mustinjective, hence strictmonotone; either monotonicity gives increasingg² contradiction."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-analysis-007.json",
+      "status": "verified",
+      "content_hash": "abc1b8b88f4144d3ca8bf48663b1c1d1d8786fab9002f2b471bcb6db92571901",
+      "proof_checkpoints": [
+        "Multiply pbyproductofallinneroddmultiplicityroots; resultingpolynomialnonzeroandconstant-sign, positiveweight impliesnonzerointegral."
+      ],
+      "edge_cases": [
+        "Ifs<m auxiliarydegree<m yieldsmomentzero contradiction; endpoint/evenrootsdo notcauseinterior signchanges."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-analysis-008.json",
+      "status": "verified",
+      "content_hash": "650e740ca521a2723a0e6cb82c9adebbd08e1f0c54c932890a6d295fe6e4c50d",
+      "proof_checkpoints": [
+        "Givenlimit yieldsf=x+(c-1/6)x³+o(x³); logarithmcomposition givesc+1/6 withoutderivativesoff."
+      ],
+      "edge_cases": [
+        "f→0ensureslogdomain;f=x andx+x4bothc1/6butquarticlimits0/1."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-analysis-009.json",
+      "status": "verified",
+      "content_hash": "d9e91849f0ac73da9a4ea4bc47edc875c95034a861478d2e0ff119e384f6c5dc",
+      "proof_checkpoints": [
+        "Fixed-dTaylor root gives n+a/d+gamma/n+O(n^-2),gamma=b/d-(d-1)a²/(2d²)."
+      ],
+      "edge_cases": [
+        "nintegerperiodofabssin; sinθnonzero derivativeformula, sinθzero givesπ|gamma| includinggamma0; rootpositiveeventually."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-analysis-010.json",
+      "status": "verified",
+      "content_hash": "60308f86306f5d3fe2421ddebfc3a8623c88fe74e8515dd7f708fb0ac9f7a0c9",
+      "proof_checkpoints": [
+        "Coordinateproductrule givesgradientJ^Tgradphi andfullHessianJ^THphiJ+sumgradphi_alpha Hg_alpha."
+      ],
+      "edge_cases": [
+        "n,k>=1; universalnoaddendumiffexternalgradient0, arbitraryquadraticgforcesnecessity; linearexternalcounterexamplex²at0."
+      ],
+      "corrections": [],
+      "executed_checks": []
     }
   ]
 }

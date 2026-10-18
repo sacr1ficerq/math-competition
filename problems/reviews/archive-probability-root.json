@@ -1,0 +1,91 @@
+{
+  "reviewer": "root",
+  "independent_of_author": true,
+  "hash_algorithm": "sha256(statement+criterions+reference_solution UTF8)",
+  "executed_checks": {
+    "random_integer_optimization": 1000,
+    "enumerated_random_walk_paths": 3069
+  },
+  "files": [
+    {
+      "file": "problems/shad-archive-probability-011.json",
+      "status": "verified",
+      "content_hash": "655e54a640a28a13ebc45d6eacffd7da27f4aea8c8dea9a23a00f9984136cf3a",
+      "proof_checkpoints": [
+        "Conditional projection identity, normal fourth moment, a=0 and almost-sure uniqueness verified."
+      ]
+    },
+    {
+      "file": "problems/shad-archive-probability-012.json",
+      "status": "verified",
+      "content_hash": "b71778cf5285347efd98452cfd9a4e6daf262c01388aa768ebac81861610e726",
+      "proof_checkpoints": [
+        "Exactly-two-gesture events are disjoint; success parameter positive below1, geometric holding times independent via constant conditional law, equal probabilities checked."
+      ]
+    },
+    {
+      "file": "problems/shad-archive-probability-013.json",
+      "status": "verified",
+      "content_hash": "56ac87795e52b988ae93cedeaaffb23f67d879c0b5773bb129591082d15c180b",
+      "proof_checkpoints": [
+        "Censored likelihood integrated piecewise; coincident thresholds, a=j logarithms and positive lower endpoints checked."
+      ]
+    },
+    {
+      "file": "problems/shad-archive-probability-014.json",
+      "status": "verified",
+      "content_hash": "f84323dff5eebde510a42665d12c4681ec6e1c75f6d8c7e473498dba1516f5b2",
+      "proof_checkpoints": [
+        "Saturated demand excludes k>L; strict concave quadratic and nearest-integer ties cover k=0 and all boundaries."
+      ]
+    },
+    {
+      "file": "problems/shad-archive-probability-015.json",
+      "status": "verified",
+      "content_hash": "402d21fd8f5e238625e612139efb3c3b9626968eccc6ba28215c5c244743e765",
+      "proof_checkpoints": [
+        "Rotational invariance gives angular disagreement theta/pi; strong law and CLT include degenerate collinear endpoints."
+      ]
+    },
+    {
+      "file": "problems/shad-archive-probability-016.json",
+      "status": "verified",
+      "content_hash": "2be4bd4dd63d85439f17007c19d134bed6244ada5a604a1b2394a7852737101c",
+      "proof_checkpoints": [
+        "Inclusion-exclusion tail, uniform weak-composition gap bijection and max=min decomposition checked without independence."
+      ]
+    },
+    {
+      "file": "problems/shad-archive-probability-017.json",
+      "status": "verified",
+      "content_hash": "d2c8c3cbb6a88a7e2880b8a6e4c05a6e0323c4b071f0fe2e98d259bff013195a",
+      "proof_checkpoints": [
+        "Variance logarithmic, exp(k^2) subsequence Chebyshev summable, countable BC and monotone interpolation valid; critical case explicitly excluded."
+      ]
+    },
+    {
+      "file": "problems/shad-archive-probability-018.json",
+      "status": "verified",
+      "content_hash": "6f40d2f1b20a219838ff84fd8baf3f4338bee81e735d933416dd72ffce75fa6d",
+      "proof_checkpoints": [
+        "Long-fragment density2, conditional triangle interval and normalized mean1/(4*(2log2-1)) checked."
+      ]
+    },
+    {
+      "file": "problems/shad-archive-probability-019.json",
+      "status": "verified",
+      "content_hash": "9f327ac08b4785a116136ce8c6bd907b034d5313c230fce071ed987b6b39b5d5",
+      "proof_checkpoints": [
+        "Circle itself versus disk distinguished: diagonal tile iff corner distance<r; three-tile corner squares minus quarters; two-tile remainder nonnegative."
+      ]
+    },
+    {
+      "file": "problems/shad-archive-probability-020.json",
+      "status": "verified",
+      "content_hash": "9b7505c64d10214ddb7d2efadbf5152f6043b23abe4937b454bda93baea18260",
+      "proof_checkpoints": [
+        "Complex cross-correlations, finite geometric formula and asymptotic diffusion coefficient verified, rho1 deterministic and other unit-modulus finite formulas valid."
+      ]
+    }
+  ]
+}

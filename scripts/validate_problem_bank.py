@@ -1,6 +1,7 @@
 """Read-only release checks for authored bank content; not a proof verifier."""
 import argparse
 from collections import Counter
+import hashlib
 import json
 from pathlib import Path
 import sys
@@ -15,9 +16,23 @@ def main():
     parser.add_argument('--directory', type=Path, default=ROOT / 'problems')
     parser.add_argument('--require-reviewed', action='store_true')
     parser.add_argument('--min-active', type=int, default=0)
+    parser.add_argument('--verify-review-hashes', action='store_true',
+                        help='Require a matching full mathematical review for each active problem')
     args = parser.parse_args()
     errors, ids, statements = [], {}, {}
     total, active, topics = 0, 0, Counter()
+    review_records = {}
+    if args.verify_review_hashes:
+        for report_path in sorted((args.directory / 'reviews').glob('*.json')):
+            if report_path.name == 'typography.json':
+                continue  # Notation checks do not replace a mathematical review.
+            report = json.loads(report_path.read_text(encoding='utf-8'))
+            for record in report.get('records', report.get('files', report.get('problems', []))):
+                identifier = record.get('id') or Path(record.get('file', '')).stem
+                reviewer = record.get('reviewer', record.get('independent_gate', report.get('reviewer')))
+                status = record.get('result', record.get('status'))
+                if status in {'pass', 'verified', 'passed_independent_mathematical_review'}:
+                    review_records.setdefault(identifier, []).append((reviewer, record))
     for path in sorted(args.directory.glob('*.json')):
         if path.name == 'catalog.json':
             continue
@@ -50,6 +65,18 @@ def main():
             if args.require_reviewed and (not reviewed or raw['retired']):
                 raise ValueError('release requires reviewed, active content')
             if not raw['retired']:
+                if args.verify_review_hashes:
+                    hashes = {
+                        hashlib.sha256(json.dumps(content.model_dump(), ensure_ascii=False, sort_keys=True).encode()).hexdigest(),
+                        hashlib.sha256((content.statement + content.criterions + content.reference_solution).encode()).hexdigest(),
+                    }
+                    matching = any(
+                        reviewer == raw['reviewed_by'] and
+                        (record.get('content_sha256') in hashes or record.get('content_hash') in hashes)
+                        for reviewer, record in review_records.get(identifier, [])
+                    )
+                    if not matching:
+                        raise ValueError('active content has no matching full-review hash and reviewer')
                 active += 1
                 topics[raw['topic']] += 1
         except (ValueError, KeyError, TypeError) as error:
