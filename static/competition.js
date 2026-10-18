@@ -288,7 +288,7 @@ function renderPlayers() {
     wins.className = "win-count";
     wins.textContent = `${p.wins} 🥪`;
     wins.setAttribute("aria-label", `Бутерброды: ${p.wins}`);
-    wins.title = "Один бутерброд за победу в раунде";
+    wins.title = "Бутербродный капитал. Один бутерброд за победу в раунде.";
     card.append(top, wins, score);
     cards.append(card);
   }
@@ -392,7 +392,7 @@ function renderDeadline(player) {
 
 function resultReason() {
   if(state.result?.reason === "Equal scores; earlier finalization wins.") return "Оценки равны. Побеждает тот, кто завершил решение первым.";
-  if(state.result?.reason === "Higher final score.") return "";
+  if(state.result?.reason === "Higher final score.") return "Математика серьёзная. Валюта — бутербродная.";
   return state.result?.winner ? "За победу в раунде — один бутерброд." : "Одинаковые результаты. Бутерброды не начисляются.";
 }
 
