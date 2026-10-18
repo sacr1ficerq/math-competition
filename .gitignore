@@ -7,3 +7,14 @@ __pycache__/
 *.sqlite3-shm
 *.sqlite3-wal
 temp
+
+# Local account data, exports, and installation secrets
+*.sqlite
+*.sqlite-*
+*.db
+*.db-*
+.env.*
+!.env.example
+account-key
+*.sqlite3.backup
+*.sqlite3.bak
