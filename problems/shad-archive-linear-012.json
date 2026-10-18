@@ -1,0 +1,16 @@
+{
+  "id": "shad-archive-linear-012",
+  "topic": "linear_algebra",
+  "topic_label": "Линейная алгебра",
+  "title": "Когда внутренняя обратная становится взаимной",
+  "statement": "Зафиксирован проектор $A\\in\\mathbb R^{n\\times n}$ ранга $r$, где $1\\le r<n$, причём ортогональность не предполагается. Опишите все матрицы $B$ с $ABA=A$ в базисе, согласованном с $\\operatorname{im}A\\oplus\\ker A$. Укажите необходимое и достаточное дополнительное условие для $BAB=B$. Докажите, что это условие равносильно $\\operatorname{rank}B=r$, и постройте пример, показывающий, что одно равенство $ABA=A$ не влечёт второго.",
+  "criterions": "Максимум 10 баллов. 2 балла — согласованный базис и полный вид блоков; 3 балла — точное условие второго равенства; 3 балла — формула ранга через дополнение Шура; 2 балла — невырожденный по смыслу контрпример. Независимые этапы складываются, частичный балл внутри этапа допустим. Принимайте другое строгое решение. 0 баллов — нет верных содержательных шагов.",
+  "reference_solution": "Из $A^2=A$ следует прямое разложение $\\mathbb R^n=\\operatorname{im}A\\oplus\\ker A$: всякий $x=Ax+(x-Ax)$, пересечение нулевое. В соответствующем базисе $A=\\operatorname{diag}(E_r,0)$. Запишем $B=\\begin{pmatrix}P&U\\\\V&W\\end{pmatrix}$. Тогда $ABA=\\operatorname{diag}(P,0)$, поэтому ровно все решения первого равенства имеют вид\n$$B=\\begin{pmatrix}E_r&U\\\\V&W\\end{pmatrix},$$\nгде $U,V,W$ произвольны согласованных размеров. Прямое перемножение без перестановки множителей даёт $BAB=\\begin{pmatrix}E_r&U\\\\V&VU\\end{pmatrix}$. Поэтому второе равенство эквивалентно $W=VU$.\n\nУмножим $B$ слева и справа на обратимые блочные матрицы:\n$$\\begin{pmatrix}E_r&0\\\\-V&E_{n-r}\\end{pmatrix}B\\begin{pmatrix}E_r&-U\\\\0&E_{n-r}\\end{pmatrix}=\\begin{pmatrix}E_r&0\\\\0&W-VU\\end{pmatrix}.$$\nЗначит, $\\operatorname{rank}B=r+\\operatorname{rank}(W-VU)$, и ранг равен $r$ ровно при взаимности двух равенств. Для контрпримера возьмём $B=E_n$: первое равенство верно, поскольку $A$ — проектор, но $BAB=A\\ne E_n=B$, так как $r<n$. Нулевые матрицы в контрпримере не используются.",
+  "source_style": "original_structural_analogue",
+  "source_note": "Авторская задача; не официальное задание ШАД. Структурный источник: экзамен2016, задача1; https://yastatic.net/s3/academy/shad/enroll/shad2016.pdf",
+  "subtopic": "generalized_inverse_block_conditions",
+  "difficulty": "shad",
+  "retired": false,
+  "review_status": "reviewed",
+  "reviewed_by": "math_analysis_algorithms"
+}

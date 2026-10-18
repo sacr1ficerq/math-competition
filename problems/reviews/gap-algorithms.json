@@ -1,0 +1,161 @@
+{
+  "reviewed_on": "2026-10-18",
+  "reviewer": "shad_admissions_research",
+  "independent_of_author": true,
+  "scope": "Full statements, proofs, rubrics and mathematical edge cases of all24new algorithm syllabus-gap tasks; metadata reviewed, retirement preserved.",
+  "hash_algorithm": "SHA256(UTF8(json.dumps({k:problem[k] for k in [\"title\",\"statement\",\"criterions\",\"reference_solution\"]}, ensure_ascii=False, sort_keys=True))); Python default separators include comma-space and colon-space; no appended newline.",
+  "executed_checks": [
+    {
+      "script": "temp/check_gap_algorithms.py",
+      "reported_by_author": true,
+      "scope": "5000 seeded random arithmetic cases across bases2,3,10,16,256 for add/sub/multiply/divide",
+      "limitation": "Execution reported by author; mathematical proofs independently read by reviewer."
+    }
+  ],
+  "records": [
+    {
+      "id": "shad-gap-algorithms-001",
+      "content_sha256": "059c32a0e39dfd5b72759e67c9b0fd5dd9fe7eafa5956bba220dd3fb34012f0b",
+      "result": "pass",
+      "proof_review": "Signed addition/subtraction carry and borrow invariants checked, equal-modulus and canonical zero handled."
+    },
+    {
+      "id": "shad-gap-algorithms-002",
+      "content_sha256": "e817e60f4aff5725c655e1d47f83293fd3f556a7365f70289df21133e880d1e9",
+      "result": "pass",
+      "proof_review": "Row multiplication checked including unused final cell, normalized carry and strict accumulator bound B^2."
+    },
+    {
+      "id": "shad-gap-algorithms-003",
+      "content_sha256": "eed6517dd70121d2d3acb9a80e062ff5ce2d94b282ce3331cb5056e8f6e4c523",
+      "result": "pass",
+      "proof_review": "Prefix quotient invariant, digit range, remainder uniqueness and m+1-digit workspace checked."
+    },
+    {
+      "id": "shad-gap-algorithms-004",
+      "content_sha256": "c46d485154e9a4da8e31ad8d6baa02549fecd841d23bf58c62b10b72f6e77acf",
+      "result": "pass",
+      "proof_review": "Linearity of expectation needs no joint independence; fixed-key nonadaptive premise and operation model explicit."
+    },
+    {
+      "id": "shad-gap-algorithms-005",
+      "content_sha256": "945aa34c6ab16b8e181c857e91b5ca06047bb2810e5e89ea038e658c2ffef7d9",
+      "result": "pass",
+      "proof_review": "Pigeonhole adaptive collision set and exact sum of failed chain comparisons checked; lower bound limited to stated chain implementation."
+    },
+    {
+      "id": "shad-gap-algorithms-006",
+      "content_sha256": "988b9c79286703e6619f2c4ede5bf111933df793698b597287d2f9a1b947a2f4",
+      "result": "pass",
+      "proof_review": "Rehash movement requires no duplicate searches; deterministic epoch sizes, fresh hash expectation and geometric rebuild sum checked."
+    },
+    {
+      "id": "shad-gap-algorithms-007",
+      "content_sha256": "0c277f4f8a9d02a4f593aa0014c23eb3eed6fd136b1750fdf95090a1b19e4c2e",
+      "result": "pass",
+      "proof_review": "BST successor transplant checked both direct-child and deeper cases, identity-preserving links and absence of self-cycle."
+    },
+    {
+      "id": "shad-gap-algorithms-008",
+      "content_sha256": "31a178cb185b1397874375b215de466bc36f0034750252570d8dde2d43515b90",
+      "result": "pass",
+      "proof_review": "AVL recurrence and LL/LR height proofs checked including empty subtree edge cases; symmetric cases follow by reversal."
+    },
+    {
+      "id": "shad-gap-algorithms-009",
+      "content_sha256": "46b271b396c61a2e895e9eb31d1072653a0c83948b90b4333aa187f7a45c8b68",
+      "result": "pass",
+      "proof_review": "Multiset count versus node count, transplant of full multiplicity, size recomputation order and rank/select boundaries checked."
+    },
+    {
+      "id": "shad-gap-algorithms-010",
+      "content_sha256": "4287f9be86e4b7401b9e58def7c5b0d8be9e2ad84a729358a7f6dd81f03cb6a9",
+      "result": "pass",
+      "proof_review": "Trie terminal/pass invariant checked for empty string, repeated strings and safe freeing only zero subtrees."
+    },
+    {
+      "id": "shad-gap-algorithms-011",
+      "content_sha256": "802a38e07058d58862f8bdf6bdd24b4389b425fc8944923c81a4ffaf9abb082a",
+      "result": "pass",
+      "proof_review": "Most-significant XOR greedy dominance checked with witnesses and deletion-dependent live memory bound."
+    },
+    {
+      "id": "shad-gap-algorithms-012",
+      "content_sha256": "5dc84032220a7a0bc932e4d3b536953d24b9d16f19f63a91bf6916a8182029d5",
+      "result": "pass",
+      "proof_review": "Group cancellation order verified; S3 conjugation counterexample evaluated under stated right-to-left convention."
+    },
+    {
+      "id": "shad-gap-algorithms-013",
+      "content_sha256": "f06f645dacecab91999e59489411f2cabfdbccc37467f47de1f14fc6fac524ae",
+      "result": "pass",
+      "proof_review": "Four corner indicator expansion and two successive prefix transforms checked including boundary sentinel cells."
+    },
+    {
+      "id": "shad-gap-algorithms-014",
+      "content_sha256": "020ca2e6d7b3a10f79a041f8a4617628ed028ec2a29972b9a5f1220cba362ec3",
+      "result": "pass",
+      "proof_review": "Bellman-Ford seeds without mutation checked; reachable negative cycle detection, downstream closure and finite optimal paths justified."
+    },
+    {
+      "id": "shad-gap-algorithms-015",
+      "content_sha256": "f4c2193e2ddfa3d587164b5f340d45554422808e2b8e81751cca21b2fbffa68d",
+      "result": "pass",
+      "proof_review": "Floyd negative diagonal/reachability criterion checked for parallel edges and negative self-loops; no premature minus-infinity arithmetic."
+    },
+    {
+      "id": "shad-gap-algorithms-016",
+      "content_sha256": "7940ba770afe0e3262ee9228ec4086d9ca62d2a800f4f6d3c37c5951e11cca7b",
+      "result": "pass",
+      "proof_review": "Articulation >= criterion checked, separate DFS root rule and parent-edge ID treatment valid in multigraphs."
+    },
+    {
+      "id": "shad-gap-algorithms-017",
+      "content_sha256": "95c865ca8bdb7cd894677b4b60faae2a715984c40b0ef55ad6c22961e4557172",
+      "result": "pass",
+      "proof_review": "Quickselect phase argument uses uniform bounded success conditional on current state; geometric-size work sum and positive-probability worst path correct."
+    },
+    {
+      "id": "shad-gap-algorithms-018",
+      "content_sha256": "739e1d5ecd0899e5e43dcf62d6245c648bed2c585896c18a5e3dec692bafa6ea",
+      "result": "pass",
+      "proof_review": "Quicksort pair indicator probability 2/(j-i+1) and exact harmonic sum checked; independent random pivot premise explicit."
+    },
+    {
+      "id": "shad-gap-algorithms-019",
+      "content_sha256": "28a4b48aa377e906f1a9f54704478d70cba51577c0e93d6deb86d4d67740ca58",
+      "result": "pass",
+      "proof_review": "Bottom-up heapify bound via number of vertices with depth-h descendants checked; heapsort suffix invariant and repeats correct."
+    },
+    {
+      "id": "shad-gap-algorithms-020",
+      "content_sha256": "a1442aa74ea891deb7ccd72200450972777866d1f3ce727a9ae4d9f9742664ad",
+      "result": "pass",
+      "proof_review": "DFS gray-edge certificate reconstruction and reverse finish order checked including loops and disconnected graphs."
+    },
+    {
+      "id": "shad-gap-algorithms-021",
+      "content_sha256": "7287117f106edd21ffe42fca5bb55a41037b36e733dfd070cdff24c31df2474e",
+      "result": "pass",
+      "proof_review": "All invalid-input checks precede mutation; list reversal preserved tail, prefix and ownership premise checked."
+    },
+    {
+      "id": "shad-gap-algorithms-022",
+      "content_sha256": "7ae8fb55cbf5fd21b3afc7547de659b064cde16ef3c8d41d29195309e52ece60",
+      "result": "pass",
+      "proof_review": "Floyd entry proof and all acyclic/one-cycle/same-entry/different-entry cases checked without mutating links."
+    },
+    {
+      "id": "shad-gap-algorithms-023",
+      "content_sha256": "a246aabfe351deed40262d43ea23ed7234c869f57887921b3fb944c3faa1ec4d",
+      "result": "pass",
+      "proof_review": "Flat immutable string copy counts versus deferred concatenation tree costs and peak-memory distinction correct."
+    },
+    {
+      "id": "shad-gap-algorithms-024",
+      "content_sha256": "d120cf0521204addfbc74bf8445b831bda3d3c0655d8f2d5465d7fd7219648be",
+      "result": "pass",
+      "proof_review": "Bit-cost modular exponentiation checked with 2b-bit product and school division; initial reduced base and input exponent storage explicit."
+    }
+  ]
+}

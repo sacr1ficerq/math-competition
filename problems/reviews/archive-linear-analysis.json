@@ -1,0 +1,240 @@
+{
+  "reviewer": "math_analysis_algorithms",
+  "hash_algorithm": "sha256(statement+criterions+reference_solution UTF8)",
+  "files": [
+    {
+      "file": "problems/shad-archive-linear-001.json",
+      "status": "verified",
+      "content_hash": "95c1ec58705ccd91186f88a2c2167c68957cffa59e1939d952dc969384f42280",
+      "proof_checkpoints": [
+        "Положительный путь до границы распространяет максимум модуля однородного решения до нулевой границы; injective square matrix обеспечивает существование."
+      ],
+      "edge_cases": [
+        "Внутреннее множество может быть пустым; B непусто; слабое условие исходящего ребра опровергается изолированным2циклом."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-linear-002.json",
+      "status": "verified",
+      "content_hash": "a6970f90edf89d5c41f4cadbfd9a864765bd0ac7902ef8be249ba73ef7378e99",
+      "proof_checkpoints": [
+        "Полный Fourierбазис диагонализует усреднение, только k0 и km имеют |lambda|1; коэффициент alternatingmode определяет два предела."
+      ],
+      "edge_cases": [
+        "m>=2; -1mode исчезает iff суммы на двух долях равны; отсутствие Jordanявлений обеспечено базисом."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-linear-003.json",
+      "status": "verified",
+      "content_hash": "849fe6cc34233669249e56f005ca39504984966fda436c7c4435fafddfd7d555",
+      "proof_checkpoints": [
+        "Обе Gramматрицы J+diag(degree-1) SPD дают v<=b и b<=v; pairincidence заставляет каждую точку встречаться хотя бы раз."
+      ],
+      "edge_cases": [
+        "Если степень1, её единственный блок содержит все точки и нарушает пересечение с другим блоком размера>=2; v,b>=2 нужны."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-linear-004.json",
+      "status": "verified",
+      "content_hash": "9c76e7e5e86de8b7a9176a00e533a0a621f5b7075e6d1d770e60aa6e1e2cda27",
+      "proof_checkpoints": [
+        "Невырожденное tracepairing через Eij; inclusionkernels даёт пропорциональность функционалов."
+      ],
+      "edge_cases": [
+        "При симметричных traceless тестах skewpart невидима, symmetricpart forcedscalar; n>=2."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-linear-005.json",
+      "status": "verified",
+      "content_hash": "de0a95fc20dabd524ab1c1753bafbe42cd4c8dd8b32fb6b8d4395e081baffad3",
+      "proof_checkpoints": [
+        "Крайние лучи orthant ровно координатные; automorphism переносит их биективно."
+      ],
+      "edge_cases": [
+        "Tei ненулевые positive multiples; n1 допускает strictlypositiveinverse, приn>=2 impossibility изнулейidentity."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-linear-006.json",
+      "status": "verified",
+      "content_hash": "7aa776b35ff0f1bf97d646ab9f8f12164ee8d543ec039ebd3b0553049c9f13b2",
+      "proof_checkpoints": [
+        "Собственный базис делает T диагональным; supports wa связывают eigenvalues по компонентам и достаточны."
+      ],
+      "edge_cases": [
+        "Изолированные вершины дают независимые параметры; всеnизn+1 independent forces fullsupport последнего."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-linear-007.json",
+      "status": "verified",
+      "content_hash": "cdc7f24610fff85552f61587a5af4f48df943003d5597bfe9e63869f37f1ed9e",
+      "proof_checkpoints": [
+        "D=VCVT, Vandermonde rank3; congruence diag(C,0) даёт inertia(1,2,n-3)."
+      ],
+      "edge_cases": [
+        "Различные узлы n>=3; H1=0 даёт HDH=-2(Hx)(Hx)T, Hxне0."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-linear-008.json",
+      "status": "verified",
+      "content_hash": "01e5ee10bc36157260992f9f8c56d6703999f5633fea5b1c911a8afb8ead9cf8",
+      "proof_checkpoints": [
+        "Симметрия задаёт последний столбец, trace задаёт t; триblockidempotencyусловия необходимы/достаточны."
+      ],
+      "edge_cases": [
+        "b0 не требуетделения; symmetricidempotent+tracen-1 даётровноhyperplaneprojector иuniquecompletion."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-linear-009.json",
+      "status": "verified",
+      "content_hash": "3ef7366d895e53fd7bb207a9b9862b2ec5fd9664137c15bb6fb85a1d5935b6fb",
+      "proof_checkpoints": [
+        "Двеorthogonaldiagonalizations превращают Q вsum alpha_i beta_j yij²; знаковые counts полные."
+      ],
+      "edge_cases": [
+        "n,m>=1; positiveform iff обаSPD либо обаSND; nonzeroPSD B сkernel даётnonzeroX withQ0."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-linear-010.json",
+      "status": "verified",
+      "content_hash": "729a8add43dbd2b1e309b7c82738c8952792fbfdb42c58c793fdba268d6e42eb",
+      "proof_checkpoints": [
+        "Operatornormperturbation нижеspectralgap сохраняет positive/negativeindices; intervalconnectedness сохраняет inertia."
+      ],
+      "edge_cases": [
+        "Repeatedeigenvalues разрешены; explicit2x2rotationcongruence J→-J даётsufficiencybalancedindices."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-linear-011.json",
+      "status": "verified",
+      "content_hash": "92c8c8b4ff24fed2240a8c99dd7cffe96b201724225eacc66b3dda89a224d90a",
+      "proof_checkpoints": [
+        "Метрика <x,y>+<Jx,Jy> SPD и Jinvariant; invariantplane имеет invariantorthogonalcomplement."
+      ],
+      "edge_cases": [
+        "nodd исключеноdet²=(-1)^n; n2base; полученполныйreal similarityclass, не толькооднаплоскость."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-linear-012.json",
+      "status": "verified",
+      "content_hash": "7b58c784573968bd6d889c7b83b2189ee9eaf46e12acc4cad54323f4040b1f11",
+      "proof_checkpoints": [
+        "ВimA+kerAбазисе ABA fixes topblockI; BAB givesbottomVU."
+      ],
+      "edge_cases": [
+        "RankB=r+rank(W-VU) поinvertibleblockelimination; B=I counterexample при1<=r<n."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-linear-013.json",
+      "status": "verified",
+      "content_hash": "9cba030ae72b4b4bf3f4b1433adce47703c7d81ed8e75f794adb629465b18cde",
+      "proof_checkpoints": [
+        "Directionu eigenvalue lambda+||u||² и orthogonalspace eigenvalue lambda give fullclassification."
+      ],
+      "edge_cases": [
+        "u!=0,n>=2; приlambda0 совместно iff bparallel, приlambda=-a iff bperp; dimensions n-1 и1."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-linear-014.json",
+      "status": "verified",
+      "content_hash": "7c5be388e84a8f650447bcd44f8d06ee21d6e0bc5b02fca7f89d419737ba31c6",
+      "proof_checkpoints": [
+        "imA=kerA изsquarezero+anticommutatorI; similarlyB, so evenn andrankn/2."
+      ],
+      "edge_cases": [
+        "Square(A+tB)=tI безкоммутации; t0singular; tpositive rootsdistinct andtrace0 fix equalmultiplicities."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-analysis-001.json",
+      "status": "verified",
+      "content_hash": "472cfe5bf87758ad0bffd217b3a10995f47fbdb9d674abbd6827a772da8b8874",
+      "proof_checkpoints": [
+        "Две полуоси monotoneontoR; обратные derivatives positive суммируются1, substitutionfirstforabs givesabsoluteconvergence."
+      ],
+      "edge_cases": [
+        "a>0; positivebranchweight strictlyincreasing, дваunitintervalindicators даютsameintegral ноdifferentweightedparts."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-analysis-002.json",
+      "status": "verified",
+      "content_hash": "f08fb52bd7aa37b8a161fd01b86f8a6c0a5b8ee3eab7b454fea30be74e5707e9",
+      "proof_checkpoints": [
+        "Дляh1 изменениеu=tx и IBPна[1,t] cancel logt costerms; remainderg=(h-h0)logx hasintegrablederivative."
+      ],
+      "edge_cases": [
+        "Нульобработанabsoluteintegrability andboundaryg0=0; g1=0; h0=0 allowsRiemannLebesgueo1/t."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-analysis-003.json",
+      "status": "verified",
+      "content_hash": "eab2e387e540f5058632cad65898cdc0068cf2814336d2cbb16d69fcf631a0d1",
+      "proof_checkpoints": [
+        "Arctanf maps endpointdifference strictlybelowpi; MVT gives neededstrictderivative forL>=pi."
+      ],
+      "edge_cases": [
+        "L=pi included bystrictendpointbound; L<pi explicitcenteredtan finiteonclosedinterval; noC1assumption."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-analysis-004.json",
+      "status": "verified",
+      "content_hash": "061d9c0adf05b358c27ea53cc4c21291e25f67a307fe146cbd3b69b29e3e47a9",
+      "proof_checkpoints": [
+        "Digitincrement1-(q-1)vq(n); finiteAbelsummation andfinitevaluation expansion giveharmoniccancellation."
+      ],
+      "edge_cases": [
+        "Compositebasesallowed; floorbound>=N/(2q^k), geometricweightedkmajorant justifieslimit; boundarydigit/logtermsvanish."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    }
+  ]
+}
