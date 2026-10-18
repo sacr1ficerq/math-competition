@@ -100,8 +100,8 @@ When no common unseen tasks remain, choose another topic or add tasks. There is 
 automatic fallback to repeats. The elementary demonstration tasks have been retired; bank content is maintained
 as separately reviewed problem files.
 
-The bank contains 240 original SHAD-style problems, 40 each in linear algebra,
-analysis, probability, combinatorics, algorithms, and data analysis. Every problem
+The bank contains 386 original SHAD-style problems: 77 algorithms, 72 linear algebra,
+68 analysis, 64 probability, 53 data analysis, and 52 combinatorics. Every problem
 has a reference proof and grading rubric, with independent review records in
 `problems/reviews/`. These are preparation exercises, not official examination
 questions. Research sources and verification caveats are recorded in
@@ -110,10 +110,18 @@ questions. Research sources and verification caveats are recorded in
 Check the published bank with:
 
 ```sh
-uv run python scripts/validate_problem_bank.py --require-reviewed --min-active 240
+uv run python scripts/validate_problem_bank.py --require-reviewed --verify-review-hashes --min-active 386
 ```
 
-This checks release metadata and formatting; it does not automatically prove the mathematics.
+This checks release metadata, formatting, and exact content hashes against full independent
+mathematical reviews; it does not automatically prove the mathematics. Archive task mappings
+are in [`docs/source-task-analogy-matrix.json`](docs/source-task-analogy-matrix.json),
+with syllabus coverage and its remaining limits in
+[`docs/shad-syllabus-coverage.json`](docs/shad-syllabus-coverage.json).
+Coverage of the reviewed public archive does not guarantee every future examination variant.
+
+Account databases, sessions, passwords, saved provider keys, and installation encryption
+keys are local runtime data and are excluded from the repository.
 
 Practice is at `/practice`. Choose a topic and open a task; this records exposure.
 Practice uses your saved key and default model and shows feedback immediately.

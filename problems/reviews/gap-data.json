@@ -2,7 +2,7 @@
   "reviewed_on": "2026-10-18",
   "reviewer": "shad_admissions_research",
   "independent_of_author": true,
-  "scope": "Full10statements/reference proofs/rubrics and edgecases; formal fixes incorporated, no publication.",
+  "scope": "Full12statements/reference proofs/rubrics and edgecases, including pruning and robust cleaning; independent of author.",
   "hash_algorithm": "SHA256(UTF8(json.dumps({k:problem[k] for k in [title,statement,criterions,reference_solution]}, ensure_ascii=False, sort_keys=True))); Python default separators comma-space and colon-space, no newline.",
   "records": [
     {
@@ -64,6 +64,18 @@
       "content_sha256": "2c7e4730cc4ff4d96005334f173eac19e3c65e09d81b4fd8d34eeaf23f506b6d",
       "result": "pass",
       "proof_review": "Exchangeable rank exact coverage and memorizing calibration counterexample verified, infinite threshold handled."
+    },
+    {
+      "id": "shad-gap-data-011",
+      "content_sha256": "241ffa718905471581f530292e40eeb48a18d9808759f8bb870f9f28192b032a",
+      "result": "pass",
+      "proof_review": "Pruning recursion exhaustive split/prune alternatives and linear bound verified; two optimality inequalities prove leaf-count monotonicity for any tied optimum."
+    },
+    {
+      "id": "shad-gap-data-012",
+      "content_sha256": "9bbe49cbaea723f0836dc2b8ec064b360397baed7ff42b61a965e7f1fe9d4b76",
+      "result": "pass",
+      "proof_review": "Median guarantee and two-world sharp minimax construction checked; mean counterexample valid for m>=1 and majority-contamination indistinguishability correct."
     }
   ]
 }

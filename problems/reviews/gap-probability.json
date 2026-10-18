@@ -1,0 +1,31 @@
+{
+  "reviewer": "root",
+  "independent_of_author": true,
+  "hash_algorithm": "sha256(json.dumps(four problem fields, ensure_ascii=False, sort_keys=True) UTF8; default separators)",
+  "records": [
+    {
+      "id": "shad-gap-probability-001",
+      "result": "pass",
+      "content_sha256": "b9d6904a4761d54eefe3fe83ee5da1bd578971c91d7bb7c750e7d6ab93904490",
+      "proof_review": "Multinomial law and indicator covariance, third-order CF remainder, explicit singular Gaussian, covariance nullspace span1 and support hyperplane verified."
+    },
+    {
+      "id": "shad-gap-probability-002",
+      "result": "pass",
+      "content_sha256": "f0990067d04f66b687b9772c0f65719113a3dc8e0ee346992c77ca4adb51f33e",
+      "proof_review": "Weibull density, all real moment threshold q>-kappa, Gamma formula, exact minimum/maximum and powered Gumbel normalization verified."
+    },
+    {
+      "id": "shad-gap-probability-003",
+      "result": "pass",
+      "content_sha256": "d2898c60641eaf8bc626c4477943131e96e15f1cab47f1865fc98e111509e7e5",
+      "proof_review": "Uses given LIL correctly for strict sub/supercritical thresholds, SLLN consequence, unbounded sqrt scale and logical critical limitation."
+    },
+    {
+      "id": "shad-gap-probability-004",
+      "result": "pass",
+      "content_sha256": "3573d5471f8fce294736ffe0ca264a765f579835c92dc2b52a94a8edf39877d3",
+      "proof_review": "Quantitative Jensen via Taylor curvature, EVn=(1-1/n)v, Lipschitz log variance and two Chebyshev/union bounds with exact8 constant verified."
+    }
+  ]
+}

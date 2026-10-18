@@ -4,12 +4,17 @@
 
 ### Fixed
 
-- Corrected mathematical notation in 217 task statements; all 240 active conditions
+- Corrected mathematical notation in 217 task statements; all 240 original conditions
   pass KaTeX rendering checks. Historical rounds receive exact presentation-only
   corrections without changing grading inputs.
 - Removed competing width limits from the task condition workspace.
 
 ### Added
+
+- Expanded the independently reviewed bank to 386 tasks with full solutions and
+  rubrics, public archive traceability, and bounded syllabus-gap additions.
+- Exact full-review hash validation rejects content modified after review.
+- Light sandwich-themed copy on the home page, score tooltips, and results.
 
 - Keyboard action search, discoverable shortcuts, and optional single-letter
   navigation that stays inactive while typing.

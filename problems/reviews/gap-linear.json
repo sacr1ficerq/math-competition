@@ -1,0 +1,59 @@
+{
+  "reviewer": "root",
+  "independent_of_author": true,
+  "hash_algorithm": "sha256(json.dumps(four problem fields, ensure_ascii=False, sort_keys=True) UTF8; default separators)",
+  "records": [
+    {
+      "id": "shad-gap-linear-001",
+      "result": "pass",
+      "content_sha256": "74e863b24624d56644c0a8b68c6f3a7874f0ab348e07f59a95f007a22c21253b",
+      "proof_review": "Cycle merge/split changes count by1; minimal arbitrary and adjacent swaps, parity and composition triangle inequality checked."
+    },
+    {
+      "id": "shad-gap-linear-002",
+      "result": "pass",
+      "content_sha256": "1835e4166e2fd96e22a8bd1f6c74bfd4051fdbedc6cbb2a2dfa438b47229ce2d",
+      "proof_review": "Corrected comma typo in conjugate exponent; polar modulus exponent and m+n angles, m=n unit modulus rays, zero and argument reindexing all correct."
+    },
+    {
+      "id": "shad-gap-linear-003",
+      "result": "pass",
+      "content_sha256": "8bb30c038dce6ae68a6bae90f645f1dd5837b1d88e1374b5a5ebf524027d305c",
+      "proof_review": "Explicit row elimination, exceptional t1/t2, coefficient/augmented ranks and homogeneous bases verified."
+    },
+    {
+      "id": "shad-gap-linear-004",
+      "result": "pass",
+      "content_sha256": "25f6c37a53169a8ef0bd0ffe542e693e1570f9bd62b7b16a696ea55656c232cb",
+      "proof_review": "Hermite-like dual polynomials satisfy derivatives at0 and valueat1; corrected row/column wording; inverse dual change and algebraic transpose correct."
+    },
+    {
+      "id": "shad-gap-linear-005",
+      "result": "pass",
+      "content_sha256": "76241d1a50009fb0e8907bbaf326321c9c20dbf38c455523735bd1056d765652",
+      "proof_review": "Nullity increments reconstruct Jordan sizes4,1 at0 and3,2,2 at2; characteristic/minimal and product powers7,3,1,0 checked."
+    },
+    {
+      "id": "shad-gap-linear-006",
+      "result": "pass",
+      "content_sha256": "8237095f91e2ab8082243cad4dc9e1087b2b042067299e0a8a0dbda66c4859d8",
+      "proof_review": "Complex square completion includes conjugations, Schur induction, unit triangular leading determinants and inertia valid; zero first pivot can be nonsingular."
+    },
+    {
+      "id": "shad-gap-linear-007",
+      "result": "pass",
+      "content_sha256": "61fc97fbe7c14f17233683dc319093e7918e0f10a9322dacacdd3899de0d21e7",
+      "proof_review": "Unique PSD square root via spectral subspaces, kernel-complement isometry and all unitary kernel extensions prove existence and exact uniqueness criterion."
+    },
+    {
+      "id": "shad-gap-linear-008",
+      "result": "pass",
+      "content_sha256": "7f80eece2b1e7c1f96d32da1f07ca364cbb75b6a5f2fc4fd761b74246fb17b97",
+      "proof_review": "Three Gram-Schmidt vectors and upper R, strict positivity from n>=3 distinct real values and volume determinant verified."
+    }
+  ],
+  "executed_checks": {
+    "permutation_cases": 873,
+    "substituted_complex_roots": 120
+  }
+}

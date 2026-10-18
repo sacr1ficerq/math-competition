@@ -445,6 +445,123 @@
       ],
       "corrections": [],
       "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-analysis-011.json",
+      "status": "verified",
+      "content_hash": "11d2b0c4297e12683fa2e06bda6d54974457ebb33ed68417a83e5571a40ace01",
+      "proof_checkpoints": [
+        "Integratedderivative givescubic; signsof(x-a)(x-1) classifyinteriorandone-sidedendpointlocalextrema."
+      ],
+      "edge_cases": [
+        "fa0=0,fa2=2/3,fa1=a/2-1/6; interiorfa(a)betweenendvaluesfor0<=a<=2; globaltiesa1/3,5/3; criticalmergea1."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-analysis-012.json",
+      "status": "verified",
+      "content_hash": "346d269593e5ab9b820119c4ca5a7a1ed5a6b79a3ba22ffaf1f4020c68a1d3d2",
+      "proof_checkpoints": [
+        "Separatehalflineformulasgivecriticalpoints+-|a|,bothlocalmin;values0and4|a|."
+      ],
+      "edge_cases": [
+        "a0 gives|x|onpuncturedline,noattainedinf0; anonzero range[0,infinity),uniquezeroinx=a; nofiniteupperbound."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-analysis-013.json",
+      "status": "verified",
+      "content_hash": "ba40f5f0ed88d189178b06984c368b6494121fb2ea45e78d93b04c9826c8fb7b",
+      "proof_checkpoints": [
+        "Effectivepowerhn=c(loglogn)^alpha(logloglogn)^beta; dominatesorpalesbyfirstnonzerolexicographicexponent."
+      ],
+      "edge_cases": [
+        "hn→infinity comparesn^-2,hn→0 comparesn^-1/2; alpha=beta0exactnpowerwithc>1criterion; n16alllogbasespositive."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-analysis-014.json",
+      "status": "verified",
+      "content_hash": "5abf17b0f1e1c3ae5eba33104074a14aeb00c2c6c7674d1d61a6c261feabf240",
+      "proof_checkpoints": [
+        "Vertical/horizontalcrosssections proveinverseintegralidentitywithoutinverse derivative."
+      ],
+      "edge_cases": [
+        "Arbitrarysigneda/phi(a) handledbyshiftedareas; x+sinxstrictincreasingdespiteendpointderivative0; resultpi²/2-2."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-analysis-015.json",
+      "status": "verified",
+      "content_hash": "e6da7d643e06983a454732c32864e705ab0ec1366f91cb1acff2d29c56f2b9dc",
+      "proof_checkpoints": [
+        "Geometricmajorantgivesuniformconvergence; pairedtriangularwaves bounddelta(t)+.5delta(2t)<=.5."
+      ],
+      "edge_cases": [
+        "Pairwisedeficitsnonnegativegiveiffallfractional4^jx in[1/4,3/4]; x1/3attains2/3; base4digits1/2familyinjectiveuncountable."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-analysis-016.json",
+      "status": "verified",
+      "content_hash": "132d940257bb07b64a91c02fa47e3bf5d32fc7997dde11b55e750cb27582d85e",
+      "proof_checkpoints": [
+        "Recursion preservesnonzero signanddecreasingmodulus→0; exactreciprocalsquaredifference2+xn² yieldsnxn²→1/2."
+      ],
+      "edge_cases": [
+        "Everyrealp comparesn^-p/2,iffp>2; initialnegativevaluesandp<=0included."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-analysis-017.json",
+      "status": "verified",
+      "content_hash": "51273fd02fb17e205a356578f21a69aecf78edc3251ad76bfec68c8534f4bf70",
+      "proof_checkpoints": [
+        "Reciprocalinvolutionx=q/t preservesdx/(x²+betax+q),symmetrizationreplaceshbyK/2."
+      ],
+      "edge_cases": [
+        "Positivequadraticfrom|beta|<2sqrtq; fixedprincipalatanprimitive avoidsbranchambiguity; positiveatanreciprocalpairKpi/2."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-analysis-018.json",
+      "status": "verified",
+      "content_hash": "1013ae86d1d5fb8696713bca3556fe210a82b29a7d190f6f60864ca5d5e0cc54",
+      "proof_checkpoints": [
+        "Distance|t cost|/sqrt2; tan(t)-1/tstrictincreasingcrosses0onceandgprimechangessign+to-."
+      ],
+      "edge_cases": [
+        "Bisectionbracket[pi,pi+1/pi],derivativebound1+3pi/2 andhalvingdistance giveexplicitabsolutetoleranceandlogiterations."
+      ],
+      "corrections": [],
+      "executed_checks": []
+    },
+    {
+      "file": "problems/shad-archive-data-001.json",
+      "status": "verified",
+      "content_hash": "781c4296d772f91222ab66b14f2a59be5f9e9ebbfaedbb724e082ecc876a0149",
+      "proof_checkpoints": [
+        "Squaredreconstruction conditionalmean cz withc>0; conditionalclassmajorityoppositesign givesaccuracies1-theta/theta/global.5."
+      ],
+      "edge_cases": [
+        "Tieclass1requiresa(1)<0,a(-1)>=0; sigmoidbijectivegivesuniquelogiteta optimum; meanfillloss>=theta c→infinitywhileoptimalentropyfixed."
+      ],
+      "corrections": [],
+      "executed_checks": []
     }
   ]
 }
